@@ -1,0 +1,462 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="RiftWorldModelStoreContainer" CdmEntityContainer="RiftWorldEntities">
+    <EntitySetMapping Name="C__MigrationHistory">
+      <EntityTypeMapping TypeName="RiftWorldModel.C__MigrationHistory">
+        <MappingFragment StoreEntitySet="__MigrationHistory">
+          <ScalarProperty Name="MigrationId" ColumnName="MigrationId" />
+          <ScalarProperty Name="ContextKey" ColumnName="ContextKey" />
+          <ScalarProperty Name="Model" ColumnName="Model" />
+          <ScalarProperty Name="ProductVersion" ColumnName="ProductVersion" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AspNetRoles">
+      <EntityTypeMapping TypeName="RiftWorldModel.AspNetRole">
+        <MappingFragment StoreEntitySet="AspNetRoles">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AspNetUserClaims">
+      <EntityTypeMapping TypeName="RiftWorldModel.AspNetUserClaim">
+        <MappingFragment StoreEntitySet="AspNetUserClaims">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="ClaimType" ColumnName="ClaimType" />
+          <ScalarProperty Name="ClaimValue" ColumnName="ClaimValue" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AspNetUserLogins">
+      <EntityTypeMapping TypeName="RiftWorldModel.AspNetUserLogin">
+        <MappingFragment StoreEntitySet="AspNetUserLogins">
+          <ScalarProperty Name="LoginProvider" ColumnName="LoginProvider" />
+          <ScalarProperty Name="ProviderKey" ColumnName="ProviderKey" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AspNetUsers">
+      <EntityTypeMapping TypeName="RiftWorldModel.AspNetUser">
+        <MappingFragment StoreEntitySet="AspNetUsers">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="EmailConfirmed" ColumnName="EmailConfirmed" />
+          <ScalarProperty Name="PasswordHash" ColumnName="PasswordHash" />
+          <ScalarProperty Name="SecurityStamp" ColumnName="SecurityStamp" />
+          <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+          <ScalarProperty Name="PhoneNumberConfirmed" ColumnName="PhoneNumberConfirmed" />
+          <ScalarProperty Name="TwoFactorEnabled" ColumnName="TwoFactorEnabled" />
+          <ScalarProperty Name="LockoutEndDateUtc" ColumnName="LockoutEndDateUtc" />
+          <ScalarProperty Name="LockoutEnabled" ColumnName="LockoutEnabled" />
+          <ScalarProperty Name="AccessFailedCount" ColumnName="AccessFailedCount" />
+          <ScalarProperty Name="UserName" ColumnName="UserName" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Characters">
+      <EntityTypeMapping TypeName="RiftWorldModel.Character">
+        <MappingFragment StoreEntitySet="Characters">
+          <ScalarProperty Name="CharacterId" ColumnName="CharacterId" />
+          <ScalarProperty Name="PlayerId" ColumnName="PlayerId" />
+          <ScalarProperty Name="CharacterName" ColumnName="CharacterName" />
+          <ScalarProperty Name="RaceId" ColumnName="RaceId" />
+          <ScalarProperty Name="GenderId" ColumnName="GenderId" />
+          <ScalarProperty Name="PortraitFileName" ColumnName="PortraitFileName" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="About" ColumnName="About" />
+          <ScalarProperty Name="CurrentLocationId" ColumnName="CurrentLocationId" />
+          <ScalarProperty Name="TierId" ColumnName="TierId" />
+          <ScalarProperty Name="IsRetired" ColumnName="IsRetired" />
+          <ScalarProperty Name="IsApproved" ColumnName="IsApproved" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CharOrgs">
+      <EntityTypeMapping TypeName="RiftWorldModel.CharOrg">
+        <MappingFragment StoreEntitySet="CharOrgs">
+          <ScalarProperty Name="CharOrgsId" ColumnName="CharOrgsId" />
+          <ScalarProperty Name="CharId" ColumnName="CharId" />
+          <ScalarProperty Name="OrgId" ColumnName="OrgId" />
+          <ScalarProperty Name="BlurbOrgPage" ColumnName="BlurbOrgPage" />
+          <ScalarProperty Name="IsPublic" ColumnName="IsPublic" />
+          <ScalarProperty Name="IsCurrent" ColumnName="IsCurrent" />
+          <ScalarProperty Name="Proposed" ColumnName="Proposed" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CharSecrets">
+      <EntityTypeMapping TypeName="RiftWorldModel.CharSecret">
+        <MappingFragment StoreEntitySet="CharSecrets">
+          <ScalarProperty Name="CharSecretId" ColumnName="CharSecretId" />
+          <ScalarProperty Name="CharId" ColumnName="CharId" />
+          <ScalarProperty Name="SecretId" ColumnName="SecretId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Classes">
+      <EntityTypeMapping TypeName="RiftWorldModel.Class">
+        <MappingFragment StoreEntitySet="Class">
+          <ScalarProperty Name="ClassId" ColumnName="ClassId" />
+          <ScalarProperty Name="ClassName" ColumnName="ClassName" />
+          <ScalarProperty Name="IsPlayerEnabled" ColumnName="IsPlayerEnabled" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ClassCharacters">
+      <EntityTypeMapping TypeName="RiftWorldModel.ClassCharacter">
+        <MappingFragment StoreEntitySet="ClassCharacters">
+          <ScalarProperty Name="ClassCharacterId" ColumnName="ClassCharacterId" />
+          <ScalarProperty Name="ClassId" ColumnName="ClassId" />
+          <ScalarProperty Name="CharacterId" ColumnName="CharacterId" />
+          <ScalarProperty Name="ClassOrder" ColumnName="ClassOrder" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ClassNPCs">
+      <EntityTypeMapping TypeName="RiftWorldModel.ClassNPC">
+        <MappingFragment StoreEntitySet="ClassNPCs">
+          <ScalarProperty Name="ClassNpcId" ColumnName="ClassNpcId" />
+          <ScalarProperty Name="ClassId" ColumnName="ClassId" />
+          <ScalarProperty Name="NpcId" ColumnName="NpcId" />
+          <ScalarProperty Name="ClassOrder" ColumnName="ClassOrder" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Events">
+      <EntityTypeMapping TypeName="RiftWorldModel.Event">
+        <MappingFragment StoreEntitySet="Events">
+          <ScalarProperty Name="EventId" ColumnName="EventId" />
+          <ScalarProperty Name="InfoId" ColumnName="InfoId" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="IsHistory" ColumnName="IsHistory" />
+          <ScalarProperty Name="Date" ColumnName="Date" />
+          <ScalarProperty Name="AboutText" ColumnName="AboutText" />
+          <ScalarProperty Name="NormalParticipants" ColumnName="NormalParticipants" />
+          <ScalarProperty Name="IsWorkInProgress" ColumnName="IsWorkInProgress" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Genders">
+      <EntityTypeMapping TypeName="RiftWorldModel.Gender">
+        <MappingFragment StoreEntitySet="Gender">
+          <ScalarProperty Name="GenderId" ColumnName="GenderId" />
+          <ScalarProperty Name="GenderName" ColumnName="GenderName" />
+          <ScalarProperty Name="IconName" ColumnName="IconName" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Infos">
+      <EntityTypeMapping TypeName="RiftWorldModel.Info">
+        <MappingFragment StoreEntitySet="Infos">
+          <ScalarProperty Name="InfoId" ColumnName="InfoId" />
+          <ScalarProperty Name="InfoTypeId" ColumnName="InfoTypeId" />
+          <ScalarProperty Name="IdWithinType" ColumnName="IdWithinType" />
+          <ScalarProperty Name="Blurb" ColumnName="Blurb" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="IsPublished" ColumnName="IsPublished" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="InfoTags">
+      <EntityTypeMapping TypeName="RiftWorldModel.InfoTag">
+        <MappingFragment StoreEntitySet="InfoTags">
+          <ScalarProperty Name="InfoTagId" ColumnName="InfoTagId" />
+          <ScalarProperty Name="InfoId" ColumnName="InfoId" />
+          <ScalarProperty Name="TagId" ColumnName="TagId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="InfoTypes">
+      <EntityTypeMapping TypeName="RiftWorldModel.InfoType">
+        <MappingFragment StoreEntitySet="InfoType">
+          <ScalarProperty Name="InfoTypeId" ColumnName="InfoTypeId" />
+          <ScalarProperty Name="TypeName" ColumnName="TypeName" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Items">
+      <EntityTypeMapping TypeName="RiftWorldModel.Item">
+        <MappingFragment StoreEntitySet="Items">
+          <ScalarProperty Name="ItemId" ColumnName="ItemId" />
+          <ScalarProperty Name="InfoId" ColumnName="InfoId" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Blurb" ColumnName="Blurb" />
+          <ScalarProperty Name="PictureFileName" ColumnName="PictureFileName" />
+          <ScalarProperty Name="DescriptionText" ColumnName="DescriptionText" />
+          <ScalarProperty Name="PropertyText" ColumnName="PropertyText" />
+          <ScalarProperty Name="HistoryText" ColumnName="HistoryText" />
+          <ScalarProperty Name="IsWorkInProgress" ColumnName="IsWorkInProgress" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Journals">
+      <EntityTypeMapping TypeName="RiftWorldModel.Journal">
+        <MappingFragment StoreEntitySet="Journals">
+          <ScalarProperty Name="JournalId" ColumnName="JournalId" />
+          <ScalarProperty Name="CharacterId" ColumnName="CharacterId" />
+          <ScalarProperty Name="OocDateWritten" ColumnName="OocDateWritten" />
+          <ScalarProperty Name="ICDateWritten" ColumnName="ICDateWritten" />
+          <ScalarProperty Name="TheContent" ColumnName="TheContent" />
+          <ScalarProperty Name="IsApproved" ColumnName="IsApproved" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="LocaleEvents">
+      <EntityTypeMapping TypeName="RiftWorldModel.LocaleEvent">
+        <MappingFragment StoreEntitySet="LocaleEvents">
+          <ScalarProperty Name="LocaleEventId" ColumnName="LocaleEventId" />
+          <ScalarProperty Name="LocaleId" ColumnName="LocaleId" />
+          <ScalarProperty Name="EventId" ColumnName="EventId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="LocaleLevels">
+      <EntityTypeMapping TypeName="RiftWorldModel.LocaleLevel">
+        <MappingFragment StoreEntitySet="LocaleLevel">
+          <ScalarProperty Name="LocaleLevelId" ColumnName="LocaleLevelId" />
+          <ScalarProperty Name="LocaleName" ColumnName="LocaleName" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Locales">
+      <EntityTypeMapping TypeName="RiftWorldModel.Locale">
+        <MappingFragment StoreEntitySet="Locales">
+          <ScalarProperty Name="LocaleId" ColumnName="LocaleId" />
+          <ScalarProperty Name="InfoId" ColumnName="InfoId" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="LevelOfLocaleId" ColumnName="LevelOfLocaleId" />
+          <ScalarProperty Name="RegionId" ColumnName="RegionId" />
+          <ScalarProperty Name="ClosestCityId" ColumnName="ClosestCityId" />
+          <ScalarProperty Name="CouncilDelegateId" ColumnName="CouncilDelegateId" />
+          <ScalarProperty Name="Appointed" ColumnName="Appointed" />
+          <ScalarProperty Name="Environment" ColumnName="Environment" />
+          <ScalarProperty Name="About" ColumnName="About" />
+          <ScalarProperty Name="IsWorkInProgress" ColumnName="IsWorkInProgress" />
+          <ScalarProperty Name="AvgLifestyle" ColumnName="AvgLifestyle" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Lores">
+      <EntityTypeMapping TypeName="RiftWorldModel.Lore">
+        <MappingFragment StoreEntitySet="Lores">
+          <ScalarProperty Name="LoreId" ColumnName="LoreId" />
+          <ScalarProperty Name="InfoId" ColumnName="InfoId" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="TheContent" ColumnName="TheContent" />
+          <ScalarProperty Name="IsWorkInProgress" ColumnName="IsWorkInProgress" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Majorities">
+      <EntityTypeMapping TypeName="RiftWorldModel.Majority">
+        <MappingFragment StoreEntitySet="Majorities">
+          <ScalarProperty Name="MajorityId" ColumnName="MajorityId" />
+          <ScalarProperty Name="LocaleId" ColumnName="LocaleId" />
+          <ScalarProperty Name="RaceId" ColumnName="RaceId" />
+          <ScalarProperty Name="IsFirst" ColumnName="IsFirst" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="NpcOrgs">
+      <EntityTypeMapping TypeName="RiftWorldModel.NpcOrg">
+        <MappingFragment StoreEntitySet="NpcOrgs">
+          <ScalarProperty Name="NpcOrgId" ColumnName="NpcOrgId" />
+          <ScalarProperty Name="NpcId" ColumnName="NpcId" />
+          <ScalarProperty Name="OrgId" ColumnName="OrgId" />
+          <ScalarProperty Name="OrgOrder" ColumnName="OrgOrder" />
+          <ScalarProperty Name="BlurbNpcPage" ColumnName="BlurbNpcPage" />
+          <ScalarProperty Name="BlurbOrgPage" ColumnName="BlurbOrgPage" />
+          <ScalarProperty Name="IsCurrent" ColumnName="IsCurrent" />
+          <ScalarProperty Name="MemberOrder" ColumnName="MemberOrder" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="NPCs">
+      <EntityTypeMapping TypeName="RiftWorldModel.NPC">
+        <MappingFragment StoreEntitySet="NPCs">
+          <ScalarProperty Name="NpcId" ColumnName="NpcId" />
+          <ScalarProperty Name="InfoId" ColumnName="InfoId" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Alias" ColumnName="Alias" />
+          <ScalarProperty Name="Quote" ColumnName="Quote" />
+          <ScalarProperty Name="PortraitFileName" ColumnName="PortraitFileName" />
+          <ScalarProperty Name="RaceId" ColumnName="RaceId" />
+          <ScalarProperty Name="CrestFileName" ColumnName="CrestFileName" />
+          <ScalarProperty Name="ApperanceText" ColumnName="ApperanceText" />
+          <ScalarProperty Name="AboutText" ColumnName="AboutText" />
+          <ScalarProperty Name="LastLocationId" ColumnName="LastLocationId" />
+          <ScalarProperty Name="IsWorkInProgress" ColumnName="IsWorkInProgress" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="OrgEvents">
+      <EntityTypeMapping TypeName="RiftWorldModel.OrgEvent">
+        <MappingFragment StoreEntitySet="OrgEvents">
+          <ScalarProperty Name="OrgEventsId" ColumnName="OrgEventsId" />
+          <ScalarProperty Name="OrgId" ColumnName="OrgId" />
+          <ScalarProperty Name="EventId" ColumnName="EventId" />
+          <ScalarProperty Name="Blurb" ColumnName="Blurb" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Orgs">
+      <EntityTypeMapping TypeName="RiftWorldModel.Org">
+        <MappingFragment StoreEntitySet="Orgs">
+          <ScalarProperty Name="OrgId" ColumnName="OrgId" />
+          <ScalarProperty Name="InfoId" ColumnName="InfoId" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="IsPlayerEnabled" ColumnName="IsPlayerEnabled" />
+          <ScalarProperty Name="SymbolFileName" ColumnName="SymbolFileName" />
+          <ScalarProperty Name="BaseLocationId" ColumnName="BaseLocationId" />
+          <ScalarProperty Name="AboutText" ColumnName="AboutText" />
+          <ScalarProperty Name="IsWorkInProgress" ColumnName="IsWorkInProgress" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Races">
+      <EntityTypeMapping TypeName="RiftWorldModel.Race">
+        <MappingFragment StoreEntitySet="Race">
+          <ScalarProperty Name="RaceId" ColumnName="RaceId" />
+          <ScalarProperty Name="RaceName" ColumnName="RaceName" />
+          <ScalarProperty Name="IsPlayerEnabled" ColumnName="IsPlayerEnabled" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Rifts">
+      <EntityTypeMapping TypeName="RiftWorldModel.Rift">
+        <MappingFragment StoreEntitySet="Rifts">
+          <ScalarProperty Name="RiftId" ColumnName="RiftId" />
+          <ScalarProperty Name="InfoId" ColumnName="InfoId" />
+          <ScalarProperty Name="Nickname" ColumnName="Nickname" />
+          <ScalarProperty Name="Location" ColumnName="Location" />
+          <ScalarProperty Name="Environment" ColumnName="Environment" />
+          <ScalarProperty Name="Hazards" ColumnName="Hazards" />
+          <ScalarProperty Name="IsWorkInProgress" ColumnName="IsWorkInProgress" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Rumors">
+      <EntityTypeMapping TypeName="RiftWorldModel.Rumor">
+        <MappingFragment StoreEntitySet="Rumors">
+          <ScalarProperty Name="RumorsId" ColumnName="RumorsId" />
+          <ScalarProperty Name="RumorOfId" ColumnName="RumorOfId" />
+          <ScalarProperty Name="AuthorId" ColumnName="AuthorId" />
+          <ScalarProperty Name="IsApproved" ColumnName="IsApproved" />
+          <ScalarProperty Name="TheContent" ColumnName="TheContent" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Secrets">
+      <EntityTypeMapping TypeName="RiftWorldModel.Secret">
+        <MappingFragment StoreEntitySet="Secrets">
+          <ScalarProperty Name="SecretId" ColumnName="SecretId" />
+          <ScalarProperty Name="IsAboutId" ColumnName="IsAboutId" />
+          <ScalarProperty Name="TheContent" ColumnName="TheContent" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SecretSecretTags">
+      <EntityTypeMapping TypeName="RiftWorldModel.SecretSecretTag">
+        <MappingFragment StoreEntitySet="SecretSecretTags">
+          <ScalarProperty Name="SstId" ColumnName="SstId" />
+          <ScalarProperty Name="SecretId" ColumnName="SecretId" />
+          <ScalarProperty Name="SecretTagId" ColumnName="SecretTagId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SecretTags">
+      <EntityTypeMapping TypeName="RiftWorldModel.SecretTag">
+        <MappingFragment StoreEntitySet="SecretTags">
+          <ScalarProperty Name="SecretTagId" ColumnName="SecretTagId" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Stories">
+      <EntityTypeMapping TypeName="RiftWorldModel.Story">
+        <MappingFragment StoreEntitySet="Stories">
+          <ScalarProperty Name="StoryId" ColumnName="StoryId" />
+          <ScalarProperty Name="IsAboutId" ColumnName="IsAboutId" />
+          <ScalarProperty Name="DateTold" ColumnName="DateTold" />
+          <ScalarProperty Name="CommissionedBy" ColumnName="CommissionedBy" />
+          <ScalarProperty Name="IsCannon" ColumnName="IsCannon" />
+          <ScalarProperty Name="TheContent" ColumnName="TheContent" />
+          <ScalarProperty Name="Title" ColumnName="Title" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="StoryTags">
+      <EntityTypeMapping TypeName="RiftWorldModel.StoryTag">
+        <MappingFragment StoreEntitySet="StoryTags">
+          <ScalarProperty Name="StoryTagId" ColumnName="StoryTagId" />
+          <ScalarProperty Name="StoryId" ColumnName="StoryId" />
+          <ScalarProperty Name="TagId" ColumnName="TagId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="sysdiagrams">
+      <EntityTypeMapping TypeName="RiftWorldModel.sysdiagram">
+        <MappingFragment StoreEntitySet="sysdiagrams">
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+          <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+          <ScalarProperty Name="version" ColumnName="version" />
+          <ScalarProperty Name="definition" ColumnName="definition" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Tags">
+      <EntityTypeMapping TypeName="RiftWorldModel.Tag">
+        <MappingFragment StoreEntitySet="Tags">
+          <ScalarProperty Name="TagId" ColumnName="TagId" />
+          <ScalarProperty Name="TagName" ColumnName="TagName" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Tiers">
+      <EntityTypeMapping TypeName="RiftWorldModel.Tier">
+        <MappingFragment StoreEntitySet="Tier">
+          <ScalarProperty Name="TierId" ColumnName="TierId" />
+          <ScalarProperty Name="TierName" ColumnName="TierName" />
+          <ScalarProperty Name="MinLevel" ColumnName="MinLevel" />
+          <ScalarProperty Name="MaxLevel" ColumnName="MaxLevel" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Users">
+      <EntityTypeMapping TypeName="RiftWorldModel.User">
+        <MappingFragment StoreEntitySet="Users">
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="DiscordName" ColumnName="DiscordName" />
+          <ScalarProperty Name="DiscordDiscriminator" ColumnName="DiscordDiscriminator" />
+          <ScalarProperty Name="ConsentFileName" ColumnName="ConsentFileName" />
+          <ScalarProperty Name="CurrentCharacterId" ColumnName="CurrentCharacterId" />
+          <ScalarProperty Name="IsApproved" ColumnName="IsApproved" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="VarietyOfInhabitants">
+      <EntityTypeMapping TypeName="RiftWorldModel.VarietyOfInhabitant">
+        <MappingFragment StoreEntitySet="VarietyOfInhabitants">
+          <ScalarProperty Name="VarietyOfInhabitantsId" ColumnName="VarietyOfInhabitantsId" />
+          <ScalarProperty Name="RiftId" ColumnName="RiftId" />
+          <ScalarProperty Name="RaceId" ColumnName="RaceId" />
+          <ScalarProperty Name="RaceOrder" ColumnName="RaceOrder" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="AspNetUserRoles" TypeName="RiftWorldModel.AspNetUserRoles" StoreEntitySet="AspNetUserRoles">
+      <EndProperty Name="AspNetRoles">
+        <ScalarProperty Name="Id" ColumnName="RoleId" />
+      </EndProperty>
+      <EndProperty Name="AspNetUsers">
+        <ScalarProperty Name="Id" ColumnName="UserId" />
+      </EndProperty>
+    </AssociationSetMapping>
+  </EntityContainerMapping>
+</Mapping>

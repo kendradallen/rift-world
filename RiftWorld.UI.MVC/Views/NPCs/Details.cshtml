@@ -1,0 +1,106 @@
+﻿@model RiftWorld.DATA.EF.NPC
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>NPC</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Alias)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Alias)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Quote)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Quote)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PortraitFileName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PortraitFileName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CrestFileName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CrestFileName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ApperanceText)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ApperanceText)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AboutText)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AboutText)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IsWorkInProgress)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IsWorkInProgress)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Info.Blurb)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Info.Blurb)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Locale.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Locale.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Race.RaceName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Race.RaceName)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.NpcId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

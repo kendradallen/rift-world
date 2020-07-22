@@ -738,10 +738,12 @@ namespace RiftWorld.DATA.EF
 
         [Required]
         [Display(Name = "Minimum Level")]
+        [Range(1,20)]
         public byte MinLevel { get; set; }
 
         [Required]
         [Display(Name ="Maximum Level")]
+        [Range(1,20)]
         public byte MaxLevel { get; set; }
 
     }
@@ -760,7 +762,7 @@ namespace RiftWorld.DATA.EF
         [Display(Name = "Discord Name")]
         public string DiscordName { get; set; }
 
-        //TODO consider whether I should change the discord discriminator to a small int and limit the digits
+        //TODO change the discord discriminator to a small int and add range to it
         [Required]
         [StringLength(maximumLength: 4, MinimumLength = 4)]
         public string DiscordDiscriminator { get; set; }

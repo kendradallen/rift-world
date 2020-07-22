@@ -1,0 +1,93 @@
+﻿@model IEnumerable<RiftWorld.DATA.EF.NPC>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Alias)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Quote)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PortraitFileName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CrestFileName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ApperanceText)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AboutText)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IsWorkInProgress)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Info.Blurb)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Locale.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Race.RaceName)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Alias)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Quote)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PortraitFileName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CrestFileName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ApperanceText)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AboutText)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.IsWorkInProgress)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Info.Blurb)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Locale.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Race.RaceName)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.NpcId }) |
+            @Html.ActionLink("Details", "Details", new { id=item.NpcId }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.NpcId })
+        </td>
+    </tr>
+}
+
+</table>

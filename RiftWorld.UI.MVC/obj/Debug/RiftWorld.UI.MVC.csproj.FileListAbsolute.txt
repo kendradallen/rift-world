@@ -103,3 +103,6 @@ C:\Users\student\Documents\Visual Studio 2017\Projects\RiftWorld\RiftWorld\src\R
 C:\Users\student\Documents\Visual Studio 2017\Projects\RiftWorld\RiftWorld\src\RiftWorld.UI.MVC\obj\Debug\RiftWorld.UI.MVC.csproj.CopyComplete
 C:\Users\student\Documents\Visual Studio 2017\Projects\RiftWorld\RiftWorld\src\RiftWorld.UI.MVC\obj\Debug\RiftWorld.UI.MVC.dll
 C:\Users\student\Documents\Visual Studio 2017\Projects\RiftWorld\RiftWorld\src\RiftWorld.UI.MVC\obj\Debug\RiftWorld.UI.MVC.pdb
+C:\Users\student\Documents\Visual Studio 2017\Projects\RiftWorld\RiftWorld\src\RiftWorld.UI.MVC\bin\RiftWorld.DATA.EF.dll
+C:\Users\student\Documents\Visual Studio 2017\Projects\RiftWorld\RiftWorld\src\RiftWorld.UI.MVC\bin\RiftWorld.DATA.EF.pdb
+C:\Users\student\Documents\Visual Studio 2017\Projects\RiftWorld\RiftWorld\src\RiftWorld.UI.MVC\bin\RiftWorld.DATA.EF.dll.config

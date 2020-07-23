@@ -442,6 +442,7 @@ namespace RiftWorld.DATA.EF
         [Required]
         [StringLength(500)]
         [UIHint("MultilineText")]
+        [Display(Name = "Known Aliases")]
         public string Alias { get; set; }
 
         [Required]

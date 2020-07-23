@@ -1,0 +1,252 @@
+﻿body {
+    background: url("img/testmap.jpg") no-repeat center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    font-family: "Grenze Gotisch", cursive;
+    font-size: 22px;
+    /*font-weight: 300;*/
+}
+
+#content {
+    background-color: antiquewhite;
+    color: darkslategrey;
+}
+
+    #content p {
+        color: darkslategrey;
+    }
+
+.header-section .ht-options {
+    background-color: rgba(158, 3, 3, 0.52);
+}
+
+.header-section .logo {
+    background: none;
+}
+
+.footer-section {
+    background: none;
+}
+
+    .footer-section .container {
+        background-color: rgba(255, 235, 205, .3);
+        border: 2px solid rgba(255, 235, 205, .23);
+    }
+
+p {
+    font-size: 1em;
+    font-weight: 300;
+    line-height: 1.1em;
+}
+
+
+/**************  NPC ****************/
+#content {
+    padding-top: 1em;
+    /*box-shadow: -1px 10px 10px 12px rgba(0,0,0,.29);*/
+    /*padding-right: .4em;*/
+    box-shadow: inset -1px 1px 20px 20px #e8b182;
+}
+
+#startTop {
+    padding-right: .4em;
+    margin: auto;
+}
+
+#name {
+    font-size: 3em;
+    font-weight: 500;
+    line-height: 1em;
+    color: black;
+    margin: 0;
+}
+
+#aliases {
+    font-size: 1.5em;
+    margin-top: .5em;
+}
+
+#startTop-right {
+    text-align: center;
+    border: ridge rgba(245,222,179,.38);
+    border-right: none;
+    background: rgba(245, 222, 179, .24);
+    padding: 0; /* This is at clients preference of size during demo. As viewed on laptop screen. (using the Percy demo pic) */
+}
+
+#lastLo dt, #lastLo dd {
+    display: inline-block;
+}
+
+#startLower {
+    border: ridge wheat;
+    margin: auto;
+    border-right: none;
+    border-left: none;
+    padding: 3px;
+}
+
+#orgs {
+    position: absolute;
+    font-size: 1.5em;
+    line-height: 1em;
+}
+
+#lastLo {
+    position: absolute;
+    bottom: 0px;
+    line-height: 1em;
+    font-size: 1.3em;
+    /*margin-bottom: unset;*/
+}
+
+    #lastLo dl {
+        margin-bottom: unset;
+    }
+
+/*#about, #apperance, #secret, #story, #rumors{
+    margin-top: 2em;
+}*/
+.hang{
+    padding-left: .3rem;
+    padding-right: .3rem;
+}
+
+.hang p {
+    text-indent: 1em;
+}
+
+#apperance {
+    margin-top: 2em;
+}
+
+/**************  blockquote ****************/
+blockquote h4 {
+    margin: unset;
+    color: lightslategray;
+}
+
+#start blockquote {
+    border-radius: 3px;
+    position: relative; /*  <--- */
+    font-style: italic;
+    text-align: center;
+    padding: 1rem 1.2rem;
+    width: 60%; /* create space for the quotes */
+    color: #4a4a4a;
+    margin: 1rem auto 2rem;
+    color: #4a4a4a;
+    background: rgba(248,248,255,.75);
+    box-shadow: 1px 1px rgba(0,0,0, .18);
+}
+    /* -- create the quotation marks -- */
+    #start blockquote:before,
+    #start blockquote:after {
+        font-family: FontAwesome;
+        position: absolute;
+        /* -- inside the relative position of blockquote -- */
+        top: 13px;
+        color: ghostwhite;
+        font-size: 34px;
+        text-shadow: 1px 1px rgba(0,0,0,.49);
+    }
+
+    #start blockquote:before {
+        content: "\f10d";
+        margin-right: 13px;
+        right: 100%;
+    }
+
+    #start blockquote:after {
+        content: "\f10e";
+        margin-left: 13px;
+        left: 100%;
+        top: auto;
+        bottom: 13px;
+    }
+
+/**************  line header ****************/
+
+h2.line {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: darkslategray;
+    font-weight: bold;
+    font-size: 2.3em;
+}
+
+    h2.line:before,
+    h2:after {
+        content: '';
+        /*border-top: 2px solid;*/
+        border-top: 8px solid;
+        margin: 0 20px 0 0;
+        flex: 1 0 20px;
+    }
+
+    h2.line:after {
+        margin: 0 0 0 20px;
+    }
+
+
+/**************  sidenav ****************/
+
+#mySidenav {
+    position: sticky;
+    top: 80px;
+}
+
+    #mySidenav a {
+        position: absolute; /* Position them relative to the browser window */
+        left: -80px; /* Position them outside of the screen */
+        transition: 0.3s; /* Add transition on hover */
+        padding: 15px; /* 15px padding */
+        width: 100px; /* Set a specific width */
+        text-decoration: none; /* Remove underline */
+        font-size: 20px; /* Increase font size */
+        color: black; /* White text color */
+        border-radius: 0 5px 5px 0; /* Rounded corners on the top right and bottom right side */
+        background-color: burlywood;
+        box-shadow: 2px 0 1px 0 rgba(0,0,0,.5);
+        border-top: solid cornsilk;
+        border-bottom: solid navajowhite;
+    }
+
+        #mySidenav a .active {
+            background-color: crimson;
+            color: white;
+            border-color: maroon;
+        }
+
+        #mySidenav a:hover {
+            left: 0; /* On mouse-over, make the elements appear as they should */
+        }
+
+/* The about link: 20px from the top with a green background */
+a#about-nav {
+    top: 20px;
+    /*background-color: #4CAF50;*/
+    background-color: crimson;
+    color: white;
+    border-color: maroon;
+}
+
+#blog {
+    top: 80px;
+    background-color: #2196F3; /* Blue */
+}
+
+#projects {
+    top: 140px;
+    background-color: #f44336; /* Red */
+}
+
+#contact {
+    top: 200px;
+    background-color: #555 /* Light Black */
+}

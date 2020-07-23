@@ -17,7 +17,20 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
         // GET: NPCs
         public ActionResult Index()
         {
+            //DO NOT, under any circumstances, not include Info. Not until you experiment and figure out if you don't need it when doing the secrets, rumors, stories, and tags
             var nPCs = db.NPCs.Include(n => n.Info).Include(n => n.Locale).Include(n => n.Race);
+
+            //var npcAndClass = from n in db.NPCs
+            //            join cn in db.ClassNPCs on n.NpcId equals cn.NpcId
+            //            join c in db.Classes on cn.ClassId equals c.ClassId
+            //            select new
+            //            {
+            //                NpcId = n.NpcId,
+            //                ClassId = c.ClassId
+            //                //other assignments
+            //            }
+            //        ;
+
             return View(nPCs.ToList());
         }
 
@@ -50,8 +63,70 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        //public ActionResult Create([Bind(Include = "NpcId,InfoId,Name,Alias,Quote,PortraitFileName,RaceId,CrestFileName,ApperanceText,AboutText,LastLocationId,IsWorkInProgress")] NPC nPC, string blurb)
         public ActionResult Create([Bind(Include = "NpcId,InfoId,Name,Alias,Quote,PortraitFileName,RaceId,CrestFileName,ApperanceText,AboutText,LastLocationId,IsWorkInProgress")] NPC nPC)
         {
+            //note: add blurb to creation form and binding (also figure out how ModelState and Bind actually work. This is pseudo code
+            //TODO - make this real code. It is making a Info at same time as new NPC
+            Info info;
+
+            string blurb = "things";
+            if (blurb.Length <= 100)
+            {
+                short oldLargestInfoId = db.Infos.Max(i => i.InfoId);
+                                         
+                info = new Info
+                {
+                    InfoTypeId = 2,
+                    IdWithinType = (short)(db.NPCs.Max(n => n.NpcId) + 1),
+                    Blurb = blurb,
+                    Name = nPC.Name,
+                    IsPublished = nPC.IsWorkInProgress
+                };
+                db.Infos.Add(info);
+                //short newLargestInfoId = db.Infos.Max(i => i.InfoId);
+                //if (oldLargestInfoId != newLargestInfoId)
+                //{
+                //    //ViewBag.Message = "yup. Old = " + oldLargestInfoId + ". New = " + newLargestInfoId;
+                //    ViewBag.Message = nPC.NpcId;
+                //    return View("test");
+                //}
+                //else
+                //{
+                //    //ViewBag.Message = "NOOOOOOOOOOOOOOO. Old = " + oldLargestInfoId + ". New = " + newLargestInfoId;
+                //    ViewBag.Message = nPC.NpcId;
+                //    return View("test");
+
+                //}
+
+                db.SaveChanges();
+
+                //short newLargestInfoId = db.Infos.Max(i => i.InfoId);
+                //if (oldLargestInfoId != newLargestInfoId)
+                //{
+                //    ViewBag.Message = "yup. Old = " + oldLargestInfoId + ". New = " + newLargestInfoId;
+                //}
+                //else
+                //{
+                //    ViewBag.Message = "NOOOOOOOOOOOOOOO. Old = " + oldLargestInfoId + ". New = " + newLargestInfoId;
+                //}
+
+            }
+            else
+            {
+                ViewBag.Message = "Blurb was too long, try again";
+                ViewBag.InfoId = new SelectList(db.Infos, "InfoId", "Blurb", nPC.InfoId);
+                ViewBag.LastLocationId = new SelectList(db.Locales, "LocaleId", "Name", nPC.LastLocationId);
+                ViewBag.RaceId = new SelectList(db.Races, "RaceId", "RaceName", nPC.RaceId);
+                ViewBag.Blurb = blurb;
+                return View(nPC);
+            }
+
+            short blue = db.Infos.Max(i => i.InfoId);
+            nPC.InfoId = blue;
+            ViewBag.SecondMessage = blue;
+
+
             if (ModelState.IsValid)
             {
                 db.NPCs.Add(nPC);

@@ -3,104 +3,154 @@
 @{
     ViewBag.Title = "Details";
 }
+    @* TODO - sidenav both programming it and ensure the labels are proper *@
+    <div id="mySidenav" class="sidenav">
+        <a href="#" id="about-nav">About</a>
+        <a href="#" id="blog">Blog</a>
+        <a href="#" id="projects">Projects</a>
+        <a href="#" id="contact">Contact</a>
+    </div>
 
-<h2>Details</h2>
+    <article class="container" id="content">
+        <div class="row">
+            <section id="start" class="col-12">
+                <div id="quote" class="clearfix">
+                    <blockquote>
+                        <h4>
+                            @Html.DisplayFor(model => model.Quote)
+                        </h4>
+                    </blockquote>
+                </div>
+                <div id="startTop" class="row">
+                    <div id="startTop-left" class="col-md-9">
+                        <div id="name">
+                            @Html.DisplayFor(model => model.Name)
+                        </div>
+                        <div id="aliases">
+                            <h5>
+                                @Html.DisplayNameFor(model => model.Alias)
+                            </h5><p>
+                                @Html.DisplayFor(model => model.Alias)
+                            </p>
+                        </div>
+                    </div>
+                    <div id="startTop-right" class="col-md-3">
+                        <div id="picture">
+                            <img src="https://vignette.wikia.nocookie.net/criticalrole/images/9/91/Percy2.png/revision/latest/scale-to-width-down/310?cb=20151228164610" />
+                        </div>
+                        <div id="basic-stuff" class="row">
+                            <p id="race" class="col-6">
+                                @Html.DisplayFor(model => model.Race.RaceName)
+                            </p>
+                            <p id="class" class="col-6">Gunslinger</p>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <div id="startLower" class="row">
+                    <div id="crest" class="col-md-2">
+                        <img src="https://vignette.wikia.nocookie.net/criticalrole/images/5/59/DeRolo_Crest.JPG/revision/latest/scale-to-width-down/180?cb=20180516101724" />
+                    </div>
+                    <div id="startLower-right" class="col-md-10">
+                        <div id="orgs">
+                            <ul>
+                                <li>
+                                    Vox Machina
+                                </li>
+                                <li>
+                                    The De Rolo family - <i>current head </i>
+                                </li>
+                            </ul>
+                        </div>
+                        <div id="lastLo">
+                            <dl>
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.LastLocationId)
+                                </dt>
+                                <dd>
+                                    @Html.DisplayFor(model => model.Locale.Name)
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <br />
+            <section id="apperance" class="col-12">
+                <h2 class="line">
+                    @Html.DisplayNameFor(model => model.ApperanceText)
+                </h2>
+                <div class="hang">
+                    @* @Html.DisplayFor(model => model.ApperanceText)*@
+                    @Html.Raw(Model.ApperanceText)
 
-<div>
-    <h4>NPC</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
+                    @*<p>Percy is a young human in his early twenties,.He originally had brown hair, but it turned white as a result of the trauma he suffered after the Briarwoods killed his family and he ran away with the aid of his sister Cassandra.</p>
 
-        <dd>
-            @Html.DisplayFor(model => model.Name)
-        </dd>
+                        <p>After joining the Slayer's Take, Percy has the brand of the guild on his right arm.</p>*@
+                </div>
+            </section>
+            <section id="about" class="col-12">
+                <h2 class="line">
+                    @Html.DisplayNameFor(model => model.AboutText)
+                </h2>
+                <div class="hang">
+                    @* @Html.Raw(Model.AboutText)*@
+                    <p> Compared to his fellow party, Percy is rather quiet, usually only speaking when necessary. However, he has shown he can be quite persuasive in social situations and is somewhat of a strategist within the group, as seen in "The Temple Showdown" (1x11).</p>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Alias)
-        </dt>
+                    <p>Percy thinks of himself as being the only one capable of making adult decisions, despite his young age. He is also very pragmatic, with a consistent belief that the ends justify the means. This has led to moments of conflict between him and the party.</p>
+                    <h5 style="text-decoration: underline;">Background</h5>
+                    <p>Percy was raised alongside his six siblings in Whitestone, where his branch of the de Rolo family ruled. Five years before the campaign began, the Briarwoods were invited in as guests, where they proceeded to seize control of Whitestone, murdering the de Rolos and those loyal to them. Percy was taken prisoner and tortured by Anna Ripley. After Percy fled Whitestone with the help of his sister Cassandra, he wandered aimlessly before setting out to avenge his family. Percy then constructed his first gun, the List. On five of its six barrels he inscribed a target of his vengeance: Lord Briarwood, Lady Briarwood, Dr. Ripley, Sir Kerrion Stonefell, and Professor Anders. Percy tracked Dr. Ripley for a year until he made his way to Stilben, where he attempted to kill her. He was captured by Dr. Ripley's guards and imprisoned until he was freed by the rest of Vox Machina.</p>
 
-        <dd>
-            @Html.DisplayFor(model => model.Alias)
-        </dd>
+                    <p>Because he is a gunslinger, Percy is the main long-ranged attack member of Vox Machina. He previously fought with his two guns, "The List", a six-barrel pepper-box, and "Bad News", a sniper rifle-esque device. The List has since been destroyed, and Percy has acquired two new weapons, both from Dr. Ripley: a four-shot pistol which he called "Retort", and another pepperbox known as "Animus". He also has experience in using melee weapons, usually a rapier or a longsword.</p>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Quote)
-        </dt>
+                    <p>Percy is also a tinkerer, creating and modifying items to give both himself and his teammates an edge in battle. He creates explosive and utility arrows for Vex'ahlia, as well as crafting his own ammunition and even weapons, such as his Diplomacy electroshock glove.</p>
+                </div>
+            </section>
+            <section id="secret" class="col-12">
+                <h2 class="line">Few Know...</h2>
 
-        <dd>
-            @Html.DisplayFor(model => model.Quote)
-        </dd>
+            </section>
+            <section id="story" class="col-12">
+                <h2 class="line">Stories</h2>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.PortraitFileName)
-        </dt>
+            </section>
+            <section id="rumors" class="col-12">
+                <h2 class="line">Rumors</h2>
 
-        <dd>
-            @Html.DisplayFor(model => model.PortraitFileName)
-        </dd>
+            </section>
+        </div>
+        <footer id="tags">
+            <div class="tag-list">
+                <a href="#"><span>Vox Machina</span></a>
+                <a href="#"><span>Taldore</span></a>
+            </div>
+            <p>
+                @Html.ActionLink("Edit", "Edit", new { id = Model.NpcId }) |
+                @Html.ActionLink("Back to List", "Index")
+            </p>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.CrestFileName)
-        </dt>
+        </footer>
+    </article>
 
-        <dd>
-            @Html.DisplayFor(model => model.CrestFileName)
-        </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.ApperanceText)
-        </dt>
+@*
+    @Html.DisplayNameFor(model => model.Name)
 
-        <dd>
-            @Html.DisplayFor(model => model.ApperanceText)
-        </dd>
+    @Html.DisplayNameFor(model => model.Quote)
 
-        <dt>
-            @Html.DisplayNameFor(model => model.AboutText)
-        </dt>
+    @Html.DisplayNameFor(model => model.PortraitFileName)
+    @Html.DisplayFor(model => model.PortraitFileName)
 
-        <dd>
-            @Html.DisplayFor(model => model.AboutText)
-        </dd>
+    @Html.DisplayNameFor(model => model.CrestFileName)
+    @Html.DisplayFor(model => model.CrestFileName)
 
-        <dt>
-            @Html.DisplayNameFor(model => model.IsWorkInProgress)
-        </dt>
+    @Html.DisplayFor(model => model.AboutText)
 
-        <dd>
-            @Html.DisplayFor(model => model.IsWorkInProgress)
-        </dd>
+    @Html.DisplayNameFor(model => model.IsWorkInProgress)
+    @Html.DisplayFor(model => model.IsWorkInProgress)
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Info.Blurb)
-        </dt>
+    @Html.DisplayNameFor(model => model.Info.Blurb)
+    @Html.DisplayFor(model => model.Info.Blurb)
 
-        <dd>
-            @Html.DisplayFor(model => model.Info.Blurb)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Locale.Name)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Locale.Name)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Race.RaceName)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Race.RaceName)
-        </dd>
-
-    </dl>
-</div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.NpcId }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+    @Html.DisplayNameFor(model => model.Race.RaceName)
+*@

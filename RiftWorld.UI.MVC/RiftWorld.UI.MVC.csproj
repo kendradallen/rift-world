@@ -272,8 +272,9 @@
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
-    <Content Include="Scripts\bootstrap.js" />
-    <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\BaseMVCScripts\bootstrap.js" />
+    <Content Include="Scripts\BaseMVCScripts\bootstrap.min.js" />
+    <Content Include="Scripts\jquery-3.5.1.js" />
     <Content Include="Scripts\js\bootstrap.min.js" />
     <Content Include="Scripts\js\circle-progress.min.js" />
     <Content Include="Scripts\js\jquery-3.3.1.min.js" />
@@ -390,19 +391,19 @@
     <Content Include="Content\fonts\fontawesome-webfont.woff" />
     <Content Include="Content\fonts\fontawesome-webfont.woff2" />
     <Content Include="Content\fonts\FontAwesome.otf" />
-    <None Include="Scripts\jquery-3.3.1.intellisense.js" />
-    <Content Include="Scripts\jquery-3.3.1.js" />
-    <Content Include="Scripts\jquery-3.3.1.min.js" />
-    <Content Include="Scripts\jquery-3.3.1.slim.js" />
-    <Content Include="Scripts\jquery-3.3.1.slim.min.js" />
-    <None Include="Scripts\jquery.validate-vsdoc.js" />
-    <Content Include="Scripts\jquery.validate.js" />
-    <Content Include="Scripts\jquery.validate.min.js" />
-    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
-    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
-    <Content Include="Scripts\modernizr-2.8.3.js" />
-    <Content Include="Scripts\respond.js" />
-    <Content Include="Scripts\respond.min.js" />
+    <None Include="Scripts\BaseMVCScripts\jquery-3.3.1.intellisense.js" />
+    <Content Include="Scripts\BaseMVCScripts\jquery-3.3.1.js" />
+    <Content Include="Scripts\BaseMVCScripts\jquery-3.3.1.min.js" />
+    <Content Include="Scripts\BaseMVCScripts\jquery-3.3.1.slim.js" />
+    <Content Include="Scripts\BaseMVCScripts\jquery-3.3.1.slim.min.js" />
+    <None Include="Scripts\BaseMVCScripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\BaseMVCScripts\jquery.validate.js" />
+    <Content Include="Scripts\BaseMVCScripts\jquery.validate.min.js" />
+    <Content Include="Scripts\BaseMVCScripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\BaseMVCScripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\BaseMVCScripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\BaseMVCScripts\respond.js" />
+    <Content Include="Scripts\BaseMVCScripts\respond.min.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -468,6 +469,7 @@
     <Content Include="_Archive\fonts\FontAwesome.otf" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\NPCs\test.cshtml" />
+    <Content Include="Views\NPCs\CreateV2.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -478,8 +480,8 @@
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <None Include="packages.config" />
-    <Content Include="Scripts\jquery-3.3.1.slim.min.map" />
-    <Content Include="Scripts\jquery-3.3.1.min.map" />
+    <Content Include="Scripts\BaseMVCScripts\jquery-3.3.1.slim.min.map" />
+    <Content Include="Scripts\BaseMVCScripts\jquery-3.3.1.min.map" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RiftWorld.DATA.EF\RiftWorld.DATA.EF.csproj">

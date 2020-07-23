@@ -14,6 +14,11 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
     {
         private RiftWorldEntities db = new RiftWorldEntities();
 
+        public ActionResult Test()
+        {
+            return View("test");
+        }
+
         // GET: NPCs
         public ActionResult Index()
         {
@@ -46,6 +51,66 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             {
                 return HttpNotFound();
             }
+            return View(nPC);
+        }
+
+        // GET: NPCs/Create
+        public ActionResult CreateV2()
+        {
+            ViewBag.InfoId = new SelectList(db.Infos, "InfoId", "Blurb");
+            ViewBag.LastLocationId = new SelectList(db.Locales, "LocaleId", "Name");
+            ViewBag.RaceId = new SelectList(db.Races, "RaceId", "RaceName");
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        //public ActionResult Create([Bind(Include = "NpcId,InfoId,Name,Alias,Quote,PortraitFileName,RaceId,CrestFileName,ApperanceText,AboutText,LastLocationId,IsWorkInProgress")] NPC nPC, string blurb)
+        public ActionResult CreateV2([Bind(Include = "NpcId,InfoId,Name,Alias,Quote,PortraitFileName,RaceId,CrestFileName,ApperanceText,AboutText,LastLocationId,IsWorkInProgress")] NPC nPC, string blurb)
+        {
+            //make corresponding info 
+            Info info;
+            
+            if (blurb.Length <= 100) //actual making of the info
+            {
+                short oldLargestInfoId = db.Infos.Max(i => i.InfoId);
+
+                info = new Info
+                {
+                    InfoTypeId = 2, // <----- type 2 = NPC
+                    IdWithinType = (short)(db.NPCs.Max(n => n.NpcId) + 1), //hack in order to not have to come back to this AGAIN later. But if needed cna be done after NPC actually made
+                    Blurb = blurb,
+                    Name = nPC.Name,
+                    IsPublished = nPC.IsWorkInProgress
+                };
+                db.Infos.Add(info);
+
+                db.SaveChanges();
+
+            }
+            else //if blurb is too long (and thus not valid)
+            {
+                ViewBag.Message = "Blurb was too long, try again";
+                ViewBag.InfoId = new SelectList(db.Infos, "InfoId", "Blurb", nPC.InfoId);
+                ViewBag.LastLocationId = new SelectList(db.Locales, "LocaleId", "Name", nPC.LastLocationId);
+                ViewBag.RaceId = new SelectList(db.Races, "RaceId", "RaceName", nPC.RaceId);
+                ViewBag.Blurb = blurb;
+                return View(nPC);
+            }
+
+            //adding proper InfoId to NPC before checking if Model is valid (cause till now, it wasn't)
+            nPC.InfoId = db.Infos.Max(i => i.InfoId); 
+
+            if (ModelState.IsValid)
+            {
+                db.NPCs.Add(nPC);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+
+            ViewBag.InfoId = new SelectList(db.Infos, "InfoId", "Blurb", nPC.InfoId);
+            ViewBag.LastLocationId = new SelectList(db.Locales, "LocaleId", "Name", nPC.LastLocationId);
+            ViewBag.RaceId = new SelectList(db.Races, "RaceId", "RaceName", nPC.RaceId);
             return View(nPC);
         }
 

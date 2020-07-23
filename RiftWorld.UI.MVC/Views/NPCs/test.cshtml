@@ -6,3 +6,36 @@
 <h2>test</h2>
 
 <h3>@ViewBag.Message</h3>
+
+<!-- Tiny Classic -->
+<article id="content" class="container">
+    <form method="post">
+        <textarea id="mytextarea">Hello, World!</textarea>
+    </form>
+
+    <!-- Tiny Inline -->
+
+    <form method="post">
+        <div id="myeditablediv">Click here to edit!</div>
+    </form>
+</article>
+
+
+@section Scripts{
+
+    @* Tiny classic*@
+    <script>
+        tinymce.init({
+            selector: '#mytextarea'
+        });
+    </script>
+
+
+    @* tiny inline *@
+    <script type="text/javascript">
+        tinymce.init({
+            selector: '#myeditablediv',
+            inline: true
+        });
+    </script>
+}

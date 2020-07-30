@@ -181,6 +181,7 @@
     <Compile Include="Models\AdminViewModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\NpcViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -269,11 +270,13 @@
     <Content Include="Content\img\videos\videos-3.jpg" />
     <Content Include="Content\img\videos\videos-4.jpg" />
     <Content Include="Content\img\videos\videos-5.jpg" />
+    <Content Include="Content\SelectBoxes\multi.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\BaseMVCScripts\bootstrap.js" />
     <Content Include="Scripts\BaseMVCScripts\bootstrap.min.js" />
+    <Content Include="Scripts\JavaScript.js" />
     <Content Include="Scripts\jquery-3.5.1.js" />
     <Content Include="Scripts\js\bootstrap.min.js" />
     <Content Include="Scripts\js\circle-progress.min.js" />
@@ -283,6 +286,7 @@
     <Content Include="Scripts\js\jquery.slicknav.js" />
     <Content Include="Scripts\js\main.js" />
     <Content Include="Scripts\js\owl.carousel.min.js" />
+    <Content Include="Scripts\SelectBoxes\multi.js" />
     <Content Include="_Archive\404.html" />
     <Content Include="_Archive\categories-grid.html" />
     <Content Include="_Archive\categories-list.html" />
@@ -468,8 +472,11 @@
     <Content Include="_Archive\fonts\fontawesome-webfont.woff2" />
     <Content Include="_Archive\fonts\FontAwesome.otf" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\NPCs\test.cshtml" />
     <Content Include="Views\NPCs\CreateV2.cshtml" />
+    <Content Include="Views\NPCs\DetailsV2.cshtml" />
+    <Content Include="Views\NPCs\_OrgsPartial.cshtml" />
+    <Content Include="Views\NPCs\Test.cshtml" />
+    <Content Include="Views\NPCs\Test2.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

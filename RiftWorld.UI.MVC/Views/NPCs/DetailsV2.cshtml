@@ -53,14 +53,16 @@
                 </div>
                 <div id="startLower-right" class="col-md-10">
                     <div id="orgs">
-                        <ul>
+                        @Html.Action("_OrgsPartial", "NPCs", new { id= Model.NpcId})
+
+                        @*<ul>
                             <li>
                                 Vox Machina
                             </li>
                             <li>
                                 The De Rolo family - <i>current head </i>
                             </li>
-                        </ul>
+                        </ul>*@
                     </div>
                     <div id="lastLo">
                         <dl>
@@ -95,10 +97,10 @@
             </h2>
             <div class="hang">
                 @*<form method="post">
-                    <textarea id="mytextarea">@Html.Raw(Model.AboutText)</textarea>
-                </form>*@
+                        <textarea id="mytextarea">@Html.Raw(Model.AboutText)</textarea>
+                    </form>*@
                 @Html.Raw(Html.Raw(Model.AboutText))
-                
+
                 <p> Compared to his fellow party, Percy is rather quiet, usually only speaking when necessary. However, he has shown he can be quite persuasive in social situations and is somewhat of a strategist within the group, as seen in "The Temple Showdown" (1x11).</p>
 
                 <p>Percy thinks of himself as being the only one capable of making adult decisions, despite his young age. He is also very pragmatic, with a consistent belief that the ends justify the means. This has led to moments of conflict between him and the party.</p>

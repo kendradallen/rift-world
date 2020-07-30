@@ -1,41 +1,163 @@
-﻿
+﻿@model RiftWorld.UI.MVC.Models.TesterVM
+
 @{
-    ViewBag.Title = "test";
+    ViewBag.Title = "Test";
 }
 
-<h2>test</h2>
 
-<h3>@ViewBag.Message</h3>
+@section styles{
+}
+<h2>Test</h2>
 
-<!-- Tiny Classic -->
-<article id="content" class="container">
-    <form method="post">
-        <textarea id="mytextarea">Hello, World!</textarea>
-    </form>
+@using (Html.BeginForm("","",FormMethod.Post, new { id = "PublisherCreateForm" }))
+{
+    @Html.AntiForgeryToken()
 
-    <!-- Tiny Inline -->
+<div class="form-horizontal">
+    <h4>TesterVM</h4>
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+        </div>
+    </div>
 
-    <form method="post">
-        <div id="myeditablediv">Click here to edit!</div>
-    </form>
-</article>
+    @* <select class="demo" multiple>
+            @foreach (var o in OrgList)
+            {
+                <option value="@o.OrgId">
+                    o.Name
+                </option>
+            }
+        </select>*@
 
+    @*<select class="selectDemo" multiple>
+        @foreach (var o in Model.OrgAssociations)
+        {
+            <option value="@o.Value">
+                @o.Text
+            </option>
+        }
+    </select>*@
 
-@section Scripts{
+    @*<div class="col-md-10 form-group">
+        @foreach (var i in Model.OrgAssociations)
+        {
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" />@i.Text
+                </label>
+            </div>
+        }
+    </div>*@
 
-    @* Tiny classic*@
+    <ul id="selected">
+        <li>
+            <p class="list-name" value="Name">Name</p>
+            <input class="list-order"  type="number" />
+        </li>
+    </ul>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input id="submit" type="button" value="Create" class="btn btn-default" />
+        </div>
+    </div>
+</div>
+}
+
+<div id="Message"> </div>
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
     <script>
-        tinymce.init({
-            selector: '#mytextarea'
-        });
+
+        //$("ul#selected li").each(function () {
+        //    list.push({ "list-name": $(this).$(".list-name").val(), "list-order": $(this).$(".list-order").val() })
+        //});
+
+        //var stuffTaGive = {
+        //    Name: "hold",
+        //    List: [""]
+        //}
+
+        //var thing = [
+        //     {
+        //        "list-name": "holder",
+        //        "list-order": 0
+        //    }
+        //];
+       
+        $("#submit").on('click', function (e) {
+            e.preventDefault();
+            var counter = 0;
+            $("ul#selected li").each(function () {
+                var name = this.textContent;
+                //var order = $(""
+                if (counter === 0) {
+                    var thing = [
+             {
+                "list-name": name,
+                "list-order": 0
+            }
+        ];
+                }
+                else {
+                    thing.push({ "list-name": name, "list-order": $('input').val() });
+                }
+                counter++;
+                $("#Message").html("<div class='alert alert-success'>" + thing[0]["list-name"] + ", "+ counter.toString() + "</div>");
+
+            });
+
+
+        }
+        
+        )
+        //var list = {
+        //    "list-name": "holder",
+        //    "list-order": 0
+        //}
+        //$("#submit").on('click', function (e) {
+        //    e.preventDefault();
+        //    $("ul#selected li").each(function () {
+        //        list.push({ "list-name": $('label').val(), "list-order": $('input').val() });
+        //        $("#Message").html("<div class='alert alert-success'>" + list["list-name"] + "</div>");
+
+        //    });
+
+
+        //}
+
+        //)
+
+    </script>
+    <script>
+        //define an object with the following properties
+            //ID
+
+        //on submit
+
+        // get form data. Bind to NPC.
+
+        //for each option in the selected list
+                //add to an array a class object 
+                // the ID = to the value of the item
+                //serilize that array. Add it to the form data. 
+
+
+        //so, using the two (or even three) list method, I'll during post action,take the itmes based on the list they are in. The values will be their ID. (if I want them to have more data I make them an array)
+            //then I have a button that let's you edit the say notes on it. You have the item as the currently focused item, and then click the button to add note, that then changes the "value" attribute to have the notes on it. 
     </script>
 
 
-    @* tiny inline *@
-    <script type="text/javascript">
-        tinymce.init({
-            selector: '#myeditablediv',
-            inline: true
-        });
-    </script>
 }
+

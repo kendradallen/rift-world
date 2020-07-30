@@ -1,0 +1,13 @@
+﻿@model IEnumerable<RiftWorld.UI.MVC.Models.OrgVM>
+
+<ul>
+    @foreach (var item in Model)
+    {
+    <li>
+        @Html.DisplayFor(modelItem => item.Name) @(item.Blurb.IsEmpty() ? "" : " - ") <i>
+    @Html.DisplayFor(modelItem => item.Blurb)
+</i>
+    </li>
+    }
+</ul>
+

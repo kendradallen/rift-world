@@ -1,4 +1,6 @@
 ﻿using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
+using RiftWorld.DATA.EF;
 
 namespace RiftWorld.UI.MVC.Controllers
 {

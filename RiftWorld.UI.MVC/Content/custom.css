@@ -1,4 +1,5 @@
-﻿body {
+﻿
+body {
     background: url("img/testmap.jpg") no-repeat center fixed;
     -webkit-background-size: cover;
     -moz-background-size: cover;
@@ -8,6 +9,8 @@
     font-size: 22px;
     /*font-weight: 300;*/
 }
+
+
 
 #content {
     background-color: antiquewhite;
@@ -86,13 +89,41 @@ p {
     border-right: none;
     border-left: none;
     padding: 3px;
+    /*padding-right:2em;*/
 }
 
 #orgs {
+    text-align:right;
+    direction:rtl;
     position: absolute;
     font-size: 1.5em;
     line-height: 1em;
+    display:contents;
 }
+    #orgs h4{
+        text-decoration:underline;
+        margin-right: -.3em;
+        margin-bottom:.2rem;
+    }
+#crest {
+    box-shadow: inset 1px 1px 20px #f2d1b1;
+}
+
+#startLower-right {
+    box-shadow: inset 1px 1px 9px 0px #f2d0b0;
+    padding-right: 1em;
+}
+
+#orgs li {
+    box-shadow: inset 1px 1px 9px 0px rgba(242,208,176,.48);
+    border-radius: 11%;
+}
+#orgs ul{
+    list-style:none;
+    border-right:solid #751919;
+    padding-right:.5em;
+}
+
 
 #lastLo {
     position: absolute;
@@ -198,7 +229,8 @@ h2.line {
 
 #mySidenav {
     position: sticky;
-    top: 80px;
+    /*top: 80px;*/
+    top: 30px;
 }
 
     #mySidenav a {
@@ -215,10 +247,11 @@ h2.line {
         box-shadow: 2px 0 1px 0 rgba(0,0,0,.5);
         border-top: solid cornsilk;
         border-bottom: solid navajowhite;
+        text-transform:capitalize;
     }
 
-        #mySidenav a .active {
-            background-color: crimson;
+        #mySidenav a.active {
+            background-color: crimson; 
             color: white;
             border-color: maroon;
         }
@@ -227,26 +260,23 @@ h2.line {
             left: 0; /* On mouse-over, make the elements appear as they should */
         }
 
-/* The about link: 20px from the top with a green background */
-a#about-nav {
-    top: 20px;
-    /*background-color: #4CAF50;*/
-    background-color: crimson;
-    color: white;
-    border-color: maroon;
+
+/**************  Secrets   ****************/
+#secret div {
+    align-content:center;
+    padding: 0 5vw;
 }
 
-#blog {
-    top: 80px;
-    background-color: #2196F3; /* Blue */
+#secret p {
+    text-align: center;
+    background: black;
+    font-size: 1.5em; /*or 1.25em*/
+    color: gray;
+    padding: .5em 1em;
+    border-radius: 2em 1em 4em / 0.5em 3em;
+    margin-bottom: unset;
+    text-transform:lowercase;
 }
 
-#projects {
-    top: 140px;
-    background-color: #f44336; /* Red */
-}
 
-#contact {
-    top: 200px;
-    background-color: #555 /* Light Black */
-}
+/**************  Stories  ****************/

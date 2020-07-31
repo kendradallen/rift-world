@@ -170,6 +170,9 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\Entities\CharactersController.cs" />
     <Compile Include="Controllers\Entities\NPCsController.cs" />
+    <Compile Include="Controllers\Entities\RumorsController.cs" />
+    <Compile Include="Controllers\Entities\SecretsController.cs" />
+    <Compile Include="Controllers\Entities\StoriesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\RolesAdminController.cs" />
@@ -477,6 +480,9 @@
     <Content Include="Views\NPCs\_OrgsPartial.cshtml" />
     <Content Include="Views\NPCs\Test.cshtml" />
     <Content Include="Views\NPCs\Test2.cshtml" />
+    <Content Include="Views\Secrets\_Details.cshtml" />
+    <Content Include="Views\Stories\_Stories.cshtml" />
+    <Content Include="Views\Rumors\_Rumors.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

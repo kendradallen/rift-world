@@ -210,17 +210,34 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             //                //other assignments
             //            }
             //        ;
-            var orgs = from no in db.NpcOrgs
-                             join o in db.Orgs on no.OrgId equals o.OrgId
-                             where no.NpcId == id && no.IsCurrent == true && o.IsWorkInProgress == false
-                             orderby no.OrgOrder
-                             select new
-                             {
-                                 Name = o.Name,
-                                 Blurb = no.BlurbNpcPage
-                             }
-                        ;
-            orgs.ToList();
+
+            //add the npc's classes
+            #region Classes
+            List<string> classes = (from cn in db.ClassNPCs
+                                    join c in db.Classes on cn.ClassId equals c.ClassId
+                                    where cn.NpcId == id
+                                    orderby cn.ClassOrder.HasValue descending, cn.ClassOrder, c.ClassName
+                                    select c.ClassName)
+               .ToList()
+               ;
+            var x = classes.Count;
+            switch (x)
+            {
+                case 0:
+                    ViewBag.Classes = "Unknown";
+                    break;
+                case 1:
+                    ViewBag.Classes = classes[0];
+                    break;
+                case 2:
+                    ViewBag.Classes = classes[0] + "/" + classes[1];
+                    break;
+                default:
+                    ViewBag.Classes = "Too many";
+                    break;
+            }
+
+            #endregion
             return View(nPC);
         }
 

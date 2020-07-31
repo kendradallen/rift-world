@@ -4,15 +4,9 @@
     ViewBag.Title = "Details";
 }
 @* TODO - sidenav both programming it and ensure the labels are proper *@
-<div id="mySidenav" class="sidenav">
-    <a href="#" id="about-nav">About</a>
-    <a href="#" id="blog">Blog</a>
-    <a href="#" id="projects">Projects</a>
-    <a href="#" id="contact">Contact</a>
-</div>
 
-<article class="container" id="content">
-    <div class="row">
+@*<article class="container" id="content" >
+    <div class="row">*@
         <section id="start" class="col-12">
             <div id="quote" class="clearfix">
                 <blockquote>
@@ -42,7 +36,7 @@
                         <p id="race" class="col-6">
                             @Html.DisplayFor(model => model.Race.RaceName)
                         </p>
-                        <p id="class" class="col-6">Gunslinger</p>
+                        <p id="class" class="col-6">@ViewBag.Classes</p>
                     </div>
                 </div>
             </div>
@@ -53,7 +47,8 @@
                 </div>
                 <div id="startLower-right" class="col-md-10">
                     <div id="orgs">
-                        @Html.Action("_OrgsPartial", "NPCs", new { id= Model.NpcId})
+                        <h4 style="text-decoration:underline;">Member of</h4>
+                        @Html.Action("_OrgsPartial", "NPCs", new { id = Model.NpcId })
 
                         @*<ul>
                             <li>
@@ -62,6 +57,14 @@
                             <li>
                                 The De Rolo family - <i>current head </i>
                             </li>
+                            <li> we're just gonna keep going</li>
+                            <li> we're just gonna keep going</li>
+                            <li> we're just gonna keep going</li>
+                            <li> we're just gonna keep going</li>
+                            <li> we're just gonna keep going</li>
+                            <li> we're just gonna keep going</li>
+                            <li> we're just gonna keep going</li>
+                            <li> we're just gonna keep going</li>
                         </ul>*@
                     </div>
                     <div id="lastLo">
@@ -88,7 +91,7 @@
 
                 @*<p>Percy is a young human in his early twenties,.He originally had brown hair, but it turned white as a result of the trauma he suffered after the Briarwoods killed his family and he ran away with the aid of his sister Cassandra.</p>
 
-                    <p>After joining the Slayer's Take, Percy has the brand of the guild on his right arm.</p>*@
+                <p>After joining the Slayer's Take, Percy has the brand of the guild on his right arm.</p>*@
             </div>
         </section>
         <section id="about" class="col-12">
@@ -97,8 +100,8 @@
             </h2>
             <div class="hang">
                 @*<form method="post">
-                        <textarea id="mytextarea">@Html.Raw(Model.AboutText)</textarea>
-                    </form>*@
+                    <textarea id="mytextarea">@Html.Raw(Model.AboutText)</textarea>
+                </form>*@
                 @Html.Raw(Html.Raw(Model.AboutText))
 
                 <p> Compared to his fellow party, Percy is rather quiet, usually only speaking when necessary. However, he has shown he can be quite persuasive in social situations and is somewhat of a strategist within the group, as seen in "The Temple Showdown" (1x11).</p>
@@ -112,19 +115,21 @@
                 <p>Percy is also a tinkerer, creating and modifying items to give both himself and his teammates an edge in battle. He creates explosive and utility arrows for Vex'ahlia, as well as crafting his own ammunition and even weapons, such as his Diplomacy electroshock glove.</p>
             </div>
         </section>
-        <section id="secret" class="col-12">
-            <h2 class="line">Few Know...</h2>
-
-        </section>
+        @Html.Action("_Details", "Secrets", new { id = Model.NpcId })
         <section id="story" class="col-12">
             <h2 class="line">Stories</h2>
 
         </section>
         <section id="rumors" class="col-12">
             <h2 class="line">Rumors</h2>
-
+            <div>
+                <div>
+                    <h6>Kinna whispers...</h6>
+                    <p>That once Wren was totally the one who messed with Ben. </p>
+                </div>
+            </div>
         </section>
-    </div>
+    @*</div>*@
     <footer id="tags">
         <div class="tag-list">
             <a href="#"><span>Vox Machina</span></a>
@@ -136,17 +141,54 @@
         </p>
 
     </footer>
-</article>
+@*</article>*@
 
-@*@section Scripts{
-    <script>
-        tinymce.init({
-            selector: '#mytextarea',
-            readonly: true,
-            toolbar: false,
-            menubar: false,
-            encoding: 'xml'
-        });
+@section Scripts{
+
+    @*<script>
+        var counter = 0;
+        $("section").each(function () {
+            var id = $(this).attr("id");
+            var top = 20 + 60 * counter;
+            $("#mySidenav").append('<a href="#' + id + '" id="' + id + '-nav" style="top:' + top + 'px;">' + id + '</a>');
+            counter++;
+            window.addEventListener("scroll", event => {
+                let fromTop = window.scrollY -284; /*284 is the size of the top nav bar*/
+                let daLink = document.querySelector("#mySidenav a#" + id + "-nav");
+                let section = document.querySelector(daLink.hash);
+
+                if (
+                    section.offsetTop <= fromTop &&
+                    section.offsetTop + section.offsetHeight > fromTop
+                ) {
+                    daLink.classList.add("active");
+                } else {
+                    daLink.classList.remove("active");
+                }
+
+            })
+        })
+
+    </script>
+
+<script>
+        //smooth scrolling
+
+        // Select all »a« elements with a parent class »links« and add a function that is executed on click
+        $('.sidenav a').on('click', function (e) {
+
+            // Define variable of the clicked »a« element (»this«) and get its href value.
+            var href = $(this).attr('href');
+
+            // Run a scroll animation to the position of the element which has the same id like the href value.
+            $('html, body').animate({
+                scrollTop: $(href).offset().top
+            }, '300');
+
+            // Prevent the browser from showing the attribute name of the clicked link in the address bar
+            e.preventDefault();
+
+        });   
     </script>*@
 
 }

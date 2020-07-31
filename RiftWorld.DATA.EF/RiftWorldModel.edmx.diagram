@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="5ac82ca977ae4818852d8b873f27eb98" Name="Diagram1">
+      <Diagram DiagramId="5ac82ca977ae4818852d8b873f27eb98" Name="Diagram1" ZoomLevel="64">
         <EntityTypeShape EntityType="RiftWorldModel.C__MigrationHistory" Width="1.5" PointX="0.75" PointY="6.75" IsExpanded="true" />
         <EntityTypeShape EntityType="RiftWorldModel.AspNetRole" Width="1.5" PointX="0.75" PointY="2.5" IsExpanded="true" />
         <EntityTypeShape EntityType="RiftWorldModel.AspNetUserClaim" Width="1.5" PointX="5.25" PointY="1" IsExpanded="true" />
@@ -43,7 +43,7 @@
         <EntityTypeShape EntityType="RiftWorldModel.sysdiagram" Width="1.5" PointX="0.75" PointY="9.75" IsExpanded="true" />
         <EntityTypeShape EntityType="RiftWorldModel.Tag" Width="1.5" PointX="7.75" PointY="2.375" IsExpanded="true" />
         <EntityTypeShape EntityType="RiftWorldModel.Tier" Width="1.5" PointX="0.75" PointY="22.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="RiftWorldModel.User" Width="1.5" PointX="5.25" PointY="33.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="RiftWorldModel.UserDetail" Width="1.5" PointX="5.25" PointY="33.25" IsExpanded="true" />
         <EntityTypeShape EntityType="RiftWorldModel.VarietyOfInhabitant" Width="1.5" PointX="6" PointY="22.625" IsExpanded="true" />
         <AssociationConnector Association="RiftWorldModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" ManuallyRouted="false" />
         <AssociationConnector Association="RiftWorldModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" ManuallyRouted="false" />

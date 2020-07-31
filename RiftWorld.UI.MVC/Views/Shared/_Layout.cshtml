@@ -108,11 +108,16 @@
                     <div class="col-lg-6 col-md-8">
                         <div class="ht-widget">
                             <ul>
+                                @if (true)
+	{
+		 /**/
+	}   
                                 <li><i class="fa fa-sun-o"></i> <span>20<sup>c</sup></span> London</li>
                                 <li><i class="fa fa-clock-o"></i> Aug 01, 2019</li>
-                                <li class="signup-switch signup-open">
-                                    <i class="fa fa-sign-out"></i> Login / Sign up
-                                </li>
+                                @*<li class="signup-switch signup-open">
+                                        <i class="fa fa-sign-out"></i> Login / Sign up
+                                    </li>*@
+                                <li>@Html.Partial("_LoginPartial")</li>
                             </ul>
                         </div>
                     </div>
@@ -152,14 +157,28 @@
                         <li><a href="@Url.Action("Npc", "Home")"> <span>NPC <i class="fa fa-angle-down"></i></span></a></li>
                         <li><a href="@Url.Action("About", "Home")"><span>About <i class="fa fa-angle-down"></i></span></a></li>
                         <li><a href="@Url.Action("Contact", "Home")"><span>Videos <i class="fa fa-angle-down"></i></span></a></li>
+                        @if (Request.IsAuthenticated && User.IsInRole("Admin"))
+                        {
+                            <li>@Html.ActionLink("RolesAdmin", "Index", "RolesAdmin")</li>
+                            <li>@Html.ActionLink("UsersAdmin", "Index", "UsersAdmin")</li>
+                        }
+
                     </ul>
                 </div>
             </div>
         </div>
     </header>
     <!-- Header End -->
-    <main>
-        @RenderBody()
+    <!-- Main section here!!! -->
+    <main style="position:relative;">
+        <nav id="mySidenav" class="sidenav">
+        </nav>
+        <article class="container" id="content">
+            <div class="row">
+
+                @RenderBody()
+            </div>
+        </article>
     </main>
 
     <!-- Footer Section Begin -->
@@ -261,11 +280,48 @@
         })
     </script>
 
-    @*<script>
-            $(document).ready(function () {
-                $('#summernote').summernote();
-            });
-        </script>*@
+    <script>
+
+        var counter = 0;
+        $("section").each(function () {
+            var id = $(this).attr("id");
+            var top = 20 + 60 * counter;
+            $("#mySidenav").append('<a href="#' + id + '" id="' + id + '-nav" style="top:' + top + 'px;">' + id + '</a>');
+            counter++;
+            window.addEventListener("scroll", event => {
+                let fromTop = window.scrollY - 284; /*284 is the size of the top nav bar*/
+                let daLink = document.querySelector("#mySidenav a#" + id + "-nav");
+                let section = document.querySelector(daLink.hash);
+
+                if (
+                    section.offsetTop <= fromTop &&
+                    section.offsetTop + section.offsetHeight > fromTop
+                ) {
+                    daLink.classList.add("active");
+                } else {
+                    daLink.classList.remove("active");
+                }
+
+            })
+        })
+        //smooth scrolling
+        // Select all »a« elements with a parent class »links« and add a function that is executed on click
+        $('.sidenav a').on('click', function (e) {
+
+            // Define variable of the clicked »a« element (»this«) and get its href value.
+            var href = $(this).attr('href');
+
+            // Run a scroll animation to the position of the element which has the same id like the href value.
+            $('html, body').animate({
+                scrollTop: $(href).offset().top
+            }, '300');
+
+            // Prevent the browser from showing the attribute name of the clicked link in the address bar
+            e.preventDefault();
+
+        });
+
+    </script>
 
 
 </body>

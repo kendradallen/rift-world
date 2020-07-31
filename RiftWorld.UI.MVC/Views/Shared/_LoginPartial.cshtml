@@ -1,6 +1,26 @@
 ﻿@using Microsoft.AspNet.Identity
-@if (Request.IsAuthenticated) {
-    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" })) {
+@using RiftWorld.DATA.EF; @* added for domain models & db access (specifically to user details) *@
+@if (Request.IsAuthenticated)
+{
+    //grabbing the other table's user information
+    RiftWorldEntities db = new RiftWorldEntities();
+    string userId = User.Identity.GetUserId();
+    User currentUser = db.Users.Where(u => u.UserId == userId).FirstOrDefault();
+    Character currentCharacter;
+    string discordName = "Future Hero";
+    if (currentUser != null)
+    {
+        currentCharacter = db.Characters.Where(c => c.PlayerId == userId && c.IsRetired == false).FirstOrDefault();
+        discordName = currentUser.DiscordName;
+    }
+    else
+    {
+        currentCharacter = null;
+    }
+
+
+    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+    {
         @Html.AntiForgeryToken()
 
         <ul class="nav navbar-nav navbar-right">
@@ -11,7 +31,9 @@
         </ul>
     }
 }
-else {
+
+else
+{
     <ul class="nav navbar-nav navbar-right">
         <li>@Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
         <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>

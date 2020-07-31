@@ -11,7 +11,7 @@ namespace RiftWorld.UI.MVC.Models
 {
     #region testing work with Linking tables 
 
-    
+
     public class AssociationWork
     {
         public short OrgId { get; set; }
@@ -23,7 +23,7 @@ namespace RiftWorld.UI.MVC.Models
         {
             //should check if the orgId actually in db in theory. 
             //  done: handled in controller action as that is where all contact with the db is. 
-            if (Order>200)
+            if (Order > 200)
             {
                 return false;
             }
@@ -68,21 +68,6 @@ namespace RiftWorld.UI.MVC.Models
             return true;
         }
     }
-    //public class AWSmolv2
-    //{
-    //    [Required(ErrorMessage = "ya need a name")]
-    //    [StringLength(30, MinimumLength = 1)]   //<-------- for some reason, the validation allowed an empty string to get through. Trying this minimum length to see if it fixes
-    //    public string Name { get; set; }
-
-    //    public Dictionary<short, AssociationWorkv2> Associations { get; set; }
-
-    //    public AWSmolv2(string name, Dictionary<short, AssociationWorkv2> associations)
-    //    {
-    //        Name = name;
-    //        Associations = associations;
-    //    }
-    //}
-
 
     public class AssociationWork_Full
     {
@@ -106,12 +91,13 @@ namespace RiftWorld.UI.MVC.Models
 
     public class NpcCreateViewModel
     {
-        //fields
+        #region Fields
         private string _alias;
         private string _apperanceText;
         private string _aboutText;
+        #endregion
 
-        //props
+        #region Props
         [Required]
         [StringLength(30)]
         public string Name { get; set; }
@@ -201,10 +187,14 @@ namespace RiftWorld.UI.MVC.Models
 
         //infos stuff
         [Required]
-        [StringLength(100, ErrorMessage = "Blurb must be less than a 100 characters. We can talk about changing that if you don't like." )]
+        [StringLength(100, ErrorMessage = "Blurb must be less than a 100 characters. We can talk about changing that if you don't like.")]
         public string Blurb { get; set; }
 
-        //methods 
+
+
+        #endregion
+
+        #region Methods
         public bool Validate()
         {
             if (Name.Length > 30 || String.IsNullOrWhiteSpace(Name))
@@ -236,8 +226,62 @@ namespace RiftWorld.UI.MVC.Models
 
             return true;
         }
+
+        #endregion
+
     }
 
+
+    /* 
+     the three parts:
+        1. the model that is sent with the options to choose from
+        2. the model for the association table
+        3. the model to attach to during post. (I'm not actually sure if that it would be strictly nessary but I feel far more comfortable given my struggle with binding to do it this way.
+         */
+    public class Npc_Org
+    {
+        #region Props
+        public short OrgId { get; set; }
+        public Nullable<byte> OrderOrg { get; set; }
+        public Nullable<byte> OrderNpc { get; set; }
+
+        [StringLength(50)]
+        public string BlurbNpc { get; set; }
+
+        [StringLength(50)]
+        public string BlurbOrg { get; set; }
+
+        #endregion
+
+        #region Methods
+        public bool Validate()
+        {
+            //should check if the orgId actually in db in theory. 
+
+            if (BlurbNpc.Length > 50)
+            {
+                return false;
+            }
+
+            if (BlurbOrg.Length > 50)
+            {
+                return false;
+            }
+
+            return true;
+        }
+        #endregion
+    }
+
+    public class Npc_Class
+    {
+        #region Props
+        public byte ClassId { get; set; }
+        public Nullable<byte> ClassOrder { get; set; }
+        #endregion
+
+
+    }
 
     public class OrgVM //TODO - seriously, remaned this shit. It's terrible and was from testing
     {

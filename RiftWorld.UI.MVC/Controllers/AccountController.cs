@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using RiftWorld.DATA.EF;
 
 namespace RiftWorld.UI.MVC.Controllers
 {
@@ -153,10 +154,17 @@ namespace RiftWorld.UI.MVC.Controllers
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    var code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                    var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking this link: <a href=\"" + callbackUrl + "\">link</a>");
-                    ViewBag.Link = callbackUrl;
+                    #region Adding Custom User Details (yes I am upset I named that table User as well... Don't really want to go through the pain of renaming.... Future me, just call it deets)
+                    
+
+                    #endregion
+
+                    #region REMOVED Email Confirm Demo Code
+                    //var code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                    //var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                    //await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking this link: <a href=\"" + callbackUrl + "\">link</a>");
+                    //ViewBag.Link = callbackUrl; 
+                    #endregion
                     return View("DisplayEmail");
                 }
                 AddErrors(result);

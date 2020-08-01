@@ -17,7 +17,7 @@ namespace RiftWorld.UI.MVC.Controllers
         {
         }
 
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
+        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
         {
             UserManager = userManager;
             SignInManager = signInManager;
@@ -68,6 +68,27 @@ namespace RiftWorld.UI.MVC.Controllers
             {
                 return View(model);
             }
+
+            //TODO - uncomment this to prevent logins if user has not been approved by admin --- currently commented out to allow faster testing of other features on my end 
+            #region ADDED - prevent login if user unapproved
+            //RiftWorldEntities db = new RiftWorldEntities();
+            //bool isApproved = (from ud in db.UserDetails
+            //                   where ud.UserId ==
+            //                      (
+            //                          from u in db.AspNetUsers
+            //                          where u.Email == model.Email
+            //                          select u.Id
+            //                      )
+            //                      .FirstOrDefault()
+            //                   select ud.IsApproved
+            //                   ).FirstOrDefault()
+            //                   ;
+            //if (!isApproved)
+            //{
+            //    return RedirectToAction("PendingApproval", "Home");
+            //}
+
+            #endregion
 
             // This doen't count login failures towards lockout only two factor authentication
             // To enable password failures to trigger lockout, change to shouldLockout: true
@@ -154,9 +175,29 @@ namespace RiftWorld.UI.MVC.Controllers
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    #region Adding Custom User Details (yes I am upset I named that table User as well... Don't really want to go through the pain of renaming.... Future me, just call it deets)
-                    
+                    #region Adding Custom User Details/Role
+                    RiftWorldEntities db = new RiftWorldEntities();
 
+                    //add Player Role to User
+                    var resultRole = await UserManager.AddToRolesAsync(user.Id, "Player");
+                    if (!resultRole.Succeeded)
+                    {
+                        ModelState.AddModelError("", result.Errors.First());
+                        return View();
+                    }
+
+                    UserDetail newUserDeets = new UserDetail
+                    {
+                        UserId = user.Id,
+                        DiscordName = model.DiscordName,
+                        DiscordDiscriminator = model.DiscordDiscriminator,
+                        ConsentFileName = null,
+                        CurrentCharacterId = null,
+                        IsApproved = false
+                    };
+
+                    db.UserDetails.Add(newUserDeets);
+                    db.SaveChanges();
                     #endregion
 
                     #region REMOVED Email Confirm Demo Code
@@ -165,7 +206,7 @@ namespace RiftWorld.UI.MVC.Controllers
                     //await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking this link: <a href=\"" + callbackUrl + "\">link</a>");
                     //ViewBag.Link = callbackUrl; 
                     #endregion
-                    return View("DisplayEmail");
+                    return RedirectToAction("PendingApproval", "Home");
                 }
                 AddErrors(result);
             }

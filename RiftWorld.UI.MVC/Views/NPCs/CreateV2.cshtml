@@ -40,6 +40,7 @@
         </div>
     </div>
 
+    @* TODO - change to uploading a file *@
     <div class="form-group">
         @Html.LabelFor(model => model.PortraitFileName, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
@@ -51,11 +52,13 @@
     <div class="form-group">
         @Html.LabelFor(model => model.RaceId, "RaceId", htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.DropDownList("RaceId", null, htmlAttributes: new { @class = "form-control" })
+            @Html.DropDownList("RaceId", null, htmlAttributes: new {@class = "form-control" })
+
             @Html.ValidationMessageFor(model => model.RaceId, "", new { @class = "text-danger" })
         </div>
     </div>
 
+    @* TODO - change to uploading a file *@
     <div class="form-group">
         @Html.LabelFor(model => model.CrestFileName, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
@@ -63,14 +66,20 @@
             @Html.ValidationMessageFor(model => model.CrestFileName, "", new { @class = "text-danger" })
         </div>
     </div>
+    @*<div class="form-group">
+        <input type="file" name="crest" class="col-md-10" />
+        <img class="img-fluid img-thumbnail border-00" src="~/Content/img/categories-grid/cg-1.jpg" />
+        <br />
+    </div>*@
+
 
     @*<div class="form-group">
-        @Html.LabelFor(model => model.ApperanceText, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.ApperanceText, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.ApperanceText, "", new { @class = "text-danger" })
-        </div>
-    </div>*@
+            @Html.LabelFor(model => model.ApperanceText, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ApperanceText, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ApperanceText, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
 
     <div class="form-group">
         @Html.LabelFor(model => model.ApperanceText, htmlAttributes: new { @class = "control-label col-md-2" })

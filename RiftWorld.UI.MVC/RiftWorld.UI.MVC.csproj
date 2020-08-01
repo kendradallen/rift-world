@@ -411,7 +411,9 @@
     <Content Include="Scripts\BaseMVCScripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\BaseMVCScripts\respond.js" />
     <Content Include="Scripts\BaseMVCScripts\respond.min.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -483,6 +485,7 @@
     <Content Include="Views\Secrets\_Details.cshtml" />
     <Content Include="Views\Stories\_Stories.cshtml" />
     <Content Include="Views\Rumors\_Rumors.cshtml" />
+    <Content Include="Views\Home\PendingApproval.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -498,7 +501,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RiftWorld.DATA.EF\RiftWorld.DATA.EF.csproj">
-      <Project>{14947785-8368-44b4-978b-8a1c3f8d2486}</Project>
+      <Project>{20b5e3d3-fbe4-4c01-a646-d160628612a4}</Project>
       <Name>RiftWorld.DATA.EF</Name>
     </ProjectReference>
   </ItemGroup>

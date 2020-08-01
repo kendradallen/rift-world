@@ -17,7 +17,7 @@ namespace RiftWorld.UI.MVC.Controllers
         // GET: Characters
         public ActionResult Index()
         {
-            var characters = db.Characters.Include(c => c.Gender).Include(c => c.Locale).Include(c => c.Race).Include(c => c.Tier).Include(c => c.User);
+            var characters = db.Characters.Include(c => c.Gender).Include(c => c.Locale).Include(c => c.Race).Include(c => c.Tier).Include(c => c.UserDetails);
             return View(characters.ToList());
         }
 
@@ -43,7 +43,7 @@ namespace RiftWorld.UI.MVC.Controllers
             ViewBag.CurrentLocationId = new SelectList(db.Locales, "LocaleId", "Name");
             ViewBag.RaceId = new SelectList(db.Races, "RaceId", "RaceName");
             ViewBag.TierId = new SelectList(db.Tiers, "TierId", "TierName");
-            ViewBag.PlayerId = new SelectList(db.Users, "UserId", "DiscordName");
+            ViewBag.PlayerId = new SelectList(db.UserDetails, "UserId", "DiscordName");
             return View();
         }
 
@@ -65,7 +65,7 @@ namespace RiftWorld.UI.MVC.Controllers
             ViewBag.CurrentLocationId = new SelectList(db.Locales, "LocaleId", "Name", character.CurrentLocationId);
             ViewBag.RaceId = new SelectList(db.Races, "RaceId", "RaceName", character.RaceId);
             ViewBag.TierId = new SelectList(db.Tiers, "TierId", "TierName", character.TierId);
-            ViewBag.PlayerId = new SelectList(db.Users, "UserId", "DiscordName", character.PlayerId);
+            ViewBag.PlayerId = new SelectList(db.UserDetails, "UserId", "DiscordName", character.PlayerId);
             return View(character);
         }
 
@@ -85,7 +85,7 @@ namespace RiftWorld.UI.MVC.Controllers
             ViewBag.CurrentLocationId = new SelectList(db.Locales, "LocaleId", "Name", character.CurrentLocationId);
             ViewBag.RaceId = new SelectList(db.Races, "RaceId", "RaceName", character.RaceId);
             ViewBag.TierId = new SelectList(db.Tiers, "TierId", "TierName", character.TierId);
-            ViewBag.PlayerId = new SelectList(db.Users, "UserId", "DiscordName", character.PlayerId);
+            ViewBag.PlayerId = new SelectList(db.UserDetails, "UserId", "DiscordName", character.PlayerId);
             return View(character);
         }
 
@@ -106,7 +106,7 @@ namespace RiftWorld.UI.MVC.Controllers
             ViewBag.CurrentLocationId = new SelectList(db.Locales, "LocaleId", "Name", character.CurrentLocationId);
             ViewBag.RaceId = new SelectList(db.Races, "RaceId", "RaceName", character.RaceId);
             ViewBag.TierId = new SelectList(db.Tiers, "TierId", "TierName", character.TierId);
-            ViewBag.PlayerId = new SelectList(db.Users, "UserId", "DiscordName", character.PlayerId);
+            ViewBag.PlayerId = new SelectList(db.UserDetails, "UserId", "DiscordName", character.PlayerId);
             return View(character);
         }
 

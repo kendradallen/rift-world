@@ -400,13 +400,13 @@
     <Property Name="MinLevel" Type="tinyint" Nullable="false" />
     <Property Name="MaxLevel" Type="tinyint" Nullable="false" />
   </EntityType>
-  <EntityType Name="Users">
+  <EntityType Name="UserDetails">
     <Key>
       <PropertyRef Name="UserId" />
     </Key>
     <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
     <Property Name="DiscordName" Type="nvarchar" MaxLength="32" Nullable="false" />
-    <Property Name="DiscordDiscriminator" Type="char" MaxLength="4" Nullable="false" />
+    <Property Name="DiscordDiscriminator" Type="smallint" Nullable="false" />
     <Property Name="ConsentFileName" Type="varchar" MaxLength="75" Nullable="false" />
     <Property Name="CurrentCharacterId" Type="smallint" />
     <Property Name="IsApproved" Type="bit" Nullable="false" />
@@ -469,10 +469,10 @@
     </ReferentialConstraint>
   </Association>
   <Association Name="FK_Characters_Users">
-    <End Role="Users" Type="Self.Users" Multiplicity="1" />
+    <End Role="UserDetails" Type="Self.UserDetails" Multiplicity="1" />
     <End Role="Characters" Type="Self.Characters" Multiplicity="*" />
     <ReferentialConstraint>
-      <Principal Role="Users">
+      <Principal Role="UserDetails">
         <PropertyRef Name="UserId" />
       </Principal>
       <Dependent Role="Characters">
@@ -1042,12 +1042,12 @@
   </Association>
   <Association Name="FK_Users_Characters">
     <End Role="Characters" Type="Self.Characters" Multiplicity="0..1" />
-    <End Role="Users" Type="Self.Users" Multiplicity="*" />
+    <End Role="UserDetails" Type="Self.UserDetails" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="Characters">
         <PropertyRef Name="CharacterId" />
       </Principal>
-      <Dependent Role="Users">
+      <Dependent Role="UserDetails">
         <PropertyRef Name="CurrentCharacterId" />
       </Dependent>
     </ReferentialConstraint>
@@ -1116,7 +1116,7 @@
     <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Tags" EntityType="Self.Tags" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Tier" EntityType="Self.Tier" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="UserDetails" EntityType="Self.UserDetails" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="VarietyOfInhabitants" EntityType="Self.VarietyOfInhabitants" Schema="dbo" store:Type="Tables" />
     <AssociationSet Name="FK_Characters_Gender" Association="Self.FK_Characters_Gender">
       <End Role="Gender" EntitySet="Gender" />
@@ -1135,7 +1135,7 @@
       <End Role="Characters" EntitySet="Characters" />
     </AssociationSet>
     <AssociationSet Name="FK_Characters_Users" Association="Self.FK_Characters_Users">
-      <End Role="Users" EntitySet="Users" />
+      <End Role="UserDetails" EntitySet="UserDetails" />
       <End Role="Characters" EntitySet="Characters" />
     </AssociationSet>
     <AssociationSet Name="FK_CharOrgs_Characters" Association="Self.FK_CharOrgs_Characters">
@@ -1324,7 +1324,7 @@
     </AssociationSet>
     <AssociationSet Name="FK_Users_Characters" Association="Self.FK_Users_Characters">
       <End Role="Characters" EntitySet="Characters" />
-      <End Role="Users" EntitySet="Users" />
+      <End Role="UserDetails" EntitySet="UserDetails" />
     </AssociationSet>
     <AssociationSet Name="FK_VarietyOfInhabitants_Race" Association="Self.FK_VarietyOfInhabitants_Race">
       <End Role="Race" EntitySet="Race" />

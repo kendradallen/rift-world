@@ -30,6 +30,23 @@
         </div>
     </div>
     <div class="form-group">
+        @Html.LabelFor(m => m.DiscordName, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.DiscordName, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.DiscordDiscriminator, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.DiscordDiscriminator, new { @class = "form-control" })
+        </div>
+    </div>
+
+    <p>
+        Once you submit, this form will be processed and need to be approved. NO accounts will be approved until you have sent me your RPG consent form on discord. So make sure I have that.
+    </p>
+
+    <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
             <input type="submit" class="btn btn-default" value="Register" />
         </div>

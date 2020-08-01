@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,42 +15,42 @@ namespace RiftWorld.DATA.EF
         [Required]
         [Display(Name = "Player")]
         public string PlayerId { get; set; }
-        
+
         [Required]
-        [Display(Name ="Name")]
+        [Display(Name = "Name")]
         [StringLength(25)]
         public string CharacterName { get; set; }
-        
+
         [Required]
         [Display(Name = "Species")]
         public byte RaceId { get; set; }
-        
+
         [Required]
-        [Display(Name ="Gender")]
+        [Display(Name = "Gender")]
         public byte GenderId { get; set; }
-        
+
         public string PortraitFileName { get; set; }
-        
+
         [Required]
         [UIHint("MultilineText")]
         [StringLength(2000)]
         public string Description { get; set; }
-        
+
         [Required]
         [UIHint("MultilineText")]
         [StringLength(8000)]
         public string About { get; set; }
-        
+
         [Required] //may need to be removed due to weirdness during inital creation
         [Display(Name = "Current Location")]
         public short CurrentLocationId { get; set; }
-        
+
         [Required]
-        [Display(Name ="Tier")]
+        [Display(Name = "Tier")]
         public byte TierId { get; set; }
-        
+
         public bool IsRetired { get; set; }
-        
+
         public bool IsApproved { get; set; }
     }
 
@@ -63,17 +64,17 @@ namespace RiftWorld.DATA.EF
     {
 
         //public short CharOrgsId { get; set; }
-        
+
         //public short CharId { get; set; }
-        
+
         //public short OrgId { get; set; }
         [StringLength(50)]
         public string BlurbOrgPage { get; set; }
-        
+
         public bool IsPublic { get; set; }
-        
+
         public bool IsCurrent { get; set; }
-        
+
         public bool Proposed { get; set; }
 
     }
@@ -84,13 +85,13 @@ namespace RiftWorld.DATA.EF
     #endregion
 
     #region CharSecret Metadata
-    //public class CharSecretMetaData
-    //{
+    public class CharSecretMetaData
+    {
 
-    //}
+    }
 
-    //[MetadataType(typeof(CharSecretMetaData))]
-    //public partial class CharSecret { }
+    [MetadataType(typeof(CharSecretMetaData))]
+    public partial class CharSecret { }
 
     #endregion
 
@@ -98,8 +99,8 @@ namespace RiftWorld.DATA.EF
     public class ClassMetaData
     {
         //public byte ClassId { get; set; }
-        [Required(ErrorMessage ="Katherine, seriously. If you're going to make a new class you need to actually name it.")]
-        [StringLength(15, ErrorMessage ="Too long. You have 15 characters; try again.")]
+        [Required(ErrorMessage = "Katherine, seriously. If you're going to make a new class you need to actually name it.")]
+        [StringLength(15, ErrorMessage = "Too long. You have 15 characters; try again.")]
         public string ClassName { get; set; }
         public bool IsPlayerEnabled { get; set; }
 
@@ -176,11 +177,11 @@ namespace RiftWorld.DATA.EF
         //public byte GenderId { get; set; }
         [Required(ErrorMessage = "No matter how much you want it, I can't let you make a nameless gender.")]
         [StringLength(15, ErrorMessage = "Do me a favor and please make it shorter. I only planned for gender names of 15 characters.")]
-        [Display(Name ="Gender")]
+        [Display(Name = "Gender")]
         public string GenderName { get; set; }
 
         [StringLength(15)]
-        [Display(Name="Icon")]
+        [Display(Name = "Icon")]
         public string IconName { get; set; }
 
     }
@@ -234,7 +235,7 @@ namespace RiftWorld.DATA.EF
     public class InfoTypeMetaData
     {
         //public byte InfoTypeId { get; set; }
-        [Required(ErrorMessage ="I have so many questions. HOW ARE YOU HERE?! I sure as heck didn't make this an editable as this is really a new version kind of thing.")]
+        [Required(ErrorMessage = "I have so many questions. HOW ARE YOU HERE?! I sure as heck didn't make this an editable as this is really a new version kind of thing.")]
         [StringLength(15)]
         public string TypeName { get; set; }
 
@@ -271,8 +272,8 @@ namespace RiftWorld.DATA.EF
 
         //unsure about whether or not to use commented out stuff. If it does work, most strings will be using this (as I didn't make columns nullable for space purposes)
         //TODO experiment with below to see if it works for database
-            //[Required(AllowEmptyStrings =true)]
-            //[DisplayFormat(ConvertEmptyStringToNull =false)]
+        //[Required(AllowEmptyStrings =true)]
+        //[DisplayFormat(ConvertEmptyStringToNull =false)]
         [Required]
         [UIHint("MultilineText")]
         [Display(Name = "Properties")]
@@ -300,7 +301,7 @@ namespace RiftWorld.DATA.EF
         public short CharacterId { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:d}")]
-        [Display( Name ="Published: ")]
+        [Display(Name = "Published: ")]
         public System.DateTime OocDateWritten { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:d}")]
@@ -331,13 +332,13 @@ namespace RiftWorld.DATA.EF
         public string Name { get; set; }
 
         [Required]
-        [Display(Name ="Level of Locale")]
+        [Display(Name = "Level of Locale")]
         public byte LevelOfLocaleId { get; set; }
 
         [Display(Name = "Region")]
         public Nullable<short> RegionId { get; set; }
 
-        [Display(Name ="Nearest City")]
+        [Display(Name = "Nearest City")]
         public Nullable<short> ClosestCityId { get; set; }
 
         [Display(Name = "Council Delegate")]
@@ -491,7 +492,7 @@ namespace RiftWorld.DATA.EF
         public Nullable<byte> OrgOrder { get; set; }
 
         [StringLength(50)]
-        [Display(Name ="Blurb for NPC's page about postion in org")]
+        [Display(Name = "Blurb for NPC's page about postion in org")]
         public string BlurbNpcPage { get; set; }
 
         [StringLength(50)]
@@ -557,7 +558,8 @@ namespace RiftWorld.DATA.EF
     #region Race Metadata
     public class RaceMetadata
     {
-        public byte RaceId { get; set; }
+        //public byte RaceId { get; set; }
+
         [Required(ErrorMessage = "Katherine... I feel like we need talk. About how things need names. But also about what to do if something needs to be blank.")]
         [StringLength(15, ErrorMessage = "Well... this is awkward. So, I figured race names would never be more than 15 characters... guess I'm wrong. So, either contact me for a fix or figure out how to shorten it.")]
         [Display(Name = "Species Name")]
@@ -642,20 +644,20 @@ namespace RiftWorld.DATA.EF
     #endregion
 
     #region SecretSecretTag Metadata
-    //public class SecretSecretTagMetadata
-    //{
+    public class SecretSecretTagMetadata
+    {
 
-    //}
+    }
 
-    //[MetadataType(typeof(SecretSecretTagMetadata))]
-    //public partial class SecretSecretTag { }
+    [MetadataType(typeof(SecretSecretTagMetadata))]
+    public partial class SecretSecretTag { }
     #endregion
 
     #region SecretTag Metadata
     public class SecretTagMetadata
     {
         //public short SecretTagId { get; set; }
-        
+
         [Required]
         [StringLength(30)]
         public string Name { get; set; }
@@ -738,12 +740,12 @@ namespace RiftWorld.DATA.EF
 
         [Required]
         [Display(Name = "Minimum Level")]
-        [Range(1,20)]
+        [Range(1, 20)]
         public byte MinLevel { get; set; }
 
         [Required]
-        [Display(Name ="Maximum Level")]
-        [Range(1,20)]
+        [Display(Name = "Maximum Level")]
+        [Range(1, 20)]
         public byte MaxLevel { get; set; }
 
     }
@@ -752,8 +754,8 @@ namespace RiftWorld.DATA.EF
     public partial class Tier { }
     #endregion
 
-    #region User Metadata
-    public class UserMetadata
+    #region UserDetail Metadata
+    public class UserDetailMetadata
     {
         //public string UserId { get; set; }
 
@@ -762,12 +764,11 @@ namespace RiftWorld.DATA.EF
         [Display(Name = "Discord Name")]
         public string DiscordName { get; set; }
 
-        //TODO change the discord discriminator to a small int and add range to it
+        //DONE change the discord discriminator to a small int and add range to it
         [Required]
-        [StringLength(maximumLength: 4, MinimumLength = 4)]
-        public string DiscordDiscriminator { get; set; }
+        [Range(0000, 9999)]
+        public short DiscordDiscriminator { get; set; }
 
-        [Required]
         public string ConsentFileName { get; set; }
 
         public Nullable<short> CurrentCharacterId { get; set; }
@@ -775,8 +776,8 @@ namespace RiftWorld.DATA.EF
         public bool IsApproved { get; set; }
     }
 
-    [MetadataType(typeof(UserMetadata))]
-    public partial class User { }
+    [MetadataType(typeof(UserDetailMetadata))]
+    public partial class UserDetail { }
     #endregion
 
     #region VarietyOfInhabitant Metadata
@@ -786,7 +787,7 @@ namespace RiftWorld.DATA.EF
     }
 
     [MetadataType(typeof(VarietyOfInhabitantMetadata))]
-    public partial class VarietyOfInhabitant{ }
+    public partial class VarietyOfInhabitant { }
 
     #endregion
 

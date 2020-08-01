@@ -63,7 +63,7 @@ namespace RiftWorld.DATA.EF
         public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
         public virtual DbSet<Tag> Tags { get; set; }
         public virtual DbSet<Tier> Tiers { get; set; }
-        public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<UserDetail> UserDetails { get; set; }
         public virtual DbSet<VarietyOfInhabitant> VarietyOfInhabitants { get; set; }
     }
 }

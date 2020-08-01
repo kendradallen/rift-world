@@ -12,17 +12,17 @@ namespace RiftWorld.DATA.EF
     using System;
     using System.Collections.Generic;
     
-    public partial class User
+    public partial class UserDetail
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public User()
+        public UserDetail()
         {
             this.Characters = new HashSet<Character>();
         }
     
         public string UserId { get; set; }
         public string DiscordName { get; set; }
-        public string DiscordDiscriminator { get; set; }
+        public short DiscordDiscriminator { get; set; }
         public string ConsentFileName { get; set; }
         public Nullable<short> CurrentCharacterId { get; set; }
         public bool IsApproved { get; set; }

@@ -42,17 +42,23 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                           .ToList()
                           ;
 
-            //if the user isn't an Admin, dynamically change the content 
-            if (!User.IsInRole("Admin"))
-            {
-                var user = User.Identity.GetUserId();
-                var curChar = db.Characters.Where(c => c.PlayerId == user && c.IsRetired == false).FirstOrDefault();
-                if (curChar != null)
-                {
 
-                }
+            ////if the user isn't an Admin, dynamically change the content 
+            //if (!User.IsInRole("Admin"))
+            //{
+            //    var userId = User.Identity.GetUserId();
+            //    UserDetail user = db.UserDetails.Where(u => u.UserId == userId).FirstOrDefault();
+            //    var curChar = user.CurrentCharacterId;
+            //    if (curChar != null)
+            //    {
+            //        var tags = 
+            //            (
+            //                from st in db.SecretTags
+            //            )
+            //        //intersect with secrets
+            //    }
 
-            }
+            //}
             //logic to check if the user matches the tags
 
             return PartialView(secrets);

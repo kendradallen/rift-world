@@ -79,6 +79,13 @@ namespace RiftWorld.UI.MVC.Models
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+
+        //custom and added
+        [Required]
+        public string DiscordName { get; set; }
+        [Required]
+        [Range(0000, 9999)]
+        public short DiscordDiscriminator { get; set; }
     }
 
     public class ResetPasswordViewModel

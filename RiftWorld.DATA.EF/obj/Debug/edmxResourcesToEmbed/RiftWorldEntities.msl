@@ -428,9 +428,9 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="Users">
-      <EntityTypeMapping TypeName="RiftWorldModel.User">
-        <MappingFragment StoreEntitySet="Users">
+    <EntitySetMapping Name="UserDetails">
+      <EntityTypeMapping TypeName="RiftWorldModel.UserDetail">
+        <MappingFragment StoreEntitySet="UserDetails">
           <ScalarProperty Name="UserId" ColumnName="UserId" />
           <ScalarProperty Name="DiscordName" ColumnName="DiscordName" />
           <ScalarProperty Name="DiscordDiscriminator" ColumnName="DiscordDiscriminator" />

@@ -154,12 +154,11 @@
                     <ul>
                         @* NTS: the "span" for the buttons IS required for template style *@
                         <li><a href="@Url.Action("Index", "Home")"><span>Home</span></a></li>
-                        <li><a href="@Url.Action("Npc", "Home")"> <span>NPC <i class="fa fa-angle-down"></i></span></a></li>
+                        <li><a href="@Url.Action("Index", "NPCs")"> <span>NPC <i class="fa fa-angle-down"></i></span></a></li>
                         <li><a href="@Url.Action("About", "Home")"><span>About <i class="fa fa-angle-down"></i></span></a></li>
-                        <li><a href="@Url.Action("Contact", "Home")"><span>Videos <i class="fa fa-angle-down"></i></span></a></li>
+                        <li><a href="@Url.Action("Index", "Characters")"><span>Hall of Heroes <i class="fa fa-angle-down"></i></span></a></li>
                         @if (Request.IsAuthenticated && User.IsInRole("Admin"))
                         {
-                            <li>@Html.ActionLink("RolesAdmin", "Index", "RolesAdmin")</li>
                             <li>@Html.ActionLink("UsersAdmin", "Index", "UsersAdmin")</li>
                         }
 
@@ -262,7 +261,7 @@
     <script src="~/Scripts/js/main.js"></script>
 
     <!-- Tiny -->
-    @*<script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>*@
+    <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
 
 
 

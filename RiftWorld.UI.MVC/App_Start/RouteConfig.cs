@@ -7,6 +7,7 @@ namespace RiftWorld.UI.MVC
     {
         public static void RegisterRoutes(RouteCollection routes)
         {
+            //TODO - change routing to be link a real website
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapRoute(

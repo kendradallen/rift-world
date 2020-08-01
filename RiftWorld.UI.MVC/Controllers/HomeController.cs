@@ -1,11 +1,19 @@
 ﻿using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using RiftWorld.DATA.EF;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.Entity;
+using System.Linq;
+using System.Net;
+
 
 namespace RiftWorld.UI.MVC.Controllers
 {
     public class HomeController : Controller
     {
+        private RiftWorldEntities db = new RiftWorldEntities();
+
         [HttpGet]
         public ActionResult Index()
         {
@@ -27,6 +35,24 @@ namespace RiftWorld.UI.MVC.Controllers
             ViewBag.Message = "Your contact page.";
 
             return View();
+        }
+
+        public ActionResult PendingApproval()
+        {
+            return View();
+        }
+
+        public ActionResult SearchSite(string search)
+        {
+            List<Info> result =
+                (
+                from ti in db.InfoTags
+                where ti.Info.Name.Contains(search)
+                    || ti.Tag.TagName.Contains(search)
+                select ti.Info
+                ).ToList()
+                ;
+            return View("Search Result", result);
         }
     }
 }

@@ -5,27 +5,32 @@
     //grabbing the other table's user information
     RiftWorldEntities db = new RiftWorldEntities();
     string userId = User.Identity.GetUserId();
-    User currentUser = db.Users.Where(u => u.UserId == userId).FirstOrDefault();
+    UserDetail currentUser = db.UserDetails.Where(u => u.UserId == userId).FirstOrDefault();
     Character currentCharacter;
+    string charName = "";
     string discordName = "Future Hero";
     if (currentUser != null)
     {
         currentCharacter = db.Characters.Where(c => c.PlayerId == userId && c.IsRetired == false).FirstOrDefault();
         discordName = currentUser.DiscordName;
+        charName = currentCharacter.CharacterName;
     }
     else
     {
         currentCharacter = null;
     }
-
+    if (User.IsInRole("Admin"))
+    {
+        discordName = "Katherine";
+    }
 
     using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
     {
         @Html.AntiForgeryToken()
 
-        <ul class="nav navbar-nav navbar-right">
+        <ul @*class="nav navbar-nav navbar-right"*@>
             <li>
-                @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
+                @Html.ActionLink("Hi " + (charName.IsEmpty() ? charName : discordName)+ "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage"})
             </li>
             <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
         </ul>
@@ -34,7 +39,7 @@
 
 else
 {
-    <ul class="nav navbar-nav navbar-right">
+    <ul @*class="nav navbar-nav navbar-right"*@>
         <li>@Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
         <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
     </ul>

@@ -6,6 +6,7 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using RiftWorld.DATA.EF;
 
 namespace RiftWorld.UI.MVC.Controllers
 {
@@ -191,6 +192,120 @@ namespace RiftWorld.UI.MVC.Controllers
             return View();
         }
 
+        //Approve User
+        [HttpGet]
+        public async Task<ActionResult> Approve(string id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var user = await UserManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                return HttpNotFound();
+            }
+
+            var userRoles = await UserManager.GetRolesAsync(user.Id);
+            RiftWorldEntities db = new RiftWorldEntities();
+            var userDeets = db.UserDetails.Where(x => x.UserId == id).First();
+            ViewBag.CurrentCharacter = db.Characters.Where(x => x.CharacterId == userDeets.CurrentCharacterId).Select(x => x.CharacterName).FirstOrDefault();
+            ViewBag.PastCharacters = db.Characters.Where(x => x.PlayerId == id && x.IsRetired == true).Select(x => x.CharacterName).ToList();
+            return View(new EditUserViewModel2()
+            {
+                Id = user.Id,
+                Email = user.Email,
+                DiscordName = userDeets.DiscordName,
+                DiscordDiscriminator = userDeets.DiscordDiscriminator,
+                ConsentFileName = userDeets.ConsentFileName,
+                IsApproved = userDeets.IsApproved
+            });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Approve([Bind(Include = "Email,Id, ConsentFileName, DiscordName, DiscordDiscriminator, IsApproved")] EditUserViewModel2 editUser, string submit, HttpPostedFileBase consentFile)
+        {
+            RiftWorldEntities db = new RiftWorldEntities();
+            var userDeets = await db.UserDetails.Where(x => x.UserId == editUser.Id).FirstAsync();
+            ViewBag.CurrentCharacter = db.Characters.Where(x => x.CharacterId == userDeets.CurrentCharacterId).Select(x => x.CharacterName).FirstOrDefault();
+            ViewBag.PastCharacters = db.Characters.Where(x => x.PlayerId == editUser.Id && x.IsRetired == true).Select(x => x.CharacterName).ToList();
+
+            switch (submit)
+            {
+                case "Deny":
+                    return RedirectToAction("DeleteConfirmed", new { id = editUser.Id});
+                case "Approve":
+                case "Save":
+                    break;
+            }
+            if (ModelState.IsValid)
+            {
+                var user = await UserManager.FindByIdAsync(editUser.Id);
+                if (user == null)
+                {
+                    return HttpNotFound();
+                }
+                if (consentFile != null)
+                {
+                    string consentName = consentFile.FileName;
+
+                    string ext = consentName.Substring(consentName.LastIndexOf('.'));
+                    string[] goodExts = { ".pdf" };
+
+                    if (goodExts.Contains(ext.ToLower()))
+                    {
+                        consentName = editUser.DiscordName + "_" + editUser.DiscordDiscriminator + ext;
+                        consentFile.SaveAs(Server.MapPath("~/Content/ConsentFiles/" + consentName));
+                        UserDetail userDetail = await db.UserDetails.FindAsync(editUser.Id);
+                        userDetail.ConsentFileName = consentName;
+                        userDetail.IsApproved = true;
+                        db.Entry(userDetail).State = EntityState.Modified;
+                        await db.SaveChangesAsync();
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("", "That file type was the incorrect type. It needs to end with either .pdf ");
+                        return View(new EditUserViewModel2()
+                        {
+                            Id = editUser.Id,
+                            Email = editUser.Email,
+                            DiscordName = editUser.DiscordName,
+                            DiscordDiscriminator = editUser.DiscordDiscriminator,
+                            ConsentFileName = editUser.ConsentFileName,
+                            IsApproved = editUser.IsApproved
+                        });
+                    }
+                }
+                else if (editUser.ConsentFileName == null)
+                {
+                    ModelState.AddModelError("", "You need to add the consent form in order to approve a player Katherine. We went over this. You wanted it this way.");
+                    return View(new EditUserViewModel2()
+                    {
+                        Id = editUser.Id,
+                        Email = editUser.Email,
+                        DiscordName = editUser.DiscordName,
+                        DiscordDiscriminator = editUser.DiscordDiscriminator,
+                        ConsentFileName = editUser.ConsentFileName,
+                        IsApproved = editUser.IsApproved
+                    });
+                }
+
+                return RedirectToAction("Index");
+            }
+            ModelState.AddModelError("", "Something failed.");
+            return View(new EditUserViewModel2()
+            {
+                Id = editUser.Id,
+                Email = editUser.Email,
+                DiscordName = editUser.DiscordName,
+                DiscordDiscriminator = editUser.DiscordDiscriminator,
+                ConsentFileName = editUser.ConsentFileName,
+                IsApproved = editUser.IsApproved
+            });
+        }
+
+
         //
         // GET: /Users/Delete/5
         [HttpGet]
@@ -206,6 +321,21 @@ namespace RiftWorld.UI.MVC.Controllers
                 return HttpNotFound();
             }
             return View(user);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> _Delete(string id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var user = await UserManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                return HttpNotFound();
+            }
+            return PartialView(user);
         }
 
         //
@@ -233,9 +363,17 @@ namespace RiftWorld.UI.MVC.Controllers
                     ModelState.AddModelError("", result.Errors.First());
                     return View();
                 }
+
+                RiftWorldEntities db = new RiftWorldEntities();
+                var userDeets = await db.UserDetails.Where(x => x.UserId == id).FirstOrDefaultAsync();
+                db.UserDetails.Remove(userDeets);
+                await db.SaveChangesAsync();
+
                 return RedirectToAction("Index");
             }
             return View();
         }
+
+        
     }
 }

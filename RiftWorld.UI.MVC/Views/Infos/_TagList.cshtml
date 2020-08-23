@@ -1,0 +1,11 @@
+﻿@model IEnumerable<RiftWorld.DATA.EF.Tag>
+
+
+<div class="details-text">
+    <div class="dt-tags">
+        @foreach (var item in Model)
+        {
+            @Html.ActionLink(item.TagName, "TagIndex", "Infos", new { id = item.TagId }, null)
+        }
+    </div>
+</div>

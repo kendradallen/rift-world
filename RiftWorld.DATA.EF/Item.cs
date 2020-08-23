@@ -22,7 +22,8 @@ namespace RiftWorld.DATA.EF
         public string DescriptionText { get; set; }
         public string PropertyText { get; set; }
         public string HistoryText { get; set; }
-        public bool IsWorkInProgress { get; set; }
+        public bool IsPublished { get; set; }
+        public string Artist { get; set; }
     
         public virtual Info Info { get; set; }
     }

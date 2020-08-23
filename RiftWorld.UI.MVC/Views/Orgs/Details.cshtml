@@ -1,0 +1,74 @@
+﻿@model RiftWorld.DATA.EF.Org
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Org</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IsPlayerEnabled)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IsPlayerEnabled)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SymbolFileName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SymbolFileName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AboutText)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AboutText)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IsPublished)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IsPublished)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Info.Blurb)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Info.Blurb)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Locale.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Locale.Name)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.OrgId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

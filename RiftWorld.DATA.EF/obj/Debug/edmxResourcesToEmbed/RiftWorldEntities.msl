@@ -59,6 +59,10 @@
     <EntitySetMapping Name="Characters">
       <EntityTypeMapping TypeName="RiftWorldModel.Character">
         <MappingFragment StoreEntitySet="Characters">
+          <ScalarProperty Name="IsDead" ColumnName="IsDead" />
+          <ScalarProperty Name="HasUnseenEdit" ColumnName="HasUnseenEdit" />
+          <ScalarProperty Name="ClassString" ColumnName="ClassString" />
+          <ScalarProperty Name="Artist" ColumnName="Artist" />
           <ScalarProperty Name="CharacterId" ColumnName="CharacterId" />
           <ScalarProperty Name="PlayerId" ColumnName="PlayerId" />
           <ScalarProperty Name="CharacterName" ColumnName="CharacterName" />
@@ -77,13 +81,13 @@
     <EntitySetMapping Name="CharOrgs">
       <EntityTypeMapping TypeName="RiftWorldModel.CharOrg">
         <MappingFragment StoreEntitySet="CharOrgs">
+          <ScalarProperty Name="KatherineApproved" ColumnName="KatherineApproved" />
           <ScalarProperty Name="CharOrgsId" ColumnName="CharOrgsId" />
           <ScalarProperty Name="CharId" ColumnName="CharId" />
           <ScalarProperty Name="OrgId" ColumnName="OrgId" />
           <ScalarProperty Name="BlurbOrgPage" ColumnName="BlurbOrgPage" />
           <ScalarProperty Name="IsPublic" ColumnName="IsPublic" />
           <ScalarProperty Name="IsCurrent" ColumnName="IsCurrent" />
-          <ScalarProperty Name="Proposed" ColumnName="Proposed" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -128,14 +132,17 @@
     <EntitySetMapping Name="Events">
       <EntityTypeMapping TypeName="RiftWorldModel.Event">
         <MappingFragment StoreEntitySet="Events">
+          <ScalarProperty Name="DateEra" ColumnName="DateEra" />
+          <ScalarProperty Name="DateYear" ColumnName="DateYear" />
+          <ScalarProperty Name="DateMonth" ColumnName="DateMonth" />
+          <ScalarProperty Name="DateDay" ColumnName="DateDay" />
           <ScalarProperty Name="EventId" ColumnName="EventId" />
           <ScalarProperty Name="InfoId" ColumnName="InfoId" />
           <ScalarProperty Name="Name" ColumnName="Name" />
           <ScalarProperty Name="IsHistory" ColumnName="IsHistory" />
-          <ScalarProperty Name="Date" ColumnName="Date" />
           <ScalarProperty Name="AboutText" ColumnName="AboutText" />
           <ScalarProperty Name="NormalParticipants" ColumnName="NormalParticipants" />
-          <ScalarProperty Name="IsWorkInProgress" ColumnName="IsWorkInProgress" />
+          <ScalarProperty Name="IsPublished" ColumnName="IsPublished" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -180,6 +187,8 @@
     <EntitySetMapping Name="Items">
       <EntityTypeMapping TypeName="RiftWorldModel.Item">
         <MappingFragment StoreEntitySet="Items">
+          <ScalarProperty Name="Artist" ColumnName="Artist" />
+          <ScalarProperty Name="IsPublished" ColumnName="IsPublished" />
           <ScalarProperty Name="ItemId" ColumnName="ItemId" />
           <ScalarProperty Name="InfoId" ColumnName="InfoId" />
           <ScalarProperty Name="Name" ColumnName="Name" />
@@ -188,17 +197,16 @@
           <ScalarProperty Name="DescriptionText" ColumnName="DescriptionText" />
           <ScalarProperty Name="PropertyText" ColumnName="PropertyText" />
           <ScalarProperty Name="HistoryText" ColumnName="HistoryText" />
-          <ScalarProperty Name="IsWorkInProgress" ColumnName="IsWorkInProgress" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="Journals">
       <EntityTypeMapping TypeName="RiftWorldModel.Journal">
         <MappingFragment StoreEntitySet="Journals">
+          <ScalarProperty Name="HasUnseenEdit" ColumnName="HasUnseenEdit" />
           <ScalarProperty Name="JournalId" ColumnName="JournalId" />
           <ScalarProperty Name="CharacterId" ColumnName="CharacterId" />
           <ScalarProperty Name="OocDateWritten" ColumnName="OocDateWritten" />
-          <ScalarProperty Name="ICDateWritten" ColumnName="ICDateWritten" />
           <ScalarProperty Name="TheContent" ColumnName="TheContent" />
           <ScalarProperty Name="IsApproved" ColumnName="IsApproved" />
         </MappingFragment>
@@ -234,7 +242,7 @@
           <ScalarProperty Name="Appointed" ColumnName="Appointed" />
           <ScalarProperty Name="Environment" ColumnName="Environment" />
           <ScalarProperty Name="About" ColumnName="About" />
-          <ScalarProperty Name="IsWorkInProgress" ColumnName="IsWorkInProgress" />
+          <ScalarProperty Name="IsPublished" ColumnName="IsPublished" />
           <ScalarProperty Name="AvgLifestyle" ColumnName="AvgLifestyle" />
         </MappingFragment>
       </EntityTypeMapping>
@@ -246,7 +254,7 @@
           <ScalarProperty Name="InfoId" ColumnName="InfoId" />
           <ScalarProperty Name="Name" ColumnName="Name" />
           <ScalarProperty Name="TheContent" ColumnName="TheContent" />
-          <ScalarProperty Name="IsWorkInProgress" ColumnName="IsWorkInProgress" />
+          <ScalarProperty Name="IsPublished" ColumnName="IsPublished" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -277,6 +285,10 @@
     <EntitySetMapping Name="NPCs">
       <EntityTypeMapping TypeName="RiftWorldModel.NPC">
         <MappingFragment StoreEntitySet="NPCs">
+          <ScalarProperty Name="GenderId" ColumnName="GenderId" />
+          <ScalarProperty Name="IsDead" ColumnName="IsDead" />
+          <ScalarProperty Name="CrestArtist" ColumnName="CrestArtist" />
+          <ScalarProperty Name="PortraitArtist" ColumnName="PortraitArtist" />
           <ScalarProperty Name="NpcId" ColumnName="NpcId" />
           <ScalarProperty Name="InfoId" ColumnName="InfoId" />
           <ScalarProperty Name="Name" ColumnName="Name" />
@@ -288,7 +300,7 @@
           <ScalarProperty Name="ApperanceText" ColumnName="ApperanceText" />
           <ScalarProperty Name="AboutText" ColumnName="AboutText" />
           <ScalarProperty Name="LastLocationId" ColumnName="LastLocationId" />
-          <ScalarProperty Name="IsWorkInProgress" ColumnName="IsWorkInProgress" />
+          <ScalarProperty Name="IsPublished" ColumnName="IsPublished" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -305,6 +317,7 @@
     <EntitySetMapping Name="Orgs">
       <EntityTypeMapping TypeName="RiftWorldModel.Org">
         <MappingFragment StoreEntitySet="Orgs">
+          <ScalarProperty Name="Artist" ColumnName="Artist" />
           <ScalarProperty Name="OrgId" ColumnName="OrgId" />
           <ScalarProperty Name="InfoId" ColumnName="InfoId" />
           <ScalarProperty Name="Name" ColumnName="Name" />
@@ -312,7 +325,7 @@
           <ScalarProperty Name="SymbolFileName" ColumnName="SymbolFileName" />
           <ScalarProperty Name="BaseLocationId" ColumnName="BaseLocationId" />
           <ScalarProperty Name="AboutText" ColumnName="AboutText" />
-          <ScalarProperty Name="IsWorkInProgress" ColumnName="IsWorkInProgress" />
+          <ScalarProperty Name="IsPublished" ColumnName="IsPublished" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -334,18 +347,18 @@
           <ScalarProperty Name="Location" ColumnName="Location" />
           <ScalarProperty Name="Environment" ColumnName="Environment" />
           <ScalarProperty Name="Hazards" ColumnName="Hazards" />
-          <ScalarProperty Name="IsWorkInProgress" ColumnName="IsWorkInProgress" />
+          <ScalarProperty Name="IsPublished" ColumnName="IsPublished" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="Rumors">
       <EntityTypeMapping TypeName="RiftWorldModel.Rumor">
         <MappingFragment StoreEntitySet="Rumors">
+          <ScalarProperty Name="RumorText" ColumnName="RumorText" />
           <ScalarProperty Name="RumorsId" ColumnName="RumorsId" />
           <ScalarProperty Name="RumorOfId" ColumnName="RumorOfId" />
           <ScalarProperty Name="AuthorId" ColumnName="AuthorId" />
           <ScalarProperty Name="IsApproved" ColumnName="IsApproved" />
-          <ScalarProperty Name="TheContent" ColumnName="TheContent" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -458,5 +471,6 @@
         <ScalarProperty Name="Id" ColumnName="UserId" />
       </EndProperty>
     </AssociationSetMapping>
+    <FunctionImportMapping FunctionImportName="getSecrets" FunctionName="RiftWorldModel.Store.getSecrets" />
   </EntityContainerMapping>
 </Mapping>

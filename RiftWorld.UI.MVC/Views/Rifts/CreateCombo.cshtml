@@ -1,0 +1,314 @@
+﻿@model RiftWorld.UI.MVC.Models.ComboCreate
+
+@{
+    /**/
+
+    ViewBag.Title = "CreateCombo";
+    int startNickname = ViewBag.startNickname;
+    int startLocation = ViewBag.startLocation;
+    int startBlurb = ViewBag.startBlurb;
+
+    List<byte> theSelected = ViewBag.Selected;
+
+}
+<div class="col-12">
+    <h2>@ViewBag.Title</h2>
+
+    @using (Html.BeginForm("Create", "Rifts", FormMethod.Post, new { id = "baseCreate" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.HiddenFor(model => model.IsPublished)
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Location, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-12">
+                    @Html.EditorFor(model => model.Location, new { htmlAttributes = new { @class = "form-control count", data_max = 300 } })
+                    <div id="tcp-Location" class="col-md-offset-2 col-12"><span id="tc-Location">@startLocation</span> character(s) left.</div>
+                    @Html.ValidationMessageFor(model => model.Location, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Nickname, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-12">
+                    @Html.EditorFor(model => model.Nickname, new { htmlAttributes = new { @class = "form-control count", data_max = 50 } })
+                    @Html.ValidationMessageFor(model => model.Nickname, "", new { @class = "text-danger" })
+                    <div id="tcp-Nickname" class="col-md-offset-2 col-12"><span id="tc-Nickname">@startNickname</span> character(s) left.</div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Blurb, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-12">
+                    @Html.EditorFor(model => model.Blurb, new { htmlAttributes = new { @class = "form-control count", data_max = 100 } })
+                    @Html.ValidationMessageFor(model => model.Blurb, "", new { @class = "text-danger" })
+                    <div id="tcp-Blurb" class="col-md-offset-2 col-12"><span id="tc-Blurb">@startBlurb</span> character(s) left.</div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Environment, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-12">
+                    @Html.EditorFor(model => model.Environment, new { htmlAttributes = new { @class = "form-control rich" } })
+                    @Html.ValidationMessageFor(model => model.Environment, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Hazards, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-12">
+                    @Html.EditorFor(model => model.Hazards, new { htmlAttributes = new { @class = "form-control rich" } })
+                    @Html.ValidationMessageFor(model => model.Hazards, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <label class="col-md-2" for="tags">Tags</label>
+                @Html.ListBox("tags", (MultiSelectList)ViewBag.Tags)
+            </div>
+
+
+            <!-- Modal -->
+            <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="confirmModalLabel">Publish Confirm</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Are you sure you want to publish?</p>
+                            <div id="nulled">
+
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            <input type="submit" name="submit" value="Publish" class="btn btn-success" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        //put modal confirming publish here.
+    }
+
+    @using (Html.BeginForm("AssoCreate", "Rifts", FormMethod.Post, new { id = "daForm" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            <h4>VarietyOfInhabitant</h4>
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group">
+                <label class="col-md-2" for="vari">Variety of Inhabitants</label>
+                <select multiple="multiple" name="vari" id="vari">
+                    @foreach (var x in ViewBag.Races)
+                    {
+                        <option value="@x.RaceId" @(theSelected.Contains(x.RaceId) ? "selected" : "") data-list="vari">@x.RaceName</option>
+                    }
+                </select>
+                <div class="other-stuff" data-list="vari">
+                    @foreach (var x in ViewBag.Races)
+                    {
+                        <div data-value="@x.RaceId" data-list="vari" style="display:none">
+                            <h5>@x.RaceName</h5>
+                            <div class="input-group">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">Display Priority</span>
+                                    <input type="number" data-value="@x.RaceId" data-name="order" value="@(theSelected.Contains(x.RaceId) ? (Model.Assos.Where(a => a.RaceId == x.RaceId).Select(a => a.RaceOrder).FirstOrDefault().ToString()) : "")" />
+                                    <span class="input-group-prepend">Choose number between 0 and 255. Or nothing</span>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+    <div class="form-group">
+        <div class="col-12 btn-group">
+            <button type="button" id="yaSave" name="submit" value="Save and Continue" class="btn btn-warning" />
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#confirmModal">
+                Open Modal
+            </button>
+        </div>
+    </div>
+
+    <div>
+        @Html.ActionLink("Back to List", "Index")
+    </div>
+</div>
+
+@section Scripts{
+
+    <script>
+        type = "text/javascript" >
+            tinymce.init({
+                selector: '.rich'
+            });
+    </script>
+    <script>
+        new SlimSelect({
+            select: '#tags'
+        })
+    </script>
+    <script>
+        //$(function () {
+        //    $('#Blurb').keyup(function (e) {
+        //        var max = 100;
+        //        var len = $(this).val().length;
+        //        var char = max - len;
+        //        $('#tc-Blurb').html(char);
+        //    });
+        //});
+        $('.count').keyup(function (e) {
+            var name = $(this).attr('id');
+            var max = $(this).data('max');
+            var len = $(this).val().length;
+            var char = max - len;
+            $('#tc-' + name).html(char);
+            if (char < 0) {
+                $('#tcp-' + name).addClass('text-danger');
+            }
+            else {
+                $('#tcp-' + name).removeClass('text-danger');
+            }
+        });
+    </script>
+    <script>
+        $('#confirmModal').on('show.bs.modal', function () {
+            var nullables = ['Environment', 'Hazards'];
+            var nuliLength = nullables.length;
+            var theNulled = [];
+            for (var i = 0; i < nuliLength; i++) {
+                var nuli = nullables[i];
+                var checkThis = tinymce.get(nuli).getContent();
+                if (checkThis == "") {
+                    theNulled.push(nuli);
+                }
+                //console.log(checkThis.length); <--- test for seperate sheet for getting character count on rich editor. Good news, it works and counts the full character count with the html.
+            };
+            $(function () {
+                const list = $('.modal-body #nulled');
+                list.html("");
+                list.append('<ul></ul>');
+                const list2 = $('.modal-body #nulled ul');
+                $(theNulled).each(function () {
+                    list2.append('<li>' + this + '</li>');
+                });
+                if (theNulled.length > 0) {
+                    list.append('<p> all have no value.</p><p>Click publish if this is okay.</p>');
+                }
+            })
+        });
+    </script>
+
+    <script src="~/Scripts/SelectBoxes/multi.js"></script>
+    <script>
+        $("#vari").multi({
+            enable_search: true,
+            search_placeholder: "search..."
+        });
+    </script>
+    <script>
+        function on_click(thing, list) {
+            $('div[data-value="' + thing + '"][data-list="' + list + '"]').toggle();
+        }
+
+        const okButton = document.getElementById('daSubmit');
+        $(function () {
+            $('.other-stuff input').keyup(function (e) {
+                var max = 255;
+                var value = $(this).val();
+                var invalid = false;
+                if (value > max) {
+                    $(this).addClass("invalid");
+                }
+                else {
+                    $(this).removeClass("invalid");
+                }
+
+                //disable submit if invalid
+                $('.other-stuff input').each(function () {
+                    if ($(this).hasClass("invalid")) {
+                        invalid = true;
+                    }
+
+                });
+                if (invalid) {
+                    okButton.disabled = true;
+                }
+                else {
+                    okButton.disabled = false;
+                }
+            });
+        });
+    </script>
+    <script>
+        class AssoVariety {
+            constructor(raceId, order) {
+                this.RaceId = raceId;
+                this.RaceOrder = order;
+            }
+        }
+
+        class TheSubmitted {
+            constructor(vari) {
+                this.InfoId = $("#InfoId").val();
+                this.RiftId = $("#RiftId").val();
+                this.Submit = $("#Submit").val();
+                this.__RequestVerificationToken = $('input[name="__RequestVerificationToken"]', $('#daForm')).val();
+                this.Varieties = vari;
+            }
+        }
+
+        function GetDataPt(target, name, list) {
+            var work = $('[data-list="' + list + '"][data-value="' + target + '"] [data-name="' + name + '"]').val();
+            return work;
+        }
+
+        $("#daForm").submit(function (e) {
+            e.preventDefault();
+            var postVari = [];
+            $(function () {
+                $(".selected-wrapper a").each(function () {
+                    var t = $(this).data("value");
+                    var list = $(this).data("list");
+                    var order = GetDataPt(t, "order", list);
+                    postVari.push(new AssoVariety(t, order));
+                    console.log(postVari);
+                });
+
+                var deFormData = new TheSubmitted(postVari);
+                 $(document).ready(function () {
+                    $.ajax({
+                        url: "@Url.Action("AssoCreate","Rifts")",
+                        type: "POST",
+                        data: deFormData,
+                        success: function (data) {
+                            if (data == true) {
+                                window.location.href = "/Rifts/Index";
+                            }
+                            else {
+
+                            }
+                        }
+                    });
+                });
+            });
+
+        });
+
+
+    </script>
+
+}

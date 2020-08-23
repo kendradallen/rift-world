@@ -18,7 +18,7 @@ namespace RiftWorld.DATA.EF
         public short InfoId { get; set; }
         public string Name { get; set; }
         public string TheContent { get; set; }
-        public bool IsWorkInProgress { get; set; }
+        public bool IsPublished { get; set; }
     
         public virtual Info Info { get; set; }
     }

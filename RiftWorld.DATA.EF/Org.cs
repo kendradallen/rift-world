@@ -29,7 +29,8 @@ namespace RiftWorld.DATA.EF
         public string SymbolFileName { get; set; }
         public Nullable<short> BaseLocationId { get; set; }
         public string AboutText { get; set; }
-        public bool IsWorkInProgress { get; set; }
+        public bool IsPublished { get; set; }
+        public string Artist { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CharOrg> CharOrgs { get; set; }

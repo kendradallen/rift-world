@@ -1,0 +1,59 @@
+﻿@model IEnumerable<RiftWorld.DATA.EF.Rift>
+
+@{
+    ViewBag.Title = "Rifts";
+}
+
+
+<div class="col-12">
+
+
+    <h2>@ViewBag.Title</h2>
+
+    <p>
+        @Html.ActionLink("Create New", "Create")
+    </p>
+    @*@foreach (var item in Model)
+    {
+        <div class="rift row">
+            <p class="col-sm-4">@item.Nickname</p>
+            <p class="col-sm-8">@item.Info.Blurb</p>
+        </div>
+    }*@
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Nickname)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Location)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Info.Blurb)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.ActionLink(item.Nickname, "Details", new { id = item.RiftId })
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Location)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Info.Blurb)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.RiftId }) |
+                    @Html.ActionLink("Edit Complex", "AssoEdit", new { id = item.RiftId }) |
+                    @*@Html.ActionLink("Details", "Details", new { id = item.RiftId }) |*@
+                    @Html.ActionLink("Delete", "Delete", new { id = item.RiftId })
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>

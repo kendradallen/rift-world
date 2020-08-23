@@ -30,13 +30,25 @@
                         <h5>
                             @Html.DisplayNameFor(model => model.Alias)
                         </h5><p>
-                            @Html.DisplayFor(model => model.Alias)
-                        </p>
+    Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibu
+    @*@Html.DisplayFor(model => model.Alias)*@
+</p>
                     </div>
                 </div>
-                <div id="startTop-right" class="col-md-3">
+                <div id="startTop-right" class="col-md-3 align-self-center">
                     <div id="picture">
-                        <img src="https://vignette.wikia.nocookie.net/criticalrole/images/9/91/Percy2.png/revision/latest/scale-to-width-down/310?cb=20151228164610" />
+                        <div class="padder">
+                            @*<img src="https://vignette.wikia.nocookie.net/criticalrole/images/9/91/Percy2.png/revision/latest/scale-to-width-down/310?cb=20151228164610" />*@
+                            @if (Model.PortraitFileName != null)
+                            {
+                                <img src="~/Content/img/npc/@Html.DisplayFor(model => model.PortraitFileName)" />
+                            }
+                            else
+                            {
+                                <img src="~/Content/img/npc/default.jpg" />
+
+                            }
+                        </div>
                     </div>
                     <div id="basic-stuff" class="row">
                         <p id="race" class="col-6">
@@ -49,7 +61,17 @@
             <br />
             <div id="startLower" class="row">
                 <div id="crest" class="col-md-2">
-                    <img src="https://vignette.wikia.nocookie.net/criticalrole/images/5/59/DeRolo_Crest.JPG/revision/latest/scale-to-width-down/180?cb=20180516101724" />
+                    @*<img src="https://vignette.wikia.nocookie.net/criticalrole/images/5/59/DeRolo_Crest.JPG/revision/latest/scale-to-width-down/180?cb=20180516101724" />*@
+                    @if (Model.CrestFileName != null)
+                    {
+                        <img src="~/Content/img/npc/@Html.DisplayFor(model => model.CrestFileName)" />
+
+                    }
+                    else
+                    {
+                        <img src="~/Content/img/npc/org_default.jpg" />
+
+                    }
                 </div>
                 <div id="startLower-right" class="col-md-10">
                     <div id="orgs">
@@ -162,8 +184,8 @@
 
     @Html.DisplayFor(model => model.AboutText)
 
-    @Html.DisplayNameFor(model => model.IsWorkInProgress)
-    @Html.DisplayFor(model => model.IsWorkInProgress)
+    @Html.DisplayNameFor(model => model.IsPublished)
+    @Html.DisplayFor(model => model.IsPublished)
 
     @Html.DisplayNameFor(model => model.Info.Blurb)
     @Html.DisplayFor(model => model.Info.Blurb)

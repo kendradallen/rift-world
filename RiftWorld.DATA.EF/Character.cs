@@ -37,6 +37,10 @@ namespace RiftWorld.DATA.EF
         public byte TierId { get; set; }
         public bool IsRetired { get; set; }
         public bool IsApproved { get; set; }
+        public string Artist { get; set; }
+        public string ClassString { get; set; }
+        public bool HasUnseenEdit { get; set; }
+        public bool IsDead { get; set; }
     
         public virtual Gender Gender { get; set; }
         public virtual Locale Locale { get; set; }

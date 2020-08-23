@@ -113,7 +113,12 @@ var multi = (function() {
       row.innerText = label;
       row.setAttribute("role", "button");
       row.setAttribute("data-value", value);
-      row.setAttribute("multi-index", i);
+        row.setAttribute("multi-index", i);
+            /************************ Begin Kendra's code edits *****************************/
+        var type = option.dataset.list;
+        if (option.classList.contains("unpub")) { row.setAttribute("data-pub", "unpub"); }
+        row.setAttribute("data-list", type);
+            /********************** End Kendra's code edits ******************************/
 
       if (option.disabled) {
         row.className += " disabled";
@@ -125,7 +130,7 @@ var multi = (function() {
           var clone = row.cloneNode(true);
     /************************ Begin Kendra's code edits *****************************/
 
-          clone.setAttribute("onclick", "on_click("+value+")");
+          clone.setAttribute("onclick", "on_click("+value+",'"+type+"')");
 
     /********************** End Kendra's code edits ******************************/
         select.wrapper.selected.appendChild(clone);
@@ -264,6 +269,16 @@ var multi = (function() {
       non_selected.addEventListener("click", function (event) {
           if (event.target.getAttribute("multi-index")) {
               toggle_option(select, event, settings);
+
+              //hide the corresponding other-stuff section
+              var list = event.target.getAttribute("data-list");
+              var id = event.target.getAttribute("data-value");
+              $('div[data-value="' + id + '"][data-list="' + list + '"]').hide();
+              //option 1 for solving input validation issue on complex: make .other-stuff areas in selected list have specific class and only validate those with said class
+              $('div[data-value="' + id + '"][data-list="' + list + '"]').toggleClass("yes-man");
+
+              CheckValidity();
+              //option 2 for solving input validation issue on complex: clear input data when clicked
           }
       });
 

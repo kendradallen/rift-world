@@ -11,6 +11,8 @@
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
+
+
 <table class="table">
     <tr>
         <th>
@@ -35,7 +37,7 @@
             @Html.DisplayNameFor(model => model.AboutText)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.IsWorkInProgress)
+            @Html.DisplayNameFor(model => model.IsPublished)
         </th>*@
         <th>
             @Html.DisplayNameFor(model => model.Info.Blurb)
@@ -73,7 +75,7 @@
             @Html.DisplayFor(modelItem => item.AboutText)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.IsWorkInProgress)
+            @Html.DisplayFor(modelItem => item.IsPublished)
         </td>*@
         <td>
             @Html.DisplayFor(modelItem => item.Info.Blurb)

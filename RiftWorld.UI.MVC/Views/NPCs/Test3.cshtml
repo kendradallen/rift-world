@@ -1,0 +1,465 @@
+﻿@model RiftWorld.UI.MVC.Models.NpcCreateGetVM
+@{
+    ViewBag.Title = "Test3";
+}
+
+@section styles{
+    <link rel="stylesheet" href="~/Content/SelectBoxes/multi.css" />
+}
+
+<div class="col">
+    @using (Html.BeginForm("Test3", "NPCs", FormMethod.Post,
+                new { id = "daForm", @enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>NpcCreateGetVM</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.NPC.InfoId)
+        <div class="form-group">
+            @Html.LabelFor(model => model.NPC.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.NPC.Name, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.NPC.Name, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.NPC.Alias, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.NPC.Alias, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.NPC.Alias, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.NPC.Quote, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.NPC.Quote, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.NPC.Quote, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        @* TODO - change to uploading a file *@
+        <div class="form-group">
+            @Html.LabelFor(model => model.NPC.PortraitFileName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.NPC.PortraitFileName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.NPC.PortraitFileName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        @*<div class="form-group">
+            @Html.LabelFor(model => model.NPC.PortraitFileName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <input type="file" name="portraitPic" id="PortraitPic"/>
+                <img class="img-fluid img-thumbnail border-00" src="~/Content/img/npc/default.jpg" />
+                @Html.HiddenFor(model => model.NPC.PortraitFileName)
+            </div>
+        </div>*@
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.NPC.RaceId, "RaceId", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("RaceId", (SelectList)ViewBag.RaceId, "-- None? Unknown? --", htmlAttributes: new { @class = "form-control" })
+
+                @Html.ValidationMessageFor(model => model.NPC.RaceId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        @* TODO - change to uploading a file *@
+        <div class="form-group">
+            @Html.LabelFor(model => model.NPC.CrestFileName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.NPC.CrestFileName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.NPC.CrestFileName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        @*<div class="form-group">
+            @Html.LabelFor(model => model.NPC.CrestFileName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <input type="file" name="crestPic" id="CrestPic"/>
+                <img class="img-fluid img-thumbnail border-00" src="~/Content/img/npc/org_default.jpg" />
+                @Html.HiddenFor(model => model.NPC.CrestFileName)
+            </div>
+        </div>*@
+        @* todo - put in as tinymce *@
+        <div class="form-group">
+            @Html.LabelFor(model => model.NPC.ApperanceText, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.NPC.ApperanceText, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.NPC.ApperanceText, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        @*<div class="form-group">
+            @Html.LabelFor(model => model.NPC.ApperanceText, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <textarea class="form-control text-box multi-line rich" data-val="true" data-val-required="The About field is required." id="ApperanceText" name="ApperanceText"></textarea>
+            </div>
+        </div>*@
+        @* todo - put in as tinymce *@
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.NPC.AboutText, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.NPC.AboutText, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.NPC.AboutText, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.NPC.LastLocationId, "LastLocationId", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("LastLocationId", (SelectList)ViewBag.LastLocationId, "-- Unknown --", htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.NPC.LastLocationId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        @Html.HiddenFor(model => model.NPC.IsPublished)
+
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Blurb, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Blurb, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Blurb, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        @* multi-select lists -orgs *@<div class="form-group">
+            <label class="col-md-2" for="orgs">Organizations</label>
+            <select multiple="multiple" name="orgs" id="orgs">
+                @foreach (var x in ViewBag.Orgs)
+                {
+                    <option value="@x.OrgId" data-list="org" class="@(x.IsPublished ? "":"unpub")">@x.Name</option>//DO NOT try to expand this out with enters. It royally fucks up the styling. it must remain inline with no spacing as is presented
+                }
+            </select>
+            <div id="otherStuff_orgs" class="other-stuff" data-list="org">
+                @foreach (var x in ViewBag.Orgs)
+                {
+                    <div data-value="@x.OrgId" data-list="org" style="display:none">
+                        <h5>@x.Name</h5>
+                        <div class="input-group">
+                            <div class="input-group-append">
+                                <span class="input-group-text">Display Priority of Org on NPC page</span>
+                                <input type="number" data-value="@x.OrgId" data-name="order-org" />
+
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <div class="input-group-append">
+                                <span class="input-group-text">Display priority of NPC on org page</span>
+                                <input type="number" data-value="@x.OrgId" data-name="order-npc" />
+
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <div class="input-group-append">
+                                <span class="input-group-text">Blurb about Org on NPC page</span>
+                                <input type="text" data-value="@x.OrgId" data-name="blurb-org" />
+
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <div class="input-group-append">
+                                <span class="input-group-text">Blurb about NPC on Org Page</span>
+                                <input type="text" data-value="@x.OrgId" data-name="blurb-npc" />
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+        @* multi-select lists -classes *@
+        <div class="form-group">
+            <label class="col-md-2" for="classes">Classes</label>
+            <select multiple="multiple" name="classes" id="classes">
+                @foreach (var x in ViewBag.Classes)
+                {
+                    <option value="@x.ClassId" data-list="ya-class">@x.ClassName</option>//DO NOT try to expand this out with enters. It royally fucks up the styling. it must remain inline with no spacing as is presented
+                }
+            </select>
+            <div id="otherStuff_classes" class="other-stuff" data-list="class">
+                @foreach (var x in ViewBag.Classes)
+                {
+                    <div data-value="@x.ClassId" data-list="ya-class" style="display:none">
+                        <h5>@x.ClassName</h5>
+                        <div class="input-group">
+                            <div class="input-group-append">
+                                <span class="input-group-text">Display Priority</span>
+                                <input type="number" data-value="@x.ClassId" data-name="order" />
+                            </div>
+                        </div>
+
+                    </div>
+                }
+            </div>
+        </div>
+        @* multi-select lists -tags *@
+        <div class="form-group">
+            <label class="col-md-2" for="tags">Tags</label>
+            <select multiple="multiple" name="tags" id="tags">
+                @foreach (var x in ViewBag.Tags)
+                {
+                    <option value="@x.TagId" data-list="tags">@x.TagName</option>
+                }
+            </select>
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input id="submit" type="submit" value="Create" class="btn btn-default" />
+                </div>
+            </div>
+        </div>
+        <input type="button" value="test" onclick="myFunction()" />
+
+
+        }
+
+        <div>
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    </div>
+@section Scripts{
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Scripts/SelectBoxes/multi.js"></script>
+
+
+    <script>
+        $("#orgs").multi({
+            enable_search: true,
+            search_placeholder: "search..."
+        });
+        $("#classes").multi({
+            enable_search: true,
+            search_placeholder: "search..."
+        });
+        new SlimSelect({
+            select: "#tags"
+        })
+    </script>
+    @*<script>
+            $(function () {
+                tinymce.init({
+                    selector: '.rich'
+                });
+
+            });
+            function myFunction() {
+                var myContent = tinymce.get("ApperanceText").getContent();
+                console.log(myContent);
+            }
+        </script>*@
+
+    <script>
+        function on_click(thing, list) {
+            console.log("fired");
+            console.log(thing);
+            //String type = list;
+            $('div[data-value="' + thing + '"][data-list="' + list + '"]').toggle();
+
+        }
+
+    </script>
+    <script>
+
+        class NPC {
+            constructor(name, alias, quote, portraitFileName, raceId, crestFileName, apperanceText, aboutText, lastLocationId, IsPublished) {
+                //NTS!!!!!!!!! -----property names must match the properties names of the models EXACTLY
+                this.Name = name;
+                this.Alias = alias;
+                this.Quote = quote;
+                this.PortraitFileName = portraitFileName;
+                this.RaceId = raceId;
+                this.CrestFileName = crestFileName;
+                this.ApperanceText = apperanceText;
+                this.AboutText = aboutText;
+                this.LastLocationId = lastLocationId;
+                this.IsPublished = IsPublished;
+            }
+        }
+
+        class AssoOrg {
+            constructor(orgId, orgOrder, npcOrder, orgBlurb, npcBlurb) {
+                this.OrgId = orgId;
+                this.OrderOrg = orgOrder;
+                this.OrderNpc = npcOrder;
+                this.BlurbOrg = orgBlurb;
+                this.BlurbNpc = npcBlurb;
+            }
+        }
+
+        class AssoClass {
+            constructor(classId, order) {
+                this.ClassId = classId;
+                this.ClassOrder = order;
+            }
+        }
+        class AssoTag {
+            constructor(id) {
+                this.TagId = id;
+            }
+        }
+        class TheSubmitted {
+            constructor(npc, blurb, orgs, classes, tags) {
+                this.NPC = npc;
+                this.Blurb = blurb;
+                this.AssoOrgs = orgs;
+                this.AssoClasses = classes;
+                this.AssoTags = tags;
+            }
+        }
+        class TheSubmittedLong {
+            constructor(name, alias, quote, portraitFileName, raceId, crestFileName, apperanceText, aboutText, lastLocationId, IsPublished, blurb, orgs, classes, tags) {
+                this.Name = name;
+                this.Alias = alias;
+                this.Quote = quote;
+                this.PortraitFileName = portraitFileName;
+                this.RaceId = raceId;
+                this.CrestFileName = crestFileName;
+                this.ApperanceText = apperanceText;
+                this.AboutText = aboutText;
+                this.LastLocationId = lastLocationId;
+                this.IsPublished = IsPublished;
+
+                this.Blurb = blurb;
+                this.AssoOrgs = orgs;
+                this.AssoClasses = classes;
+                this.AssoTags = tags;
+            }
+            //constructor(npc, blurb, orgs, classes, tags) {
+            //    this.Blurb = blurb;
+            //    this.AssoOrgs = orgs;
+            //    this.AssoClasses = classes;
+            //    this.AssoTags = tags;
+            //    this.NPC = npc;
+
+            //}
+        }
+        class SubmittedV2 {
+            constructor(formdata, blurb, orgs, classes, tags) {
+                this.FormData = formdata;
+                this.Blurb = blurb;
+                this.AssoOrgs = orgs;
+                this.AssoClasses = classes;
+                this.AssoTags = tags;
+            }
+        }
+        function TheRealSubmit(npc, blurb, orgs, classes, tags, optionsOrgs, optionsClasses, optionsTags) {
+            this.NPC = npc;
+
+            this.Blurb = blurb;
+
+            this.Orgs = orgs;
+            this.Classes = classes;
+            this.Tags = tags;
+
+            this.OptionOrgs = optionsOrgs;
+            this.OptionsClasses = optionsClasses;
+            this.OptionsTags = optionsTags;
+        }
+
+
+        function GetDataPt(target, type, list) {
+            console.log(target);
+            console.log(type);
+            console.log(list);
+            var work = $('[data-list="' + list + '"][data-value="' + target + '"] [data-name="' + type + '"]').val();
+            console.log(work);
+            return work;
+        }
+
+        //var length = $(".selected-wrapper a").length;
+
+        //Note: this is an action on the act of clicking the submit button (not on the act of submitting the form)
+        $("#daForm").submit(function (e) {
+            //var formdata = $(this).serializeArray();
+            e.preventDefault();
+            //console.log(theLength);
+            //var foo = new AssociationArray
+            var postDataOrg = [];
+            var postDataClass = [];
+            var postDataTag = [];
+            $(function () {
+                //get classes data
+                $(".selected-wrapper a").each(function () {
+                    var t = $(this).data("value");
+                    var list = $(this).data("list");
+                    if (list == "ya-class") {
+                        var order = GetDataPt(t, "order", list);
+                        //var order = $('[data-list="' + list + '"][data-value="' + t + '"] [data-name="Order"]').val();
+                        console.log("classorder for" + t + ":" + order);
+                        postDataClass.push(new AssoClass(t, order));
+                        console.log("postDataClass:" + postDataClass);
+                    }
+                    else if (list == "org") {
+                        //order org
+                        var orderorg = GetDataPt(t, "order-org", list);
+                        console.log("orderorg for" + t + ":" + orderorg);
+                        //order npc
+                        var ordernpc = GetDataPt(t, "order-npc", list);
+                        console.log("ordernpc for" + t + ":" + ordernpc);
+                        //blurb org
+                        var blurborg = GetDataPt(t, "blurb-org", list);
+                        console.log("blurborg for" + t + ":" + blurborg);
+                        //blurb org
+                        var blurbnpc = GetDataPt(t, "blurb-npc", list);
+                        console.log("blurbnpc for" + t + ":" + blurbnpc);
+
+                        postDataOrg.push(new AssoOrg(t, orderorg, ordernpc, blurborg, blurbnpc));
+                        console.log("postdataorg:" + postDataOrg);
+                    }
+                    //else if (list == "tags") {
+                    //    postDataTag.push(new AssoTag(t));
+                    //    console.log("tag = " + postDataTag);
+                    //}
+
+                });
+                $(".ss-values .ss-value-text").each(function () {
+                    var tag = $(this).text();
+                    postDataTag.push(new AssoTag(tag));
+                    console.log(postDataTag);
+                })
+                //never trust auto generation
+
+                ////////////////////God I'm dumb. Kay so future me, remember, JS is asynchronous. Stuff can run in not the the right order. Unless you tell it otherwise, anything can run before the needed data is there.
+                ///////////////////Also, I'm know there is a cleaner way to do it with promises and such but the time crunch is currently preventing me from trying to learn that at the same time. So, the rest of this code will be in a far more crude and bodge-y like fashion
+                //getting NPC
+                var name = $("#NPC_Name").val();
+                console.log(name);
+                var alias = $("#NPC_Alias").val();
+                var quote = $("#NPC_Quote").val();
+                var portraitFileName = null;
+                var raceId = $("#RaceId").val();
+                var crestFileName = null;
+
+                //var myContent = tinymce.get("ApperanceText").getContent();
+                //console.log(myContent);
+
+                var myContent = $("#ApperanceText").val();
+                var aboutText = $("#NPC_AboutText").val();
+                var lastLocation = $("#LastLocationId").val();
+                var IsPublished = true;
+                var npc = new NPC(name, alias, quote, portraitFileName, raceId, crestFileName, myContent, aboutText, lastLocation, IsPublished);
+                //the submitted
+                var blurb = $("#Blurb").val();
+
+                @*$(document).ready(function () {
+                    var deFormData = new TheSubmittedLong(name, alias, quote, portraitFileName, raceId, crestFileName, myContent, aboutText, lastLocation, IsPublished, blurb, postDataOrg, postDataClass, postDataTag);
+                    console.log(deFormData);
+                    console.log(JSON.stringify(deFormData));
+                    $.ajax({
+                        url: "@Url.Action("Test3","NPCs")",
+                        type: "POST",
+                        data: deFormData
+                    });
+                });*@
+
+            });
+        });
+
+
+    </script>
+
+}

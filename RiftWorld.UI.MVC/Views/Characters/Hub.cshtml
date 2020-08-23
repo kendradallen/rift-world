@@ -1,0 +1,122 @@
+﻿@model RiftWorld.DATA.EF.Character
+
+@{
+    ViewBag.Title = "Hub";
+}
+
+<h2>Hub</h2>
+@Html.Action("_Secrets", "Characters", new { id = Model.CharacterId})
+<section class="col-12" id="details">
+    <h4>Character</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.CharacterName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CharacterName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PortraitFileName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PortraitFileName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.About)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.About)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IsRetired)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IsRetired)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IsApproved)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IsApproved)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Artist)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Artist)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ClassString)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ClassString)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Gender.GenderName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Gender.GenderName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Locale.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Locale.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Race.RaceName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Race.RaceName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Tier.TierName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Tier.TierName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UserDetail.DiscordName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UserDetail.DiscordName)
+        </dd>
+
+    </dl>
+</section>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.CharacterId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

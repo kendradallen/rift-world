@@ -1,0 +1,97 @@
+﻿@model RiftWorld.UI.MVC.Models.ApprovalVM
+@using RiftWorld.DATA.EF
+
+@{
+    ViewBag.Title = "Approvals";
+}
+<div class="col-12">
+    <h2>Approvals</h2>
+    @if (Request.IsAuthenticated && User.IsInRole("Admin"))
+    {
+        <table class="table">
+            <thead>Users</thead>
+            <tr>
+                <th>
+                    User
+                </th>
+                <th>
+                </th>
+            </tr>
+
+
+            @foreach (UserDetail item in Model.Users)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DiscordFull)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Decide", "Approve", "UsersAdmin", new { id = item.UserId }, null)
+                    </td>
+                </tr>
+            }
+
+        </table>
+    }
+    <table class="table">
+        <thead>Characters</thead>
+        <tr>
+            <th>
+                User
+            </th>
+            <th>
+                Character Name
+            </th>
+            <th>
+            </th>
+        </tr>
+
+        @foreach (Character item in Model.Characters)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserDetail.DiscordFull)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CharacterName)
+                </td>
+                <td>
+                    @Html.ActionLink("Decide", "Approve", "Characters", new { id = item.CharacterId }, null)
+                </td>
+            </tr>
+        }
+
+
+    </table>
+
+    <table class="table">
+        <thead>Rumors</thead>
+        <tr>
+            <th>
+                Character
+            </th>
+            <th>
+                Info Rumor about
+            </th>
+            <th>
+            </th>
+        </tr>
+
+
+        @foreach (Rumor item in Model.Rumors)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Character.CharacterName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Info.Name)
+                </td>
+                <td>
+                    @Html.ActionLink("Decide", "Approve", "Rumors", new { id = item.RumorsId }, null)
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>

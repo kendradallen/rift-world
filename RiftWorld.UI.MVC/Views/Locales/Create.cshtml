@@ -1,0 +1,197 @@
+﻿@*@model RiftWorld.DATA.EF.Locale*@
+@model RiftWorld.UI.MVC.Models.LocaleCreateVM
+
+@{
+    ViewBag.Title = "Locale Create";
+    int startName = ViewBag.startName;
+    int startBlurb = ViewBag.startBlurb;
+    int startAppointed = ViewBag.startAppointed;
+    int startAvg = ViewBag.startAvg;
+}
+
+<div class="col-12">
+
+    <h2>@ViewBag.Title</h2>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.IsPublished)
+        <div class="form-group">
+            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label" })
+            <div class="col-12">
+                <div class="da-focus">
+                    @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control count", data_max = 50 } })
+                </div>
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                <div id="tcp-Name" class="col-md-offset-2 col-12 @(startName <0 ? "invalid":"")"><span id="tc-Name">@startName</span> character(s) left.</div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Blurb, htmlAttributes: new { @class = "control-label" })
+            <div class="col-12">
+                <div class="da-focus">
+                    @Html.EditorFor(model => model.Blurb, new { htmlAttributes = new { @class = "form-control count", data_max = 100, style = "height:4em;" } })
+                </div>
+                @Html.ValidationMessageFor(model => model.Blurb, "", new { @class = "text-danger" })
+                <div id="tcp-Blurb" class="col-md-offset-2 col-12 @(startBlurb <0 ? "invalid":"")"><span id="tc-Blurb">@startBlurb</span> character(s) left.</div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.LevelOfLocaleId, htmlAttributes: new { @class = "control-label" })
+            <div class="col-md-8">
+                @Html.DropDownList("LevelOfLocaleId", (SelectList)ViewBag.LevelOfLocaleId, "", htmlAttributes: new { @class = "" })
+                @Html.ValidationMessageFor(model => model.LevelOfLocaleId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group" id="#qRegion">
+            @Html.LabelFor(model => model.RegionId, "RegionId", htmlAttributes: new { @class = "control-label " })
+            <div class="col-md-8">
+                @Html.DropDownList("RegionId", (SelectList)ViewBag.RegionId, "--- N/A ---", htmlAttributes: new { @class = "" })
+                @Html.ValidationMessageFor(model => model.RegionId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group" id="qClosestCity">
+            @Html.LabelFor(model => model.ClosestCityId, "ClosestCityId", htmlAttributes: new { @class = "control-label " })
+            <div class="col-md-8">
+                @Html.DropDownList("ClosestCityId", (SelectList)ViewBag.ClosestCityId, "--- N/A ---", htmlAttributes: new { @class = "" })
+                @Html.ValidationMessageFor(model => model.ClosestCityId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group" id="qCouncilDelegate">
+            @Html.LabelFor(model => model.CouncilDelegateId, "CouncilDelegateId", htmlAttributes: new { @class = "control-label" })
+            <div class="col-md-8">
+                @Html.DropDownList("CouncilDelegateId", (SelectList)ViewBag.CouncilDelegateId, "None", htmlAttributes: new { @class = "" })
+                @Html.ValidationMessageFor(model => model.CouncilDelegateId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Appointed, htmlAttributes: new { @class = "control-label" })
+            <div class="col-12">
+                @Html.EditorFor(model => model.Appointed, new { htmlAttributes = new { @class = "form-control rich count", data_max = 8000, style = "height:20em;" } })
+                @Html.ValidationMessageFor(model => model.Appointed, "", new { @class = "text-danger" })
+                @*<div id="tcp-Appointed" class="col-md-offset-2 col-12 @(startAppointed <0 ? "invalid":"")"><span id="tc-Appointed">@startAppointed</span> character(s) left.</div>*@
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Environment, htmlAttributes: new { @class = "control-label" })
+            <div class="col-12">
+                @Html.EditorFor(model => model.Environment, new { htmlAttributes = new { @class = "form-control rich", style = "height:20em;" } })
+                @Html.ValidationMessageFor(model => model.Environment, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.AvgLifestyle, htmlAttributes: new { @class = "control-label" })
+            <div class="col-12">
+                @Html.EditorFor(model => model.AvgLifestyle, new { htmlAttributes = new { @class = "form-control rich count", data_max = 3000, style = "height:20em;" } })
+                @Html.ValidationMessageFor(model => model.AvgLifestyle, "", new { @class = "text-danger" })
+                @*<div id="tcp-Avg" class="col-md-offset-2 col-12 @(startAvg <0 ? "invalid":"")"><span id="tc-Avg">@startAvg</span> character(s) left.</div>*@
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.About, htmlAttributes: new { @class = "control-label" })
+            <div class="col-12">
+                @Html.EditorFor(model => model.About, new { htmlAttributes = new { @class = "form-control rich", style = "height:20em;" } })
+                @Html.ValidationMessageFor(model => model.About, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+
+        <div class="form-group">
+            <label class="col-md-2" for="tags">Tags</label>
+            @Html.ListBox("tags", (MultiSelectList)ViewBag.Tags)
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to publish?</p>
+                        <div id="nulled">
+
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <input type="submit" name="submit" value="Publish" class="btn btn-success" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-12 btn-group">
+                <input type="submit" name="submit" value="Save and Continue" class="btn btn-warning" />
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#confirmModal">
+                    Publish
+                </button>
+            </div>
+        </div>
+    </div>
+    }
+
+    <div style="text-align:left;">
+        @Html.ActionLink("Back to List", "Index")
+    </div>
+</div>
+
+@section Scripts{
+    <script src="~/Scripts/MyJS/edit.js"></script>
+    <script>
+        //$('select#RegionId option:first-child').attr("data-placeholder", "true");
+        //$('select#ClosestCityId option:first-child').attr("data-placeholder", "true");
+        //$('select#CouncilDelegateId option:first-child').attr("data-placeholder", "true");
+        $('select#LevelOfLocaleId option:first-child').attr("data-placeholder", "true");
+    </script>
+
+    <script>
+        //slim select tags
+        new SlimSelect({
+            select: '#tags'
+        })
+
+        new SlimSelect({
+            select: "#RegionId"
+
+        })
+        new SlimSelect({
+            select: "#ClosestCityId"
+        })
+        new SlimSelect({
+            select: "#CouncilDelegateId"
+
+        })
+        new SlimSelect({
+            select: "#LevelOfLocaleId",
+            showSearch: false,
+            placeholder: 'Choose a level of Locale'
+        })
+    </script>
+    <script>
+        var nullables = ['Appointed', 'Environment', 'About', 'AvgLifestyle'];
+        $('#confirmModal').on('show.bs.modal', function () {
+            ConfirmModal(nullables);
+        });
+    </script>
+}

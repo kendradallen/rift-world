@@ -69,24 +69,23 @@ namespace RiftWorld.UI.MVC.Controllers
                 return View(model);
             }
 
-            //TODO - uncomment this to prevent logins if user has not been approved by admin --- currently commented out to allow faster testing of other features on my end 
             #region ADDED - prevent login if user unapproved
-            //RiftWorldEntities db = new RiftWorldEntities();
-            //bool isApproved = (from ud in db.UserDetails
-            //                   where ud.UserId ==
-            //                      (
-            //                          from u in db.AspNetUsers
-            //                          where u.Email == model.Email
-            //                          select u.Id
-            //                      )
-            //                      .FirstOrDefault()
-            //                   select ud.IsApproved
-            //                   ).FirstOrDefault()
-            //                   ;
-            //if (!isApproved)
-            //{
-            //    return RedirectToAction("PendingApproval", "Home");
-            //}
+            RiftWorldEntities db = new RiftWorldEntities();
+            bool isApproved = (from ud in db.UserDetails
+                               where ud.UserId ==
+                                  (
+                                      from u in db.AspNetUsers
+                                      where u.Email == model.Email
+                                      select u.Id
+                                  )
+                                  .FirstOrDefault()
+                               select ud.IsApproved
+                               ).FirstOrDefault()
+                               ;
+            if (!isApproved)
+            {
+                return RedirectToAction("PendingApproval", "Home");
+            }
 
             #endregion
 

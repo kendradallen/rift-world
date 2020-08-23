@@ -25,10 +25,13 @@ namespace RiftWorld.DATA.EF
         public short InfoId { get; set; }
         public string Name { get; set; }
         public bool IsHistory { get; set; }
-        public System.DateTime Date { get; set; }
         public string AboutText { get; set; }
         public string NormalParticipants { get; set; }
-        public bool IsWorkInProgress { get; set; }
+        public bool IsPublished { get; set; }
+        public byte DateDay { get; set; }
+        public byte DateMonth { get; set; }
+        public Nullable<short> DateYear { get; set; }
+        public string DateEra { get; set; }
     
         public virtual Info Info { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

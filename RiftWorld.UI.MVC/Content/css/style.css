@@ -51,6 +51,7 @@ h6 {
     color: #111111;
     font-weight: 400;
     font-family: "Cinzel", serif;
+    /*font-family: 'MedievalSharp', cursive;*/
 }
 
 h1 {
@@ -570,6 +571,7 @@ ol {
                 color: #ffffff;
                 text-transform: uppercase;
                 font-family: "Cinzel", serif;
+                /*font-family: 'MedievalSharp', cursive;*/
                 padding: 15px 0;
                 border-bottom: 1px solid #151515;
                 display: block;
@@ -1052,6 +1054,7 @@ ol {
                 font-size: 15px;
                 color: #ffffff;
                 font-family: "Cinzel", serif;
+                /*font-family: 'MedievalSharp', cursive;*/
                 text-transform: uppercase;
                 padding: 17px 15px 13px 30px;
                 display: inline-block;

@@ -1,0 +1,106 @@
+﻿@model RiftWorld.DATA.EF.Locale
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Locale</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Appointed)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Appointed)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Environment)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Environment)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.About)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.About)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IsPublished)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IsPublished)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AvgLifestyle)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AvgLifestyle)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Info.Blurb)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Info.Blurb)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LocaleLevel.LocaleName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LocaleLevel.LocaleName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Locale1.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Locale1.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Locale2.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Locale2.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NPC.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NPC.Name)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.LocaleId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

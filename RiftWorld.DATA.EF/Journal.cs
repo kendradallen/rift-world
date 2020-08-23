@@ -17,9 +17,9 @@ namespace RiftWorld.DATA.EF
         public int JournalId { get; set; }
         public short CharacterId { get; set; }
         public System.DateTime OocDateWritten { get; set; }
-        public Nullable<System.DateTime> ICDateWritten { get; set; }
         public string TheContent { get; set; }
         public bool IsApproved { get; set; }
+        public bool HasUnseenEdit { get; set; }
     
         public virtual Character Character { get; set; }
     }

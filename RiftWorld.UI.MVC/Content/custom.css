@@ -1,6 +1,6 @@
 ﻿
 body {
-    background: url("img/testmap.jpg") no-repeat center fixed;
+    background: url("img/CaeritheinMap.jpg") no-repeat center center fixed;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -8,9 +8,90 @@ body {
     font-family: "Grenze Gotisch", cursive;
     font-size: 22px;
     /*font-weight: 300;*/
+    height: 100%;
+    text-align: center;
 }
 
+/*.tox .tox-edit-area__iframe {
+    box-shadow: inset -1px 1px 20px 7px #e8b182;
+}
 
+.tox .tox-menubar {
+    box-shadow: inset -1px 1px 20px 20px #e8b182;
+}*/
+
+pre {
+    color: unset;
+    font-family: "Grenze Gotisch", cursive;
+    font-size: unset;
+    white-space: pre-wrap;
+    font-weight:300;
+}
+
+#adminNav {
+    background-color: rgba(223, 136, 223, .9);
+    box-shadow: -2px -1px 4px rgba(0,0,0,.59);
+}
+
+@media (min-width: 768px) {
+    #adminNav.navbar-expand-md .navbar-nav .nav-link {
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+}
+
+#adminNav .navbar-text {
+    padding-top: 0;
+    padding-bottom: 0;
+    font-weight: bold;
+}
+
+    #adminNav .navbar-text.published {
+        color: forestgreen;
+    }
+
+    #adminNav .navbar-text.un-published {
+        color: red;
+    }
+
+.rift #adminNav {
+    text-shadow: none;
+}
+
+    .rift #adminNav a:hover, .rift #adminNav a:focus {
+        text-shadow: none;
+    }
+
+.form-group {
+    padding-left: 10%;
+    padding-right: 10%;
+}
+
+.form-horizontal {
+    text-align: left;
+}
+
+#nulled ul {
+    padding-left: 35%;
+}
+
+    #nulled ul li {
+        text-align: left;
+    }
+
+.modal-body {
+    text-align: left;
+}
+
+.ht-options .ht-widget ul li span.badge {
+    font-size: 12px;
+    text-shadow: none;
+    /*vertical-align: middle;*/
+}
+
+.invalid {
+    color: red !important;
+}
 
 #content {
     background-color: antiquewhite;
@@ -21,9 +102,9 @@ body {
         color: darkslategrey;
     }
 
-.header-section .ht-options {
+/*.header-section .ht-options {
     background-color: rgba(158, 3, 3, 0.52);
-}
+}*/
 
 .header-section .logo {
     background: none;
@@ -44,18 +125,41 @@ p {
     line-height: 1.1em;
 }
 
-
-/**************  NPC ****************/
 #content {
     padding-top: 1em;
+    padding-bottom: 1em;
     /*box-shadow: -1px 10px 10px 12px rgba(0,0,0,.29);*/
     /*padding-right: .4em;*/
     box-shadow: inset -1px 1px 20px 20px #e8b182;
 }
+/**************  Artist Section ****************/
+.overlay {
+    position: absolute;
+    bottom: 50px;
+    background: rgb(0, 0, 0);
+    background: rgba(0, 0, 0, 0.5); /* Black see-through */
+    color: #f1f1f1;
+    width: 93%;
+    transition: .5s ease;
+    opacity: 0;
+    color: white;
+    font-size: 20px;
+    padding: 20px;
+    text-align: center;
+}
+
+/* When you mouse over the container, fade in the overlay title */
+.padder:hover .overlay {
+    opacity: 1;
+}
+
+/**************  NPC ****************/
+
 
 #startTop {
     padding-right: .4em;
     margin: auto;
+    text-align: left;
 }
 
 #name {
@@ -77,6 +181,24 @@ p {
     border-right: none;
     background: rgba(245, 222, 179, .24);
     padding: 0; /* This is at clients preference of size during demo. As viewed on laptop screen. (using the Percy demo pic) */
+    /*padding: 30px;*/
+}
+
+#picture {
+    width: 100%;
+    height: 88%;
+}
+
+    #picture img {
+        /*height: 266px;*/ /* TODO - this is only good for display on the tv screen moniter. If time, media queries for this size*/
+        max-height: 266px;
+        border: 1px inset darkgray;
+        object-fit: cover;
+        width: 100%;
+    }
+
+.padder {
+    padding: 10px;
 }
 
 #lastLo dt, #lastLo dd {
@@ -93,18 +215,20 @@ p {
 }
 
 #orgs {
-    text-align:right;
-    direction:rtl;
+    text-align: right;
+    direction: rtl;
     position: absolute;
     font-size: 1.5em;
     line-height: 1em;
-    display:contents;
+    display: contents;
 }
-    #orgs h4{
-        text-decoration:underline;
+
+    #orgs h3 {
+        text-decoration: underline;
         margin-right: -.3em;
-        margin-bottom:.2rem;
+        margin-bottom: .2rem;
     }
+
 #crest {
     box-shadow: inset 1px 1px 20px #f2d1b1;
 }
@@ -118,10 +242,11 @@ p {
     box-shadow: inset 1px 1px 9px 0px rgba(242,208,176,.48);
     border-radius: 11%;
 }
-#orgs ul{
-    list-style:none;
-    border-right:solid #751919;
-    padding-right:.5em;
+
+#orgs ul {
+    list-style: none;
+    border-right: solid #751919;
+    padding-right: .5em;
 }
 
 
@@ -140,19 +265,104 @@ p {
 /*#about, #apperance, #secret, #story, #rumors{
     margin-top: 2em;
 }*/
-.hang{
+.hang {
     padding-left: .3rem;
     padding-right: .3rem;
 }
 
-.hang p {
-    text-indent: 1em;
-}
 
 #apperance {
     margin-top: 2em;
 }
 
+/**************  Characters ****************/
+#startTop-left_character {
+    text-align: center;
+    border: ridge rgba(245,222,179,.38);
+    border-left: none;
+    background: rgba(245, 222, 179, .24);
+    padding: 0; /* This is at clients preference of size during demo. As viewed on laptop screen. (using the Percy demo pic) */
+    /*padding: 30px;*/
+}
+
+#name_character {
+    font-size: 3em;
+    font-weight: 500;
+    line-height: 1em;
+    color: black;
+    margin: 0;
+    border-bottom: solid 5px rgba(218, 165, 32, .5);
+}
+
+span.dt{
+    font-weight:700;
+}
+
+.chara-space{
+    font-size: 1.1em;
+}
+
+.chara-space .col-auto:first-child{
+    padding-right:0;
+}
+.chara-space .col-auto.end{
+    padding-left:0
+}
+
+.chara-space .divider{
+    color:goldenrod;
+}
+
+.chara-space.topper{
+    padding-top:.2em;
+}
+
+footer.chara-space {
+    font-style: italic;
+    padding-top: .2em;
+    font-size: .9em;
+    border-top: solid #EAC87B;
+}
+
+.begin{
+    border:dashed #f4deb5;
+}
+
+.overlay-character {
+    position: absolute;
+    bottom: 10px;
+    background: rgb(0, 0, 0);
+    background: rgba(0, 0, 0, 0.5); /* Black see-through */
+    color: #f1f1f1;
+    width: 93%;
+    transition: .5s ease;
+    opacity: 0;
+    color: white;
+    font-size: 20px;
+    padding: 20px;
+    text-align: center;
+}
+h2.line.chara{
+    color: slategray;
+}
+/* When you mouse over the container, fade in the overlay title */
+.padder:hover .overlay-character {
+    opacity: 1;
+}
+
+#picture.dead img {
+    filter: grayscale(100%);
+    transition: filter 0.5s;
+}
+
+#picture.retired img {
+    filter: sepia(1);
+    transition: filter 0.5s;
+}
+
+#picture.retired .padder:hover img, #picture.dead .padder:hover img{
+    filter: none;
+}
 /**************  blockquote ****************/
 blockquote h4 {
     margin: unset;
@@ -229,16 +439,18 @@ h2.line {
 
 #mySidenav {
     position: sticky;
-    /*top: 80px;*/
     top: 30px;
+    z-index: 30;
 }
 
     #mySidenav a {
         position: absolute; /* Position them relative to the browser window */
-        left: -80px; /* Position them outside of the screen */
+        /*left: -80px;*/ /* Position them outside of the screen */
+        left: -85px;
         transition: 0.3s; /* Add transition on hover */
         padding: 15px; /* 15px padding */
-        width: 100px; /* Set a specific width */
+        /*width: 100px;*/ /* Set a specific width */
+        width: 125px;
         text-decoration: none; /* Remove underline */
         font-size: 20px; /* Increase font size */
         color: black; /* White text color */
@@ -247,11 +459,11 @@ h2.line {
         box-shadow: 2px 0 1px 0 rgba(0,0,0,.5);
         border-top: solid cornsilk;
         border-bottom: solid navajowhite;
-        text-transform:capitalize;
+        text-transform: capitalize;
     }
 
         #mySidenav a.active {
-            background-color: crimson; 
+            background-color: crimson;
             color: white;
             border-color: maroon;
         }
@@ -263,7 +475,7 @@ h2.line {
 
 /**************  Secrets   ****************/
 #secret div {
-    align-content:center;
+    align-content: center;
     padding: 0 5vw;
 }
 
@@ -275,8 +487,494 @@ h2.line {
     padding: .5em 1em;
     border-radius: 2em 1em 4em / 0.5em 3em;
     margin-bottom: unset;
-    text-transform:lowercase;
+    text-transform: lowercase;
 }
 
 
 /**************  Stories  ****************/
+/* Style the tab */
+.tab {
+    overflow: hidden;
+    border-bottom: 5px double goldenrod;
+    /*background-color: #f1f1f1;*/
+}
+
+    /* Style the buttons that are used to open the tab content */
+    .tab button {
+        color: midnightblue;
+        background-color: rgba(188, 143, 143, .37);
+        float: left;
+        border-left: 1px solid goldenrod;
+        border-right: 1px solid goldenrod;
+        border-top: 1px solid goldenrod;
+        border-top-right-radius: 23%;
+        border-bottom: none;
+        outline: none;
+        cursor: pointer;
+        padding: 5px 16px;
+        transition: 0.3s;
+    }
+
+        /* Change background color of buttons on hover */
+        .tab button:hover {
+            background-color: rosybrown;
+        }
+
+        /* Create an active/current tablink class */
+        .tab button.active {
+            background-color: rgb(165, 42, 42);
+            color: seashell;
+        }
+
+/* Style the tab content */
+.tabcontent {
+    /*background-color:rgba(255, 235, 205, 0);*/
+    display: none;
+    padding: 6px 12px;
+    border: 5px double rgba(184, 134, 11, .49);
+    border-top: none;
+    animation: fadeEffect 1s; /* Fading effect takes 1 second */
+    box-shadow: inset -20px 0 20px 20px rgba(255, 228, 196, .32)
+}
+
+/* Go from zero to full opacity */
+@keyframes fadeEffect {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.tabcontent .intro p {
+    font-style: italic;
+}
+
+.morecontent span {
+    display: none;
+}
+
+.morelink {
+    display: inline;
+}
+
+/**************  Association Select  ****************/
+a[data-pub] {
+    color: orangered;
+}
+
+.selected-wrapper a:focus {
+    color: currentColor;
+}
+
+.multi-wrapper {
+    border-color: darkgoldenrod;
+    background-color: blanchedalmond;
+}
+
+    .multi-wrapper .item:hover {
+        background-color: floralwhite;
+    }
+
+    .multi-wrapper .search-input {
+        border-color: darkgoldenrod;
+        box-shadow: inset 3px 2px 10px 0px #f4a46075;
+        background-color: transparent;
+    }
+
+    .multi-wrapper .non-selected-wrapper, .multi-wrapper .selected-wrapper {
+        background-color: transparent;
+        border-color: darkgoldenrod;
+        box-shadow: inset 3px 2px 10px 0px #f4a46075;
+    }
+
+.other-stuff > div {
+    border: 1px dotted darkgoldenrod;
+    margin: 1em 0;
+    padding: .5rem;
+}
+
+.other-stuff h5 {
+    margin-bottom: .5rem;
+}
+/**************  Rifts  ****************/
+.rift #content {
+    /*background: radial-gradient(circle, rgba(0, 212,255,.7) 37%, rgba(2,0,26,.5) 66%, rgba(89,13,147,.8) 100%);*/
+    background: radial-gradient(circle, rgb(13 172 94 / 70%) -20%,rgba(0, 212,255,.8) 37%, rgba(2,0,26,.5) 66%, rgba(89,13,147,.8) 100%);
+    border-radius: 15px / 100px;
+    color: white;
+    text-shadow: 1px 1px 5px black;
+    margin-top: 1em;
+    box-shadow: 0 0 15px 13px rgba(89, 13, 147, .38);
+    text-align: center;
+    /*filter: hue-rotate(45deg);*/
+}
+
+    .rift #content p {
+        color: white;
+    }
+
+.rift h2.line {
+    /*text-shadow: 1px 1px 3px #333198;
+    color: transparent*/
+    text-shadow: 4px 3px 5px #333198bd;
+    color: #da70d6ad;
+    -webkit-text-stroke: 1px darkorchid;
+}
+
+    .rift h2.line:before, .rift h2.line:after {
+        /*color: #3331987a;
+        border-top: 8px solid #333198a1;
+        box-shadow: 1px 1px 8px 1px #333198;*/
+        color: #da70d65c;
+        border-top: 8px solid #da70d65c;
+        box-shadow: 1px 1px 8px 1px #333198;
+    }
+
+main .rift {
+    box-shadow: none;
+}
+
+.rift a {
+    color: silver;
+}
+
+    .rift a:hover, .rift a:focus {
+        color: inherit;
+        text-shadow: 1px 1px black;
+    }
+
+/**************  Rumors  ****************/
+#rumor-list, #make-rumor {
+    padding-left: 15%;
+    padding-right: 15%;
+}
+
+    #rumor-list p {
+        margin-bottom: auto;
+    }
+
+#rumors .daRumor p:before {
+    content: "“";
+    font-family: Georgia;
+    font-size: 40px;
+    line-height: 0;
+    display: inline-block;
+    display: -webkit-inline-box;
+}
+
+.speechbubble {
+    align-content: center;
+    background-color: white;
+    color: black;
+    font-size: .8em;
+    line-height: 1.75;
+    padding: 22px 25px 15px 25px;
+    margin-bottom: 1em;
+    cursor: default;
+    border-radius: 20px;
+    box-shadow: -1px 8px 20px 0px rgba(0,0,0, .28);
+}
+
+#rumor-list .col-sm-6:nth-child(2n) {
+    float: left;
+}
+
+    #rumor-list .col-sm-6:nth-child(2n+1) h6 {
+        text-align: right;
+    }
+
+#rumor-list .col-sm-6:nth-child(2n) {
+    float: right;
+}
+
+    #rumor-list .col-sm-6:nth-child(2n) h6 {
+        text-align: left;
+    }
+
+#make-rumor {
+    text-align: left;
+}
+/**************  Making the template my own  ****************/
+.ht-options {
+    padding: .4em 0 .3em 0;
+    /*background-color: rgba(158, 3, 3, 0.52);*/
+    background: radial-gradient(circle, rgba(0, 212,255,.5) 37%, rgba(89,13,147,0.5) 67%);
+    text-shadow: -1px 1px black;
+}
+
+    .ht-options .pls-style {
+        margin-left: 2.5em;
+        margin-right: 2.5em;
+    }
+
+    .ht-options .row {
+        margin-top: -.5em;
+    }
+
+.ht-widget {
+    text-align: left;
+}
+
+.nav-options {
+    /*background: rgba(158, 3, 3, .52);*/
+    padding: 10px 1em 10px 1em;
+    background: radial-gradient(circle, rgba(0, 212,255,.5) 37%, rgba(2,0,26,.5) 66%, rgba(89,13,147,.5) 100%);
+}
+
+    .nav-options .humberger-menu,
+    .nav-options .nav-search {
+        background: none;
+        border: 1px solid #f5f5f56b;
+        box-shadow: 0px 0px 2px #ffffffc2;
+    }
+
+    .nav-options .nav-menu ul li a {
+        /*background: rgba(168, 29, 29, .52);*/
+        background: none;
+        padding: 17px 15px 13px 20px;
+        border: 1px solid #f5f5f56b;
+        box-shadow: 0px 0px 2px #ffffffc2;
+    }
+
+    .nav-options .nav-menu ul li:hover > a {
+        background: rgba(0, 212, 255, .84);
+        text-shadow: 1px 0px 0px #ffffff;
+        box-shadow: 0px 0px 11px;
+    }
+
+    .nav-options .nav-menu ul li .dropdown {
+        background: rgba(95, 13, 214, 1);
+        box-shadow: 0px 0px 6px 2px ghostwhite;
+        padding: 5px 0px 7px;
+    }
+
+        .nav-options .nav-menu ul li .dropdown li a {
+            border: none;
+            box-shadow: none;
+        }
+
+        .nav-options .nav-menu ul li .dropdown li:hover > a {
+            box-shadow: 0px 0px 11px;
+        }
+
+.sneaky-shadow {
+    padding: unset;
+    box-shadow: 7px 11px 9px 11px rgba(0,0,0,.29);
+}
+
+a {
+    color: midnightblue;
+}
+
+    a:hover, a:focus {
+        color: crimson;
+    }
+
+.ht-options a {
+    color: unset;
+}
+
+.nav-options .nav-menu ul li.active a {
+    background: rgba(0, 212, 255, .84);
+}
+
+/**************  Editing style  ****************/
+
+.btn-group-vertical.quick {
+    position: fixed;
+    bottom: 20px;
+    right: 30px;
+    border-radius: 5px;
+}
+
+a.quick {
+    z-index: 99;
+    font-size: 18px;
+    border: none;
+    outline: none;
+    background-color: mediumorchid;
+    color: white;
+    cursor: pointer;
+    padding: 10px 16px;
+}
+
+.btn-group-vertical.quick .quick:first-child {
+    border-radius: 5px 5px 0px 0px;
+}
+
+.btn-group-vertical.quick .quick:last-child {
+    border-radius: 0px 0px 5px 5px;
+}
+
+a.quick:hover {
+    background-color: darkorchid;
+    color: white;
+}
+
+a.quick:focus {
+    color: white;
+}
+
+/**************  Forms  ****************/
+.form-control {
+    color: darkblue;
+    /*background-color: antiquewhite;*/
+    background-color: #e9b58814;
+    /*border-color: goldenrod;*/
+    border-bottom: 1px solid goldenrod;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    /*box-shadow: inset 3px 2px 10px 0px #f4a46075;*/
+    padding: .375rem .75rem 0rem .75rem;
+}
+
+    .form-control:focus {
+        color: darkblue;
+        background-color: #e9b58814;
+        /*background-color: #F8E7D1;*/
+        border-color: goldenrod;
+        box-shadow: 0 0 5px 0.2rem rgba(255, 215, 0, .5);
+    }
+
+input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:focus, input:-webkit-autofill:active {
+    -webkit-box-shadow: inset 0 0 0 30px #F8E7D1;
+    -webkit-text-fill-color: darkblue;
+    /*border: 1px solid goldenrod;*/
+    /*-webkit-appearance: none;*/
+    /*-webkit-transition-delay: 99999s;*/
+}
+
+
+.input-group-text {
+    background-color: floralwhite;
+    border: 1px solid goldenrod;
+}
+
+.input-group-prepend.input-group-append .input-group-text {
+    font-size: 1.75rem;
+    line-height: 1.5rem;
+}
+
+.da-focus {
+    border-radius: .25rem;
+    box-shadow: inset 3px 2px 10px 0px #f4a46075;
+}
+
+    .da-focus.form-control {
+        padding: inherit;
+    }
+
+.form-control.asso {
+    background-color: blanchedalmond;
+}
+
+.da-focus.form-control.asso input {
+    background-color: transparent;
+}
+
+/* width */
+textarea::-webkit-scrollbar, 
+.multi-wrapper ::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Track */
+textarea::-webkit-scrollbar-track,
+.multi-wrapper ::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px tan;
+    border-radius: 10px;
+}
+
+/* Handle */
+textarea::-webkit-scrollbar-thumb,
+.multi-wrapper ::-webkit-scrollbar-thumb {
+    background: indigo;
+    border-radius: 10px;
+}
+
+    /* Handle on hover */
+    textarea::-webkit-scrollbar-thumb:hover,
+    .multi-wrapper ::-webkit-scrollbar-thumb:hover {
+        background: purple;
+    }
+
+/**************  Slim Select  ****************/
+.player .ss-main .ss-single-selected,
+.player .ss-content,
+.player .ss-content .ss-search input {
+    background-color: antiquewhite;
+}
+
+.ss-main {
+    color: darkblue;
+}
+
+    .ss-main .ss-single-selected .placeholder .ss-disabled {
+        color: lightskyblue;
+    }
+
+    .ss-main .ss-multi-selected,
+    .ss-main .ss-single-selected {
+        border-color: darkgoldenrod;
+        background-color: blanchedalmond;
+        box-shadow: inset 3px 2px 10px 0px #f4a46075;
+        height: unset;
+    }
+
+        .ss-main .ss-multi-selected .ss-values .ss-disabled {
+            color: lightskyblue;
+            line-height: 1.3em;
+        }
+
+        .ss-main .ss-single-selected .placeholder {
+            line-height: 1.3em;
+        }
+
+        .ss-main .ss-multi-selected .ss-add {
+            margin-top: 16px;
+        }
+
+        .ss-main .ss-multi-selected .ss-values .ss-value {
+            font-size: .9em;
+            background-color: darkorchid;
+        }
+
+.ss-content {
+    border-color: darkgoldenrod;
+    background-color: blanchedalmond;
+    box-shadow: inset 3px 2px 10px 0px #f4a46075;
+}
+
+    .ss-content .ss-search input {
+        color: darkblue;
+        border-color: darkgoldenrod;
+        background-color: blanchedalmond;
+    }
+
+        .ss-content .ss-search input:focus {
+            box-shadow: 0 0 5px orchid;
+        }
+
+    .ss-content .ss-list .ss-option.ss-highlighted,
+    .ss-content .ss-list .ss-option:hover {
+        background-color: darkorchid;
+    }
+
+    .ss-content .ss-list .ss-option.ss-disabled {
+        color: royalblue;
+        background-color: transparent;
+    }
+/**************  Modal  ****************/
+.modal-content {
+    background-color: blanchedalmond;
+    border-color: rgba(184, 134, 11, .2);
+}
+
+.modal-header,
+.modal-footer {
+    border-color: goldenrod;
+}

@@ -5,126 +5,29 @@ using System.Web;
 using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
 using System.Runtime;
-
+using RiftWorld.DATA.EF;
 
 namespace RiftWorld.UI.MVC.Models
 {
-    #region testing work with Linking tables 
-
-
-    public class AssociationWork
-    {
-        public short OrgId { get; set; }
-
-        public Nullable<byte> Order { get; set; }
-
-        //methods
-        public bool Validate()
-        {
-            //should check if the orgId actually in db in theory. 
-            //  done: handled in controller action as that is where all contact with the db is. 
-            if (Order > 200)
-            {
-                return false;
-            }
-            return true;
-        }
-    }
-
-    //public class AssociationWorkv2
-    //{
-    //    public Nullable<byte> Order { get; set; }
-    //}
-
-
-    public class AWSmol
-    {
-        public string Name { get; set; }
-
-        public List<AssociationWork> Associations { get; set; }
-
-        public AWSmol(string name, List<AssociationWork> associations)
-        {
-            Name = name;
-            Associations = associations;
-        }
-
-        //methods
-        public bool Validate()
-        {
-            if (Name.Length > 30 || String.IsNullOrEmpty(Name))
-            {
-                return false;
-            }
-
-            foreach (AssociationWork a in Associations)
-            {
-                if (!a.Validate())
-                {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-    }
-
-    public class AssociationWork_Full
-    {
-        [Required(ErrorMessage = "ya need a name")]
-        [StringLength(30)]
-        public string Name { get; set; }
-
-        public IEnumerable<SelectListItem> AssociationOptions { get; set; }
-
-        public List<AssociationWork> Associations { get; set; }
-
-        //Ctor
-        public AssociationWork_Full()
-        {
-            AssociationOptions = new List<SelectListItem>();
-        }
-
-    }
-    #endregion
-
-
-    public class NpcCreateViewModel
+    public class NpcCreateVM
     {
         #region Fields
-        private string _alias;
         private string _apperanceText;
         private string _aboutText;
         #endregion
 
-        #region Props
         [Required]
-        [StringLength(30)]
+        [StringLength(30, ErrorMessage = " ")]
         public string Name { get; set; }
 
         [Required]
-        [StringLength(500)]
+        [StringLength(500, ErrorMessage = " ")]
         [UIHint("MultilineText")]
         [Display(Name = "Known Aliases")]
-        public string Alias
-        {
-            get { return _alias; }
-            set
-            {
-                if (String.IsNullOrWhiteSpace(value))
-                {
-                    _alias = "Nada";
-                }
-                else
-                {
-                    _alias = value;
-                }
-            }
-
-        }
+        public string Alias { get; set; }
 
         [Required]
-        [StringLength(150)]
+        [StringLength(150, ErrorMessage = " ")]
         [UIHint("MultilineText")]
         public string Quote { get; set; }
 
@@ -135,7 +38,6 @@ namespace RiftWorld.UI.MVC.Models
 
         public string CrestFileName { get; set; }
 
-        [Required]
         [StringLength(2000)]
         [UIHint("MultilineText")]
         [Display(Name = "Apperance")]
@@ -145,20 +47,17 @@ namespace RiftWorld.UI.MVC.Models
             get { return _apperanceText; }
             set
             {
-                if (String.IsNullOrWhiteSpace(value))
+                if (string.IsNullOrEmpty(value))
                 {
-                    _alias = "Nada";
+                    _apperanceText = "Nada";
                 }
                 else
                 {
                     _apperanceText = value;
                 }
             }
-
         }
 
-
-        [Required]
         [UIHint("MultilineText")]
         [Display(Name = "About")]
         [AllowHtml]
@@ -167,130 +66,368 @@ namespace RiftWorld.UI.MVC.Models
             get { return _aboutText; }
             set
             {
-                if (String.IsNullOrWhiteSpace(value))
+                if (string.IsNullOrEmpty(value))
                 {
-                    _alias = "Nada";
+                    _aboutText = "Nada";
                 }
                 else
                 {
                     _aboutText = value;
                 }
             }
-
         }
-
 
         [Display(Name = "Last Location")]
         public Nullable<short> LastLocationId { get; set; }
 
-        public bool IsWorkInProgress { get; set; }
+        public bool IsPublished { get; set; }
 
-        //infos stuff
+        [StringLength(40)]
+        public string PortraitArtist { get; set; }
+
+        [StringLength(40)]
+        public string CrestArtist { get; set; }
+
+        public bool IsDead { get; set; }
+        public byte GenderId { get; set; }
+
         [Required]
-        [StringLength(100, ErrorMessage = "Blurb must be less than a 100 characters. We can talk about changing that if you don't like.")]
+        [StringLength(100, ErrorMessage = " ")]
+        [UIHint("MultilineText")]
         public string Blurb { get; set; }
-
-
-
-        #endregion
-
-        #region Methods
-        public bool Validate()
-        {
-            if (Name.Length > 30 || String.IsNullOrWhiteSpace(Name))
-            {
-                return false;
-            }
-
-            if (Alias.Length > 500)
-            {
-                return false;
-            }
-
-            if (Quote.Length > 150 || String.IsNullOrWhiteSpace(Quote))
-            {
-                return false;
-            }
-
-            if (ApperanceText.Length > 2000)
-            {
-                return false;
-            }
-
-            //blurb validation
-            if (Blurb.Length > 100 || String.IsNullOrWhiteSpace(Blurb))
-            {
-                return false;
-            }
-
-
-            return true;
-        }
-
-        #endregion
-
     }
 
-
-    /* 
-     the three parts:
-        1. the model that is sent with the options to choose from
-        2. the model for the association table
-        3. the model to attach to during post. (I'm not actually sure if that it would be strictly nessary but I feel far more comfortable given my struggle with binding to do it this way.
-         */
-    public class Npc_Org
+    public class NpcEditPostVM
     {
-        #region Props
-        public short OrgId { get; set; }
-        public Nullable<byte> OrderOrg { get; set; }
-        public Nullable<byte> OrderNpc { get; set; }
+        #region prop
+        public short InfoId { get; set; }
+        public short NpcId { get; set; }
 
-        [StringLength(50)]
-        public string BlurbNpc { get; set; }
-
-        [StringLength(50)]
-        public string BlurbOrg { get; set; }
-
+        #region npcCreate
+        #region Fields
+        private string _apperanceText;
+        private string _aboutText;
         #endregion
 
-        #region Methods
-        public bool Validate()
-        {
-            //should check if the orgId actually in db in theory. 
-
-            if (BlurbNpc.Length > 50)
-            {
-                return false;
-            }
-
-            if (BlurbOrg.Length > 50)
-            {
-                return false;
-            }
-
-            return true;
-        }
-        #endregion
-    }
-
-    public class Npc_Class
-    {
-        #region Props
-        public byte ClassId { get; set; }
-        public Nullable<byte> ClassOrder { get; set; }
-        #endregion
-
-
-    }
-
-    public class OrgVM //TODO - seriously, remaned this shit. It's terrible and was from testing
-    {
+        [Required]
+        [StringLength(30, ErrorMessage = " ")]
         public string Name { get; set; }
 
-        public string Blurb { get; set; }
+        [Required]
+        [StringLength(500, ErrorMessage = " ")]
+        [UIHint("MultilineText")]
+        [Display(Name = "Known Aliases")]
+        public string Alias { get; set; }
 
-        //public Nullable<byte> Order { get; set; }
+        [Required]
+        [StringLength(150, ErrorMessage = " ")]
+        [UIHint("MultilineText")]
+        public string Quote { get; set; }
+
+        public string PortraitFileName { get; set; }
+
+        [Display(Name = "Species")]
+        public Nullable<byte> RaceId { get; set; }
+
+        public string CrestFileName { get; set; }
+
+        [StringLength(2000)]
+        [UIHint("MultilineText")]
+        [Display(Name = "Apperance")]
+        [AllowHtml]
+        public string ApperanceText
+        {
+            get { return _apperanceText; }
+            set
+            {
+                if (string.IsNullOrEmpty(value))
+                {
+                    _apperanceText = "Nada";
+                }
+                else
+                {
+                    _apperanceText = value;
+                }
+            }
+        }
+
+        [UIHint("MultilineText")]
+        [Display(Name = "About")]
+        [AllowHtml]
+        public string AboutText
+        {
+            get { return _aboutText; }
+            set
+            {
+                if (string.IsNullOrEmpty(value))
+                {
+                    _aboutText = "Nada";
+                }
+                else
+                {
+                    _aboutText = value;
+                }
+            }
+        }
+
+        [Display(Name = "Last Location")]
+        public Nullable<short> LastLocationId { get; set; }
+
+        public bool IsPublished { get; set; }
+
+        [StringLength(40)]
+        public string PortraitArtist { get; set; }
+
+        [StringLength(40)]
+        public string CrestArtist { get; set; }
+
+        public bool IsDead { get; set; }
+        public byte GenderId { get; set; }
+
+        [Required]
+        [StringLength(100, ErrorMessage = " ")]
+        [UIHint("MultilineText")]
+        public string Blurb { get; set; }
+        #endregion
+        #endregion
+
+        #region ctor
+        public NpcEditPostVM() { }
+        public NpcEditPostVM(NPC npc, string blurb)
+        {
+            InfoId = npc.InfoId;
+            NpcId = npc.NpcId;
+            Name = npc.Name;
+            Alias = npc.Alias;
+            Quote = npc.Quote;
+            PortraitFileName = npc.PortraitFileName;
+            RaceId = npc.RaceId;
+            CrestFileName = npc.CrestFileName;
+            ApperanceText = npc.ApperanceText;
+            AboutText = npc.AboutText;
+            LastLocationId = npc.LastLocationId;
+            IsPublished = npc.IsPublished;
+            PortraitArtist = npc.PortraitArtist;
+            CrestArtist = npc.CrestArtist;
+            IsDead = npc.IsDead;
+            GenderId = npc.GenderId;
+            Blurb = blurb; 
+        }
+        #endregion
+    }
+
+    public class NpcEditVM
+    {
+        #region prop
+        public short InfoId { get; set; }
+        public short NpcId { get; set; }
+
+        #region npcCreate
+        #region Fields
+        private string _apperanceText;
+        private string _aboutText;
+        #endregion
+
+        [Required]
+        [StringLength(30, ErrorMessage = " ")]
+        public string Name { get; set; }
+
+        [Required]
+        [StringLength(500, ErrorMessage = " ")]
+        [UIHint("MultilineText")]
+        [Display(Name = "Known Aliases")]
+        public string Alias { get; set; }
+
+        [Required]
+        [StringLength(150, ErrorMessage = " ")]
+        [UIHint("MultilineText")]
+        public string Quote { get; set; }
+
+        public string PortraitFileName { get; set; }
+
+        [Display(Name = "Species")]
+        public Nullable<byte> RaceId { get; set; }
+
+        public string CrestFileName { get; set; }
+
+        [StringLength(2000)]
+        [UIHint("MultilineText")]
+        [Display(Name = "Apperance")]
+        [AllowHtml]
+        public string ApperanceText
+        {
+            get
+            {
+                if (_apperanceText == "Nada")
+                {
+                    return "";
+                }
+                else
+                {
+                    return _apperanceText;
+                }
+            }
+            set
+            {
+                if (string.IsNullOrEmpty(value))
+                {
+                    _apperanceText = "Nada";
+                }
+                else
+                {
+                    _apperanceText = value;
+                }
+            }
+        }
+
+        [UIHint("MultilineText")]
+        [Display(Name = "About")]
+        [AllowHtml]
+        public string AboutText
+        {
+            get
+            {
+                if (_aboutText == "Nada")
+                {
+                    return "";
+                }
+                else
+                {
+                    return _aboutText;
+                }
+            }
+            set
+            {
+                if (string.IsNullOrEmpty(value))
+                {
+                    _aboutText = "Nada";
+                }
+                else
+                {
+                    _aboutText = value;
+                }
+            }
+        }
+
+        [Display(Name = "Last Location")]
+        public Nullable<short> LastLocationId { get; set; }
+
+        public bool IsPublished { get; set; }
+
+        [StringLength(40)]
+        public string PortraitArtist { get; set; }
+
+        [StringLength(40)]
+        public string CrestArtist { get; set; }
+
+        public bool IsDead { get; set; }
+        public byte GenderId { get; set; }
+
+        [Required]
+        [StringLength(100, ErrorMessage = " ")]
+        [UIHint("MultilineText")]
+        public string Blurb { get; set; }
+        #endregion
+        #endregion
+
+        #region ctor
+        public NpcEditVM() { }
+        public NpcEditVM(NPC npc, string blurb)
+        {
+            InfoId = npc.InfoId;
+            NpcId = npc.NpcId;
+            Name = npc.Name;
+            Alias = npc.Alias;
+            Quote = npc.Quote;
+            PortraitFileName = npc.PortraitFileName;
+            RaceId = npc.RaceId;
+            CrestFileName = npc.CrestFileName;
+            ApperanceText = npc.ApperanceText;
+            AboutText = npc.AboutText;
+            LastLocationId = npc.LastLocationId;
+            IsPublished = npc.IsPublished;
+            PortraitArtist = npc.PortraitArtist;
+            CrestArtist = npc.CrestArtist;
+            IsDead = npc.IsDead;
+            GenderId = npc.GenderId;
+            Blurb = blurb;
+        }
+        public NpcEditVM(NpcEditPostVM npc)
+        {
+            InfoId = npc.InfoId;
+            NpcId = npc.NpcId;
+            Name = npc.Name;
+            Alias = npc.Alias;
+            Quote = npc.Quote;
+            PortraitFileName = npc.PortraitFileName;
+            RaceId = npc.RaceId;
+            CrestFileName = npc.CrestFileName;
+            ApperanceText = npc.ApperanceText;
+            AboutText = npc.AboutText;
+            LastLocationId = npc.LastLocationId;
+            IsPublished = npc.IsPublished;
+            PortraitArtist = npc.PortraitArtist;
+            CrestArtist = npc.CrestArtist;
+            IsDead = npc.IsDead;
+            GenderId = npc.GenderId;
+            Blurb = npc.Blurb;
+        }
+        #endregion
+    }
+
+    public class AssoNpcVM
+    {
+        public short InfoId { get; set; }
+        public short NpcId { get; set; }
+        public string Submit { get; set; }
+        public string Name { get; set; }
+
 
     }
 
+    public class AssoOrg_Npc
+    {
+        public short OrgId { get; set; }
+
+        [Display(Name = "Priority of org display on NPC's page")]
+        public Nullable<byte> OrgOrder { get; set; }
+
+        [StringLength(50, ErrorMessage = " ")]
+        [Display(Name = "Blurb for NPC's page about postion in org")]
+        public string BlurbNpcPage { get; set; }
+
+        [StringLength(50, ErrorMessage = " ")]
+        [Display(Name = "Blurb for org's page about NPC's role")]
+        public string BlurbOrgPage { get; set; }
+
+        [Display(Name = "Priority of NPC display on org's page")]
+        public Nullable<byte> MemberOrder { get; set; }
+
+        public bool IsCurrent { get; set; }
+
+        public AssoOrg_Npc() { }
+        public AssoOrg_Npc(NpcOrg npcOrg)
+        {
+            OrgId = npcOrg.OrgId;
+            OrgOrder = npcOrg.OrgOrder;
+            BlurbNpcPage = npcOrg.BlurbNpcPage;
+            BlurbOrgPage = npcOrg.BlurbOrgPage;
+            MemberOrder = npcOrg.MemberOrder;
+            IsCurrent = npcOrg.IsCurrent;
+        }
+
+    }
+
+    public class AssoClass_Npc
+    {
+        public byte ClassId { get; set; }
+        public Nullable<byte> ClassOrder { get; set; }
+
+        public AssoClass_Npc() { }
+        public AssoClass_Npc(ClassNPC classNPC)
+        {
+            ClassId = classNPC.ClassId;
+            ClassOrder = classNPC.ClassOrder;
+        }
+    }
 }

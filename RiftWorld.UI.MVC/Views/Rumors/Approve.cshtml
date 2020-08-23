@@ -1,0 +1,55 @@
+﻿@model RiftWorld.DATA.EF.Rumor
+
+@{
+    ViewBag.Title = "Approve";
+}
+
+<div class="col-12">
+    <h2>Approve</h2>
+
+    <div>
+        <h4>Rumor</h4>
+        <hr />
+        <dl class="dl-horizontal">
+
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Character.CharacterName)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Character.CharacterName)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.RumorOfId)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Info.Name)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.RumorText)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.RumorText)
+            </dd>
+        </dl>
+    </div>
+    <p>
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            @Html.HiddenFor(model => model.RumorsId)
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    @Html.ActionLink("Deny", "Delete", new { id = Model.RumorsId })
+                    <input type="submit" value="Approve" class="btn btn-default" />
+                </div>
+            </div>
+        }
+    </p>
+</div>

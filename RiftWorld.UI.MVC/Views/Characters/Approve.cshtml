@@ -1,0 +1,98 @@
+﻿@model RiftWorld.DATA.EF.Character
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<section id="start" class="col-12">
+    <div id="startTop" class="row">
+        @if (Model.PortraitFileName != null)
+        {
+            <div id="startTop-left_character" class="col-md-3 align-self-center">
+                <div id="picture">
+                    <div class="padder">
+                        <img src="~/Content/img/character/@Model.PortraitFileName" />
+                        <div class="overlay-character">Art by @Model.Artist</div>
+                    </div>
+                </div>
+            </div>
+        }
+        <div id="startTop-right_character" class="@(Model.PortraitFileName != null ? "col-md-9" : "col-12")">
+            <div class="row">
+                <div id="name_character" class="col-md-12">
+                    @Html.DisplayFor(model => model.CharacterName)
+                </div>
+            </div>
+            <div class="col-12 begin">
+                <div class="row chara-space topper">
+                    <div class="col-auto">
+                        <span class="dt">@Html.DisplayNameFor(model => model.RaceId):</span> @Html.DisplayFor(model => model.Race.RaceName)
+                        @*@if (Model.Gender.IconName != null)
+                        {
+                            <i class="fas fa-@Model.Gender.IconName" title="@Model.Gender.GenderName"></i>
+                        }*@
+                    </div>
+                    <div class="col-auto divider">
+                        |
+                    </div>
+                    <div class="col-auto end">
+                        <span class="dt">@Html.DisplayNameFor(model => model.GenderId):</span> @Model.Gender.GenderName
+                    </div>
+                </div>
+                <div class=" row chara-space">
+                    <div class="col-auto">
+                        <span class="dt">@Html.DisplayNameFor(model => model.ClassString):</span> @Html.DisplayFor(model => model.ClassString)
+                    </div>
+                    <div class="col-auto divider">
+                        |
+                    </div>
+                    <div class="col-auto end">
+                        <span class="dt">@Html.DisplayNameFor(model => model.TierId):</span> @Html.DisplayFor(model => model.Tier.TierName)
+                    </div>
+                </div>
+                <div class="row chara-space">
+                    <div class="col-auto" style="font-size:1.4em;">
+                        <span class="dt">@Html.DisplayNameFor(model => model.CurrentLocationId):</span> @Html.DisplayFor(model => model.Locale.Name)
+                    </div>
+                </div>
+                <footer class="row chara-space ooc">
+                    <div class="col-auto">
+                        <span class="dt">Portrayed by:</span> @Html.DisplayFor(model => model.UserDetail.DiscordFull)
+                    </div>
+                    <div class="col-auto">
+                        <span class="dt">Status:</span> @Html.DisplayFor(model => model.Status)
+                    </div>
+                </footer>
+
+            </div>
+        </div>
+    </div>
+</section>
+<section id="description" class="col-12">
+    <h2 class="line chara">
+        @Html.DisplayNameFor(model => model.Description)
+    </h2>
+    <pre>@Html.DisplayFor(model => model.Description)</pre>
+</section>
+<section id="about" class="col-12">
+    <h2 class="line chara">
+        @Html.DisplayNameFor(model => model.About)
+    </h2>
+    <pre>@Html.DisplayFor(model => model.About)</pre>
+</section>
+<secion id="actions" class="col-12">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+            @Html.HiddenFor(model => model.CharacterId)
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    @Html.ActionLink("Deny", "Delete", new { id = Model.CharacterId })
+                    <input type="submit" value="Approve" class="btn btn-default" />
+                </div>
+            </div>
+    }
+
+</secion>

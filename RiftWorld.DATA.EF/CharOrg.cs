@@ -20,7 +20,7 @@ namespace RiftWorld.DATA.EF
         public string BlurbOrgPage { get; set; }
         public bool IsPublic { get; set; }
         public bool IsCurrent { get; set; }
-        public bool Proposed { get; set; }
+        public bool KatherineApproved { get; set; }
     
         public virtual Character Character { get; set; }
         public virtual Org Org { get; set; }

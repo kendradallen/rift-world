@@ -86,6 +86,10 @@
     <NavigationProperty Name="Journals" Relationship="Self.FK_Journals_Characters" FromRole="Characters" ToRole="Journals" />
     <NavigationProperty Name="Rumors" Relationship="Self.FK_Rumors_Characters" FromRole="Characters" ToRole="Rumors" />
     <NavigationProperty Name="UserDetails" Relationship="Self.FK_Users_Characters" FromRole="Characters" ToRole="UserDetails" />
+    <Property Name="Artist" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
+    <Property Name="ClassString" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
+    <Property Name="HasUnseenEdit" Type="Boolean" Nullable="false" />
+    <Property Name="IsDead" Type="Boolean" Nullable="false" />
   </EntityType>
   <EntityType Name="CharOrg">
     <Key>
@@ -97,9 +101,9 @@
     <Property Name="BlurbOrgPage" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="IsPublic" Type="Boolean" Nullable="false" />
     <Property Name="IsCurrent" Type="Boolean" Nullable="false" />
-    <Property Name="Proposed" Type="Boolean" Nullable="false" />
     <NavigationProperty Name="Character" Relationship="Self.FK_CharOrgs_Characters" FromRole="CharOrgs" ToRole="Characters" />
     <NavigationProperty Name="Org" Relationship="Self.FK_CharOrgs_Orgs" FromRole="CharOrgs" ToRole="Orgs" />
+    <Property Name="KatherineApproved" Type="Boolean" Nullable="false" />
   </EntityType>
   <EntityType Name="CharSecret">
     <Key>
@@ -151,22 +155,26 @@
     <Property Name="InfoId" Type="Int16" Nullable="false" />
     <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
     <Property Name="IsHistory" Type="Boolean" Nullable="false" />
-    <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
     <Property Name="AboutText" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
     <Property Name="NormalParticipants" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
-    <Property Name="IsWorkInProgress" Type="Boolean" Nullable="false" />
+    <Property Name="IsPublished" Type="Boolean" Nullable="false" />
     <NavigationProperty Name="Info" Relationship="Self.FK_Events_Infos" FromRole="Events" ToRole="Infos" />
     <NavigationProperty Name="LocaleEvents" Relationship="Self.FK_LocaleEvents_Events" FromRole="Events" ToRole="LocaleEvents" />
     <NavigationProperty Name="OrgEvents" Relationship="Self.FK_OrgEvents_Events" FromRole="Events" ToRole="OrgEvents" />
+    <Property Name="DateDay" Type="Byte" Nullable="false" />
+    <Property Name="DateMonth" Type="Byte" Nullable="false" />
+    <Property Name="DateYear" Type="Int16" />
+    <Property Name="DateEra" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
   </EntityType>
   <EntityType Name="Gender">
     <Key>
       <PropertyRef Name="GenderId" />
     </Key>
     <Property Name="GenderId" Type="Byte" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="GenderName" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
-    <Property Name="IconName" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+    <Property Name="GenderName" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="IconName" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
     <NavigationProperty Name="Characters" Relationship="Self.FK_Characters_Gender" FromRole="Gender" ToRole="Characters" />
+    <NavigationProperty Name="NPCs" Relationship="RiftWorldModel.FK_NPCs_Gender" FromRole="Gender" ToRole="NPC" />
   </EntityType>
   <EntityType Name="Info">
     <Key>
@@ -221,8 +229,9 @@
     <Property Name="DescriptionText" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
     <Property Name="PropertyText" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
     <Property Name="HistoryText" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
-    <Property Name="IsWorkInProgress" Type="Boolean" Nullable="false" />
+    <Property Name="IsPublished" Type="Boolean" Nullable="false" />
     <NavigationProperty Name="Info" Relationship="Self.FK_Items_Infos" FromRole="Items" ToRole="Infos" />
+    <Property Name="Artist" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
   </EntityType>
   <EntityType Name="Journal">
     <Key>
@@ -231,10 +240,10 @@
     <Property Name="JournalId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="CharacterId" Type="Int16" Nullable="false" />
     <Property Name="OocDateWritten" Type="DateTime" Nullable="false" Precision="0" />
-    <Property Name="ICDateWritten" Type="DateTime" Precision="0" />
     <Property Name="TheContent" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
     <Property Name="IsApproved" Type="Boolean" Nullable="false" />
     <NavigationProperty Name="Character" Relationship="Self.FK_Journals_Characters" FromRole="Journals" ToRole="Characters" />
+    <Property Name="HasUnseenEdit" Type="Boolean" Nullable="false" />
   </EntityType>
   <EntityType Name="LocaleEvent">
     <Key>
@@ -268,7 +277,7 @@
     <Property Name="Appointed" Type="String" MaxLength="8000" FixedLength="false" Unicode="false" Nullable="false" />
     <Property Name="Environment" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
     <Property Name="About" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
-    <Property Name="IsWorkInProgress" Type="Boolean" Nullable="false" />
+    <Property Name="IsPublished" Type="Boolean" Nullable="false" />
     <Property Name="AvgLifestyle" Type="String" MaxLength="3000" FixedLength="false" Unicode="false" Nullable="false" />
     <NavigationProperty Name="Characters" Relationship="Self.FK_Characters_Locales" FromRole="Locales" ToRole="Characters" />
     <NavigationProperty Name="Info" Relationship="Self.FK_Locales_Infos" FromRole="Locales" ToRole="Infos" />
@@ -291,7 +300,7 @@
     <Property Name="InfoId" Type="Int16" Nullable="false" />
     <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
     <Property Name="TheContent" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
-    <Property Name="IsWorkInProgress" Type="Boolean" Nullable="false" />
+    <Property Name="IsPublished" Type="Boolean" Nullable="false" />
     <NavigationProperty Name="Info" Relationship="Self.FK_Lores_Infos" FromRole="Lores" ToRole="Infos" />
   </EntityType>
   <EntityType Name="Majority">
@@ -335,13 +344,18 @@
     <Property Name="ApperanceText" Type="String" MaxLength="2000" FixedLength="false" Unicode="false" Nullable="false" />
     <Property Name="AboutText" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
     <Property Name="LastLocationId" Type="Int16" />
-    <Property Name="IsWorkInProgress" Type="Boolean" Nullable="false" />
+    <Property Name="IsPublished" Type="Boolean" Nullable="false" />
     <NavigationProperty Name="ClassNPCs" Relationship="Self.FK_ClassNPCs_NPCs" FromRole="NPCs" ToRole="ClassNPCs" />
     <NavigationProperty Name="Info" Relationship="Self.FK_NPCs_Infos" FromRole="NPCs" ToRole="Infos" />
     <NavigationProperty Name="Locales" Relationship="Self.FK_Locales_NPCs" FromRole="NPCs" ToRole="Locales" />
     <NavigationProperty Name="Locale" Relationship="Self.FK_NPCs_Locales" FromRole="NPCs" ToRole="Locales" />
     <NavigationProperty Name="NpcOrgs" Relationship="Self.FK_NpcOrgs_NPCs" FromRole="NPCs" ToRole="NpcOrgs" />
     <NavigationProperty Name="Race" Relationship="Self.FK_NPCs_Race" FromRole="NPCs" ToRole="Race" />
+    <Property Name="PortraitArtist" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
+    <Property Name="CrestArtist" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
+    <Property Name="IsDead" Type="Boolean" Nullable="false" />
+    <Property Name="GenderId" Type="Byte" Nullable="false" />
+    <NavigationProperty Name="Gender" Relationship="RiftWorldModel.FK_NPCs_Gender" FromRole="NPC" ToRole="Gender" />
   </EntityType>
   <EntityType Name="OrgEvent">
     <Key>
@@ -365,12 +379,13 @@
     <Property Name="SymbolFileName" Type="String" MaxLength="75" FixedLength="false" Unicode="false" />
     <Property Name="BaseLocationId" Type="Int16" />
     <Property Name="AboutText" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
-    <Property Name="IsWorkInProgress" Type="Boolean" Nullable="false" />
+    <Property Name="IsPublished" Type="Boolean" Nullable="false" />
     <NavigationProperty Name="CharOrgs" Relationship="Self.FK_CharOrgs_Orgs" FromRole="Orgs" ToRole="CharOrgs" />
     <NavigationProperty Name="Info" Relationship="Self.FK_Orgs_Infos" FromRole="Orgs" ToRole="Infos" />
     <NavigationProperty Name="Locale" Relationship="Self.FK_Orgs_Locales" FromRole="Orgs" ToRole="Locales" />
     <NavigationProperty Name="NpcOrgs" Relationship="Self.FK_NpcOrgs_Orgs" FromRole="Orgs" ToRole="NpcOrgs" />
     <NavigationProperty Name="OrgEvents" Relationship="Self.FK_OrgEvents_Orgs" FromRole="Orgs" ToRole="OrgEvents" />
+    <Property Name="Artist" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
   </EntityType>
   <EntityType Name="Race">
     <Key>
@@ -394,7 +409,7 @@
     <Property Name="Location" Type="String" MaxLength="300" FixedLength="false" Unicode="false" Nullable="false" />
     <Property Name="Environment" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
     <Property Name="Hazards" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
-    <Property Name="IsWorkInProgress" Type="Boolean" Nullable="false" />
+    <Property Name="IsPublished" Type="Boolean" Nullable="false" />
     <NavigationProperty Name="Info" Relationship="Self.FK_Rifts_Infos" FromRole="Rifts" ToRole="Infos" />
     <NavigationProperty Name="VarietyOfInhabitants" Relationship="Self.FK_VarietyOfInhabitants_Rifts" FromRole="Rifts" ToRole="VarietyOfInhabitants" />
   </EntityType>
@@ -406,9 +421,9 @@
     <Property Name="RumorOfId" Type="Int16" Nullable="false" />
     <Property Name="AuthorId" Type="Int16" Nullable="false" />
     <Property Name="IsApproved" Type="Boolean" Nullable="false" />
-    <Property Name="TheContent" Type="String" MaxLength="300" FixedLength="false" Unicode="false" Nullable="false" />
     <NavigationProperty Name="Character" Relationship="Self.FK_Rumors_Characters" FromRole="Rumors" ToRole="Characters" />
     <NavigationProperty Name="Info" Relationship="Self.FK_Rumors_Infos" FromRole="Rumors" ToRole="Infos" />
+    <Property Name="RumorText" Type="String" Nullable="false" FixedLength="false" MaxLength="300" Unicode="false" />
   </EntityType>
   <EntityType Name="Secret">
     <Key>
@@ -501,7 +516,7 @@
     <Property Name="UserId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
     <Property Name="DiscordName" Type="String" MaxLength="32" FixedLength="false" Unicode="true" Nullable="false" />
     <Property Name="DiscordDiscriminator" Type="Int16" Nullable="false" />
-    <Property Name="ConsentFileName" Type="String" MaxLength="75" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="ConsentFileName" Type="String" MaxLength="75" FixedLength="false" Unicode="false" />
     <Property Name="CurrentCharacterId" Type="Int16" />
     <Property Name="IsApproved" Type="Boolean" Nullable="false" />
     <NavigationProperty Name="Characters" Relationship="Self.FK_Characters_Users" FromRole="UserDetails" ToRole="Characters" />
@@ -1403,5 +1418,25 @@
       <End Role="AspNetRoles" EntitySet="AspNetRoles" />
       <End Role="AspNetUsers" EntitySet="AspNetUsers" />
     </AssociationSet>
+    <FunctionImport Name="getSecrets" EntitySet="Secrets" ReturnType="Collection(RiftWorldModel.Secret)">
+      <Parameter Name="PlayerId" Type="String" Mode="In" />
+      <Parameter Name="InfoId" Type="Int16" Mode="In" />
+    </FunctionImport>
+    <AssociationSet Name="FK_NPCs_Gender" Association="RiftWorldModel.FK_NPCs_Gender">
+      <End Role="Gender" EntitySet="Genders" />
+      <End Role="NPC" EntitySet="NPCs" />
+    </AssociationSet>
   </EntityContainer>
+  <Association Name="FK_NPCs_Gender">
+    <End Type="RiftWorldModel.Gender" Role="Gender" Multiplicity="1" />
+    <End Type="RiftWorldModel.NPC" Role="NPC" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Gender">
+        <PropertyRef Name="GenderId" />
+      </Principal>
+      <Dependent Role="NPC">
+        <PropertyRef Name="GenderId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
 </Schema>

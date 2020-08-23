@@ -42,7 +42,7 @@
             @Html.DisplayNameFor(model => model.Tier.TierName)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.User.DiscordName)
+            @Html.DisplayNameFor(model => model.UserDetail.DiscordName)
         </th>
         <th></th>
     </tr>
@@ -80,7 +80,7 @@
             @Html.DisplayFor(modelItem => item.Tier.TierName)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.User.DiscordName)
+            @Html.DisplayFor(modelItem => item.UserDetail.DiscordName)
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.CharacterId }) |

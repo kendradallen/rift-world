@@ -7,11 +7,12 @@
 <h2>Create</h2>
 
 
-@using (Html.BeginForm()) 
+@using (Html.BeginForm("Create", "NPCs", FormMethod.Post, 
+    new { @enctype = "multipart/form-data" }))  ///FOR THE LOVE OF ALL THAT IS KENDRA STOP FORGETTING THIS FOR FILE UPLOADS. IT IS CRUCIAL
 {
-    @Html.AntiForgeryToken()
-    
-    <div class="form-horizontal">
+                @Html.AntiForgeryToken()
+
+                <div class="form-horizontal">
         <h4>NPC</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
@@ -50,8 +51,9 @@
         <div class="form-group">
             @Html.LabelFor(model => model.PortraitFileName, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.PortraitFileName, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.PortraitFileName, "", new { @class = "text-danger" })
+                <input type="file" name="portraitPic" />
+                <img class="img-fluid img-thumbnail border-00" src="~/Content/img/npc/default.jpg" /> 
+                @Html.HiddenFor(model => model.PortraitFileName)
             </div>
         </div>
 
@@ -66,8 +68,9 @@
         <div class="form-group">
             @Html.LabelFor(model => model.CrestFileName, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.CrestFileName, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.CrestFileName, "", new { @class = "text-danger" })
+                <input type="file" name="crestPic" />
+                <img class="img-fluid img-thumbnail border-00" src="~/Content/img/npc/org_default.jpg" />
+                @Html.HiddenFor(model => model.CrestFileName)
             </div>
         </div>
 
@@ -96,11 +99,11 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.IsWorkInProgress, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.IsPublished, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 <div class="checkbox">
-                    @Html.EditorFor(model => model.IsWorkInProgress)
-                    @Html.ValidationMessageFor(model => model.IsWorkInProgress, "", new { @class = "text-danger" })
+                    @Html.EditorFor(model => model.IsPublished)
+                    @Html.ValidationMessageFor(model => model.IsPublished, "", new { @class = "text-danger" })
                 </div>
             </div>
         </div>

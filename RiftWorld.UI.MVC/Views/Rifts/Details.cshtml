@@ -1,0 +1,103 @@
+﻿@model RiftWorld.DATA.EF.Rift
+
+@{
+    ViewBag.Title = "Details";
+    bool hasVariety = true;
+    if (ViewBag.Variety.Length == 0)
+    {
+        hasVariety = false;
+    }
+    bool exist = true;
+    if (Model.Environment == "Nada" || Model.Hazards == "Nada")
+    {
+        exist = false;
+    }
+
+}
+<section id="location" class="col-12">
+    <p>Rift Location: @Model.Location</p>
+    <p>Aka: @Model.Nickname</p>
+</section>
+@if (Model.Environment != "Nada")
+{
+<section id="environment" class="@(exist ? "col-xl-6" : "col-12")">
+    <h2 class="line">@Html.DisplayNameFor(model => model.Environment)</h2>
+    @if (hasVariety) { <p>Major Inhabitants: @ViewBag.Variety</p>}
+    @Html.Raw(Model.Environment)
+</section>
+}
+@if (Model.Hazards != "Nada")
+{
+    <section id="hazards" class="@(exist ? "col-xl-6" : "col-12") ">
+        <h2 class="line">
+            @Html.DisplayNameFor(model => model.Hazards)
+        </h2>
+        @Html.Raw(Model.Hazards)
+    </section>
+}
+@Html.Action("_Details", "Secrets", new { id = Model.InfoId })
+@Html.Action("_Stories", "Stories", new { id = Model.InfoId })
+<section id="rumors" class="col-12">
+    <h2 class="line">Rumors</h2>
+    @Html.Action("_Rumors", "Rumors", new { id = Model.InfoId })
+    <div class="clearfix"></div>
+    <div id="make-rumor">
+        @Html.Action("CreateRumor", "Rumors", new { id = Model.InfoId })
+    </div>
+</section>
+
+@if (User.IsInRole("Admin")) { 
+<nav id="adminNav" class="navbar fixed-bottom navbar-light navbar-expand-md">
+    <span class="navbar-brand">Katherine's Bar</span>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                @Html.ActionLink("Edit", "Edit", new { id = Model.RiftId }, new { @class = "nav-link" })
+            </li>
+            <li class="nav-item">
+                @Html.ActionLink("Edit Complex", "AssoEdit", new { id = Model.RiftId }, new { @class = "nav-link" })
+            </li>
+            <li class="nav-item">
+                @Html.ActionLink("Delete", "Delete", new { id = Model.RiftId }, new { @class = "nav-link" })
+            </li>
+            <li class="nav-item">
+                @Html.ActionLink("Back to List", "Index", null, new { @class = "nav-link" })
+            </li>
+        </ul>
+    </div>
+    <span class="navbar-text @Model.Pub.ToLower()">
+        @Model.Pub
+    </span>
+</nav>
+}
+@section Scripts{
+    <script>
+        //$("#content").addClass("rift");
+        $(".sneaky-shadow").addClass("rift");
+    </script>
+    <script src="~/Scripts/MyJS/story.js"></script>
+    <script>
+        const okButton = document.getElementById('daSubmit');
+        $('#RumorText').keyup(function (e) {
+            var max = 300
+            var len = $(this).val().length;
+            var char = max - len;
+            $('#tc-Rumor').html(char);
+
+            if (char < 0) {
+                $('#tcp-Rumor').addClass("invalid");
+                okButton.disabled = true;
+            }
+            else {
+                $('#tcp-Rumor').removeClass("invalid");
+                okButton.disabled = false;
+            }
+
+
+        });
+    </script>
+
+}

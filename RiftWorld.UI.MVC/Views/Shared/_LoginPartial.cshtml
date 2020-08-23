@@ -6,34 +6,57 @@
     RiftWorldEntities db = new RiftWorldEntities();
     string userId = User.Identity.GetUserId();
     UserDetail currentUser = db.UserDetails.Where(u => u.UserId == userId).FirstOrDefault();
-    Character currentCharacter;
-    string charName = "";
-    string discordName = "Future Hero";
-    if (currentUser != null)
-    {
-        currentCharacter = db.Characters.Where(c => c.PlayerId == userId && c.IsRetired == false).FirstOrDefault();
-        discordName = currentUser.DiscordName;
-        charName = currentCharacter.CharacterName;
-    }
-    else
-    {
-        currentCharacter = null;
-    }
+    string charName;
+    string discordName = "future hero";
+    short? charId;
+    int pendingStuff = db.Rumors.Where(i => i.IsApproved == false).Count() + db.Characters.Where(c => c.IsApproved == false).Count() + db.Journals.Where(j => j.IsApproved == false).Count();
+    int onlyAdmin = db.UserDetails.Where(i => i.IsApproved == false).Count();
     if (User.IsInRole("Admin"))
     {
         discordName = "Katherine";
+    }
+    else
+    {
+        discordName = currentUser.DiscordFull;
+    }
+    if (currentUser.CurrentCharacterId != null)
+    {
+        charId = (short)currentUser.CurrentCharacterId;
+        charName = db.Characters.Where(c => c.CharacterId == charId).Select(c => c.CharacterName).FirstOrDefault();
+    }
+    else
+    {
+        charId = null;
+        charName = null;
     }
 
     using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
     {
         @Html.AntiForgeryToken()
 
-        <ul @*class="nav navbar-nav navbar-right"*@>
-            <li>
-                @Html.ActionLink("Hi " + (charName.IsEmpty() ? charName : discordName)+ "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage"})
-            </li>
-            <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
-        </ul>
+<ul @*class="nav navbar-nav navbar-right"*@>
+    @if (Request.IsAuthenticated && (User.IsInRole("Player") || User.IsInRole("Mod")))
+    {
+        <li><a href="@Url.Action("Create", "Journals")">Journal <i class="fas fa-feather-alt"></i></a></li>
+        <li><a href="@Url.Action("Hub", "Characters", new { id = charId })">Character</a></li>
+    }
+    else if (Request.IsAuthenticated && User.IsInRole("Admin"))
+    {
+        <li><a href="@Url.Action("CreateWhat", "Infos")">Create New</a></li>
+        <li><a href="@Url.Action("Approvals", "Infos")">Approvals</a> <span class="badge badge-pill badge-info">@pendingStuff</span> @if (onlyAdmin > 0) {<span class="badge badge-pill badge-danger">@onlyAdmin</span>}</li>
+
+    }
+    <li>@Html.ActionLink("Profile", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })</li>
+    @if (User.IsInRole("Mod"))
+    {
+        <li><a href="@Url.Action("Approvals", "Infos")">Approvals</a> <span class="badge badge-pill badge-info">@pendingStuff</span></li>
+    }
+
+    <li>
+        @Html.ActionLink("Hi " + (!charName.IsEmpty() ? charName : discordName) + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
+    </li>
+    <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+</ul>
     }
 }
 

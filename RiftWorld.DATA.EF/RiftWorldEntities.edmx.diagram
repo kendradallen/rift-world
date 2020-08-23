@@ -98,6 +98,7 @@
         <AssociationConnector Association="RiftWorldModel.FK_StoryTags_Stories" ManuallyRouted="false" />
         <AssociationConnector Association="RiftWorldModel.FK_StoryTags_Tags" ManuallyRouted="false" />
         <AssociationConnector Association="RiftWorldModel.AspNetUserRoles" ManuallyRouted="false" />
+        <AssociationConnector Association="RiftWorldModel.FK_NPCs_Gender" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

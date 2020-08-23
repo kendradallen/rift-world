@@ -1,0 +1,35 @@
+﻿@model RiftWorld.UI.MVC.Models.RumorCreateVM
+
+@if (Request.IsAuthenticated && Model.AuthorId != null)
+{
+    using (Html.BeginForm("CreateRumor", "NPCs", FormMethod.Post, new { id = "RumorCreateForm" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(model => model.RumorOfId)
+        @Html.HiddenFor(model => model.AuthorId)
+        @Html.HiddenFor(model => model.IsApproved)
+        <div class="form-horizontal">
+            <div class="form-group">
+                @Html.Label("RumorText", "Whisper your words....", htmlAttributes: new { @class = "control-label" })
+                <div class="col-md-10">
+                    @Html.Editor("RumorText", new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessage("RumorText", "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Spread it" class="btn btn-default" />
+                </div>
+            </div>
+        </div>
+    }
+
+}
+else if (Request.IsAuthenticated && Model.AuthorId == null)
+{
+    <p>You need to have an active, approved character to make a rumor.</p> }
+else
+{
+    <p>Login to write a rumor! </p>
+}

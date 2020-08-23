@@ -4,30 +4,30 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="RiftWorldModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl" Alias="Self" Namespace="RiftWorldModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012">
         <EntityType Name="__MigrationHistory">
           <Key>
             <PropertyRef Name="MigrationId" />
             <PropertyRef Name="ContextKey" />
           </Key>
-          <Property Name="MigrationId" Type="nvarchar" MaxLength="150" Nullable="false" />
-          <Property Name="ContextKey" Type="nvarchar" MaxLength="300" Nullable="false" />
-          <Property Name="Model" Type="varbinary(max)" Nullable="false" />
-          <Property Name="ProductVersion" Type="nvarchar" MaxLength="32" Nullable="false" />
+          <Property Name="MigrationId" Nullable="false" MaxLength="150" Type="nvarchar" />
+          <Property Name="ContextKey" Nullable="false" MaxLength="300" Type="nvarchar" />
+          <Property Name="Model" Nullable="false" Type="varbinary(max)" />
+          <Property Name="ProductVersion" Nullable="false" MaxLength="32" Type="nvarchar" />
         </EntityType>
         <EntityType Name="AspNetRoles">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="nvarchar" MaxLength="128" Nullable="false" />
-          <Property Name="Name" Type="nvarchar" MaxLength="256" Nullable="false" />
+          <Property Name="Id" Nullable="false" MaxLength="128" Type="nvarchar" />
+          <Property Name="Name" Nullable="false" MaxLength="256" Type="nvarchar" />
         </EntityType>
         <EntityType Name="AspNetUserClaims">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="Id" Nullable="false" StoreGeneratedPattern="Identity" Type="int" />
+          <Property Name="UserId" Nullable="false" MaxLength="128" Type="nvarchar" />
           <Property Name="ClaimType" Type="nvarchar(max)" />
           <Property Name="ClaimValue" Type="nvarchar(max)" />
         </EntityType>
@@ -37,354 +37,367 @@
             <PropertyRef Name="ProviderKey" />
             <PropertyRef Name="UserId" />
           </Key>
-          <Property Name="LoginProvider" Type="nvarchar" MaxLength="128" Nullable="false" />
-          <Property Name="ProviderKey" Type="nvarchar" MaxLength="128" Nullable="false" />
-          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="LoginProvider" Nullable="false" MaxLength="128" Type="nvarchar" />
+          <Property Name="ProviderKey" Nullable="false" MaxLength="128" Type="nvarchar" />
+          <Property Name="UserId" Nullable="false" MaxLength="128" Type="nvarchar" />
         </EntityType>
         <EntityType Name="AspNetUserRoles">
           <Key>
             <PropertyRef Name="UserId" />
             <PropertyRef Name="RoleId" />
           </Key>
-          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
-          <Property Name="RoleId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="UserId" Nullable="false" MaxLength="128" Type="nvarchar" />
+          <Property Name="RoleId" Nullable="false" MaxLength="128" Type="nvarchar" />
         </EntityType>
         <EntityType Name="AspNetUsers">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="nvarchar" MaxLength="128" Nullable="false" />
-          <Property Name="Email" Type="nvarchar" MaxLength="256" />
-          <Property Name="EmailConfirmed" Type="bit" Nullable="false" />
+          <Property Name="Id" Nullable="false" MaxLength="128" Type="nvarchar" />
+          <Property Name="Email" MaxLength="256" Type="nvarchar" />
+          <Property Name="EmailConfirmed" Nullable="false" Type="bit" />
           <Property Name="PasswordHash" Type="nvarchar(max)" />
           <Property Name="SecurityStamp" Type="nvarchar(max)" />
           <Property Name="PhoneNumber" Type="nvarchar(max)" />
-          <Property Name="PhoneNumberConfirmed" Type="bit" Nullable="false" />
-          <Property Name="TwoFactorEnabled" Type="bit" Nullable="false" />
+          <Property Name="PhoneNumberConfirmed" Nullable="false" Type="bit" />
+          <Property Name="TwoFactorEnabled" Nullable="false" Type="bit" />
           <Property Name="LockoutEndDateUtc" Type="datetime" />
-          <Property Name="LockoutEnabled" Type="bit" Nullable="false" />
-          <Property Name="AccessFailedCount" Type="int" Nullable="false" />
-          <Property Name="UserName" Type="nvarchar" MaxLength="256" Nullable="false" />
+          <Property Name="LockoutEnabled" Nullable="false" Type="bit" />
+          <Property Name="AccessFailedCount" Nullable="false" Type="int" />
+          <Property Name="UserName" Nullable="false" MaxLength="256" Type="nvarchar" />
         </EntityType>
         <EntityType Name="Characters">
           <Key>
             <PropertyRef Name="CharacterId" />
           </Key>
-          <Property Name="CharacterId" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="PlayerId" Type="nvarchar" MaxLength="128" Nullable="false" />
-          <Property Name="CharacterName" Type="varchar" MaxLength="25" Nullable="false" />
-          <Property Name="RaceId" Type="tinyint" Nullable="false" />
-          <Property Name="GenderId" Type="tinyint" Nullable="false" />
-          <Property Name="PortraitFileName" Type="varchar" MaxLength="75" />
-          <Property Name="Description" Type="varchar" MaxLength="2000" Nullable="false" />
-          <Property Name="About" Type="varchar" MaxLength="8000" Nullable="false" />
-          <Property Name="CurrentLocationId" Type="smallint" Nullable="false" />
-          <Property Name="TierId" Type="tinyint" Nullable="false" />
-          <Property Name="IsRetired" Type="bit" Nullable="false" />
-          <Property Name="IsApproved" Type="bit" Nullable="false" />
+          <Property Name="CharacterId" Nullable="false" StoreGeneratedPattern="Identity" Type="smallint" />
+          <Property Name="PlayerId" Nullable="false" MaxLength="128" Type="nvarchar" />
+          <Property Name="CharacterName" Nullable="false" MaxLength="25" Type="varchar" />
+          <Property Name="RaceId" Nullable="false" Type="tinyint" />
+          <Property Name="GenderId" Nullable="false" Type="tinyint" />
+          <Property Name="PortraitFileName" MaxLength="75" Type="varchar" />
+          <Property Name="Description" Nullable="false" MaxLength="2000" Type="varchar" />
+          <Property Name="About" Nullable="false" MaxLength="8000" Type="varchar" />
+          <Property Name="CurrentLocationId" Nullable="false" Type="smallint" />
+          <Property Name="TierId" Nullable="false" Type="tinyint" />
+          <Property Name="IsRetired" Nullable="false" Type="bit" />
+          <Property Name="IsApproved" Nullable="false" Type="bit" />
+          <Property Name="Artist" MaxLength="40" Type="nvarchar" />
+          <Property Name="ClassString" MaxLength="40" Type="varchar" />
+          <Property Name="HasUnseenEdit" Nullable="false" Type="bit" />
+          <Property Name="IsDead" Nullable="false" Type="bit" />
         </EntityType>
         <EntityType Name="CharOrgs">
           <Key>
             <PropertyRef Name="CharOrgsId" />
           </Key>
-          <Property Name="CharOrgsId" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="CharId" Type="smallint" Nullable="false" />
-          <Property Name="OrgId" Type="smallint" Nullable="false" />
-          <Property Name="BlurbOrgPage" Type="varchar" MaxLength="50" />
-          <Property Name="IsPublic" Type="bit" Nullable="false" />
-          <Property Name="IsCurrent" Type="bit" Nullable="false" />
-          <Property Name="Proposed" Type="bit" Nullable="false" />
+          <Property Name="CharOrgsId" Nullable="false" StoreGeneratedPattern="Identity" Type="smallint" />
+          <Property Name="CharId" Nullable="false" Type="smallint" />
+          <Property Name="OrgId" Nullable="false" Type="smallint" />
+          <Property Name="BlurbOrgPage" MaxLength="50" Type="varchar" />
+          <Property Name="IsPublic" Nullable="false" Type="bit" />
+          <Property Name="IsCurrent" Nullable="false" Type="bit" />
+          <Property Name="KatherineApproved" Nullable="false" Type="bit" />
         </EntityType>
         <EntityType Name="CharSecrets">
           <Key>
             <PropertyRef Name="CharSecretId" />
           </Key>
-          <Property Name="CharSecretId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="CharId" Type="smallint" Nullable="false" />
-          <Property Name="SecretId" Type="smallint" Nullable="false" />
+          <Property Name="CharSecretId" Nullable="false" StoreGeneratedPattern="Identity" Type="int" />
+          <Property Name="CharId" Nullable="false" Type="smallint" />
+          <Property Name="SecretId" Nullable="false" Type="smallint" />
         </EntityType>
         <EntityType Name="Class">
           <Key>
             <PropertyRef Name="ClassId" />
           </Key>
-          <Property Name="ClassId" Type="tinyint" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="ClassName" Type="varchar" MaxLength="15" Nullable="false" />
-          <Property Name="IsPlayerEnabled" Type="bit" Nullable="false" />
+          <Property Name="ClassId" Nullable="false" StoreGeneratedPattern="Identity" Type="tinyint" />
+          <Property Name="ClassName" Nullable="false" MaxLength="15" Type="varchar" />
+          <Property Name="IsPlayerEnabled" Nullable="false" Type="bit" />
         </EntityType>
         <EntityType Name="ClassCharacters">
           <Key>
             <PropertyRef Name="ClassCharacterId" />
           </Key>
-          <Property Name="ClassCharacterId" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="ClassId" Type="tinyint" Nullable="false" />
-          <Property Name="CharacterId" Type="smallint" Nullable="false" />
+          <Property Name="ClassCharacterId" Nullable="false" StoreGeneratedPattern="Identity" Type="smallint" />
+          <Property Name="ClassId" Nullable="false" Type="tinyint" />
+          <Property Name="CharacterId" Nullable="false" Type="smallint" />
           <Property Name="ClassOrder" Type="tinyint" />
         </EntityType>
         <EntityType Name="ClassNPCs">
           <Key>
             <PropertyRef Name="ClassNpcId" />
           </Key>
-          <Property Name="ClassNpcId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ClassNpcId" Nullable="false" StoreGeneratedPattern="Identity" Type="int" />
           <Property Name="ClassId" Type="tinyint" />
-          <Property Name="NpcId" Type="smallint" Nullable="false" />
+          <Property Name="NpcId" Nullable="false" Type="smallint" />
           <Property Name="ClassOrder" Type="tinyint" />
         </EntityType>
         <EntityType Name="Events">
           <Key>
             <PropertyRef Name="EventId" />
           </Key>
-          <Property Name="EventId" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="InfoId" Type="smallint" Nullable="false" />
-          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="IsHistory" Type="bit" Nullable="false" />
-          <Property Name="Date" Type="date" Nullable="false" />
-          <Property Name="AboutText" Type="varchar(max)" Nullable="false" />
-          <Property Name="NormalParticipants" Type="varchar(max)" Nullable="false" />
-          <Property Name="IsWorkInProgress" Type="bit" Nullable="false" />
+          <Property Name="EventId" Nullable="false" StoreGeneratedPattern="Identity" Type="smallint" />
+          <Property Name="InfoId" Nullable="false" Type="smallint" />
+          <Property Name="Name" Nullable="false" MaxLength="50" Type="varchar" />
+          <Property Name="IsHistory" Nullable="false" Type="bit" />
+          <Property Name="AboutText" Nullable="false" Type="varchar(max)" />
+          <Property Name="NormalParticipants" Nullable="false" Type="varchar(max)" />
+          <Property Name="IsPublished" Nullable="false" Type="bit" />
+          <Property Name="DateDay" Nullable="false" Type="tinyint" />
+          <Property Name="DateMonth" Nullable="false" Type="tinyint" />
+          <Property Name="DateYear" Type="smallint" />
+          <Property Name="DateEra" MaxLength="15" Type="varchar" />
         </EntityType>
         <EntityType Name="Gender">
           <Key>
             <PropertyRef Name="GenderId" />
           </Key>
-          <Property Name="GenderId" Type="tinyint" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="GenderName" Type="varchar" MaxLength="15" Nullable="false" />
-          <Property Name="IconName" Type="varchar" MaxLength="15" />
+          <Property Name="GenderId" Nullable="false" StoreGeneratedPattern="Identity" Type="tinyint" />
+          <Property Name="GenderName" Nullable="false" MaxLength="20" Type="varchar" />
+          <Property Name="IconName" MaxLength="20" Type="varchar" />
         </EntityType>
         <EntityType Name="Infos">
           <Key>
             <PropertyRef Name="InfoId" />
           </Key>
-          <Property Name="InfoId" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="InfoTypeId" Type="tinyint" Nullable="false" />
+          <Property Name="InfoId" Nullable="false" StoreGeneratedPattern="Identity" Type="smallint" />
+          <Property Name="InfoTypeId" Nullable="false" Type="tinyint" />
           <Property Name="IdWithinType" Type="smallint" />
-          <Property Name="Blurb" Type="varchar" MaxLength="100" Nullable="false" />
-          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="IsPublished" Type="bit" Nullable="false" />
+          <Property Name="Blurb" Nullable="false" MaxLength="100" Type="varchar" />
+          <Property Name="Name" Nullable="false" MaxLength="50" Type="varchar" />
+          <Property Name="IsPublished" Nullable="false" Type="bit" />
         </EntityType>
         <EntityType Name="InfoTags">
           <Key>
             <PropertyRef Name="InfoTagId" />
           </Key>
-          <Property Name="InfoTagId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="InfoId" Type="smallint" Nullable="false" />
-          <Property Name="TagId" Type="smallint" Nullable="false" />
+          <Property Name="InfoTagId" Nullable="false" StoreGeneratedPattern="Identity" Type="int" />
+          <Property Name="InfoId" Nullable="false" Type="smallint" />
+          <Property Name="TagId" Nullable="false" Type="smallint" />
         </EntityType>
         <EntityType Name="InfoType">
           <Key>
             <PropertyRef Name="InfoTypeId" />
           </Key>
-          <Property Name="InfoTypeId" Type="tinyint" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="TypeName" Type="varchar" MaxLength="15" Nullable="false" />
+          <Property Name="InfoTypeId" Nullable="false" StoreGeneratedPattern="Identity" Type="tinyint" />
+          <Property Name="TypeName" Nullable="false" MaxLength="15" Type="varchar" />
         </EntityType>
         <EntityType Name="Items">
           <Key>
             <PropertyRef Name="ItemId" />
           </Key>
-          <Property Name="ItemId" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="InfoId" Type="smallint" Nullable="false" />
-          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="Blurb" Type="varchar" MaxLength="100" Nullable="false" />
-          <Property Name="PictureFileName" Type="varchar" MaxLength="75" />
-          <Property Name="DescriptionText" Type="varchar(max)" Nullable="false" />
-          <Property Name="PropertyText" Type="varchar(max)" Nullable="false" />
-          <Property Name="HistoryText" Type="varchar(max)" Nullable="false" />
-          <Property Name="IsWorkInProgress" Type="bit" Nullable="false" />
+          <Property Name="ItemId" Nullable="false" StoreGeneratedPattern="Identity" Type="smallint" />
+          <Property Name="InfoId" Nullable="false" Type="smallint" />
+          <Property Name="Name" Nullable="false" MaxLength="50" Type="varchar" />
+          <Property Name="Blurb" Nullable="false" MaxLength="100" Type="varchar" />
+          <Property Name="PictureFileName" MaxLength="75" Type="varchar" />
+          <Property Name="DescriptionText" Nullable="false" Type="varchar(max)" />
+          <Property Name="PropertyText" Nullable="false" Type="varchar(max)" />
+          <Property Name="HistoryText" Nullable="false" Type="varchar(max)" />
+          <Property Name="IsPublished" Nullable="false" Type="bit" />
+          <Property Name="Artist" MaxLength="40" Type="nvarchar" />
         </EntityType>
         <EntityType Name="Journals">
           <Key>
             <PropertyRef Name="JournalId" />
           </Key>
-          <Property Name="JournalId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="CharacterId" Type="smallint" Nullable="false" />
-          <Property Name="OocDateWritten" Type="date" Nullable="false" />
-          <Property Name="ICDateWritten" Type="date" />
-          <Property Name="TheContent" Type="varchar(max)" Nullable="false" />
-          <Property Name="IsApproved" Type="bit" Nullable="false" />
+          <Property Name="JournalId" Nullable="false" StoreGeneratedPattern="Identity" Type="int" />
+          <Property Name="CharacterId" Nullable="false" Type="smallint" />
+          <Property Name="OocDateWritten" Nullable="false" Type="date" />
+          <Property Name="TheContent" Nullable="false" Type="varchar(max)" />
+          <Property Name="IsApproved" Nullable="false" Type="bit" />
+          <Property Name="HasUnseenEdit" Nullable="false" Type="bit" />
         </EntityType>
         <EntityType Name="LocaleEvents">
           <Key>
             <PropertyRef Name="LocaleEventId" />
           </Key>
-          <Property Name="LocaleEventId" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="LocaleId" Type="smallint" Nullable="false" />
-          <Property Name="EventId" Type="smallint" Nullable="false" />
+          <Property Name="LocaleEventId" Nullable="false" StoreGeneratedPattern="Identity" Type="smallint" />
+          <Property Name="LocaleId" Nullable="false" Type="smallint" />
+          <Property Name="EventId" Nullable="false" Type="smallint" />
         </EntityType>
         <EntityType Name="LocaleLevel">
           <Key>
             <PropertyRef Name="LocaleLevelId" />
           </Key>
-          <Property Name="LocaleLevelId" Type="tinyint" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="LocaleName" Type="varchar" MaxLength="15" Nullable="false" />
+          <Property Name="LocaleLevelId" Nullable="false" StoreGeneratedPattern="Identity" Type="tinyint" />
+          <Property Name="LocaleName" Nullable="false" MaxLength="15" Type="varchar" />
         </EntityType>
         <EntityType Name="Locales">
           <Key>
             <PropertyRef Name="LocaleId" />
           </Key>
-          <Property Name="LocaleId" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="InfoId" Type="smallint" Nullable="false" />
-          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="LevelOfLocaleId" Type="tinyint" Nullable="false" />
+          <Property Name="LocaleId" Nullable="false" StoreGeneratedPattern="Identity" Type="smallint" />
+          <Property Name="InfoId" Nullable="false" Type="smallint" />
+          <Property Name="Name" Nullable="false" MaxLength="50" Type="varchar" />
+          <Property Name="LevelOfLocaleId" Nullable="false" Type="tinyint" />
           <Property Name="RegionId" Type="smallint" />
           <Property Name="ClosestCityId" Type="smallint" />
           <Property Name="CouncilDelegateId" Type="smallint" />
-          <Property Name="Appointed" Type="varchar" MaxLength="8000" Nullable="false" />
-          <Property Name="Environment" Type="varchar(max)" Nullable="false" />
-          <Property Name="About" Type="varchar(max)" Nullable="false" />
-          <Property Name="IsWorkInProgress" Type="bit" Nullable="false" />
-          <Property Name="AvgLifestyle" Type="varchar" MaxLength="3000" Nullable="false" />
+          <Property Name="Appointed" Nullable="false" MaxLength="8000" Type="varchar" />
+          <Property Name="Environment" Nullable="false" Type="varchar(max)" />
+          <Property Name="About" Nullable="false" Type="varchar(max)" />
+          <Property Name="IsPublished" Nullable="false" Type="bit" />
+          <Property Name="AvgLifestyle" Nullable="false" MaxLength="3000" Type="varchar" />
         </EntityType>
         <EntityType Name="Lores">
           <Key>
             <PropertyRef Name="LoreId" />
           </Key>
-          <Property Name="LoreId" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="InfoId" Type="smallint" Nullable="false" />
-          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="TheContent" Type="varchar(max)" Nullable="false" />
-          <Property Name="IsWorkInProgress" Type="bit" Nullable="false" />
+          <Property Name="LoreId" Nullable="false" StoreGeneratedPattern="Identity" Type="smallint" />
+          <Property Name="InfoId" Nullable="false" Type="smallint" />
+          <Property Name="Name" Nullable="false" MaxLength="50" Type="varchar" />
+          <Property Name="TheContent" Nullable="false" Type="varchar(max)" />
+          <Property Name="IsPublished" Nullable="false" Type="bit" />
         </EntityType>
         <EntityType Name="Majorities">
           <Key>
             <PropertyRef Name="MajorityId" />
           </Key>
-          <Property Name="MajorityId" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="LocaleId" Type="smallint" Nullable="false" />
-          <Property Name="RaceId" Type="tinyint" Nullable="false" />
-          <Property Name="IsFirst" Type="bit" Nullable="false" />
+          <Property Name="MajorityId" Nullable="false" StoreGeneratedPattern="Identity" Type="smallint" />
+          <Property Name="LocaleId" Nullable="false" Type="smallint" />
+          <Property Name="RaceId" Nullable="false" Type="tinyint" />
+          <Property Name="IsFirst" Nullable="false" Type="bit" />
         </EntityType>
         <EntityType Name="NpcOrgs">
           <Key>
             <PropertyRef Name="NpcOrgId" />
           </Key>
-          <Property Name="NpcOrgId" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="NpcId" Type="smallint" Nullable="false" />
-          <Property Name="OrgId" Type="smallint" Nullable="false" />
+          <Property Name="NpcOrgId" Nullable="false" StoreGeneratedPattern="Identity" Type="smallint" />
+          <Property Name="NpcId" Nullable="false" Type="smallint" />
+          <Property Name="OrgId" Nullable="false" Type="smallint" />
           <Property Name="OrgOrder" Type="tinyint" />
-          <Property Name="BlurbNpcPage" Type="varchar" MaxLength="50" />
-          <Property Name="BlurbOrgPage" Type="varchar" MaxLength="50" />
-          <Property Name="IsCurrent" Type="bit" Nullable="false" />
+          <Property Name="BlurbNpcPage" MaxLength="50" Type="varchar" />
+          <Property Name="BlurbOrgPage" MaxLength="50" Type="varchar" />
+          <Property Name="IsCurrent" Nullable="false" Type="bit" />
           <Property Name="MemberOrder" Type="tinyint" />
         </EntityType>
         <EntityType Name="NPCs">
           <Key>
             <PropertyRef Name="NpcId" />
           </Key>
-          <Property Name="NpcId" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="InfoId" Type="smallint" Nullable="false" />
-          <Property Name="Name" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="Alias" Type="varchar" MaxLength="500" Nullable="false" />
-          <Property Name="Quote" Type="varchar" MaxLength="150" Nullable="false" />
-          <Property Name="PortraitFileName" Type="varchar" MaxLength="75" />
+          <Property Name="NpcId" Nullable="false" StoreGeneratedPattern="Identity" Type="smallint" />
+          <Property Name="InfoId" Nullable="false" Type="smallint" />
+          <Property Name="Name" Nullable="false" MaxLength="30" Type="varchar" />
+          <Property Name="Alias" Nullable="false" MaxLength="500" Type="varchar" />
+          <Property Name="Quote" Nullable="false" MaxLength="150" Type="varchar" />
+          <Property Name="PortraitFileName" MaxLength="75" Type="varchar" />
           <Property Name="RaceId" Type="tinyint" />
-          <Property Name="CrestFileName" Type="varchar" MaxLength="75" />
-          <Property Name="ApperanceText" Type="varchar" MaxLength="2000" Nullable="false" />
-          <Property Name="AboutText" Type="varchar(max)" Nullable="false" />
+          <Property Name="CrestFileName" MaxLength="75" Type="varchar" />
+          <Property Name="ApperanceText" Nullable="false" MaxLength="2000" Type="varchar" />
+          <Property Name="AboutText" Nullable="false" Type="varchar(max)" />
           <Property Name="LastLocationId" Type="smallint" />
-          <Property Name="IsWorkInProgress" Type="bit" Nullable="false" />
+          <Property Name="IsPublished" Nullable="false" Type="bit" />
+          <Property Name="PortraitArtist" MaxLength="40" Type="nvarchar" />
+          <Property Name="CrestArtist" MaxLength="40" Type="nvarchar" />
+          <Property Name="IsDead" Nullable="false" Type="bit" />
+          <Property Name="GenderId" Nullable="false" Type="tinyint" />
         </EntityType>
         <EntityType Name="OrgEvents">
           <Key>
             <PropertyRef Name="OrgEventsId" />
           </Key>
-          <Property Name="OrgEventsId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="OrgId" Type="smallint" Nullable="false" />
-          <Property Name="EventId" Type="smallint" Nullable="false" />
-          <Property Name="Blurb" Type="varchar" MaxLength="100" />
+          <Property Name="OrgEventsId" Nullable="false" StoreGeneratedPattern="Identity" Type="int" />
+          <Property Name="OrgId" Nullable="false" Type="smallint" />
+          <Property Name="EventId" Nullable="false" Type="smallint" />
+          <Property Name="Blurb" MaxLength="100" Type="varchar" />
         </EntityType>
         <EntityType Name="Orgs">
           <Key>
             <PropertyRef Name="OrgId" />
           </Key>
-          <Property Name="OrgId" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="InfoId" Type="smallint" Nullable="false" />
-          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="IsPlayerEnabled" Type="bit" Nullable="false" />
-          <Property Name="SymbolFileName" Type="varchar" MaxLength="75" />
+          <Property Name="OrgId" Nullable="false" StoreGeneratedPattern="Identity" Type="smallint" />
+          <Property Name="InfoId" Nullable="false" Type="smallint" />
+          <Property Name="Name" Nullable="false" MaxLength="50" Type="varchar" />
+          <Property Name="IsPlayerEnabled" Nullable="false" Type="bit" />
+          <Property Name="SymbolFileName" MaxLength="75" Type="varchar" />
           <Property Name="BaseLocationId" Type="smallint" />
-          <Property Name="AboutText" Type="varchar(max)" Nullable="false" />
-          <Property Name="IsWorkInProgress" Type="bit" Nullable="false" />
+          <Property Name="AboutText" Nullable="false" Type="varchar(max)" />
+          <Property Name="IsPublished" Nullable="false" Type="bit" />
+          <Property Name="Artist" MaxLength="40" Type="nvarchar" />
         </EntityType>
         <EntityType Name="Race">
           <Key>
             <PropertyRef Name="RaceId" />
           </Key>
-          <Property Name="RaceId" Type="tinyint" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="RaceName" Type="varchar" MaxLength="15" Nullable="false" />
-          <Property Name="IsPlayerEnabled" Type="bit" Nullable="false" />
+          <Property Name="RaceId" Nullable="false" StoreGeneratedPattern="Identity" Type="tinyint" />
+          <Property Name="RaceName" Nullable="false" MaxLength="15" Type="varchar" />
+          <Property Name="IsPlayerEnabled" Nullable="false" Type="bit" />
         </EntityType>
         <EntityType Name="Rifts">
           <Key>
             <PropertyRef Name="RiftId" />
           </Key>
-          <Property Name="RiftId" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="InfoId" Type="smallint" Nullable="false" />
-          <Property Name="Nickname" Type="varchar" MaxLength="50" />
-          <Property Name="Location" Type="varchar" MaxLength="300" Nullable="false" />
-          <Property Name="Environment" Type="varchar(max)" Nullable="false" />
-          <Property Name="Hazards" Type="varchar(max)" Nullable="false" />
-          <Property Name="IsWorkInProgress" Type="bit" Nullable="false" />
+          <Property Name="RiftId" Nullable="false" StoreGeneratedPattern="Identity" Type="smallint" />
+          <Property Name="InfoId" Nullable="false" Type="smallint" />
+          <Property Name="Nickname" MaxLength="50" Type="varchar" />
+          <Property Name="Location" Nullable="false" MaxLength="300" Type="varchar" />
+          <Property Name="Environment" Nullable="false" Type="varchar(max)" />
+          <Property Name="Hazards" Nullable="false" Type="varchar(max)" />
+          <Property Name="IsPublished" Nullable="false" Type="bit" />
         </EntityType>
         <EntityType Name="Rumors">
           <Key>
             <PropertyRef Name="RumorsId" />
           </Key>
-          <Property Name="RumorsId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="RumorOfId" Type="smallint" Nullable="false" />
-          <Property Name="AuthorId" Type="smallint" Nullable="false" />
-          <Property Name="IsApproved" Type="bit" Nullable="false" />
-          <Property Name="TheContent" Type="varchar" MaxLength="300" Nullable="false" />
+          <Property Name="RumorsId" Nullable="false" StoreGeneratedPattern="Identity" Type="int" />
+          <Property Name="RumorOfId" Nullable="false" Type="smallint" />
+          <Property Name="AuthorId" Nullable="false" Type="smallint" />
+          <Property Name="IsApproved" Nullable="false" Type="bit" />
+          <Property Name="RumorText" Nullable="false" MaxLength="300" Type="varchar" />
         </EntityType>
         <EntityType Name="Secrets">
           <Key>
             <PropertyRef Name="SecretId" />
           </Key>
-          <Property Name="SecretId" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="IsAboutId" Type="smallint" Nullable="false" />
-          <Property Name="TheContent" Type="varchar(max)" Nullable="false" />
+          <Property Name="SecretId" Nullable="false" StoreGeneratedPattern="Identity" Type="smallint" />
+          <Property Name="IsAboutId" Nullable="false" Type="smallint" />
+          <Property Name="TheContent" Nullable="false" Type="varchar(max)" />
         </EntityType>
         <EntityType Name="SecretSecretTags">
           <Key>
             <PropertyRef Name="SstId" />
           </Key>
-          <Property Name="SstId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="SecretId" Type="smallint" Nullable="false" />
-          <Property Name="SecretTagId" Type="smallint" Nullable="false" />
+          <Property Name="SstId" Nullable="false" StoreGeneratedPattern="Identity" Type="int" />
+          <Property Name="SecretId" Nullable="false" Type="smallint" />
+          <Property Name="SecretTagId" Nullable="false" Type="smallint" />
         </EntityType>
         <EntityType Name="SecretTags">
           <Key>
             <PropertyRef Name="SecretTagId" />
           </Key>
-          <Property Name="SecretTagId" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Name" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="Description" Type="varchar" MaxLength="75" Nullable="false" />
+          <Property Name="SecretTagId" Nullable="false" StoreGeneratedPattern="Identity" Type="smallint" />
+          <Property Name="Name" Nullable="false" MaxLength="30" Type="varchar" />
+          <Property Name="Description" Nullable="false" MaxLength="75" Type="varchar" />
         </EntityType>
         <EntityType Name="Stories">
           <Key>
             <PropertyRef Name="StoryId" />
           </Key>
-          <Property Name="StoryId" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="IsAboutId" Type="smallint" Nullable="false" />
-          <Property Name="DateTold" Type="date" Nullable="false" />
-          <Property Name="CommissionedBy" Type="varchar" MaxLength="50" />
-          <Property Name="IsCannon" Type="bit" Nullable="false" />
-          <Property Name="TheContent" Type="varchar(max)" Nullable="false" />
-          <Property Name="Title" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="StoryId" Nullable="false" StoreGeneratedPattern="Identity" Type="smallint" />
+          <Property Name="IsAboutId" Nullable="false" Type="smallint" />
+          <Property Name="DateTold" Nullable="false" Type="date" />
+          <Property Name="CommissionedBy" MaxLength="50" Type="varchar" />
+          <Property Name="IsCannon" Nullable="false" Type="bit" />
+          <Property Name="TheContent" Nullable="false" Type="varchar(max)" />
+          <Property Name="Title" Nullable="false" MaxLength="20" Type="varchar" />
         </EntityType>
         <EntityType Name="StoryTags">
           <Key>
             <PropertyRef Name="StoryTagId" />
           </Key>
-          <Property Name="StoryTagId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="StoryId" Type="smallint" Nullable="false" />
-          <Property Name="TagId" Type="smallint" Nullable="false" />
+          <Property Name="StoryTagId" Nullable="false" StoreGeneratedPattern="Identity" Type="int" />
+          <Property Name="StoryId" Nullable="false" Type="smallint" />
+          <Property Name="TagId" Nullable="false" Type="smallint" />
         </EntityType>
         <EntityType Name="sysdiagrams">
           <Key>
             <PropertyRef Name="diagram_id" />
           </Key>
-          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
-          <Property Name="principal_id" Type="int" Nullable="false" />
-          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Nullable="false" MaxLength="128" Type="nvarchar" />
+          <Property Name="principal_id" Nullable="false" Type="int" />
+          <Property Name="diagram_id" Nullable="false" StoreGeneratedPattern="Identity" Type="int" />
           <Property Name="version" Type="int" />
           <Property Name="definition" Type="varbinary(max)" />
         </EntityType>
@@ -392,42 +405,42 @@
           <Key>
             <PropertyRef Name="TagId" />
           </Key>
-          <Property Name="TagId" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="TagName" Type="varchar" MaxLength="25" Nullable="false" />
-          <Property Name="Description" Type="varchar" MaxLength="75" />
+          <Property Name="TagId" Nullable="false" StoreGeneratedPattern="Identity" Type="smallint" />
+          <Property Name="TagName" Nullable="false" MaxLength="25" Type="varchar" />
+          <Property Name="Description" MaxLength="75" Type="varchar" />
         </EntityType>
         <EntityType Name="Tier">
           <Key>
             <PropertyRef Name="TierId" />
           </Key>
-          <Property Name="TierId" Type="tinyint" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="TierName" Type="varchar" MaxLength="10" Nullable="false" />
-          <Property Name="MinLevel" Type="tinyint" Nullable="false" />
-          <Property Name="MaxLevel" Type="tinyint" Nullable="false" />
+          <Property Name="TierId" Nullable="false" StoreGeneratedPattern="Identity" Type="tinyint" />
+          <Property Name="TierName" Nullable="false" MaxLength="10" Type="varchar" />
+          <Property Name="MinLevel" Nullable="false" Type="tinyint" />
+          <Property Name="MaxLevel" Nullable="false" Type="tinyint" />
         </EntityType>
         <EntityType Name="UserDetails">
           <Key>
             <PropertyRef Name="UserId" />
           </Key>
-          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
-          <Property Name="DiscordName" Type="nvarchar" MaxLength="32" Nullable="false" />
-          <Property Name="DiscordDiscriminator" Type="smallint" Nullable="false" />
-          <Property Name="ConsentFileName" Type="varchar" MaxLength="75" Nullable="false" />
+          <Property Name="UserId" Nullable="false" MaxLength="128" Type="nvarchar" />
+          <Property Name="DiscordName" Nullable="false" MaxLength="32" Type="nvarchar" />
+          <Property Name="DiscordDiscriminator" Nullable="false" Type="smallint" />
+          <Property Name="ConsentFileName" MaxLength="75" Type="varchar" />
           <Property Name="CurrentCharacterId" Type="smallint" />
-          <Property Name="IsApproved" Type="bit" Nullable="false" />
+          <Property Name="IsApproved" Nullable="false" Type="bit" />
         </EntityType>
         <EntityType Name="VarietyOfInhabitants">
           <Key>
             <PropertyRef Name="VarietyOfInhabitantsId" />
           </Key>
-          <Property Name="VarietyOfInhabitantsId" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="RiftId" Type="smallint" Nullable="false" />
-          <Property Name="RaceId" Type="tinyint" Nullable="false" />
+          <Property Name="VarietyOfInhabitantsId" Nullable="false" StoreGeneratedPattern="Identity" Type="smallint" />
+          <Property Name="RiftId" Nullable="false" Type="smallint" />
+          <Property Name="RaceId" Nullable="false" Type="tinyint" />
           <Property Name="RaceOrder" Type="tinyint" />
         </EntityType>
         <Association Name="FK_Characters_Gender">
-          <End Role="Gender" Type="Self.Gender" Multiplicity="1" />
-          <End Role="Characters" Type="Self.Characters" Multiplicity="*" />
+          <End Type="Self.Gender" Multiplicity="1" Role="Gender" />
+          <End Type="Self.Characters" Multiplicity="*" Role="Characters" />
           <ReferentialConstraint>
             <Principal Role="Gender">
               <PropertyRef Name="GenderId" />
@@ -438,8 +451,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Characters_Locales">
-          <End Role="Locales" Type="Self.Locales" Multiplicity="1" />
-          <End Role="Characters" Type="Self.Characters" Multiplicity="*" />
+          <End Type="Self.Locales" Multiplicity="1" Role="Locales" />
+          <End Type="Self.Characters" Multiplicity="*" Role="Characters" />
           <ReferentialConstraint>
             <Principal Role="Locales">
               <PropertyRef Name="LocaleId" />
@@ -450,8 +463,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Characters_Race">
-          <End Role="Race" Type="Self.Race" Multiplicity="1" />
-          <End Role="Characters" Type="Self.Characters" Multiplicity="*" />
+          <End Type="Self.Race" Multiplicity="1" Role="Race" />
+          <End Type="Self.Characters" Multiplicity="*" Role="Characters" />
           <ReferentialConstraint>
             <Principal Role="Race">
               <PropertyRef Name="RaceId" />
@@ -462,8 +475,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Characters_Tier">
-          <End Role="Tier" Type="Self.Tier" Multiplicity="1" />
-          <End Role="Characters" Type="Self.Characters" Multiplicity="*" />
+          <End Type="Self.Tier" Multiplicity="1" Role="Tier" />
+          <End Type="Self.Characters" Multiplicity="*" Role="Characters" />
           <ReferentialConstraint>
             <Principal Role="Tier">
               <PropertyRef Name="TierId" />
@@ -474,8 +487,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Characters_Users">
-          <End Role="UserDetails" Type="Self.UserDetails" Multiplicity="1" />
-          <End Role="Characters" Type="Self.Characters" Multiplicity="*" />
+          <End Type="Self.UserDetails" Multiplicity="1" Role="UserDetails" />
+          <End Type="Self.Characters" Multiplicity="*" Role="Characters" />
           <ReferentialConstraint>
             <Principal Role="UserDetails">
               <PropertyRef Name="UserId" />
@@ -486,8 +499,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_CharOrgs_Characters">
-          <End Role="Characters" Type="Self.Characters" Multiplicity="1" />
-          <End Role="CharOrgs" Type="Self.CharOrgs" Multiplicity="*" />
+          <End Type="Self.Characters" Multiplicity="1" Role="Characters" />
+          <End Type="Self.CharOrgs" Multiplicity="*" Role="CharOrgs" />
           <ReferentialConstraint>
             <Principal Role="Characters">
               <PropertyRef Name="CharacterId" />
@@ -498,8 +511,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_CharOrgs_Orgs">
-          <End Role="Orgs" Type="Self.Orgs" Multiplicity="1" />
-          <End Role="CharOrgs" Type="Self.CharOrgs" Multiplicity="*" />
+          <End Type="Self.Orgs" Multiplicity="1" Role="Orgs" />
+          <End Type="Self.CharOrgs" Multiplicity="*" Role="CharOrgs" />
           <ReferentialConstraint>
             <Principal Role="Orgs">
               <PropertyRef Name="OrgId" />
@@ -510,8 +523,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_CharSecrets_Characters">
-          <End Role="Characters" Type="Self.Characters" Multiplicity="1" />
-          <End Role="CharSecrets" Type="Self.CharSecrets" Multiplicity="*" />
+          <End Type="Self.Characters" Multiplicity="1" Role="Characters" />
+          <End Type="Self.CharSecrets" Multiplicity="*" Role="CharSecrets" />
           <ReferentialConstraint>
             <Principal Role="Characters">
               <PropertyRef Name="CharacterId" />
@@ -522,8 +535,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_CharSecrets_SecretTags">
-          <End Role="SecretTags" Type="Self.SecretTags" Multiplicity="1" />
-          <End Role="CharSecrets" Type="Self.CharSecrets" Multiplicity="*" />
+          <End Type="Self.SecretTags" Multiplicity="1" Role="SecretTags" />
+          <End Type="Self.CharSecrets" Multiplicity="*" Role="CharSecrets" />
           <ReferentialConstraint>
             <Principal Role="SecretTags">
               <PropertyRef Name="SecretTagId" />
@@ -534,8 +547,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_ClassCharacters_Characters">
-          <End Role="Characters" Type="Self.Characters" Multiplicity="1" />
-          <End Role="ClassCharacters" Type="Self.ClassCharacters" Multiplicity="*" />
+          <End Type="Self.Characters" Multiplicity="1" Role="Characters" />
+          <End Type="Self.ClassCharacters" Multiplicity="*" Role="ClassCharacters" />
           <ReferentialConstraint>
             <Principal Role="Characters">
               <PropertyRef Name="CharacterId" />
@@ -546,8 +559,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_ClassCharacters_Class">
-          <End Role="Class" Type="Self.Class" Multiplicity="1" />
-          <End Role="ClassCharacters" Type="Self.ClassCharacters" Multiplicity="*" />
+          <End Type="Self.Class" Multiplicity="1" Role="Class" />
+          <End Type="Self.ClassCharacters" Multiplicity="*" Role="ClassCharacters" />
           <ReferentialConstraint>
             <Principal Role="Class">
               <PropertyRef Name="ClassId" />
@@ -558,8 +571,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_ClassNPCs_Class">
-          <End Role="Class" Type="Self.Class" Multiplicity="0..1" />
-          <End Role="ClassNPCs" Type="Self.ClassNPCs" Multiplicity="*" />
+          <End Type="Self.Class" Multiplicity="0..1" Role="Class" />
+          <End Type="Self.ClassNPCs" Multiplicity="*" Role="ClassNPCs" />
           <ReferentialConstraint>
             <Principal Role="Class">
               <PropertyRef Name="ClassId" />
@@ -570,8 +583,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_ClassNPCs_NPCs">
-          <End Role="NPCs" Type="Self.NPCs" Multiplicity="1" />
-          <End Role="ClassNPCs" Type="Self.ClassNPCs" Multiplicity="*" />
+          <End Type="Self.NPCs" Multiplicity="1" Role="NPCs" />
+          <End Type="Self.ClassNPCs" Multiplicity="*" Role="ClassNPCs" />
           <ReferentialConstraint>
             <Principal Role="NPCs">
               <PropertyRef Name="NpcId" />
@@ -582,10 +595,10 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
-          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
+          <End Type="Self.AspNetUsers" Multiplicity="1" Role="AspNetUsers">
             <OnDelete Action="Cascade" />
           </End>
-          <End Role="AspNetUserClaims" Type="Self.AspNetUserClaims" Multiplicity="*" />
+          <End Type="Self.AspNetUserClaims" Multiplicity="*" Role="AspNetUserClaims" />
           <ReferentialConstraint>
             <Principal Role="AspNetUsers">
               <PropertyRef Name="Id" />
@@ -596,10 +609,10 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
-          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
+          <End Type="Self.AspNetUsers" Multiplicity="1" Role="AspNetUsers">
             <OnDelete Action="Cascade" />
           </End>
-          <End Role="AspNetUserLogins" Type="Self.AspNetUserLogins" Multiplicity="*" />
+          <End Type="Self.AspNetUserLogins" Multiplicity="*" Role="AspNetUserLogins" />
           <ReferentialConstraint>
             <Principal Role="AspNetUsers">
               <PropertyRef Name="Id" />
@@ -610,10 +623,10 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId">
-          <End Role="AspNetRoles" Type="Self.AspNetRoles" Multiplicity="1">
+          <End Type="Self.AspNetRoles" Multiplicity="1" Role="AspNetRoles">
             <OnDelete Action="Cascade" />
           </End>
-          <End Role="AspNetUserRoles" Type="Self.AspNetUserRoles" Multiplicity="*" />
+          <End Type="Self.AspNetUserRoles" Multiplicity="*" Role="AspNetUserRoles" />
           <ReferentialConstraint>
             <Principal Role="AspNetRoles">
               <PropertyRef Name="Id" />
@@ -624,10 +637,10 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId">
-          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
+          <End Type="Self.AspNetUsers" Multiplicity="1" Role="AspNetUsers">
             <OnDelete Action="Cascade" />
           </End>
-          <End Role="AspNetUserRoles" Type="Self.AspNetUserRoles" Multiplicity="*" />
+          <End Type="Self.AspNetUserRoles" Multiplicity="*" Role="AspNetUserRoles" />
           <ReferentialConstraint>
             <Principal Role="AspNetUsers">
               <PropertyRef Name="Id" />
@@ -638,8 +651,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Events_Infos">
-          <End Role="Infos" Type="Self.Infos" Multiplicity="1" />
-          <End Role="Events" Type="Self.Events" Multiplicity="*" />
+          <End Type="Self.Infos" Multiplicity="1" Role="Infos" />
+          <End Type="Self.Events" Multiplicity="*" Role="Events" />
           <ReferentialConstraint>
             <Principal Role="Infos">
               <PropertyRef Name="InfoId" />
@@ -650,8 +663,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Infos_InfoType">
-          <End Role="InfoType" Type="Self.InfoType" Multiplicity="1" />
-          <End Role="Infos" Type="Self.Infos" Multiplicity="*" />
+          <End Type="Self.InfoType" Multiplicity="1" Role="InfoType" />
+          <End Type="Self.Infos" Multiplicity="*" Role="Infos" />
           <ReferentialConstraint>
             <Principal Role="InfoType">
               <PropertyRef Name="InfoTypeId" />
@@ -662,8 +675,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_InfoTags_Infos">
-          <End Role="Infos" Type="Self.Infos" Multiplicity="1" />
-          <End Role="InfoTags" Type="Self.InfoTags" Multiplicity="*" />
+          <End Type="Self.Infos" Multiplicity="1" Role="Infos" />
+          <End Type="Self.InfoTags" Multiplicity="*" Role="InfoTags" />
           <ReferentialConstraint>
             <Principal Role="Infos">
               <PropertyRef Name="InfoId" />
@@ -674,8 +687,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_InfoTags_Tags">
-          <End Role="Tags" Type="Self.Tags" Multiplicity="1" />
-          <End Role="InfoTags" Type="Self.InfoTags" Multiplicity="*" />
+          <End Type="Self.Tags" Multiplicity="1" Role="Tags" />
+          <End Type="Self.InfoTags" Multiplicity="*" Role="InfoTags" />
           <ReferentialConstraint>
             <Principal Role="Tags">
               <PropertyRef Name="TagId" />
@@ -686,8 +699,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Items_Infos">
-          <End Role="Infos" Type="Self.Infos" Multiplicity="1" />
-          <End Role="Items" Type="Self.Items" Multiplicity="*" />
+          <End Type="Self.Infos" Multiplicity="1" Role="Infos" />
+          <End Type="Self.Items" Multiplicity="*" Role="Items" />
           <ReferentialConstraint>
             <Principal Role="Infos">
               <PropertyRef Name="InfoId" />
@@ -698,8 +711,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Journals_Characters">
-          <End Role="Characters" Type="Self.Characters" Multiplicity="1" />
-          <End Role="Journals" Type="Self.Journals" Multiplicity="*" />
+          <End Type="Self.Characters" Multiplicity="1" Role="Characters" />
+          <End Type="Self.Journals" Multiplicity="*" Role="Journals" />
           <ReferentialConstraint>
             <Principal Role="Characters">
               <PropertyRef Name="CharacterId" />
@@ -710,8 +723,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_LocaleEvents_Events">
-          <End Role="Events" Type="Self.Events" Multiplicity="1" />
-          <End Role="LocaleEvents" Type="Self.LocaleEvents" Multiplicity="*" />
+          <End Type="Self.Events" Multiplicity="1" Role="Events" />
+          <End Type="Self.LocaleEvents" Multiplicity="*" Role="LocaleEvents" />
           <ReferentialConstraint>
             <Principal Role="Events">
               <PropertyRef Name="EventId" />
@@ -722,8 +735,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_LocaleEvents_Locales">
-          <End Role="Locales" Type="Self.Locales" Multiplicity="1" />
-          <End Role="LocaleEvents" Type="Self.LocaleEvents" Multiplicity="*" />
+          <End Type="Self.Locales" Multiplicity="1" Role="Locales" />
+          <End Type="Self.LocaleEvents" Multiplicity="*" Role="LocaleEvents" />
           <ReferentialConstraint>
             <Principal Role="Locales">
               <PropertyRef Name="LocaleId" />
@@ -734,8 +747,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Locales_Infos">
-          <End Role="Infos" Type="Self.Infos" Multiplicity="1" />
-          <End Role="Locales" Type="Self.Locales" Multiplicity="*" />
+          <End Type="Self.Infos" Multiplicity="1" Role="Infos" />
+          <End Type="Self.Locales" Multiplicity="*" Role="Locales" />
           <ReferentialConstraint>
             <Principal Role="Infos">
               <PropertyRef Name="InfoId" />
@@ -746,8 +759,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Locales_LocaleLevel">
-          <End Role="LocaleLevel" Type="Self.LocaleLevel" Multiplicity="1" />
-          <End Role="Locales" Type="Self.Locales" Multiplicity="*" />
+          <End Type="Self.LocaleLevel" Multiplicity="1" Role="LocaleLevel" />
+          <End Type="Self.Locales" Multiplicity="*" Role="Locales" />
           <ReferentialConstraint>
             <Principal Role="LocaleLevel">
               <PropertyRef Name="LocaleLevelId" />
@@ -758,8 +771,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Locales_Locales">
-          <End Role="Locales" Type="Self.Locales" Multiplicity="0..1" />
-          <End Role="Locales1" Type="Self.Locales" Multiplicity="*" />
+          <End Type="Self.Locales" Multiplicity="0..1" Role="Locales" />
+          <End Type="Self.Locales" Multiplicity="*" Role="Locales1" />
           <ReferentialConstraint>
             <Principal Role="Locales">
               <PropertyRef Name="LocaleId" />
@@ -770,8 +783,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Locales_Locales1">
-          <End Role="Locales" Type="Self.Locales" Multiplicity="0..1" />
-          <End Role="Locales1" Type="Self.Locales" Multiplicity="*" />
+          <End Type="Self.Locales" Multiplicity="0..1" Role="Locales" />
+          <End Type="Self.Locales" Multiplicity="*" Role="Locales1" />
           <ReferentialConstraint>
             <Principal Role="Locales">
               <PropertyRef Name="LocaleId" />
@@ -782,8 +795,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Locales_NPCs">
-          <End Role="NPCs" Type="Self.NPCs" Multiplicity="0..1" />
-          <End Role="Locales" Type="Self.Locales" Multiplicity="*" />
+          <End Type="Self.NPCs" Multiplicity="0..1" Role="NPCs" />
+          <End Type="Self.Locales" Multiplicity="*" Role="Locales" />
           <ReferentialConstraint>
             <Principal Role="NPCs">
               <PropertyRef Name="NpcId" />
@@ -794,8 +807,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Lores_Infos">
-          <End Role="Infos" Type="Self.Infos" Multiplicity="1" />
-          <End Role="Lores" Type="Self.Lores" Multiplicity="*" />
+          <End Type="Self.Infos" Multiplicity="1" Role="Infos" />
+          <End Type="Self.Lores" Multiplicity="*" Role="Lores" />
           <ReferentialConstraint>
             <Principal Role="Infos">
               <PropertyRef Name="InfoId" />
@@ -806,8 +819,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Majorities_Locales">
-          <End Role="Locales" Type="Self.Locales" Multiplicity="1" />
-          <End Role="Majorities" Type="Self.Majorities" Multiplicity="*" />
+          <End Type="Self.Locales" Multiplicity="1" Role="Locales" />
+          <End Type="Self.Majorities" Multiplicity="*" Role="Majorities" />
           <ReferentialConstraint>
             <Principal Role="Locales">
               <PropertyRef Name="LocaleId" />
@@ -818,8 +831,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Majorities_Race">
-          <End Role="Race" Type="Self.Race" Multiplicity="1" />
-          <End Role="Majorities" Type="Self.Majorities" Multiplicity="*" />
+          <End Type="Self.Race" Multiplicity="1" Role="Race" />
+          <End Type="Self.Majorities" Multiplicity="*" Role="Majorities" />
           <ReferentialConstraint>
             <Principal Role="Race">
               <PropertyRef Name="RaceId" />
@@ -830,8 +843,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_NpcOrgs_NPCs">
-          <End Role="NPCs" Type="Self.NPCs" Multiplicity="1" />
-          <End Role="NpcOrgs" Type="Self.NpcOrgs" Multiplicity="*" />
+          <End Type="Self.NPCs" Multiplicity="1" Role="NPCs" />
+          <End Type="Self.NpcOrgs" Multiplicity="*" Role="NpcOrgs" />
           <ReferentialConstraint>
             <Principal Role="NPCs">
               <PropertyRef Name="NpcId" />
@@ -842,8 +855,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_NpcOrgs_Orgs">
-          <End Role="Orgs" Type="Self.Orgs" Multiplicity="1" />
-          <End Role="NpcOrgs" Type="Self.NpcOrgs" Multiplicity="*" />
+          <End Type="Self.Orgs" Multiplicity="1" Role="Orgs" />
+          <End Type="Self.NpcOrgs" Multiplicity="*" Role="NpcOrgs" />
           <ReferentialConstraint>
             <Principal Role="Orgs">
               <PropertyRef Name="OrgId" />
@@ -853,9 +866,21 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_NPCs_Gender">
+          <End Type="Self.Gender" Multiplicity="1" Role="Gender" />
+          <End Type="Self.NPCs" Multiplicity="*" Role="NPCs" />
+          <ReferentialConstraint>
+            <Principal Role="Gender">
+              <PropertyRef Name="GenderId" />
+            </Principal>
+            <Dependent Role="NPCs">
+              <PropertyRef Name="GenderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_NPCs_Infos">
-          <End Role="Infos" Type="Self.Infos" Multiplicity="1" />
-          <End Role="NPCs" Type="Self.NPCs" Multiplicity="*" />
+          <End Type="Self.Infos" Multiplicity="1" Role="Infos" />
+          <End Type="Self.NPCs" Multiplicity="*" Role="NPCs" />
           <ReferentialConstraint>
             <Principal Role="Infos">
               <PropertyRef Name="InfoId" />
@@ -866,8 +891,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_NPCs_Locales">
-          <End Role="Locales" Type="Self.Locales" Multiplicity="0..1" />
-          <End Role="NPCs" Type="Self.NPCs" Multiplicity="*" />
+          <End Type="Self.Locales" Multiplicity="0..1" Role="Locales" />
+          <End Type="Self.NPCs" Multiplicity="*" Role="NPCs" />
           <ReferentialConstraint>
             <Principal Role="Locales">
               <PropertyRef Name="LocaleId" />
@@ -878,8 +903,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_NPCs_Race">
-          <End Role="Race" Type="Self.Race" Multiplicity="0..1" />
-          <End Role="NPCs" Type="Self.NPCs" Multiplicity="*" />
+          <End Type="Self.Race" Multiplicity="0..1" Role="Race" />
+          <End Type="Self.NPCs" Multiplicity="*" Role="NPCs" />
           <ReferentialConstraint>
             <Principal Role="Race">
               <PropertyRef Name="RaceId" />
@@ -890,8 +915,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_OrgEvents_Events">
-          <End Role="Events" Type="Self.Events" Multiplicity="1" />
-          <End Role="OrgEvents" Type="Self.OrgEvents" Multiplicity="*" />
+          <End Type="Self.Events" Multiplicity="1" Role="Events" />
+          <End Type="Self.OrgEvents" Multiplicity="*" Role="OrgEvents" />
           <ReferentialConstraint>
             <Principal Role="Events">
               <PropertyRef Name="EventId" />
@@ -902,8 +927,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_OrgEvents_Orgs">
-          <End Role="Orgs" Type="Self.Orgs" Multiplicity="1" />
-          <End Role="OrgEvents" Type="Self.OrgEvents" Multiplicity="*" />
+          <End Type="Self.Orgs" Multiplicity="1" Role="Orgs" />
+          <End Type="Self.OrgEvents" Multiplicity="*" Role="OrgEvents" />
           <ReferentialConstraint>
             <Principal Role="Orgs">
               <PropertyRef Name="OrgId" />
@@ -914,8 +939,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Orgs_Infos">
-          <End Role="Infos" Type="Self.Infos" Multiplicity="1" />
-          <End Role="Orgs" Type="Self.Orgs" Multiplicity="*" />
+          <End Type="Self.Infos" Multiplicity="1" Role="Infos" />
+          <End Type="Self.Orgs" Multiplicity="*" Role="Orgs" />
           <ReferentialConstraint>
             <Principal Role="Infos">
               <PropertyRef Name="InfoId" />
@@ -926,8 +951,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Orgs_Locales">
-          <End Role="Locales" Type="Self.Locales" Multiplicity="0..1" />
-          <End Role="Orgs" Type="Self.Orgs" Multiplicity="*" />
+          <End Type="Self.Locales" Multiplicity="0..1" Role="Locales" />
+          <End Type="Self.Orgs" Multiplicity="*" Role="Orgs" />
           <ReferentialConstraint>
             <Principal Role="Locales">
               <PropertyRef Name="LocaleId" />
@@ -938,8 +963,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Rifts_Infos">
-          <End Role="Infos" Type="Self.Infos" Multiplicity="1" />
-          <End Role="Rifts" Type="Self.Rifts" Multiplicity="*" />
+          <End Type="Self.Infos" Multiplicity="1" Role="Infos" />
+          <End Type="Self.Rifts" Multiplicity="*" Role="Rifts" />
           <ReferentialConstraint>
             <Principal Role="Infos">
               <PropertyRef Name="InfoId" />
@@ -950,8 +975,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Rumors_Characters">
-          <End Role="Characters" Type="Self.Characters" Multiplicity="1" />
-          <End Role="Rumors" Type="Self.Rumors" Multiplicity="*" />
+          <End Type="Self.Characters" Multiplicity="1" Role="Characters" />
+          <End Type="Self.Rumors" Multiplicity="*" Role="Rumors" />
           <ReferentialConstraint>
             <Principal Role="Characters">
               <PropertyRef Name="CharacterId" />
@@ -962,8 +987,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Rumors_Infos">
-          <End Role="Infos" Type="Self.Infos" Multiplicity="1" />
-          <End Role="Rumors" Type="Self.Rumors" Multiplicity="*" />
+          <End Type="Self.Infos" Multiplicity="1" Role="Infos" />
+          <End Type="Self.Rumors" Multiplicity="*" Role="Rumors" />
           <ReferentialConstraint>
             <Principal Role="Infos">
               <PropertyRef Name="InfoId" />
@@ -974,8 +999,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Secrets_Infos">
-          <End Role="Infos" Type="Self.Infos" Multiplicity="1" />
-          <End Role="Secrets" Type="Self.Secrets" Multiplicity="*" />
+          <End Type="Self.Infos" Multiplicity="1" Role="Infos" />
+          <End Type="Self.Secrets" Multiplicity="*" Role="Secrets" />
           <ReferentialConstraint>
             <Principal Role="Infos">
               <PropertyRef Name="InfoId" />
@@ -986,8 +1011,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_SecretSecretTags_Secrets">
-          <End Role="Secrets" Type="Self.Secrets" Multiplicity="1" />
-          <End Role="SecretSecretTags" Type="Self.SecretSecretTags" Multiplicity="*" />
+          <End Type="Self.Secrets" Multiplicity="1" Role="Secrets" />
+          <End Type="Self.SecretSecretTags" Multiplicity="*" Role="SecretSecretTags" />
           <ReferentialConstraint>
             <Principal Role="Secrets">
               <PropertyRef Name="SecretId" />
@@ -998,8 +1023,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_SecretSecretTags_SecretTags">
-          <End Role="SecretTags" Type="Self.SecretTags" Multiplicity="1" />
-          <End Role="SecretSecretTags" Type="Self.SecretSecretTags" Multiplicity="*" />
+          <End Type="Self.SecretTags" Multiplicity="1" Role="SecretTags" />
+          <End Type="Self.SecretSecretTags" Multiplicity="*" Role="SecretSecretTags" />
           <ReferentialConstraint>
             <Principal Role="SecretTags">
               <PropertyRef Name="SecretTagId" />
@@ -1010,8 +1035,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Stories_Infos">
-          <End Role="Infos" Type="Self.Infos" Multiplicity="1" />
-          <End Role="Stories" Type="Self.Stories" Multiplicity="*" />
+          <End Type="Self.Infos" Multiplicity="1" Role="Infos" />
+          <End Type="Self.Stories" Multiplicity="*" Role="Stories" />
           <ReferentialConstraint>
             <Principal Role="Infos">
               <PropertyRef Name="InfoId" />
@@ -1022,8 +1047,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_StoryTags_Stories">
-          <End Role="Stories" Type="Self.Stories" Multiplicity="1" />
-          <End Role="StoryTags" Type="Self.StoryTags" Multiplicity="*" />
+          <End Type="Self.Stories" Multiplicity="1" Role="Stories" />
+          <End Type="Self.StoryTags" Multiplicity="*" Role="StoryTags" />
           <ReferentialConstraint>
             <Principal Role="Stories">
               <PropertyRef Name="StoryId" />
@@ -1034,8 +1059,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_StoryTags_Tags">
-          <End Role="Tags" Type="Self.Tags" Multiplicity="1" />
-          <End Role="StoryTags" Type="Self.StoryTags" Multiplicity="*" />
+          <End Type="Self.Tags" Multiplicity="1" Role="Tags" />
+          <End Type="Self.StoryTags" Multiplicity="*" Role="StoryTags" />
           <ReferentialConstraint>
             <Principal Role="Tags">
               <PropertyRef Name="TagId" />
@@ -1046,8 +1071,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Users_Characters">
-          <End Role="Characters" Type="Self.Characters" Multiplicity="0..1" />
-          <End Role="UserDetails" Type="Self.UserDetails" Multiplicity="*" />
+          <End Type="Self.Characters" Multiplicity="0..1" Role="Characters" />
+          <End Type="Self.UserDetails" Multiplicity="*" Role="UserDetails" />
           <ReferentialConstraint>
             <Principal Role="Characters">
               <PropertyRef Name="CharacterId" />
@@ -1058,8 +1083,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_VarietyOfInhabitants_Race">
-          <End Role="Race" Type="Self.Race" Multiplicity="1" />
-          <End Role="VarietyOfInhabitants" Type="Self.VarietyOfInhabitants" Multiplicity="*" />
+          <End Type="Self.Race" Multiplicity="1" Role="Race" />
+          <End Type="Self.VarietyOfInhabitants" Multiplicity="*" Role="VarietyOfInhabitants" />
           <ReferentialConstraint>
             <Principal Role="Race">
               <PropertyRef Name="RaceId" />
@@ -1070,8 +1095,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_VarietyOfInhabitants_Rifts">
-          <End Role="Rifts" Type="Self.Rifts" Multiplicity="1" />
-          <End Role="VarietyOfInhabitants" Type="Self.VarietyOfInhabitants" Multiplicity="*" />
+          <End Type="Self.Rifts" Multiplicity="1" Role="Rifts" />
+          <End Type="Self.VarietyOfInhabitants" Multiplicity="*" Role="VarietyOfInhabitants" />
           <ReferentialConstraint>
             <Principal Role="Rifts">
               <PropertyRef Name="RiftId" />
@@ -1081,6 +1106,10 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="getSecrets" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PlayerId" Type="nvarchar" Mode="In" />
+          <Parameter Name="InfoId" Type="smallint" Mode="In" />
+        </Function>
         <EntityContainer Name="RiftWorldModelStoreContainer">
           <EntitySet Name="__MigrationHistory" EntityType="Self.__MigrationHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AspNetRoles" EntityType="Self.AspNetRoles" Schema="dbo" store:Type="Tables" />
@@ -1124,220 +1153,224 @@
           <EntitySet Name="UserDetails" EntityType="Self.UserDetails" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="VarietyOfInhabitants" EntityType="Self.VarietyOfInhabitants" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_Characters_Gender" Association="Self.FK_Characters_Gender">
-            <End Role="Gender" EntitySet="Gender" />
-            <End Role="Characters" EntitySet="Characters" />
+            <End EntitySet="Gender" Role="Gender" />
+            <End EntitySet="Characters" Role="Characters" />
           </AssociationSet>
           <AssociationSet Name="FK_Characters_Locales" Association="Self.FK_Characters_Locales">
-            <End Role="Locales" EntitySet="Locales" />
-            <End Role="Characters" EntitySet="Characters" />
+            <End EntitySet="Locales" Role="Locales" />
+            <End EntitySet="Characters" Role="Characters" />
           </AssociationSet>
           <AssociationSet Name="FK_Characters_Race" Association="Self.FK_Characters_Race">
-            <End Role="Race" EntitySet="Race" />
-            <End Role="Characters" EntitySet="Characters" />
+            <End EntitySet="Race" Role="Race" />
+            <End EntitySet="Characters" Role="Characters" />
           </AssociationSet>
           <AssociationSet Name="FK_Characters_Tier" Association="Self.FK_Characters_Tier">
-            <End Role="Tier" EntitySet="Tier" />
-            <End Role="Characters" EntitySet="Characters" />
+            <End EntitySet="Tier" Role="Tier" />
+            <End EntitySet="Characters" Role="Characters" />
           </AssociationSet>
           <AssociationSet Name="FK_Characters_Users" Association="Self.FK_Characters_Users">
-            <End Role="UserDetails" EntitySet="UserDetails" />
-            <End Role="Characters" EntitySet="Characters" />
+            <End EntitySet="UserDetails" Role="UserDetails" />
+            <End EntitySet="Characters" Role="Characters" />
           </AssociationSet>
           <AssociationSet Name="FK_CharOrgs_Characters" Association="Self.FK_CharOrgs_Characters">
-            <End Role="Characters" EntitySet="Characters" />
-            <End Role="CharOrgs" EntitySet="CharOrgs" />
+            <End EntitySet="Characters" Role="Characters" />
+            <End EntitySet="CharOrgs" Role="CharOrgs" />
           </AssociationSet>
           <AssociationSet Name="FK_CharOrgs_Orgs" Association="Self.FK_CharOrgs_Orgs">
-            <End Role="Orgs" EntitySet="Orgs" />
-            <End Role="CharOrgs" EntitySet="CharOrgs" />
+            <End EntitySet="Orgs" Role="Orgs" />
+            <End EntitySet="CharOrgs" Role="CharOrgs" />
           </AssociationSet>
           <AssociationSet Name="FK_CharSecrets_Characters" Association="Self.FK_CharSecrets_Characters">
-            <End Role="Characters" EntitySet="Characters" />
-            <End Role="CharSecrets" EntitySet="CharSecrets" />
+            <End EntitySet="Characters" Role="Characters" />
+            <End EntitySet="CharSecrets" Role="CharSecrets" />
           </AssociationSet>
           <AssociationSet Name="FK_CharSecrets_SecretTags" Association="Self.FK_CharSecrets_SecretTags">
-            <End Role="SecretTags" EntitySet="SecretTags" />
-            <End Role="CharSecrets" EntitySet="CharSecrets" />
+            <End EntitySet="SecretTags" Role="SecretTags" />
+            <End EntitySet="CharSecrets" Role="CharSecrets" />
           </AssociationSet>
           <AssociationSet Name="FK_ClassCharacters_Characters" Association="Self.FK_ClassCharacters_Characters">
-            <End Role="Characters" EntitySet="Characters" />
-            <End Role="ClassCharacters" EntitySet="ClassCharacters" />
+            <End EntitySet="Characters" Role="Characters" />
+            <End EntitySet="ClassCharacters" Role="ClassCharacters" />
           </AssociationSet>
           <AssociationSet Name="FK_ClassCharacters_Class" Association="Self.FK_ClassCharacters_Class">
-            <End Role="Class" EntitySet="Class" />
-            <End Role="ClassCharacters" EntitySet="ClassCharacters" />
+            <End EntitySet="Class" Role="Class" />
+            <End EntitySet="ClassCharacters" Role="ClassCharacters" />
           </AssociationSet>
           <AssociationSet Name="FK_ClassNPCs_Class" Association="Self.FK_ClassNPCs_Class">
-            <End Role="Class" EntitySet="Class" />
-            <End Role="ClassNPCs" EntitySet="ClassNPCs" />
+            <End EntitySet="Class" Role="Class" />
+            <End EntitySet="ClassNPCs" Role="ClassNPCs" />
           </AssociationSet>
           <AssociationSet Name="FK_ClassNPCs_NPCs" Association="Self.FK_ClassNPCs_NPCs">
-            <End Role="NPCs" EntitySet="NPCs" />
-            <End Role="ClassNPCs" EntitySet="ClassNPCs" />
+            <End EntitySet="NPCs" Role="NPCs" />
+            <End EntitySet="ClassNPCs" Role="ClassNPCs" />
           </AssociationSet>
           <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
-            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
-            <End Role="AspNetUserClaims" EntitySet="AspNetUserClaims" />
+            <End EntitySet="AspNetUsers" Role="AspNetUsers" />
+            <End EntitySet="AspNetUserClaims" Role="AspNetUserClaims" />
           </AssociationSet>
           <AssociationSet Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
-            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
-            <End Role="AspNetUserLogins" EntitySet="AspNetUserLogins" />
+            <End EntitySet="AspNetUsers" Role="AspNetUsers" />
+            <End EntitySet="AspNetUserLogins" Role="AspNetUserLogins" />
           </AssociationSet>
           <AssociationSet Name="FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId" Association="Self.FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId">
-            <End Role="AspNetRoles" EntitySet="AspNetRoles" />
-            <End Role="AspNetUserRoles" EntitySet="AspNetUserRoles" />
+            <End EntitySet="AspNetRoles" Role="AspNetRoles" />
+            <End EntitySet="AspNetUserRoles" Role="AspNetUserRoles" />
           </AssociationSet>
           <AssociationSet Name="FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId">
-            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
-            <End Role="AspNetUserRoles" EntitySet="AspNetUserRoles" />
+            <End EntitySet="AspNetUsers" Role="AspNetUsers" />
+            <End EntitySet="AspNetUserRoles" Role="AspNetUserRoles" />
           </AssociationSet>
           <AssociationSet Name="FK_Events_Infos" Association="Self.FK_Events_Infos">
-            <End Role="Infos" EntitySet="Infos" />
-            <End Role="Events" EntitySet="Events" />
+            <End EntitySet="Infos" Role="Infos" />
+            <End EntitySet="Events" Role="Events" />
           </AssociationSet>
           <AssociationSet Name="FK_Infos_InfoType" Association="Self.FK_Infos_InfoType">
-            <End Role="InfoType" EntitySet="InfoType" />
-            <End Role="Infos" EntitySet="Infos" />
+            <End EntitySet="InfoType" Role="InfoType" />
+            <End EntitySet="Infos" Role="Infos" />
           </AssociationSet>
           <AssociationSet Name="FK_InfoTags_Infos" Association="Self.FK_InfoTags_Infos">
-            <End Role="Infos" EntitySet="Infos" />
-            <End Role="InfoTags" EntitySet="InfoTags" />
+            <End EntitySet="Infos" Role="Infos" />
+            <End EntitySet="InfoTags" Role="InfoTags" />
           </AssociationSet>
           <AssociationSet Name="FK_InfoTags_Tags" Association="Self.FK_InfoTags_Tags">
-            <End Role="Tags" EntitySet="Tags" />
-            <End Role="InfoTags" EntitySet="InfoTags" />
+            <End EntitySet="Tags" Role="Tags" />
+            <End EntitySet="InfoTags" Role="InfoTags" />
           </AssociationSet>
           <AssociationSet Name="FK_Items_Infos" Association="Self.FK_Items_Infos">
-            <End Role="Infos" EntitySet="Infos" />
-            <End Role="Items" EntitySet="Items" />
+            <End EntitySet="Infos" Role="Infos" />
+            <End EntitySet="Items" Role="Items" />
           </AssociationSet>
           <AssociationSet Name="FK_Journals_Characters" Association="Self.FK_Journals_Characters">
-            <End Role="Characters" EntitySet="Characters" />
-            <End Role="Journals" EntitySet="Journals" />
+            <End EntitySet="Characters" Role="Characters" />
+            <End EntitySet="Journals" Role="Journals" />
           </AssociationSet>
           <AssociationSet Name="FK_LocaleEvents_Events" Association="Self.FK_LocaleEvents_Events">
-            <End Role="Events" EntitySet="Events" />
-            <End Role="LocaleEvents" EntitySet="LocaleEvents" />
+            <End EntitySet="Events" Role="Events" />
+            <End EntitySet="LocaleEvents" Role="LocaleEvents" />
           </AssociationSet>
           <AssociationSet Name="FK_LocaleEvents_Locales" Association="Self.FK_LocaleEvents_Locales">
-            <End Role="Locales" EntitySet="Locales" />
-            <End Role="LocaleEvents" EntitySet="LocaleEvents" />
+            <End EntitySet="Locales" Role="Locales" />
+            <End EntitySet="LocaleEvents" Role="LocaleEvents" />
           </AssociationSet>
           <AssociationSet Name="FK_Locales_Infos" Association="Self.FK_Locales_Infos">
-            <End Role="Infos" EntitySet="Infos" />
-            <End Role="Locales" EntitySet="Locales" />
+            <End EntitySet="Infos" Role="Infos" />
+            <End EntitySet="Locales" Role="Locales" />
           </AssociationSet>
           <AssociationSet Name="FK_Locales_LocaleLevel" Association="Self.FK_Locales_LocaleLevel">
-            <End Role="LocaleLevel" EntitySet="LocaleLevel" />
-            <End Role="Locales" EntitySet="Locales" />
+            <End EntitySet="LocaleLevel" Role="LocaleLevel" />
+            <End EntitySet="Locales" Role="Locales" />
           </AssociationSet>
           <AssociationSet Name="FK_Locales_Locales" Association="Self.FK_Locales_Locales">
-            <End Role="Locales" EntitySet="Locales" />
-            <End Role="Locales1" EntitySet="Locales" />
+            <End EntitySet="Locales" Role="Locales" />
+            <End EntitySet="Locales" Role="Locales1" />
           </AssociationSet>
           <AssociationSet Name="FK_Locales_Locales1" Association="Self.FK_Locales_Locales1">
-            <End Role="Locales" EntitySet="Locales" />
-            <End Role="Locales1" EntitySet="Locales" />
+            <End EntitySet="Locales" Role="Locales" />
+            <End EntitySet="Locales" Role="Locales1" />
           </AssociationSet>
           <AssociationSet Name="FK_Locales_NPCs" Association="Self.FK_Locales_NPCs">
-            <End Role="NPCs" EntitySet="NPCs" />
-            <End Role="Locales" EntitySet="Locales" />
+            <End EntitySet="NPCs" Role="NPCs" />
+            <End EntitySet="Locales" Role="Locales" />
           </AssociationSet>
           <AssociationSet Name="FK_Lores_Infos" Association="Self.FK_Lores_Infos">
-            <End Role="Infos" EntitySet="Infos" />
-            <End Role="Lores" EntitySet="Lores" />
+            <End EntitySet="Infos" Role="Infos" />
+            <End EntitySet="Lores" Role="Lores" />
           </AssociationSet>
           <AssociationSet Name="FK_Majorities_Locales" Association="Self.FK_Majorities_Locales">
-            <End Role="Locales" EntitySet="Locales" />
-            <End Role="Majorities" EntitySet="Majorities" />
+            <End EntitySet="Locales" Role="Locales" />
+            <End EntitySet="Majorities" Role="Majorities" />
           </AssociationSet>
           <AssociationSet Name="FK_Majorities_Race" Association="Self.FK_Majorities_Race">
-            <End Role="Race" EntitySet="Race" />
-            <End Role="Majorities" EntitySet="Majorities" />
+            <End EntitySet="Race" Role="Race" />
+            <End EntitySet="Majorities" Role="Majorities" />
           </AssociationSet>
           <AssociationSet Name="FK_NpcOrgs_NPCs" Association="Self.FK_NpcOrgs_NPCs">
-            <End Role="NPCs" EntitySet="NPCs" />
-            <End Role="NpcOrgs" EntitySet="NpcOrgs" />
+            <End EntitySet="NPCs" Role="NPCs" />
+            <End EntitySet="NpcOrgs" Role="NpcOrgs" />
           </AssociationSet>
           <AssociationSet Name="FK_NpcOrgs_Orgs" Association="Self.FK_NpcOrgs_Orgs">
-            <End Role="Orgs" EntitySet="Orgs" />
-            <End Role="NpcOrgs" EntitySet="NpcOrgs" />
+            <End EntitySet="Orgs" Role="Orgs" />
+            <End EntitySet="NpcOrgs" Role="NpcOrgs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_NPCs_Gender" Association="Self.FK_NPCs_Gender">
+            <End EntitySet="Gender" Role="Gender" />
+            <End EntitySet="NPCs" Role="NPCs" />
           </AssociationSet>
           <AssociationSet Name="FK_NPCs_Infos" Association="Self.FK_NPCs_Infos">
-            <End Role="Infos" EntitySet="Infos" />
-            <End Role="NPCs" EntitySet="NPCs" />
+            <End EntitySet="Infos" Role="Infos" />
+            <End EntitySet="NPCs" Role="NPCs" />
           </AssociationSet>
           <AssociationSet Name="FK_NPCs_Locales" Association="Self.FK_NPCs_Locales">
-            <End Role="Locales" EntitySet="Locales" />
-            <End Role="NPCs" EntitySet="NPCs" />
+            <End EntitySet="Locales" Role="Locales" />
+            <End EntitySet="NPCs" Role="NPCs" />
           </AssociationSet>
           <AssociationSet Name="FK_NPCs_Race" Association="Self.FK_NPCs_Race">
-            <End Role="Race" EntitySet="Race" />
-            <End Role="NPCs" EntitySet="NPCs" />
+            <End EntitySet="Race" Role="Race" />
+            <End EntitySet="NPCs" Role="NPCs" />
           </AssociationSet>
           <AssociationSet Name="FK_OrgEvents_Events" Association="Self.FK_OrgEvents_Events">
-            <End Role="Events" EntitySet="Events" />
-            <End Role="OrgEvents" EntitySet="OrgEvents" />
+            <End EntitySet="Events" Role="Events" />
+            <End EntitySet="OrgEvents" Role="OrgEvents" />
           </AssociationSet>
           <AssociationSet Name="FK_OrgEvents_Orgs" Association="Self.FK_OrgEvents_Orgs">
-            <End Role="Orgs" EntitySet="Orgs" />
-            <End Role="OrgEvents" EntitySet="OrgEvents" />
+            <End EntitySet="Orgs" Role="Orgs" />
+            <End EntitySet="OrgEvents" Role="OrgEvents" />
           </AssociationSet>
           <AssociationSet Name="FK_Orgs_Infos" Association="Self.FK_Orgs_Infos">
-            <End Role="Infos" EntitySet="Infos" />
-            <End Role="Orgs" EntitySet="Orgs" />
+            <End EntitySet="Infos" Role="Infos" />
+            <End EntitySet="Orgs" Role="Orgs" />
           </AssociationSet>
           <AssociationSet Name="FK_Orgs_Locales" Association="Self.FK_Orgs_Locales">
-            <End Role="Locales" EntitySet="Locales" />
-            <End Role="Orgs" EntitySet="Orgs" />
+            <End EntitySet="Locales" Role="Locales" />
+            <End EntitySet="Orgs" Role="Orgs" />
           </AssociationSet>
           <AssociationSet Name="FK_Rifts_Infos" Association="Self.FK_Rifts_Infos">
-            <End Role="Infos" EntitySet="Infos" />
-            <End Role="Rifts" EntitySet="Rifts" />
+            <End EntitySet="Infos" Role="Infos" />
+            <End EntitySet="Rifts" Role="Rifts" />
           </AssociationSet>
           <AssociationSet Name="FK_Rumors_Characters" Association="Self.FK_Rumors_Characters">
-            <End Role="Characters" EntitySet="Characters" />
-            <End Role="Rumors" EntitySet="Rumors" />
+            <End EntitySet="Characters" Role="Characters" />
+            <End EntitySet="Rumors" Role="Rumors" />
           </AssociationSet>
           <AssociationSet Name="FK_Rumors_Infos" Association="Self.FK_Rumors_Infos">
-            <End Role="Infos" EntitySet="Infos" />
-            <End Role="Rumors" EntitySet="Rumors" />
+            <End EntitySet="Infos" Role="Infos" />
+            <End EntitySet="Rumors" Role="Rumors" />
           </AssociationSet>
           <AssociationSet Name="FK_Secrets_Infos" Association="Self.FK_Secrets_Infos">
-            <End Role="Infos" EntitySet="Infos" />
-            <End Role="Secrets" EntitySet="Secrets" />
+            <End EntitySet="Infos" Role="Infos" />
+            <End EntitySet="Secrets" Role="Secrets" />
           </AssociationSet>
           <AssociationSet Name="FK_SecretSecretTags_Secrets" Association="Self.FK_SecretSecretTags_Secrets">
-            <End Role="Secrets" EntitySet="Secrets" />
-            <End Role="SecretSecretTags" EntitySet="SecretSecretTags" />
+            <End EntitySet="Secrets" Role="Secrets" />
+            <End EntitySet="SecretSecretTags" Role="SecretSecretTags" />
           </AssociationSet>
           <AssociationSet Name="FK_SecretSecretTags_SecretTags" Association="Self.FK_SecretSecretTags_SecretTags">
-            <End Role="SecretTags" EntitySet="SecretTags" />
-            <End Role="SecretSecretTags" EntitySet="SecretSecretTags" />
+            <End EntitySet="SecretTags" Role="SecretTags" />
+            <End EntitySet="SecretSecretTags" Role="SecretSecretTags" />
           </AssociationSet>
           <AssociationSet Name="FK_Stories_Infos" Association="Self.FK_Stories_Infos">
-            <End Role="Infos" EntitySet="Infos" />
-            <End Role="Stories" EntitySet="Stories" />
+            <End EntitySet="Infos" Role="Infos" />
+            <End EntitySet="Stories" Role="Stories" />
           </AssociationSet>
           <AssociationSet Name="FK_StoryTags_Stories" Association="Self.FK_StoryTags_Stories">
-            <End Role="Stories" EntitySet="Stories" />
-            <End Role="StoryTags" EntitySet="StoryTags" />
+            <End EntitySet="Stories" Role="Stories" />
+            <End EntitySet="StoryTags" Role="StoryTags" />
           </AssociationSet>
           <AssociationSet Name="FK_StoryTags_Tags" Association="Self.FK_StoryTags_Tags">
-            <End Role="Tags" EntitySet="Tags" />
-            <End Role="StoryTags" EntitySet="StoryTags" />
+            <End EntitySet="Tags" Role="Tags" />
+            <End EntitySet="StoryTags" Role="StoryTags" />
           </AssociationSet>
           <AssociationSet Name="FK_Users_Characters" Association="Self.FK_Users_Characters">
-            <End Role="Characters" EntitySet="Characters" />
-            <End Role="UserDetails" EntitySet="UserDetails" />
+            <End EntitySet="Characters" Role="Characters" />
+            <End EntitySet="UserDetails" Role="UserDetails" />
           </AssociationSet>
           <AssociationSet Name="FK_VarietyOfInhabitants_Race" Association="Self.FK_VarietyOfInhabitants_Race">
-            <End Role="Race" EntitySet="Race" />
-            <End Role="VarietyOfInhabitants" EntitySet="VarietyOfInhabitants" />
+            <End EntitySet="Race" Role="Race" />
+            <End EntitySet="VarietyOfInhabitants" Role="VarietyOfInhabitants" />
           </AssociationSet>
           <AssociationSet Name="FK_VarietyOfInhabitants_Rifts" Association="Self.FK_VarietyOfInhabitants_Rifts">
-            <End Role="Rifts" EntitySet="Rifts" />
-            <End Role="VarietyOfInhabitants" EntitySet="VarietyOfInhabitants" />
+            <End EntitySet="Rifts" Role="Rifts" />
+            <End EntitySet="VarietyOfInhabitants" Role="VarietyOfInhabitants" />
           </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -1430,6 +1463,10 @@
           <NavigationProperty Name="Journals" Relationship="Self.FK_Journals_Characters" FromRole="Characters" ToRole="Journals" />
           <NavigationProperty Name="Rumors" Relationship="Self.FK_Rumors_Characters" FromRole="Characters" ToRole="Rumors" />
           <NavigationProperty Name="UserDetails" Relationship="Self.FK_Users_Characters" FromRole="Characters" ToRole="UserDetails" />
+          <Property Name="Artist" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
+          <Property Name="ClassString" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Name="HasUnseenEdit" Type="Boolean" Nullable="false" />
+          <Property Name="IsDead" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="CharOrg">
           <Key>
@@ -1441,9 +1478,9 @@
           <Property Name="BlurbOrgPage" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="IsPublic" Type="Boolean" Nullable="false" />
           <Property Name="IsCurrent" Type="Boolean" Nullable="false" />
-          <Property Name="Proposed" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Character" Relationship="Self.FK_CharOrgs_Characters" FromRole="CharOrgs" ToRole="Characters" />
           <NavigationProperty Name="Org" Relationship="Self.FK_CharOrgs_Orgs" FromRole="CharOrgs" ToRole="Orgs" />
+          <Property Name="KatherineApproved" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="CharSecret">
           <Key>
@@ -1495,22 +1532,26 @@
           <Property Name="InfoId" Type="Int16" Nullable="false" />
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="IsHistory" Type="Boolean" Nullable="false" />
-          <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="AboutText" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="NormalParticipants" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="IsWorkInProgress" Type="Boolean" Nullable="false" />
+          <Property Name="IsPublished" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Info" Relationship="Self.FK_Events_Infos" FromRole="Events" ToRole="Infos" />
           <NavigationProperty Name="LocaleEvents" Relationship="Self.FK_LocaleEvents_Events" FromRole="Events" ToRole="LocaleEvents" />
           <NavigationProperty Name="OrgEvents" Relationship="Self.FK_OrgEvents_Events" FromRole="Events" ToRole="OrgEvents" />
+          <Property Name="DateDay" Type="Byte" Nullable="false" />
+          <Property Name="DateMonth" Type="Byte" Nullable="false" />
+          <Property Name="DateYear" Type="Int16" />
+          <Property Name="DateEra" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="Gender">
           <Key>
             <PropertyRef Name="GenderId" />
           </Key>
           <Property Name="GenderId" Type="Byte" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="GenderName" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="IconName" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="GenderName" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="IconName" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Characters" Relationship="Self.FK_Characters_Gender" FromRole="Gender" ToRole="Characters" />
+          <NavigationProperty Name="NPCs" Relationship="RiftWorldModel.FK_NPCs_Gender" FromRole="Gender" ToRole="NPC" />
         </EntityType>
         <EntityType Name="Info">
           <Key>
@@ -1565,8 +1606,9 @@
           <Property Name="DescriptionText" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="PropertyText" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="HistoryText" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="IsWorkInProgress" Type="Boolean" Nullable="false" />
+          <Property Name="IsPublished" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Info" Relationship="Self.FK_Items_Infos" FromRole="Items" ToRole="Infos" />
+          <Property Name="Artist" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="Journal">
           <Key>
@@ -1575,10 +1617,10 @@
           <Property Name="JournalId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="CharacterId" Type="Int16" Nullable="false" />
           <Property Name="OocDateWritten" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="ICDateWritten" Type="DateTime" Precision="0" />
           <Property Name="TheContent" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="IsApproved" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Character" Relationship="Self.FK_Journals_Characters" FromRole="Journals" ToRole="Characters" />
+          <Property Name="HasUnseenEdit" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="LocaleEvent">
           <Key>
@@ -1612,7 +1654,7 @@
           <Property Name="Appointed" Type="String" MaxLength="8000" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Environment" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="About" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="IsWorkInProgress" Type="Boolean" Nullable="false" />
+          <Property Name="IsPublished" Type="Boolean" Nullable="false" />
           <Property Name="AvgLifestyle" Type="String" MaxLength="3000" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="Characters" Relationship="Self.FK_Characters_Locales" FromRole="Locales" ToRole="Characters" />
           <NavigationProperty Name="Info" Relationship="Self.FK_Locales_Infos" FromRole="Locales" ToRole="Infos" />
@@ -1635,7 +1677,7 @@
           <Property Name="InfoId" Type="Int16" Nullable="false" />
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="TheContent" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="IsWorkInProgress" Type="Boolean" Nullable="false" />
+          <Property Name="IsPublished" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Info" Relationship="Self.FK_Lores_Infos" FromRole="Lores" ToRole="Infos" />
         </EntityType>
         <EntityType Name="Majority">
@@ -1679,13 +1721,18 @@
           <Property Name="ApperanceText" Type="String" MaxLength="2000" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="AboutText" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="LastLocationId" Type="Int16" />
-          <Property Name="IsWorkInProgress" Type="Boolean" Nullable="false" />
+          <Property Name="IsPublished" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="ClassNPCs" Relationship="Self.FK_ClassNPCs_NPCs" FromRole="NPCs" ToRole="ClassNPCs" />
           <NavigationProperty Name="Info" Relationship="Self.FK_NPCs_Infos" FromRole="NPCs" ToRole="Infos" />
           <NavigationProperty Name="Locales" Relationship="Self.FK_Locales_NPCs" FromRole="NPCs" ToRole="Locales" />
           <NavigationProperty Name="Locale" Relationship="Self.FK_NPCs_Locales" FromRole="NPCs" ToRole="Locales" />
           <NavigationProperty Name="NpcOrgs" Relationship="Self.FK_NpcOrgs_NPCs" FromRole="NPCs" ToRole="NpcOrgs" />
           <NavigationProperty Name="Race" Relationship="Self.FK_NPCs_Race" FromRole="NPCs" ToRole="Race" />
+          <Property Name="PortraitArtist" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
+          <Property Name="CrestArtist" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
+          <Property Name="IsDead" Type="Boolean" Nullable="false" />
+          <Property Name="GenderId" Type="Byte" Nullable="false" />
+          <NavigationProperty Name="Gender" Relationship="RiftWorldModel.FK_NPCs_Gender" FromRole="NPC" ToRole="Gender" />
         </EntityType>
         <EntityType Name="OrgEvent">
           <Key>
@@ -1709,12 +1756,13 @@
           <Property Name="SymbolFileName" Type="String" MaxLength="75" FixedLength="false" Unicode="false" />
           <Property Name="BaseLocationId" Type="Int16" />
           <Property Name="AboutText" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="IsWorkInProgress" Type="Boolean" Nullable="false" />
+          <Property Name="IsPublished" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="CharOrgs" Relationship="Self.FK_CharOrgs_Orgs" FromRole="Orgs" ToRole="CharOrgs" />
           <NavigationProperty Name="Info" Relationship="Self.FK_Orgs_Infos" FromRole="Orgs" ToRole="Infos" />
           <NavigationProperty Name="Locale" Relationship="Self.FK_Orgs_Locales" FromRole="Orgs" ToRole="Locales" />
           <NavigationProperty Name="NpcOrgs" Relationship="Self.FK_NpcOrgs_Orgs" FromRole="Orgs" ToRole="NpcOrgs" />
           <NavigationProperty Name="OrgEvents" Relationship="Self.FK_OrgEvents_Orgs" FromRole="Orgs" ToRole="OrgEvents" />
+          <Property Name="Artist" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="Race">
           <Key>
@@ -1738,7 +1786,7 @@
           <Property Name="Location" Type="String" MaxLength="300" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Environment" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Hazards" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="IsWorkInProgress" Type="Boolean" Nullable="false" />
+          <Property Name="IsPublished" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Info" Relationship="Self.FK_Rifts_Infos" FromRole="Rifts" ToRole="Infos" />
           <NavigationProperty Name="VarietyOfInhabitants" Relationship="Self.FK_VarietyOfInhabitants_Rifts" FromRole="Rifts" ToRole="VarietyOfInhabitants" />
         </EntityType>
@@ -1750,9 +1798,9 @@
           <Property Name="RumorOfId" Type="Int16" Nullable="false" />
           <Property Name="AuthorId" Type="Int16" Nullable="false" />
           <Property Name="IsApproved" Type="Boolean" Nullable="false" />
-          <Property Name="TheContent" Type="String" MaxLength="300" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="Character" Relationship="Self.FK_Rumors_Characters" FromRole="Rumors" ToRole="Characters" />
           <NavigationProperty Name="Info" Relationship="Self.FK_Rumors_Infos" FromRole="Rumors" ToRole="Infos" />
+          <Property Name="RumorText" Type="String" Nullable="false" FixedLength="false" MaxLength="300" Unicode="false" />
         </EntityType>
         <EntityType Name="Secret">
           <Key>
@@ -1845,7 +1893,7 @@
           <Property Name="UserId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="DiscordName" Type="String" MaxLength="32" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="DiscordDiscriminator" Type="Int16" Nullable="false" />
-          <Property Name="ConsentFileName" Type="String" MaxLength="75" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ConsentFileName" Type="String" MaxLength="75" FixedLength="false" Unicode="false" />
           <Property Name="CurrentCharacterId" Type="Int16" />
           <Property Name="IsApproved" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Characters" Relationship="Self.FK_Characters_Users" FromRole="UserDetails" ToRole="Characters" />
@@ -2747,7 +2795,27 @@
             <End Role="AspNetRoles" EntitySet="AspNetRoles" />
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
           </AssociationSet>
+          <FunctionImport Name="getSecrets" EntitySet="Secrets" ReturnType="Collection(RiftWorldModel.Secret)">
+            <Parameter Name="PlayerId" Type="String" Mode="In" />
+            <Parameter Name="InfoId" Type="Int16" Mode="In" />
+          </FunctionImport>
+          <AssociationSet Name="FK_NPCs_Gender" Association="RiftWorldModel.FK_NPCs_Gender">
+            <End Role="Gender" EntitySet="Genders" />
+            <End Role="NPC" EntitySet="NPCs" />
+          </AssociationSet>
         </EntityContainer>
+        <Association Name="FK_NPCs_Gender">
+          <End Type="RiftWorldModel.Gender" Role="Gender" Multiplicity="1" />
+          <End Type="RiftWorldModel.NPC" Role="NPC" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Gender">
+              <PropertyRef Name="GenderId" />
+            </Principal>
+            <Dependent Role="NPC">
+              <PropertyRef Name="GenderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2812,6 +2880,10 @@
           <EntitySetMapping Name="Characters">
             <EntityTypeMapping TypeName="RiftWorldModel.Character">
               <MappingFragment StoreEntitySet="Characters">
+                <ScalarProperty Name="IsDead" ColumnName="IsDead" />
+                <ScalarProperty Name="HasUnseenEdit" ColumnName="HasUnseenEdit" />
+                <ScalarProperty Name="ClassString" ColumnName="ClassString" />
+                <ScalarProperty Name="Artist" ColumnName="Artist" />
                 <ScalarProperty Name="CharacterId" ColumnName="CharacterId" />
                 <ScalarProperty Name="PlayerId" ColumnName="PlayerId" />
                 <ScalarProperty Name="CharacterName" ColumnName="CharacterName" />
@@ -2830,13 +2902,13 @@
           <EntitySetMapping Name="CharOrgs">
             <EntityTypeMapping TypeName="RiftWorldModel.CharOrg">
               <MappingFragment StoreEntitySet="CharOrgs">
+                <ScalarProperty Name="KatherineApproved" ColumnName="KatherineApproved" />
                 <ScalarProperty Name="CharOrgsId" ColumnName="CharOrgsId" />
                 <ScalarProperty Name="CharId" ColumnName="CharId" />
                 <ScalarProperty Name="OrgId" ColumnName="OrgId" />
                 <ScalarProperty Name="BlurbOrgPage" ColumnName="BlurbOrgPage" />
                 <ScalarProperty Name="IsPublic" ColumnName="IsPublic" />
                 <ScalarProperty Name="IsCurrent" ColumnName="IsCurrent" />
-                <ScalarProperty Name="Proposed" ColumnName="Proposed" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -2881,14 +2953,17 @@
           <EntitySetMapping Name="Events">
             <EntityTypeMapping TypeName="RiftWorldModel.Event">
               <MappingFragment StoreEntitySet="Events">
+                <ScalarProperty Name="DateEra" ColumnName="DateEra" />
+                <ScalarProperty Name="DateYear" ColumnName="DateYear" />
+                <ScalarProperty Name="DateMonth" ColumnName="DateMonth" />
+                <ScalarProperty Name="DateDay" ColumnName="DateDay" />
                 <ScalarProperty Name="EventId" ColumnName="EventId" />
                 <ScalarProperty Name="InfoId" ColumnName="InfoId" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="IsHistory" ColumnName="IsHistory" />
-                <ScalarProperty Name="Date" ColumnName="Date" />
                 <ScalarProperty Name="AboutText" ColumnName="AboutText" />
                 <ScalarProperty Name="NormalParticipants" ColumnName="NormalParticipants" />
-                <ScalarProperty Name="IsWorkInProgress" ColumnName="IsWorkInProgress" />
+                <ScalarProperty Name="IsPublished" ColumnName="IsPublished" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -2933,6 +3008,8 @@
           <EntitySetMapping Name="Items">
             <EntityTypeMapping TypeName="RiftWorldModel.Item">
               <MappingFragment StoreEntitySet="Items">
+                <ScalarProperty Name="Artist" ColumnName="Artist" />
+                <ScalarProperty Name="IsPublished" ColumnName="IsPublished" />
                 <ScalarProperty Name="ItemId" ColumnName="ItemId" />
                 <ScalarProperty Name="InfoId" ColumnName="InfoId" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -2941,17 +3018,16 @@
                 <ScalarProperty Name="DescriptionText" ColumnName="DescriptionText" />
                 <ScalarProperty Name="PropertyText" ColumnName="PropertyText" />
                 <ScalarProperty Name="HistoryText" ColumnName="HistoryText" />
-                <ScalarProperty Name="IsWorkInProgress" ColumnName="IsWorkInProgress" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Journals">
             <EntityTypeMapping TypeName="RiftWorldModel.Journal">
               <MappingFragment StoreEntitySet="Journals">
+                <ScalarProperty Name="HasUnseenEdit" ColumnName="HasUnseenEdit" />
                 <ScalarProperty Name="JournalId" ColumnName="JournalId" />
                 <ScalarProperty Name="CharacterId" ColumnName="CharacterId" />
                 <ScalarProperty Name="OocDateWritten" ColumnName="OocDateWritten" />
-                <ScalarProperty Name="ICDateWritten" ColumnName="ICDateWritten" />
                 <ScalarProperty Name="TheContent" ColumnName="TheContent" />
                 <ScalarProperty Name="IsApproved" ColumnName="IsApproved" />
               </MappingFragment>
@@ -2987,7 +3063,7 @@
                 <ScalarProperty Name="Appointed" ColumnName="Appointed" />
                 <ScalarProperty Name="Environment" ColumnName="Environment" />
                 <ScalarProperty Name="About" ColumnName="About" />
-                <ScalarProperty Name="IsWorkInProgress" ColumnName="IsWorkInProgress" />
+                <ScalarProperty Name="IsPublished" ColumnName="IsPublished" />
                 <ScalarProperty Name="AvgLifestyle" ColumnName="AvgLifestyle" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -2999,7 +3075,7 @@
                 <ScalarProperty Name="InfoId" ColumnName="InfoId" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="TheContent" ColumnName="TheContent" />
-                <ScalarProperty Name="IsWorkInProgress" ColumnName="IsWorkInProgress" />
+                <ScalarProperty Name="IsPublished" ColumnName="IsPublished" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -3030,6 +3106,10 @@
           <EntitySetMapping Name="NPCs">
             <EntityTypeMapping TypeName="RiftWorldModel.NPC">
               <MappingFragment StoreEntitySet="NPCs">
+                <ScalarProperty Name="GenderId" ColumnName="GenderId" />
+                <ScalarProperty Name="IsDead" ColumnName="IsDead" />
+                <ScalarProperty Name="CrestArtist" ColumnName="CrestArtist" />
+                <ScalarProperty Name="PortraitArtist" ColumnName="PortraitArtist" />
                 <ScalarProperty Name="NpcId" ColumnName="NpcId" />
                 <ScalarProperty Name="InfoId" ColumnName="InfoId" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -3041,7 +3121,7 @@
                 <ScalarProperty Name="ApperanceText" ColumnName="ApperanceText" />
                 <ScalarProperty Name="AboutText" ColumnName="AboutText" />
                 <ScalarProperty Name="LastLocationId" ColumnName="LastLocationId" />
-                <ScalarProperty Name="IsWorkInProgress" ColumnName="IsWorkInProgress" />
+                <ScalarProperty Name="IsPublished" ColumnName="IsPublished" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -3058,6 +3138,7 @@
           <EntitySetMapping Name="Orgs">
             <EntityTypeMapping TypeName="RiftWorldModel.Org">
               <MappingFragment StoreEntitySet="Orgs">
+                <ScalarProperty Name="Artist" ColumnName="Artist" />
                 <ScalarProperty Name="OrgId" ColumnName="OrgId" />
                 <ScalarProperty Name="InfoId" ColumnName="InfoId" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -3065,7 +3146,7 @@
                 <ScalarProperty Name="SymbolFileName" ColumnName="SymbolFileName" />
                 <ScalarProperty Name="BaseLocationId" ColumnName="BaseLocationId" />
                 <ScalarProperty Name="AboutText" ColumnName="AboutText" />
-                <ScalarProperty Name="IsWorkInProgress" ColumnName="IsWorkInProgress" />
+                <ScalarProperty Name="IsPublished" ColumnName="IsPublished" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -3087,18 +3168,18 @@
                 <ScalarProperty Name="Location" ColumnName="Location" />
                 <ScalarProperty Name="Environment" ColumnName="Environment" />
                 <ScalarProperty Name="Hazards" ColumnName="Hazards" />
-                <ScalarProperty Name="IsWorkInProgress" ColumnName="IsWorkInProgress" />
+                <ScalarProperty Name="IsPublished" ColumnName="IsPublished" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Rumors">
             <EntityTypeMapping TypeName="RiftWorldModel.Rumor">
               <MappingFragment StoreEntitySet="Rumors">
+                <ScalarProperty Name="RumorText" ColumnName="RumorText" />
                 <ScalarProperty Name="RumorsId" ColumnName="RumorsId" />
                 <ScalarProperty Name="RumorOfId" ColumnName="RumorOfId" />
                 <ScalarProperty Name="AuthorId" ColumnName="AuthorId" />
                 <ScalarProperty Name="IsApproved" ColumnName="IsApproved" />
-                <ScalarProperty Name="TheContent" ColumnName="TheContent" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -3211,6 +3292,7 @@
               <ScalarProperty Name="Id" ColumnName="UserId" />
             </EndProperty>
           </AssociationSetMapping>
+          <FunctionImportMapping FunctionImportName="getSecrets" FunctionName="RiftWorldModel.Store.getSecrets" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

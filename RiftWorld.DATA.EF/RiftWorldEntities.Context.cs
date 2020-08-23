@@ -12,6 +12,8 @@ namespace RiftWorld.DATA.EF
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
+    using System.Data.Entity.Core.Objects;
+    using System.Linq;
     
     public partial class RiftWorldEntities : DbContext
     {
@@ -65,5 +67,31 @@ namespace RiftWorld.DATA.EF
         public virtual DbSet<Tier> Tiers { get; set; }
         public virtual DbSet<UserDetail> UserDetails { get; set; }
         public virtual DbSet<VarietyOfInhabitant> VarietyOfInhabitants { get; set; }
+    
+        public virtual ObjectResult<Secret> getSecrets(string playerId, Nullable<short> infoId)
+        {
+            var playerIdParameter = playerId != null ?
+                new ObjectParameter("PlayerId", playerId) :
+                new ObjectParameter("PlayerId", typeof(string));
+    
+            var infoIdParameter = infoId.HasValue ?
+                new ObjectParameter("InfoId", infoId) :
+                new ObjectParameter("InfoId", typeof(short));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Secret>("getSecrets", playerIdParameter, infoIdParameter);
+        }
+    
+        public virtual ObjectResult<Secret> getSecrets(string playerId, Nullable<short> infoId, MergeOption mergeOption)
+        {
+            var playerIdParameter = playerId != null ?
+                new ObjectParameter("PlayerId", playerId) :
+                new ObjectParameter("PlayerId", typeof(string));
+    
+            var infoIdParameter = infoId.HasValue ?
+                new ObjectParameter("InfoId", infoId) :
+                new ObjectParameter("InfoId", typeof(short));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Secret>("getSecrets", mergeOption, playerIdParameter, infoIdParameter);
+        }
     }
 }

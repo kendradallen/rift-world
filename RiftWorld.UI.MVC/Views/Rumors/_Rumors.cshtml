@@ -1,45 +1,16 @@
 ﻿@model IEnumerable<RiftWorld.DATA.EF.Rumor>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.IsApproved)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.TheContent)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Character.PlayerId)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Info.Blurb)
-        </th>
-        <th></th>
-    </tr>
+<div id="rumor-list" class="row">
+    @foreach (var item in Model)
+    {
+        <div class="col-sm-6"></div>
+        <div class="col-sm-6 row">
+            <div class="daRumor col-auto">
+                <h6>@item.Character.CharacterName whispers...</h6>
+                <div class="speechbubble"><p>@item.RumorText</p></div>
+            </div>
+        </div>
+        <div class="col-sm-6"></div>
+    }
+</div>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.IsApproved)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.TheContent)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Character.PlayerId)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Info.Blurb)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.RumorsId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.RumorsId }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.RumorsId })
-        </td>
-    </tr>
-}
-
-</table>

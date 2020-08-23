@@ -18,7 +18,7 @@ namespace RiftWorld.DATA.EF
         public short RumorOfId { get; set; }
         public short AuthorId { get; set; }
         public bool IsApproved { get; set; }
-        public string TheContent { get; set; }
+        public string RumorText { get; set; }
     
         public virtual Character Character { get; set; }
         public virtual Info Info { get; set; }

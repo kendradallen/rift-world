@@ -1,0 +1,105 @@
+﻿@model RiftWorld.UI.MVC.Models.EditUserViewModel2
+
+@{
+    ViewBag.Title = "Approve";
+}
+<div class="col-12">
+    <h2>Approve</h2>
+
+    @using (Html.BeginForm("Approve", "UsersAdmin", FormMethod.Post, new { @enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            <h4>EditUserViewModel</h4>
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.HiddenFor(model => model.Id)
+            @Html.HiddenFor(model => model.Email)
+            @Html.HiddenFor(model => model.DiscordName)
+            @Html.HiddenFor(model => model.DiscordDiscriminator)
+            @Html.HiddenFor(model => model.IsApproved)
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DisplayFor(model => model.Email, new { htmlAttributes = new { @class = "form-control disabled" } })
+                    @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.DiscordName, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DisplayFor(model => model.DiscordName, new { htmlAttributes = new { @class = "form-control disabled" } })
+                    @Html.ValidationMessageFor(model => model.DiscordName, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.DiscordDiscriminator, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DisplayFor(model => model.DiscordDiscriminator, new { htmlAttributes = new { @class = "form-control disabled" } })
+                    @Html.ValidationMessageFor(model => model.DiscordDiscriminator, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            @if (ViewBag.CurrentCharacter != null)
+            {
+                <div>
+                    @Html.LabelFor(model => model.CurrentCharacterId, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @ViewBag.CurrentCharacter
+                    </div>
+                </div>
+            }
+            @if (ViewBag.PastCharacters.Count > 0)
+            {
+                <div>
+                    <label for="pastCharacters">Past Characters</label>
+                    <ul name="pastCharacters">
+                        @foreach (string character in ViewBag.PastCharacters)
+                        {
+                            <li>@character</li>
+                        }
+                    </ul>
+                </div>
+            }
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.ConsentFileName, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.HiddenFor(model => model.ConsentFileName)
+                    @*@Html.EditorFor(model => model.ConsentFileName, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.ConsentFileName, "", new { @class = "text-danger" })*@
+                    <input type="file" name="consentFile" />
+                    @if (Model.ConsentFileName != null)
+                    {
+                        <h5>Current Consent File</h5>
+                        <iframe src="~/Content/ConsentFiles/@Model.ConsentFileName"width="100%" height="500px"></iframe>
+                    }
+                </div>
+            </div>
+
+            <div class="form-group">
+                @if (!Model.IsApproved)
+                {
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Deny" name="submit" class="btn btn-danger" />
+                    <input type="submit" value="Approve" name="submit" class="btn btn-success" />
+                </div>
+                }
+                else
+                {
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Save" name="submit" class="btn btn-success" />
+                    </div>
+                }
+            </div>
+
+        </div>
+    }
+    <div>
+        @Html.ActionLink("Back to List", "Index")
+    </div>
+</div>

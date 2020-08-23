@@ -1,0 +1,206 @@
+﻿@model RiftWorld.UI.MVC.Models.OrgEditVM
+
+@{
+    ViewBag.Title = "Editing " + Model.Name;
+    List<short> theSelected = ViewBag.Selected;
+    int startName = 50;
+    if (Model.Name != null)
+    {
+        startName = 50 - Model.Name.Length;
+
+    }
+    int startBlurb = 100;
+    if (Model.Blurb != null)
+    {
+        startBlurb = 100 - Model.Blurb.Length;
+    }
+    int startArtist = 40;
+    if (Model.Artist != null)
+    {
+        startArtist = 40 - Model.Artist.Length;
+    }
+}
+
+<div class="btn-group-vertical quick">
+    <a href="#tipity-topity" class="quick"><i class="fas fa-angle-double-up"></i></a>
+    <a href="#qFinish" class="quick"><i class="fas fa-angle-double-down"></i></a>
+</div>
+
+<div class="col-12">
+    <h2>@ViewBag.Title</h2>
+    <!-- Quick nav toolbar -->
+    <div class="btn-group quick">
+        <a class="btn btn-secondary" href="#qName">Name</a>
+        <a class="btn btn-secondary" href="#qBlurb">Blurb</a>
+        <a class="btn btn-secondary" href="#qPicture">Symbol</a>
+        <a class="btn btn-secondary" href="#qArtist">Artist</a>
+        <a class="btn btn-secondary" href="#qBaseLocation">Base</a>
+        <a class="btn btn-secondary" href="#qPlayerEnabled">Player Enabled</a>
+        <a class="btn btn-secondary" href="#qAbout">About</a>
+        <a class="btn btn-secondary" href="#qTags">Tags</a>
+    </div>
+
+    <!-- Edit form -->
+    @using (Html.BeginForm("Create", "Orgs", FormMethod.Post, new { @enctype = "multipart/form-data", id = "daForm" }))
+    {
+        @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.OrgId)
+        @Html.HiddenFor(model => model.InfoId)
+        @Html.HiddenFor(model => model.IsPublished)
+
+        <div class="form-group" id="qName">
+            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label" })
+            <div class="col-12">
+                <div class="da-focus">
+                    @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control count", data_max = 50 } })
+                </div>
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                <div id="tcp-Name" class="col-md-offset-2 col-12 @(startName <0 ? "invalid":"")"><span id="tc-Name">@startName</span> character(s) left.</div>
+            </div>
+        </div>
+
+        <div class="form-group" id="qBlurb">
+            @Html.LabelFor(model => model.Blurb, htmlAttributes: new { @class = "control-label" })
+            <div class="col-12">
+                <div class="da-focus">
+                    @Html.EditorFor(model => model.Blurb, new { htmlAttributes = new { @class = "form-control count", data_max = 100, style = "height:4em;" } })
+                </div>
+                @Html.ValidationMessageFor(model => model.Blurb, "", new { @class = "text-danger" })
+                <div id="tcp-Blurb" class="col-md-offset-2 col-12 @(startBlurb <0 ? "invalid":"")"><span id="tc-Blurb">@startBlurb</span> character(s) left.</div>
+            </div>
+        </div>
+
+
+        <div class="form-group" id="qPicture">
+            @Html.LabelFor(model => model.SymbolFileName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10 row">
+                @Html.HiddenFor(model => model.SymbolFileName)
+                <div class="col-12">
+                    <input type="file" name="picture" />
+                    <img class="img-fluid img-thumbnail border-00" src="~/Content/img/org/org_default.jpg" />
+                </div>
+                <div class="col-12">
+                    @Html.ValidationMessageFor(model => model.SymbolFileName, "", new { @class = "text-danger" })
+                </div>
+
+            </div>
+        </div>
+
+        <div class="form-group" id="qArtist">
+            @Html.LabelFor(model => model.Artist, htmlAttributes: new { @class = "control-label" })
+            <div class="col-12">
+                <div class="da-focus">
+                    @Html.EditorFor(model => model.Artist, new { htmlAttributes = new { @class = "form-control count", data_max = 40 } })
+                </div>
+                @Html.ValidationMessageFor(model => model.Artist, "", new { @class = "text-danger" })
+                <div id="tcp-Artist" class="col-md-offset-2 col-12 @(startArtist <0 ? "invalid":"")"><span id="tc-Artist">@startArtist</span> character(s) left.</div>
+
+            </div>
+        </div>
+
+        <div class="form-group" id="qBaseLocation">
+            @Html.LabelFor(model => model.BaseLocationId, htmlAttributes: new { @class = "control-label" })
+            <div class="col-md-8">
+                @Html.DropDownList("BaseLocationId", (SelectList)ViewBag.BaseLocationId, "-- Unknown --", htmlAttributes: new { @class = "" })
+                @Html.ValidationMessageFor(model => model.BaseLocationId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group" id="qPlayerEnabled">
+            <div class="form-check">
+                @Html.EditorFor(model => model.IsPlayerEnabled, new { htmlAttributes = new { @class = "form-check-input" } })
+                @Html.LabelFor(model => model.IsPlayerEnabled, htmlAttributes: new { @class = "form-check-label" })
+            </div>
+        </div>
+
+        <div class="form-group" id="qAbout">
+            @Html.LabelFor(model => model.AboutText, htmlAttributes: new { @class = "control-label" })
+            <div class="col-12">
+                @Html.EditorFor(model => model.AboutText, new { htmlAttributes = new { @class = "form-control rich", style = "height:20em;" } })
+                @Html.ValidationMessageFor(model => model.AboutText, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group" id="qTags">
+            <label for="tags">Tags</label>
+            <div class="col-12">
+                <select multiple="multiple" name="tags" id="tags">
+                    @foreach (var x in ViewBag.Tags)
+                    {
+                        <option value="@x.TagId" @(theSelected.Contains(x.TagId) ? "selected" : "")>@x.TagName</option>
+                    }
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group" id="qFinish">
+            @if (!Model.IsPublished)
+            {
+                <div class="col-md-offset-2 col-md-10 btn-group">
+                    <input type="submit" name="submit" value="Save Progress" class="btn btn-warning" />
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#confirmModal">Publish</button>
+                </div>
+            }
+            else
+            {
+                <p>This item has been made public</p>
+                <div class="col-md-offset-2 col-md-10 btn-group">
+                    <input type="submit" name="submit" value="Un-Publish" class="btn btn-danger" />
+                    <input type="submit" name="submit" value="Save" class="btn btn-success" />
+                </div>
+            }
+        </div>
+    </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to publish?</p>
+                        <div id="nulled">
+
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <input type="submit" name="submit" value="Publish" class="btn btn-success" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    }
+
+    <div style="text-align:left;">
+        @Html.ActionLink("Back to List", "Index")
+    </div>
+</div>
+@section Scripts{
+    <script src="~/Scripts/MyJS/edit.js"></script>
+
+    <script>
+        new SlimSelect({
+            select: '#tags'
+        })
+        new SlimSelect({
+            select: '#BaseLocationId'
+        })
+    </script>
+    <script>
+        var nullables = ['AboutText'];
+        $('#confirmModal').on('show.bs.modal', function () {
+            ConfirmModal(nullables);
+        });
+    </script>
+
+}

@@ -26,16 +26,11 @@ C:\Users\student\Documents\Visual Studio 2017\Projects\RiftWorld\RiftWorld\src\R
 C:\Users\student\Documents\Visual Studio 2017\Projects\RiftWorld\RiftWorld\src\RiftWorld.UI.MVC\bin\roslyn\System.IO.Compression.dll
 C:\Users\student\Documents\Visual Studio 2017\Projects\RiftWorld\RiftWorld\src\RiftWorld.UI.MVC\bin\roslyn\System.IO.FileSystem.dll
 C:\Users\student\Documents\Visual Studio 2017\Projects\RiftWorld\RiftWorld\src\RiftWorld.UI.MVC\bin\roslyn\System.IO.FileSystem.Primitives.dll
-C:\Users\student\Documents\Visual Studio 2017\Projects\RiftWorld\RiftWorld\src\RiftWorld.UI.MVC\bin\roslyn\System.IO.Pipes.AccessControl.dll
-C:\Users\student\Documents\Visual Studio 2017\Projects\RiftWorld\RiftWorld\src\RiftWorld.UI.MVC\bin\roslyn\System.IO.Pipes.dll
 C:\Users\student\Documents\Visual Studio 2017\Projects\RiftWorld\RiftWorld\src\RiftWorld.UI.MVC\bin\roslyn\System.Reflection.Metadata.dll
-C:\Users\student\Documents\Visual Studio 2017\Projects\RiftWorld\RiftWorld\src\RiftWorld.UI.MVC\bin\roslyn\System.Security.AccessControl.dll
-C:\Users\student\Documents\Visual Studio 2017\Projects\RiftWorld\RiftWorld\src\RiftWorld.UI.MVC\bin\roslyn\System.Security.Claims.dll
 C:\Users\student\Documents\Visual Studio 2017\Projects\RiftWorld\RiftWorld\src\RiftWorld.UI.MVC\bin\roslyn\System.Security.Cryptography.Algorithms.dll
 C:\Users\student\Documents\Visual Studio 2017\Projects\RiftWorld\RiftWorld\src\RiftWorld.UI.MVC\bin\roslyn\System.Security.Cryptography.Encoding.dll
 C:\Users\student\Documents\Visual Studio 2017\Projects\RiftWorld\RiftWorld\src\RiftWorld.UI.MVC\bin\roslyn\System.Security.Cryptography.Primitives.dll
 C:\Users\student\Documents\Visual Studio 2017\Projects\RiftWorld\RiftWorld\src\RiftWorld.UI.MVC\bin\roslyn\System.Security.Cryptography.X509Certificates.dll
-C:\Users\student\Documents\Visual Studio 2017\Projects\RiftWorld\RiftWorld\src\RiftWorld.UI.MVC\bin\roslyn\System.Security.Principal.Windows.dll
 C:\Users\student\Documents\Visual Studio 2017\Projects\RiftWorld\RiftWorld\src\RiftWorld.UI.MVC\bin\roslyn\System.Text.Encoding.CodePages.dll
 C:\Users\student\Documents\Visual Studio 2017\Projects\RiftWorld\RiftWorld\src\RiftWorld.UI.MVC\bin\roslyn\System.ValueTuple.dll
 C:\Users\student\Documents\Visual Studio 2017\Projects\RiftWorld\RiftWorld\src\RiftWorld.UI.MVC\bin\roslyn\System.Xml.ReaderWriter.dll
@@ -56,7 +51,6 @@ C:\Users\student\Documents\Visual Studio 2017\Projects\RiftWorld\RiftWorld\src\R
 C:\Users\student\Documents\Visual Studio 2017\Projects\RiftWorld\RiftWorld\src\RiftWorld.UI.MVC\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
 C:\Users\student\Documents\Visual Studio 2017\Projects\RiftWorld\RiftWorld\src\RiftWorld.UI.MVC\bin\Microsoft.Owin.dll
 C:\Users\student\Documents\Visual Studio 2017\Projects\RiftWorld\RiftWorld\src\RiftWorld.UI.MVC\bin\Microsoft.Owin.Host.SystemWeb.dll
-C:\Users\student\Documents\Visual Studio 2017\Projects\RiftWorld\RiftWorld\src\RiftWorld.UI.MVC\bin\Microsoft.Owin.Security.Cookies.dll
 C:\Users\student\Documents\Visual Studio 2017\Projects\RiftWorld\RiftWorld\src\RiftWorld.UI.MVC\bin\Microsoft.Owin.Security.dll
 C:\Users\student\Documents\Visual Studio 2017\Projects\RiftWorld\RiftWorld\src\RiftWorld.UI.MVC\bin\Microsoft.Owin.Security.Facebook.dll
 C:\Users\student\Documents\Visual Studio 2017\Projects\RiftWorld\RiftWorld\src\RiftWorld.UI.MVC\bin\Microsoft.Owin.Security.Google.dll
@@ -106,3 +100,11 @@ C:\Users\student\Documents\Visual Studio 2017\Projects\RiftWorld\RiftWorld\src\R
 C:\Users\student\Documents\Visual Studio 2017\Projects\RiftWorld\RiftWorld\src\RiftWorld.UI.MVC\bin\RiftWorld.DATA.EF.dll
 C:\Users\student\Documents\Visual Studio 2017\Projects\RiftWorld\RiftWorld\src\RiftWorld.UI.MVC\bin\RiftWorld.DATA.EF.pdb
 C:\Users\student\Documents\Visual Studio 2017\Projects\RiftWorld\RiftWorld\src\RiftWorld.UI.MVC\bin\RiftWorld.DATA.EF.dll.config
+C:\Users\student\Documents\Visual Studio 2017\Projects\RiftWorld\RiftWorld\src\RiftWorld.UI.MVC\bin\roslyn\Microsoft.Win32.Primitives.dll
+C:\Users\student\Documents\Visual Studio 2017\Projects\RiftWorld\RiftWorld\src\RiftWorld.UI.MVC\bin\roslyn\System.Diagnostics.DiagnosticSource.dll
+C:\Users\student\Documents\Visual Studio 2017\Projects\RiftWorld\RiftWorld\src\RiftWorld.UI.MVC\bin\roslyn\System.Globalization.Calendars.dll
+C:\Users\student\Documents\Visual Studio 2017\Projects\RiftWorld\RiftWorld\src\RiftWorld.UI.MVC\bin\roslyn\System.IO.Compression.ZipFile.dll
+C:\Users\student\Documents\Visual Studio 2017\Projects\RiftWorld\RiftWorld\src\RiftWorld.UI.MVC\bin\roslyn\System.Net.Http.dll
+C:\Users\student\Documents\Visual Studio 2017\Projects\RiftWorld\RiftWorld\src\RiftWorld.UI.MVC\bin\roslyn\System.Net.Sockets.dll
+C:\Users\student\Documents\Visual Studio 2017\Projects\RiftWorld\RiftWorld\src\RiftWorld.UI.MVC\bin\roslyn\System.Runtime.InteropServices.RuntimeInformation.dll
+C:\Users\student\Documents\Visual Studio 2017\Projects\RiftWorld\RiftWorld\src\RiftWorld.UI.MVC\bin\roslyn\System.Threading.Tasks.Extensions.dll

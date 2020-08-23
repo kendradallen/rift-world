@@ -18,6 +18,7 @@ namespace RiftWorld.DATA.EF
         public Gender()
         {
             this.Characters = new HashSet<Character>();
+            this.NPCs = new HashSet<NPC>();
         }
     
         public byte GenderId { get; set; }
@@ -26,5 +27,7 @@ namespace RiftWorld.DATA.EF
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Character> Characters { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<NPC> NPCs { get; set; }
     }
 }

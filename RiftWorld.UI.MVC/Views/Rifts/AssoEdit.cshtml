@@ -1,0 +1,112 @@
+﻿@model RiftWorld.UI.MVC.Models.AssoRiftVM
+@{
+    ViewBag.Title = "Editing " + Model.Name + " - Complex";
+    List<byte> theSelected = Model.Assos.Select(a => a.RaceId).ToList();
+}
+<div class="col-12">
+    <h2>@ViewBag.Title</h2>
+    <button class="btn btn-outline-secondary" onclick="ShowAll()">Show All</button>
+    <button class="btn btn-outline-secondary" onclick="HideAll()">Hide All</button>
+
+    @using (Html.BeginForm("AssoEdit", "Rifts", FormMethod.Post, new { id = "daForm" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.HiddenFor(model => model.InfoId)
+            @Html.HiddenFor(model => model.RiftId)
+            @Html.HiddenFor(model => model.Submit)
+            <div class="form-group">
+                <label for="vari">Variety of Inhabitants</label>
+                <select multiple="multiple" name="vari" id="vari">
+                    @foreach (var x in ViewBag.Races)
+                    {
+                        <option value="@x.RaceId" @(theSelected.Contains(x.RaceId) ? "selected" : "") data-list="vari">@x.RaceName</option>
+                    }
+                </select>
+                <div class="other-stuff" data-list="vari">
+                    @foreach (var x in ViewBag.Races)
+                    {
+                        <div data-value="@x.RaceId" data-list="vari" style="display:none" class="@(theSelected.Contains(x.RaceId) ? "yes-man": "")">
+                            <h5>@x.RaceName</h5>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">Display Priority</span>
+                                </div>
+                                <div class="da-focus asso input-group-append form-control">
+                                    <input class="form-control" data-value="@x.RaceId" type="number" data-name="order" value="@(theSelected.Contains(x.RaceId) ? (Model.Assos.Where(a => a.RaceId == x.RaceId).Select(a => a.RaceOrder).FirstOrDefault().ToString()) : "")" />
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-12">
+                    <input id="daSubmit" type="submit" value="Save" class="btn btn-lg btn-success btn-block" />
+                </div>
+            </div>
+        </div>
+    }
+
+    <div style="text-align:left;">
+        @Html.ActionLink("Back to List", "Index")
+    </div>
+</div>
+@section Scripts{
+    <script src="~/Scripts/SelectBoxes/multi.js"></script>
+    <script src="~/Scripts/MyJS/assoedit.js"></script>
+    @*note to self - below required too much constant changing between different info types to be included in the assoedit script*@
+    <script>
+        //prep for submitting associations
+        class AssoVariety {
+            constructor(raceId, order) {
+                this.RaceId = raceId;
+                this.RaceOrder = order;
+            }
+        }
+
+        class TheSubmitted {
+            constructor(vari) {
+                this.InfoId = $("#InfoId").val();
+                this.RiftId = $("#RiftId").val();
+                this.Submit = $("#Submit").val();
+                this.__RequestVerificationToken = $('input[name="__RequestVerificationToken"]', $('#daForm')).val();
+                this.Varieties = vari;
+            }
+        }
+
+        //submitting the associations
+        $("#daForm").submit(function (e) {
+            e.preventDefault();
+            var postVari = [];
+            $(function () {
+                $(".selected-wrapper a").each(function () {
+                    var t = $(this).data("value");
+                    var list = $(this).data("list");
+                    var order = GetDataPt(t, "order", list);
+                    postVari.push(new AssoVariety(t, order));
+                });
+
+                var deFormData = new TheSubmitted(postVari);
+                 $(document).ready(function () {
+                    $.ajax({
+                        url: "@Url.Action("AssoEdit","Rifts")",
+                        type: "POST",
+                        data: deFormData,
+                        success: function (data) {
+                            if (data == true) {
+                                window.location.href = "/Rifts/Details/"+@Model.RiftId;
+                            }
+                        }
+                    });
+                });
+            });
+
+        });
+
+
+    </script>
+}

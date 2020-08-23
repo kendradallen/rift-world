@@ -1,57 +1,37 @@
 ﻿@model IEnumerable<RiftWorld.DATA.EF.Story>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.DateTold)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CommissionedBy)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.IsCannon)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.TheContent)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Title)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Info.Blurb)
-        </th>
-        <th></th>
-    </tr>
+@if (Model.Count() != 0)
+{
+    <section id="story" class="col-12">
+        <h2 class="line">Stories</h2>
+        <div class="tab">
+            @foreach (var item in Model)
+            {
+                <button class="tablinks" onclick="openStory(event, @item.StoryId)">@item.Title</button>
+            }
+        </div>
+        @foreach (var item in Model)
+        {
+            <div class="tabcontent" id="@item.StoryId">
+                <h3>@item.Title</h3>
+                <div class="intro">
+                    <p>
+                        As told by the bard Sel'thein on @Html.DisplayFor(modelItem => item.DateTold) @* dear future me: html.DisplayFor is how to get the metadata formatting. item.Prop will just get the raw value of it with none of that formatting*@
+                    </p>
+                    <p>Requested by @Html.DisplayFor(modelItem => item.CommissionedBy)</p>
+                    @if (!item.IsCannon)
+                    {
+                        <div class="cannon">
+                            <p>Some say this story is untrue.</p>
+                            <p>I say: not all stories need be true.</p>
+                        </div>
+                    }
+                </div>
+                <div class="more hang">
+                    @Html.Raw(item.TheContent)
+                </div>
+            </div>
+        }
+    </section>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.DateTold)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CommissionedBy)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.IsCannon)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.TheContent)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Title)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Info.Blurb)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.StoryId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.StoryId }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.StoryId })
-        </td>
-    </tr>
 }
-
-</table>

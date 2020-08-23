@@ -106,11 +106,11 @@
     </div>
 
     <div class="form-group">
-        @Html.LabelFor(model => model.IsWorkInProgress, htmlAttributes: new { @class = "control-label col-md-2" })
+        @Html.LabelFor(model => model.IsPublished, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
             <div class="checkbox">
-                @Html.EditorFor(model => model.IsWorkInProgress)
-                @Html.ValidationMessageFor(model => model.IsWorkInProgress, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.IsPublished)
+                @Html.ValidationMessageFor(model => model.IsPublished, "", new { @class = "text-danger" })
             </div>
         </div>
     </div>

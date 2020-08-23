@@ -12,7 +12,7 @@ namespace RiftWorld.DATA.EF
     public class CharacterMetaData
     {
         //public short CharacterId { get; set; }
-        [Required]
+        //[Required]
         [Display(Name = "Player")]
         public string PlayerId { get; set; }
 
@@ -52,10 +52,35 @@ namespace RiftWorld.DATA.EF
         public bool IsRetired { get; set; }
 
         public bool IsApproved { get; set; }
+
+        [StringLength(40)]
+        public string Artist { get; set; }
+        [StringLength(40)]
+        [Display(Name = "Class")]
+        public string ClassString { get; set; }
+
+        public bool HasUnseenEdit { get; set; }
+        public bool IsDead { get; set; }
     }
 
     [MetadataType(typeof(CharacterMetaData))]
-    public partial class Character { }
+    public partial class Character
+    {
+        public string Status
+        {
+            get
+            {
+                if (IsRetired)
+                {
+                    return "Retired";
+                }
+                else
+                {
+                    return "Active";
+                }
+            }
+        }
+    }
 
     #endregion
 
@@ -75,7 +100,7 @@ namespace RiftWorld.DATA.EF
 
         public bool IsCurrent { get; set; }
 
-        public bool Proposed { get; set; }
+        public bool KatherineApproved { get; set; }
 
     }
 
@@ -112,24 +137,24 @@ namespace RiftWorld.DATA.EF
     #endregion
 
     #region  ClassCharacter Metadata
-    //public class ClassCharacterMetaData
-    //{
+    public class ClassCharacterMetaData
+    {
 
-    //}
+    }
 
-    //[MetadataType(typeof(ClassCharacterMetaData))]
-    //public partial class ClassCharacter { }
+    [MetadataType(typeof(ClassCharacterMetaData))]
+    public partial class ClassCharacter { }
 
     #endregion
 
     #region ClassNPC Metadata
-    //public class ClassNPCMetaData
-    //{
+    public class ClassNPCMetaData
+    {
+        public Nullable<byte> ClassOrder { get; set; }
+    }
 
-    //}
-
-    //[MetadataType(typeof(ClassNPCMetaData))]
-    //public partial class ClassNPC { }
+    [MetadataType(typeof(ClassNPCMetaData))]
+    public partial class ClassNPC { }
 
     #endregion
 
@@ -137,9 +162,6 @@ namespace RiftWorld.DATA.EF
     public class EventMetaData
     {
 
-        //public short EventId { get; set; }
-
-        //may need to not have this commented out; unsure --- edit: until I'm ready to experiment, I'm leaving it in
         public short InfoId { get; set; }
 
         [Required]
@@ -147,10 +169,6 @@ namespace RiftWorld.DATA.EF
         public string Name { get; set; }
 
         public bool IsHistory { get; set; }
-
-        [Required]
-        [DisplayFormat(DataFormatString = "{0:d}")]
-        public System.DateTime Date { get; set; }
 
         [Required]
         [UIHint("MultilineText")]
@@ -162,12 +180,42 @@ namespace RiftWorld.DATA.EF
         [Display(Name = "Normal Participants")]
         public string NormalParticipants { get; set; }
 
-        public bool IsWorkInProgress { get; set; }
+        public bool IsPublished { get; set; }
+
+        [Required]
+        [Range(1, 40)]
+        public byte DateDay { get; set; }
+
+        [Required]
+        [Range(1, 15)]
+        public byte DateMonth { get; set; }
+
+        [Range(0, 9999)]
+        public Nullable<short> DateYear { get; set; }
+
+        [StringLength(15)]
+        public string DateEra { get; set; }
 
     }
 
     [MetadataType(typeof(EventMetaData))]
-    public partial class Event { }
+    public partial class Event
+    {
+        public string Pub
+        {
+            get
+            {
+                if (IsPublished)
+                {
+                    return "Published";
+                }
+                else
+                {
+                    return "Un-Published";
+                }
+            }
+        }
+    }
 
     #endregion
 
@@ -176,11 +224,11 @@ namespace RiftWorld.DATA.EF
     {
         //public byte GenderId { get; set; }
         [Required(ErrorMessage = "No matter how much you want it, I can't let you make a nameless gender.")]
-        [StringLength(15, ErrorMessage = "Do me a favor and please make it shorter. I only planned for gender names of 15 characters.")]
+        [StringLength(20, ErrorMessage = "Do me a favor and please make it shorter. I only planned for gender names of 15 characters.")]
         [Display(Name = "Gender")]
         public string GenderName { get; set; }
 
-        [StringLength(15)]
+        [StringLength(20)]
         [Display(Name = "Icon")]
         public string IconName { get; set; }
 
@@ -216,18 +264,58 @@ namespace RiftWorld.DATA.EF
     }
 
     [MetadataType(typeof(InfoMetaData))]
-    public partial class Info { }
+    public partial class Info {
+        public string Pub
+        {
+            get
+            {
+                if (IsPublished)
+                {
+                    return "Published";
+                }
+                else
+                {
+                    return "Un-Published";
+                }
+            }
+        }
+        public string Controller
+        {
+            get
+            {
+                switch (InfoTypeId)
+                {
+                    case 1:
+                        return "Lore";
+                    case 2:
+                        return "NPC";
+                    case 3:
+                        return "Org";
+                    case 4:
+                        return "Locale";
+                    case 5:
+                        return "Rift";
+                    case 6:
+                        return "Event";
+                    case 7:
+                        return "Item";
+                    default:
+                        return "Info";
+                }
+            }
+        }
+    }
 
     #endregion
 
     #region InfoTag Metadata
-    //public class InfoTagMetaData
-    //{
+    public class InfoTagMetaData
+    {
 
-    //}
+    }
 
-    //[MetadataType(typeof(InfoTagMetaData))]
-    //public partial class InfoTag { }
+    [MetadataType(typeof(InfoTagMetaData))]
+    public partial class InfoTag { }
 
     #endregion
 
@@ -270,10 +358,6 @@ namespace RiftWorld.DATA.EF
         [UIHint("MultilineText")]
         public string DescriptionText { get; set; }
 
-        //unsure about whether or not to use commented out stuff. If it does work, most strings will be using this (as I didn't make columns nullable for space purposes)
-        //TODO experiment with below to see if it works for database
-        //[Required(AllowEmptyStrings =true)]
-        //[DisplayFormat(ConvertEmptyStringToNull =false)]
         [Required]
         [UIHint("MultilineText")]
         [Display(Name = "Properties")]
@@ -284,12 +368,32 @@ namespace RiftWorld.DATA.EF
         [Display(Name = "History")]
         public string HistoryText { get; set; }
 
-        public bool IsWorkInProgress { get; set; }
+        public bool IsPublished { get; set; }
+
+        [StringLength(40)]
+        public string Artist { get; set; }
+
 
     }
 
     [MetadataType(typeof(ItemMetadata))]
-    public partial class Item { }
+    public partial class Item
+    {
+        public string Pub
+        {
+            get
+            {
+                if (IsPublished)
+                {
+                    return "Published";
+                }
+                else
+                {
+                    return "Un-Published";
+                }
+            }
+        }
+    }
     #endregion
 
     #region Journal Metadata
@@ -304,15 +408,14 @@ namespace RiftWorld.DATA.EF
         [Display(Name = "Published: ")]
         public System.DateTime OocDateWritten { get; set; }
 
-        [DisplayFormat(DataFormatString = "{0:d}")]
-        public Nullable<System.DateTime> ICDateWritten { get; set; }
-
         [Required]
         [UIHint("MultilineText")]
         [Display(Name = "Journal Entry")]
         public string TheContent { get; set; }
 
         public bool IsApproved { get; set; }
+
+        public bool HasUnseenEdit { get; set; }
 
     }
 
@@ -357,7 +460,7 @@ namespace RiftWorld.DATA.EF
         [UIHint("MultilineText")]
         public string About { get; set; }
 
-        public bool IsWorkInProgress { get; set; }
+        public bool IsPublished { get; set; }
 
         [Required]
         [StringLength(3000)]
@@ -367,17 +470,33 @@ namespace RiftWorld.DATA.EF
     }
 
     [MetadataType(typeof(LocaleMetadata))]
-    public partial class Locale { }
+    public partial class Locale
+    {
+        public string Pub
+        {
+            get
+            {
+                if (IsPublished)
+                {
+                    return "Published";
+                }
+                else
+                {
+                    return "Un-Published";
+                }
+            }
+        }
+    }
     #endregion
 
     #region LocaleEvent Metadata
-    //public class LocaleEventMetadata
-    //{
+    public class LocaleEventMetadata
+    {
 
-    //}
+    }
 
-    //[MetadataType(typeof(LocaleEventMetadata))]
-    //public partial class LocaleEvent { }
+    [MetadataType(typeof(LocaleEventMetadata))]
+    public partial class LocaleEvent { }
     #endregion
 
     #region LocaleLevel Metadata
@@ -410,22 +529,38 @@ namespace RiftWorld.DATA.EF
         [UIHint("MultilineText")]
         public string TheContent { get; set; }
 
-        public bool IsWorkInProgress { get; set; }
+        public bool IsPublished { get; set; }
 
     }
 
     [MetadataType(typeof(LoreMetadata))]
-    public partial class Lore { }
+    public partial class Lore
+    {
+        public string Pub
+        {
+            get
+            {
+                if (IsPublished)
+                {
+                    return "Published";
+                }
+                else
+                {
+                    return "Un-Published";
+                }
+            }
+        }
+    }
     #endregion
 
     #region Majority Metadata
-    //public class MajorityMetadata
-    //{
+    public class MajorityMetadata
+    {
 
-    //}
+    }
 
-    //[MetadataType(typeof(MajorityMetadata))]
-    //public partial class Majority { }
+    [MetadataType(typeof(MajorityMetadata))]
+    public partial class Majority { }
     #endregion
 
     #region NPC Metadata
@@ -471,12 +606,36 @@ namespace RiftWorld.DATA.EF
         [Display(Name = "Last Location")]
         public Nullable<short> LastLocationId { get; set; }
 
-        public bool IsWorkInProgress { get; set; }
+        public bool IsPublished { get; set; }
 
+        [StringLength(40)]
+        public string PortraitArtist { get; set; }
+
+        [StringLength(40)]
+        public string CrestArtist { get; set; }
+
+        public bool IsDead { get; set; }
+        public byte GenderId { get; set; }
     }
 
     [MetadataType(typeof(NPCMetadata))]
-    public partial class NPC { }
+    public partial class NPC
+    {
+        public string Pub
+        {
+            get
+            {
+                if (IsPublished)
+                {
+                    return "Published";
+                }
+                else
+                {
+                    return "Un-Published";
+                }
+            }
+        }
+    }
     #endregion
 
     #region NpcOrg Metadata
@@ -532,12 +691,32 @@ namespace RiftWorld.DATA.EF
         [Display(Name = "About")]
         public string AboutText { get; set; }
 
-        public bool IsWorkInProgress { get; set; }
+        public bool IsPublished { get; set; }
+
+        [StringLength(40)]
+        public string Artist { get; set; }
+
 
     }
 
     [MetadataType(typeof(OrgMetadata))]
-    public partial class Org { }
+    public partial class Org
+    {
+        public string Pub
+        {
+            get
+            {
+                if (IsPublished)
+                {
+                    return "Published";
+                }
+                else
+                {
+                    return "Un-Published";
+                }
+            }
+        }
+    }
     #endregion
 
     #region OrgEvent Metadata
@@ -569,7 +748,41 @@ namespace RiftWorld.DATA.EF
     }
 
     [MetadataType(typeof(RaceMetadata))]
-    public partial class Race { }
+    public partial class Race
+    {
+        public string Plural
+        {
+            get
+            {
+                if (RaceName.EndsWith("Elf"))
+                {
+                    return RaceName.Replace("Elf", "Elves");
+                }
+                else if (RaceName.EndsWith("Dwarf"))
+                {
+                    return RaceName.Replace("Dwarf", "Dwarves");
+                }
+
+                switch (RaceName)
+                {
+                    case "Fairy":
+                        return "Fairies";
+                    //those races whose plural is same as singular
+                    case "Dragonborn":
+                    case "Fey":
+                    case "Genasi":
+                    case "Kenku":
+                    case "Lizardfolk":
+                    case "Tabaxi":
+                    case "Warforged":
+                    case "Gith":
+                        return RaceName;
+                    default:
+                        return RaceName + "s";
+                }
+            }
+        }
+    }
     #endregion
 
     #region Rift Metadata
@@ -595,12 +808,28 @@ namespace RiftWorld.DATA.EF
         [UIHint("MultilineText")]
         public string Hazards { get; set; }
 
-        public bool IsWorkInProgress { get; set; }
+        public bool IsPublished { get; set; }
 
     }
 
     [MetadataType(typeof(RiftMetadata))]
-    public partial class Rift { }
+    public partial class Rift
+    {
+        public string Pub
+        {
+            get
+            {
+                if (IsPublished)
+                {
+                    return "Published";
+                }
+                else
+                {
+                    return "Un-Published";
+                }
+            }
+        }
+    }
     #endregion
 
     #region Rumor Metadata
@@ -610,6 +839,7 @@ namespace RiftWorld.DATA.EF
 
         public short RumorOfId { get; set; }
 
+        [Required]
         public short AuthorId { get; set; }
 
         public bool IsApproved { get; set; }
@@ -618,7 +848,7 @@ namespace RiftWorld.DATA.EF
         [StringLength(300)]
         [UIHint("MultilineText")]
         [Display(Name = "Content")]
-        public string TheContent { get; set; }
+        public string RumorText { get; set; }
 
     }
 
@@ -678,11 +908,11 @@ namespace RiftWorld.DATA.EF
 
         public short IsAboutId { get; set; }
 
-        [Required]
         [DisplayFormat(DataFormatString = "{0:d}")]
         public System.DateTime DateTold { get; set; }
 
         [StringLength(50)]
+        [DisplayFormat(NullDisplayText = "an anonymous source")]
         public string CommissionedBy { get; set; }
 
         public bool IsCannon { get; set; }
@@ -703,13 +933,13 @@ namespace RiftWorld.DATA.EF
     #endregion
 
     #region StoryTag Metadata
-    //public class StoryTagMetadata
-    //{
+    public class StoryTagMetadata
+    {
 
-    //}
+    }
 
-    //[MetadataType(typeof(StoryTagMetadata))]
-    //public partial class StoryTag { }
+    [MetadataType(typeof(StoryTagMetadata))]
+    public partial class StoryTag { }
     #endregion
 
     #region Tag Metadata
@@ -777,7 +1007,16 @@ namespace RiftWorld.DATA.EF
     }
 
     [MetadataType(typeof(UserDetailMetadata))]
-    public partial class UserDetail { }
+    public partial class UserDetail
+    {
+        public string DiscordFull
+        {
+            get
+            {
+                return DiscordName + "#" + DiscordDiscriminator;
+            }
+        }
+    }
     #endregion
 
     #region VarietyOfInhabitant Metadata

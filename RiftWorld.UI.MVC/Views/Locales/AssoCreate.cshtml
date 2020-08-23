@@ -1,0 +1,168 @@
+﻿@*@model RiftWorld.DATA.EF.Majority*@
+@model RiftWorld.UI.MVC.Models.AssoLocaleVM
+
+@{
+
+    ViewBag.Title = "Create " + Model.Name + " - Complex";
+    List<byte> theSelectedMajs = Model.AssoMajs.Select(a => a.RaceId).ToList();
+    List<short> theSelectedEvents = Model.AssoEvents.Select(a => a.EventId).ToList();
+
+    byte? first = Model.AssoMajs.Where(x => x.IsFirst).Select(x => x.RaceId).FirstOrDefault();
+
+}
+<div class="col-12">
+    <h2>@ViewBag.Title</h2>
+    <button class="btn btn-outline-secondary" onclick="ShowAll()">Show All</button>
+    <button class="btn btn-outline-secondary" onclick="HideAll()">Hide All</button>
+
+    @using (Html.BeginForm("AssoCreate", "Locales", FormMethod.Post, new { id = "daForm" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.HiddenFor(model => model.InfoId)
+            @Html.HiddenFor(model => model.LocaleId)
+            @Html.HiddenFor(model => model.Submit)
+            <div class="form-group">
+                <label for="maj">Majorities</label>
+                <select multiple="multiple" name="maj" id="maj">
+                    @foreach (var x in ViewBag.Majs)
+                    {
+                        <option value="@x.RaceId" @(theSelectedMajs.Contains(x.RaceId) ? "selected" : "") data-list="maj">@x.RaceName</option>
+                    }
+                </select>
+                <div class="other-stuff" data-list="maj">
+                    @foreach (var x in ViewBag.Majs)
+                    {
+                        <div data-value="@x.RaceId" data-list="maj" style="display:none" class="@(theSelectedMajs.Contains(x.RaceId) ? "yes-man": "")">
+                            <h5>@x.RaceName</h5>
+                            <div class="input-group">
+                                <div class="form-check">
+                                    <input class="form-check-input" data-value="@x.RaceId" type="checkbox" value="" id="@x.RaceName" data-name="isFirst" @(x.RaceId == first ? "checked" : "") />
+
+                                    <label class="form-check-label" for="@x.RaceName">Display ifrst</label>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="event">Events</label>
+                <select multiple="multiple" name="event" id="event">
+                    @foreach (var x in ViewBag.Events)
+                    {
+                        <option class="@(x.IsPublished ? "":"unpub")" value="@x.EventId" @(theSelectedEvents.Contains(x.EventId) ? "selected" : "" ) data-list="event">@x.Name</option>
+                    }
+                </select>
+                <div class="other-stuff" data-list="event">
+                    @foreach (var x in ViewBag.Events)
+                    {
+                        <div data-value="@x.EventId" data-list="event" style="display:none" class="@(theSelectedEvents.Contains(x.EventId) ? "yes-man": "")">
+                            <h5>@x.EventName</h5>
+                            @*<div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">Display Priority</span>
+                                    </div>
+                                    <div class="da-focus asso input-group-append form-control">
+                                        <input class="form-control" data-value="@x.EventId" />
+                                    </div>
+                                </div>*@
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-12">
+                    <input id="daSubmit" type="submit" value="Create" class="btn btn-block btn-success btn-lg" />
+                </div>
+            </div>
+        </div>
+    }
+
+    <div style="text-align:left;">
+        @Html.ActionLink("Back to List", "Index")
+    </div>
+</div>
+@section Scripts{
+    <script src="~/Scripts/SelectBoxes/multi.js"></script>
+    <script src="~/Scripts/MyJS/assoedit.js"></script>
+
+    <script>
+        class AssoMaj {
+            constructor(raceId, isFirst) {
+                this.RaceId = raceId;
+                this.IsFirst = isFirst;
+            }
+        }
+
+        class AssoEvent {
+            constructor(eventId) {
+                this.EventId = eventId;
+            }
+        }
+
+        class TheSubmitted {
+            constructor(majs, events) {
+                this.InfoId = $("#InfoId").val();
+                this.LocaleId = $("#LocaleId").val();
+                this.Submit = $("#Submit").val();
+                this.Majs = majs;
+                this.Events = events;
+                this.__RequestVerificationToken = $('input[name="__RequestVerificationToken"]', $('#daForm')).val();
+            }
+        }
+
+        function IsChecked(target, name, list) {
+            var work = $('[data-list="' + list + '"][data-value="' + target + '"] [data-name="' + name + '"]').is(":checked");
+            return work;
+        }
+
+        $("#daForm").submit(function (e) {
+            e.preventDefault();
+            var postMaj = [];
+            var postEvent = [];
+            $(function () {
+                $(".selected-wrapper a").each(function () {
+                    var t = $(this).data("value");
+                    var list = $(this).data("list");
+                    switch (list) {
+                        case "maj":
+                            var first = IsChecked(t, "isFirst", list);
+                            postMaj.push(new AssoMaj(t, first));
+                            console.log(postMaj);
+                            break;
+                        case "event":
+                            //get other data of localeevent if any added
+                            postEvent.push(new AssoEvent(t));
+                            break;
+                    }
+                });
+
+                var deFormData = new TheSubmitted(postMaj, postEvent);
+
+                 $(document).ready(function () {
+                    $.ajax({
+                        url: "@Url.Action("AssoCreate","Locales")",
+                        type: "POST",
+                        data: deFormData,
+                        success: function (data) {
+                            if (data == true) {
+                                window.location.href = "/Locales/Details/" + @Model.LocaleId;
+
+                            }
+                            else {
+
+                            }
+                        }
+                    });
+                });
+            });
+
+        });
+
+    </script>
+}

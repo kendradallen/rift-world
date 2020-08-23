@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using RiftWorld.DATA.EF;
+using RiftWorld.UI.MVC.Models;
 
 namespace RiftWorld.UI.MVC.Controllers.Entities
 {
@@ -18,7 +19,6 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
         public PartialViewResult _Stories(short id)
         {
             var stories = db.Stories.Where(r => r.IsAboutId == id).ToList();
-
 
             return PartialView(stories);
         }
@@ -48,7 +48,8 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
         // GET: Stories/Create
         public ActionResult Create()
         {
-            ViewBag.IsAboutId = new SelectList(db.Infos, "InfoId", "Blurb");
+            ViewBag.IsAboutId = new SelectList(db.Infos, "InfoId", "Name");
+            ViewBag.Tags = new MultiSelectList(db.Tags, "TagId", "TagName");
             return View();
         }
 
@@ -57,16 +58,41 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "StoryId,IsAboutId,DateTold,CommissionedBy,IsCannon,TheContent,Title")] Story story)
+        public ActionResult Create([Bind(Include = "IsAboutId,DateTold,CommissionedBy,IsCannon,TheContent,Title")] StoryCreateVM story,
+            List<short> tags)
         {
+            story.DateTold = System.DateTime.Now.Date;
             if (ModelState.IsValid)
             {
-                db.Stories.Add(story);
+                Story daStory = new Story
+                {
+                    DateTold = story.DateTold,
+                    CommissionedBy = story.CommissionedBy,
+                    IsAboutId = story.IsAboutId,
+                    IsCannon = story.IsCannon,
+                    TheContent = story.TheContent,
+                    Title = story.Title
+                };
+                db.Stories.Add(daStory);
+                db.SaveChanges();
+
+                short storyId = db.Stories.Max(s => s.StoryId);
+                #region Adding Tags
+                if (tags != null)
+                {
+                    foreach (short t in tags)
+                    {
+                        StoryTag storyTag = new StoryTag { StoryId = storyId, TagId = t };
+                        db.StoryTags.Add(storyTag);
+                    }
+                }
+                #endregion
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.IsAboutId = new SelectList(db.Infos, "InfoId", "Blurb", story.IsAboutId);
+            ViewBag.IsAboutId = new SelectList(db.Infos, "InfoId", "Name", story.IsAboutId);
+            ViewBag.Tags = new MultiSelectList(db.Tags, "TagId", "TagName", tags);
             return View(story);
         }
 
@@ -82,7 +108,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             {
                 return HttpNotFound();
             }
-            ViewBag.IsAboutId = new SelectList(db.Infos, "InfoId", "Blurb", story.IsAboutId);
+            ViewBag.IsAboutId = new SelectList(db.Infos, "InfoId", "Name", story.IsAboutId);
             return View(story);
         }
 
@@ -99,7 +125,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.IsAboutId = new SelectList(db.Infos, "InfoId", "Blurb", story.IsAboutId);
+            ViewBag.IsAboutId = new SelectList(db.Infos, "InfoId", "Name", story.IsAboutId);
             return View(story);
         }
 

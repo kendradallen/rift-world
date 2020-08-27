@@ -2796,7 +2796,7 @@
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
           </AssociationSet>
           <FunctionImport Name="getSecrets" EntitySet="Secrets" ReturnType="Collection(RiftWorldModel.Secret)">
-            <Parameter Name="PlayerId" Type="String" Mode="In" />
+          <Parameter Name="PlayerId" Type="String" Mode="In" />
             <Parameter Name="InfoId" Type="Int16" Mode="In" />
           </FunctionImport>
           <AssociationSet Name="FK_NPCs_Gender" Association="RiftWorldModel.FK_NPCs_Gender">

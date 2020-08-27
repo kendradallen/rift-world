@@ -1,0 +1,42 @@
+﻿@model RiftWorld.UI.MVC.Models._EventOrgFullVM
+@using RiftWorld.UI.MVC.Models
+
+
+@if (Model.Holidays.Count != 0)
+{
+    <h2 class="line">Holidays</h2>
+    <ul>
+        @foreach (var item in Model.Holidays)
+        {
+            <li>
+                <a href="~/Events/Details/@item.Id">
+                    @Html.DisplayFor(modelItem => item.Name)
+                </a>
+                @(item.Blurb.IsEmpty() ? "" : " - ")
+                <i>
+                    @Html.DisplayFor(modelItem => item.Blurb)
+                </i>
+            </li>
+        }
+    </ul>
+    <br/>
+}
+@if (Model.PastEvents.Count != 0)
+{
+    <h2 class="line">Major Influence In</h2>
+    <ul>
+        @foreach (var item in Model.PastEvents)
+        {
+            <li>
+                <a href="~/Events/Details/@item.Id">
+                    @Html.DisplayFor(modelItem => item.Name)
+                </a>
+                @(item.Blurb.IsEmpty() ? "" : " - ")
+                <i>
+                    @Html.DisplayFor(modelItem => item.Blurb)
+                </i>
+            </li>
+        }
+    </ul>
+    <br/>
+}

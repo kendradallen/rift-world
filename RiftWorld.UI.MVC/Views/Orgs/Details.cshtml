@@ -1,74 +1,89 @@
 ﻿@model RiftWorld.DATA.EF.Org
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = Model.Name;
+    ViewBag.InfoId = Model.InfoId;
 }
-
-<h2>Details</h2>
-
-<div>
-    <h4>Org</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.IsPlayerEnabled)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.IsPlayerEnabled)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.SymbolFileName)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.SymbolFileName)
-        </dd>
-
-        <dt>
+<section id="start" class="col-12 row justify-content-center" name="Start">
+    <div id="pic" class=" col-sm-8 col-md-6 col-lg-3">
+        <img src="~/Content/img/org/@Model.SymbolFileName" />
+        @*@if (Model.Artist != null)*@
+        @if (Model.SymbolFileName != "default.jpg")
+        {
+            <div class="overlay">Art by @Model.Artist</div>
+        }
+    </div>
+    <div id="name" class="col-12">
+        @Html.DisplayFor(model => model.Name)
+    </div>
+    <h4 id="base" class="col-12">
+        @Html.DisplayNameFor(model => model.BaseLocationId): @(Model.BaseLocationId == null ? Html.DisplayFor(model => model.BaseLocationId) : Html.DisplayFor(model => model.Locale.Name))
+    </h4>
+</section>
+@if (Model.AboutText != "Nada")
+{
+    <section id="about" class="col-12" name="About">
+        <h2 class="line">
             @Html.DisplayNameFor(model => model.AboutText)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.AboutText)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.IsPublished)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.IsPublished)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Info.Blurb)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Info.Blurb)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Locale.Name)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Locale.Name)
-        </dd>
-
-    </dl>
-</div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.OrgId }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+        </h2>
+        <div class="hang">
+            @Html.Raw(Model.AboutText)
+        </div>
+    </section>
+}
+<section id="members" class="col-md-6" name="Members">
+    @Html.Action("_Members", "Orgs", new { id = Model.OrgId })
+    @if (Model.IsPlayerEnabled)
+    {
+        <button class="btn btn-dark btn-block">JOIN TODAY!</button>
+    }
+</section>
+<section id="events" class="col-md-6" name="Events">
+    @Html.Action("_Events", "Orgs", new { id = Model.OrgId })
+</section>
+@Html.Action("_Details", "Secrets", new { id = Model.InfoId })
+@Html.Action("_Stories", "Stories", new { id = Model.InfoId })
+<section id="rumors" class="col-12" name="Rumors">
+    <h2 class="line">Rumors</h2>
+    @Html.Action("_Rumors", "Rumors", new { id = Model.InfoId })
+    @Html.Action("CreateRumor", "Rumors", new { id = Model.InfoId })
+</section>
+<footer id="tags" class="col-12">
+    @Html.Action("_TagList", "Infos", new { id = Model.InfoId })
+    <p>
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+</footer>
+@if (User.IsInRole("Admin"))
+{
+    <nav id="adminNav" class="navbar fixed-bottom navbar-light navbar-expand-md">
+        <span class="navbar-brand">Katherine's Bar</span>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    @Html.ActionLink("Edit", "Edit", new { id = Model.OrgId }, new { @class = "nav-link" })
+                </li>
+                <li class="nav-item">
+                    @Html.ActionLink("Edit Complex", "AssoEdit", new { id = Model.OrgId }, new { @class = "nav-link" })
+                </li>
+                <li class="nav-item">
+                    @Html.ActionLink("Delete", "Delete", new { id = Model.OrgId }, new { @class = "nav-link" })
+                </li>
+                <li class="nav-item">
+                    @Html.ActionLink("Back to List", "Index", null, new { @class = "nav-link" })
+                </li>
+            </ul>
+        </div>
+        <span class="navbar-text @Model.Pub.ToLower()">
+            @Model.Pub
+        </span>
+    </nav>
+}
+@section Scripts{
+    <script src="~/Scripts/MyJS/story.js"></script>
+    <script src="~/Scripts/MyJS/rumor.js"></script>
+    <script src="~/Scripts/MyJS/secret.js"></script>
+}

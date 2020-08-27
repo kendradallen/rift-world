@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using RiftWorld.DATA.EF;
+using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.AspNet.Identity;
 
 namespace RiftWorld.UI.MVC.Controllers
 {
@@ -194,20 +196,22 @@ namespace RiftWorld.UI.MVC.Controllers
 
         //Approve User
         [HttpGet]
-        public async Task<ActionResult> Approve(string id)
+        public ActionResult Approve(string id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var user = await UserManager.FindByIdAsync(id);
+            RiftWorldEntities db = new RiftWorldEntities();
+
+            var user = db.AspNetUsers.Find(id);
             if (user == null)
             {
                 return HttpNotFound();
             }
+            var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext()));
 
-            var userRoles = await UserManager.GetRolesAsync(user.Id);
-            RiftWorldEntities db = new RiftWorldEntities();
+            var userRoles = userManager.GetRoles(id);
             var userDeets = db.UserDetails.Where(x => x.UserId == id).First();
             ViewBag.CurrentCharacter = db.Characters.Where(x => x.CharacterId == userDeets.CurrentCharacterId).Select(x => x.CharacterName).FirstOrDefault();
             ViewBag.PastCharacters = db.Characters.Where(x => x.PlayerId == id && x.IsRetired == true).Select(x => x.CharacterName).ToList();
@@ -224,24 +228,17 @@ namespace RiftWorld.UI.MVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Approve([Bind(Include = "Email,Id, ConsentFileName, DiscordName, DiscordDiscriminator, IsApproved")] EditUserViewModel2 editUser, string submit, HttpPostedFileBase consentFile)
+        public ActionResult Approve([Bind(Include = "Email,Id, ConsentFileName, DiscordName, DiscordDiscriminator, IsApproved")] EditUserViewModel2 editUser, string submit, HttpPostedFileBase consentFile)
         {
+
             RiftWorldEntities db = new RiftWorldEntities();
-            var userDeets = await db.UserDetails.Where(x => x.UserId == editUser.Id).FirstAsync();
+            var userDeets =  db.UserDetails.Where(x => x.UserId == editUser.Id).First();
             ViewBag.CurrentCharacter = db.Characters.Where(x => x.CharacterId == userDeets.CurrentCharacterId).Select(x => x.CharacterName).FirstOrDefault();
             ViewBag.PastCharacters = db.Characters.Where(x => x.PlayerId == editUser.Id && x.IsRetired == true).Select(x => x.CharacterName).ToList();
 
-            switch (submit)
-            {
-                case "Deny":
-                    return RedirectToAction("DeleteConfirmed", new { id = editUser.Id});
-                case "Approve":
-                case "Save":
-                    break;
-            }
             if (ModelState.IsValid)
             {
-                var user = await UserManager.FindByIdAsync(editUser.Id);
+                var user = db.AspNetUsers.Find(editUser.Id);
                 if (user == null)
                 {
                     return HttpNotFound();
@@ -257,11 +254,11 @@ namespace RiftWorld.UI.MVC.Controllers
                     {
                         consentName = editUser.DiscordName + "_" + editUser.DiscordDiscriminator + ext;
                         consentFile.SaveAs(Server.MapPath("~/Content/ConsentFiles/" + consentName));
-                        UserDetail userDetail = await db.UserDetails.FindAsync(editUser.Id);
+                        UserDetail userDetail = db.UserDetails.Find(editUser.Id);
                         userDetail.ConsentFileName = consentName;
                         userDetail.IsApproved = true;
                         db.Entry(userDetail).State = EntityState.Modified;
-                        await db.SaveChangesAsync();
+                        db.SaveChanges();
                     }
                     else
                     {
@@ -305,17 +302,54 @@ namespace RiftWorld.UI.MVC.Controllers
             });
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Deny(string id)
+        {
+            RiftWorldEntities db = new RiftWorldEntities();
+
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var user = db.AspNetUsers.Find(id);
+            if (user == null)
+            {
+                return HttpNotFound();
+            }
+            var userDeets = db.UserDetails.Where(x => x.UserId == id).FirstOrDefault();
+            if (userDeets  == null)
+            {
+                //error
+            }
+            if (userDeets.IsApproved == true)
+            {
+                ViewBag.Message = "You can't deny someone who already is approved to be a user. If you're trying to remove them permanently, you must use the delete function. Also, how are you getting this error?";
+                return View("Error");
+            }
+
+            var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext()));
+
+            var user2 = UserManager.FindById(id);
+
+            UserManager.Delete(user2);
+
+            db.UserDetails.Remove(userDeets);
+            db.SaveChangesAsync();
+
+            return RedirectToAction("Approvals", "Infos", null);
+        }
 
         //
         // GET: /Users/Delete/5
         [HttpGet]
-        public async Task<ActionResult> Delete(string id)
+        public ActionResult Delete(string id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var user = await UserManager.FindByIdAsync(id);
+            var user =UserManager.FindById(id);
             if (user == null)
             {
                 return HttpNotFound();
@@ -323,27 +357,27 @@ namespace RiftWorld.UI.MVC.Controllers
             return View(user);
         }
 
-        [HttpGet]
-        public async Task<ActionResult> _Delete(string id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            var user = await UserManager.FindByIdAsync(id);
-            if (user == null)
-            {
-                return HttpNotFound();
-            }
-            return PartialView(user);
-        }
+        //[HttpGet]
+        //public async Task<ActionResult> _Delete(string id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        //    }
+        //    var user = await UserManager.FindByIdAsync(id);
+        //    if (user == null)
+        //    {
+        //        return HttpNotFound();
+        //    }
+        //    return PartialView(user);
+        //}
 
         //
         // POST: /Users/Delete/5
         [HttpPost]
         [ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> DeleteConfirmed(string id)
+        public ActionResult DeleteConfirmed(string id)
         {
             if (ModelState.IsValid)
             {
@@ -352,28 +386,38 @@ namespace RiftWorld.UI.MVC.Controllers
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
                 }
 
-                var user = await UserManager.FindByIdAsync(id);
+                var user = UserManager.FindById(id);
                 if (user == null)
                 {
                     return HttpNotFound();
                 }
-                var result = await UserManager.DeleteAsync(user);
-                if (!result.Succeeded)
-                {
-                    ModelState.AddModelError("", result.Errors.First());
-                    return View();
-                }
+                UserManager.Delete(user);
 
                 RiftWorldEntities db = new RiftWorldEntities();
-                var userDeets = await db.UserDetails.Where(x => x.UserId == id).FirstOrDefaultAsync();
+                var userDeets = db.UserDetails.Where(x => x.UserId == id).FirstOrDefault();
+                var currentCharacter = userDeets.CurrentCharacterId;
+                var consent = userDeets.ConsentFileName;
+
+                string fullPath = Request.MapPath("~/Content/ConsentFiles/" + consent);
+                if (System.IO.File.Exists(fullPath))
+                {
+                    System.IO.File.Delete(fullPath);
+                }
+
                 db.UserDetails.Remove(userDeets);
-                await db.SaveChangesAsync();
+                if (currentCharacter != null)
+                {
+                    var character = db.Characters.Where(c => c.CharacterId == currentCharacter).FirstOrDefault();
+                    character.IsRetired = true;
+                    db.Entry(character).State = EntityState.Modified;
+                }
+                db.SaveChanges();
 
                 return RedirectToAction("Index");
             }
             return View();
         }
 
-        
+
     }
 }

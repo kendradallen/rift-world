@@ -1,0 +1,57 @@
+﻿@model IEnumerable<RiftWorld.DATA.EF.Info>
+
+@{
+    ViewBag.Title = "Search";
+}
+
+<h2>Search</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.IdWithinType)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Blurb)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IsPublished)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.InfoType.TypeName)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.IdWithinType)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Blurb)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.IsPublished)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.InfoType.TypeName)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.InfoId }) |
+            @Html.ActionLink("Details", "Details", new { id=item.InfoId }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.InfoId })
+        </td>
+    </tr>
+}
+
+</table>

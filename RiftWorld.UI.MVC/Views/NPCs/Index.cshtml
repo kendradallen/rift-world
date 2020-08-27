@@ -11,87 +11,108 @@
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
-
-
+@*@foreach (var item in Model)
+{
+    <div class="col-12 row justify-content-center info-box">
+        <div class="col-auto info-box-click" id="@Html.DisplayFor(modelItem => item.NpcId)">
+            <h4>
+                @Html.DisplayFor(modelItem => item.Name)
+            </h4>
+            <p>
+                @Html.DisplayFor(modelItem => item.Quote)
+            </p>
+        </div>
+    </div>
+}*@
 <table class="table">
     <tr>
         <th>
             @Html.DisplayNameFor(model => model.Name)
         </th>
         @*<th>
-            @Html.DisplayNameFor(model => model.Alias)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Quote)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.PortraitFileName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CrestFileName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ApperanceText)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.AboutText)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.IsPublished)
-        </th>*@
+                @Html.DisplayNameFor(model => model.Alias)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Quote)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PortraitFileName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CrestFileName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ApperanceText)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AboutText)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsPublished)
+            </th>*@
         <th>
             @Html.DisplayNameFor(model => model.Info.Blurb)
         </th>
         @*<th>
-            @Html.DisplayNameFor(model => model.Locale.Name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Race.RaceName)
-        </th>*@
+                @Html.DisplayNameFor(model => model.Locale.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Race.RaceName)
+            </th>*@
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Name)
-        </td>
-        @*<td>
-            @Html.DisplayFor(modelItem => item.Alias)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Quote)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.PortraitFileName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CrestFileName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ApperanceText)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.AboutText)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.IsPublished)
-        </td>*@
-        <td>
-            @Html.DisplayFor(modelItem => item.Info.Blurb)
-        </td>
-        @*<td>
-            @Html.DisplayFor(modelItem => item.Locale.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Race.RaceName)
-        </td>*@
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.NpcId }) |
-            @Html.ActionLink("Details", "DetailsV2", new { id=item.NpcId }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.NpcId })
-        </td>
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            @*<td>
+                    @Html.DisplayFor(modelItem => item.Alias)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Quote)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PortraitFileName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CrestFileName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ApperanceText)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AboutText)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsPublished)
+                </td>*@
+            <td>
+                @Html.DisplayFor(modelItem => item.Info.Blurb)
+            </td>
+            @*<td>
+                    @Html.DisplayFor(modelItem => item.Locale.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Race.RaceName)
+                </td>*@
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.NpcId }) |
+                @Html.ActionLink("Details", "DetailsV2", new { id = item.NpcId }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.NpcId })
+            </td>
+        </tr>
+    }
 
 </table>
+
+@section Scripts{
+    <script>
+        $('.info-box-click').click(function () {
+            var daid = $(this).attr("id");
+            window.location.href = "/NPCs/DetailsV2/" + daid;
+        })
+    </script>
+    }

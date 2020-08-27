@@ -11,18 +11,28 @@ using RiftWorld.UI.MVC.Models;
 
 namespace RiftWorld.UI.MVC.Controllers.Entities
 {
+    //todo - uncomment to lockdown controller
+    //[Authorize(Roles = "Admin")]
     public class OrgsController : Controller
     {
         private RiftWorldEntities db = new RiftWorldEntities();
 
         // GET: Orgs
+        [OverrideAuthorization]
         public ActionResult Index()
         {
+            //v1 - for testing so I don't have to constantly switch accounts
             var orgs = db.Orgs.Include(o => o.Info).Include(o => o.Locale);
+
+            //v2 - prevent non-admin from seeing unpublished work
+            //todo - uncomment below to prevent users from seeing un-published work
+            //var orgs = db.Orgs.Include(o => o.Info).Include(o => o.Locale).Where(o => o.IsPublished);
+
             return View(orgs.ToList());
         }
 
         // GET: Orgs/Details/5
+        [OverrideAuthorization]
         public ActionResult Details(short? id)
         {
             if (id == null)
@@ -34,7 +44,179 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             {
                 return HttpNotFound();
             }
+
+            //todo - uncomment below to prevent users from seeing un-published work
+            //if (!org.IsPublished && !User.IsInRole("Admin"))
+            //{
+            //    return View("Error");
+            //    //todo change redirect to a error 404 page
+            //}
             return View(org);
+        }
+
+        [HttpGet]
+        [OverrideAuthorization]
+        public PartialViewResult _Members(short id)
+        {
+            //todo - really refactor this
+            #region Current Members
+
+            List<_MembersVM> players =
+                (from co in db.CharOrgs
+                 join c in db.Characters on co.CharId equals c.CharacterId
+                 where
+                    co.OrgId == id &&
+                    co.IsPublic &&
+                    co.IsCurrent &&
+                    co.KatherineApproved
+                 select new _MembersVM()
+                 {
+                     Name = c.CharacterName,
+                     Blurb = co.BlurbOrgPage,
+                     Id = co.CharId,
+                     IsPlayer = true,
+                     DisplayOrder = null
+                 }
+                )
+                .Distinct()
+                .ToList()
+            ;
+            List<_MembersVM> npcs =
+                (from norg in db.NpcOrgs
+                 join n in db.NPCs on norg.NpcId equals n.NpcId
+                 where
+                     norg.OrgId == id &&
+                     norg.IsCurrent &&
+                     n.IsPublished
+                 select new _MembersVM()
+                 {
+                     Name = n.Name,
+                     Blurb = norg.BlurbOrgPage,
+                     Id = norg.NpcId,
+                     IsPlayer = false,
+                     DisplayOrder = norg.MemberOrder
+                 }
+                )
+                .Distinct()
+                .ToList()
+            ;
+
+            List<_MembersVM> members = npcs.Union(players).OrderByDescending(m => m.DisplayOrder.HasValue).OrderBy(m => m.DisplayOrder).OrderBy(m => m.Name).ToList();
+
+            #endregion
+
+            #region Past Members
+            List<_MembersVM> pastplayers =
+                (from co in db.CharOrgs
+                 join c in db.Characters on co.CharId equals c.CharacterId
+                 where
+                    co.OrgId == id &&
+                    co.IsPublic &&
+                    !co.IsCurrent &&
+                    co.KatherineApproved
+                 select new _MembersVM()
+                 {
+                     Name = c.CharacterName,
+                     Blurb = co.BlurbOrgPage,
+                     Id = co.CharId,
+                     IsPlayer = true,
+                     DisplayOrder = null
+                 }
+                )
+                .Distinct()
+                .ToList()
+            ;
+            List<_MembersVM> pastnpcs =
+                (from norg in db.NpcOrgs
+                 join n in db.NPCs on norg.NpcId equals n.NpcId
+                 where
+                    norg.OrgId == id &&
+                    !norg.IsCurrent &&
+                    n.IsPublished
+                 select new _MembersVM() //has to be empty due to linq rules
+                 {
+                     Name = n.Name,
+                     Blurb = norg.BlurbOrgPage,
+                     Id = norg.NpcId,
+                     IsPlayer = false,
+                     DisplayOrder = norg.MemberOrder
+                 }
+                )
+                .Distinct()
+                .ToList()
+            ;
+
+            List<_MembersVM> pastMembers = pastnpcs.Union(pastplayers).OrderByDescending(m => m.DisplayOrder.HasValue).OrderBy(m => m.DisplayOrder).OrderBy(m => m.Name).ToList();
+
+            #endregion
+
+            #region Secret Members
+            List<_MembersVM> secretMembers =
+                (from co in db.CharOrgs
+                    join c in db.Characters on co.CharId equals c.CharacterId
+                 where
+                    co.OrgId == id &&
+                    !co.IsPublic &&
+                    co.KatherineApproved
+                 select new _MembersVM()
+                 {
+                     Name = c.CharacterName,
+                     Blurb = co.BlurbOrgPage,
+                     Id = co.CharId,
+                     IsPlayer = true,
+                     DisplayOrder = null
+                 }
+                )
+                .Distinct()
+                .ToList()
+            ;
+
+            #endregion
+            _MemberFullVM allMembers = new _MemberFullVM { CurrentMembers = members, PastMembers = pastMembers, SecretMembers = secretMembers };
+            return PartialView(allMembers);
+        }
+
+        [HttpGet]
+        [OverrideAuthorization]
+        public PartialViewResult _Events(short id)
+        {
+            List<_EventsOrgVM> holidays =
+                (
+                    from eo in db.OrgEvents
+                    join e in db.Events on eo.EventId equals e.EventId
+                    where
+                        eo.OrgId == id &&
+                        !e.IsHistory
+                    select new _EventsOrgVM()
+                    {
+                        Name = e.Name,
+                        Id = eo.EventId,
+                        Blurb = eo.Blurb
+                    }
+                )
+                .Distinct()
+                .ToList()
+            ;
+            List<_EventsOrgVM> pastEvents =
+                (
+                    from eo in db.OrgEvents
+                    join e in db.Events on eo.EventId equals e.EventId
+                    where
+                        eo.OrgId == id &&
+                        e.IsHistory
+                    select new _EventsOrgVM()
+                    {
+                        Name = e.Name,
+                        Id = eo.EventId,
+                        Blurb = eo.Blurb
+                    }
+                )
+                .Distinct()
+                .ToList()
+            ;
+
+            _EventOrgFullVM events = new _EventOrgFullVM { Holidays = holidays, PastEvents = pastEvents };
+            return PartialView(events);
         }
 
         // GET: Orgs/Create
@@ -42,10 +224,6 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
         {
             ViewBag.BaseLocationId = new SelectList(db.Locales, "LocaleId", "Name");
             ViewBag.Tags = new MultiSelectList(db.Tags, "TagId", "TagName");
-
-            ViewBag.startName = 50;
-            ViewBag.startBlurb = 100;
-            ViewBag.startArtist = 40;
             return View();
         }
 
@@ -65,7 +243,6 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                 string[] goodExts = { ".jpg", ".jpeg", ".gif", ".png" };
                 string imgName = picture.FileName;
 
-                var length = picture.ContentLength;
                 string ext = imgName.Substring(imgName.LastIndexOf('.'));
 
                 if (!goodExts.Contains(ext.ToLower()))
@@ -156,27 +333,12 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             //if model not valid
             ViewBag.BaseLocationId = new SelectList(db.Locales, "LocaleId", "Name", org.BaseLocationId);
             ViewBag.Tags = new MultiSelectList(db.Tags, "TagId", "TagName", tags);
-            ViewBag.startName = 50;
-            ViewBag.startBlurb = 100;
-            ViewBag.startArtist = 40;
-            if (org.Name != null)
-            {
-                ViewBag.startName = 50 - org.Name.Length;
-            }
-            if (org.Blurb != null)
-            {
-                ViewBag.startBlurb = 100 - org.Blurb.Length;
-            }
-            if (org.Artist != null)
-            {
-                ViewBag.startArtist = 40 - org.Artist.Length;
-            }
 
             if (picture != null)
             {
                 ModelState.AddModelError("SymbolFileName", "Hey, there was some error, so you have to re-upload the picture");
             }
-            ModelState.AddModelError("", "Something has gone wrong. Looks for red text to see where is went wrong");
+            ModelState.AddModelError("", "Something has gone wrong. Look for red text to see where is went wrong");
 
             return View(org);
         }
@@ -467,7 +629,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                     ModelState.AddModelError("Artist", "Katherine, you're trying to submit something with a picture without an artist. That's a no-no! But seriously, if something came up that means you need to change this rule, you know who to call.");
                 }
             }
-            else if (org.SymbolFileName != null && org.Artist == null)
+            else if (org.SymbolFileName != "default.jpg" && org.Artist == null)
             {
                 ModelState.AddModelError("Artist", "Yo bud, you tired? Seems you deleted the artist by accident. Why don't ya fix that?");
 
@@ -579,7 +741,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             {
                 ModelState.AddModelError("SymbolFileName", "Hey, there was some error, so you have to re-upload the picture");
             }
-
+            ModelState.AddModelError("", "Something has gone wrong. Look for red text to see where is went wrong");
             OrgEditVM aOrg = new OrgEditVM(org);
             return View(aOrg);
         }
@@ -802,7 +964,102 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
         public ActionResult DeleteConfirmed(short id)
         {
             Org org = db.Orgs.Find(id);
+            short infoId = org.InfoId;
+            string picture = org.SymbolFileName;
             db.Orgs.Remove(org);
+
+            #region Remove Picture
+            string fullPath = Request.MapPath("~/Content/img/org/" + picture);
+            if (System.IO.File.Exists(fullPath))
+            {
+                System.IO.File.Delete(fullPath);
+            }
+            #endregion
+
+            #region Remove Associations
+
+            #region Remove NpcOrgs
+            List<NpcOrg> npcs = db.NpcOrgs.Where(x => x.OrgId == id).ToList();
+            foreach (NpcOrg gone in npcs)
+            {
+                db.NpcOrgs.Remove(gone);
+            }
+            #endregion
+
+            #region Remove CharOrgs
+            List<CharOrg> chars = db.CharOrgs.Where(x => x.OrgId == id).ToList();
+            foreach (CharOrg gone in chars)
+            {
+                db.CharOrgs.Remove(gone);
+            }
+            #endregion
+
+            #region Remove OrgEvents
+            List<OrgEvent> events = db.OrgEvents.Where(x => x.OrgId == id).ToList();
+            foreach (OrgEvent gone in events)
+            {
+                db.OrgEvents.Remove(gone);
+            }
+            #endregion
+
+            #endregion
+
+            #region Remove Rumors
+            var rumors = db.Rumors.Where(r => r.RumorOfId == infoId);
+            foreach (Rumor r in rumors)
+            {
+                db.Rumors.Remove(r);
+            }
+            #endregion
+
+            #region Remove Secrets
+            var secrets = db.Secrets.Where(s => s.IsAboutId == infoId);
+            List<short> secretIds = db.Secrets.Where(s => s.IsAboutId == infoId).Select(s => s.SecretId).ToList();
+            List<SecretSecretTag> ssts = db.SecretSecretTags.Where(s => secretIds.Contains(s.SecretId)).ToList();
+
+            //remove sst
+            foreach (SecretSecretTag secretSecretTag in ssts)
+            {
+                db.SecretSecretTags.Remove(secretSecretTag);
+            }
+
+            //remove secrets
+            foreach (Secret secret in secrets)
+            {
+                db.Secrets.Remove(secret);
+            }
+
+            #endregion
+
+            #region remove stories
+            var stories = db.Stories.Where(s => s.IsAboutId == infoId);
+            List<short> storyIds = db.Stories.Where(s => s.IsAboutId == infoId).Select(s => s.StoryId).ToList();
+            List<StoryTag> st = db.StoryTags.Where(s => storyIds.Contains(s.StoryId)).ToList();
+
+            //remove story tags
+            foreach (StoryTag storyTag in st)
+            {
+                db.StoryTags.Remove(storyTag);
+            }
+
+            //remove stories
+            foreach (Story story in stories)
+            {
+                db.Stories.Remove(story);
+            }
+            #endregion
+
+            #region Remove info
+            Info info = db.Infos.Where(i => i.InfoId == infoId).First();
+            var infoTags = db.InfoTags.Where(it => it.InfoId == infoId).ToList();
+            foreach (InfoTag infoTag in infoTags)
+            {
+                db.InfoTags.Remove(infoTag);
+            }
+
+            db.Infos.Remove(info);
+            #endregion
+
             db.SaveChanges();
             return RedirectToAction("Index");
         }

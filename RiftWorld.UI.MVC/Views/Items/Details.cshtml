@@ -1,83 +1,183 @@
 ﻿@model RiftWorld.DATA.EF.Item
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = Model.Name;
+    ViewBag.InfoId = Model.InfoId;
 }
-<div class="col-12">
-    <h2>Details</h2>
-
-    <div>
-        <h4>Item</h4>
-        <hr />
-        <dl class="dl-horizontal">
-            <dt>
-                @Html.DisplayNameFor(model => model.Name)
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.Name)
-            </dd>
-
-            <dt>
-                @Html.DisplayNameFor(model => model.Blurb)
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.Blurb)
-            </dd>
-
-            <dt>
-                @Html.DisplayNameFor(model => model.PictureFileName)
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.PictureFileName)
-            </dd>
-
-            <dt>
-                @Html.DisplayNameFor(model => model.DescriptionText)
-            </dt>
-
-            <dd>
-                @Html.Raw(Model.DescriptionText)
-            </dd>
-
-            <dt>
-                @Html.DisplayNameFor(model => model.PropertyText)
-            </dt>
-
-            <dd>
-                @Html.Raw(Model.PropertyText)
-            </dd>
-
-            <dt>
-                @Html.DisplayNameFor(model => model.HistoryText)
-            </dt>
-
-            <dd>
-                @Html.Raw(Model.HistoryText)
-            </dd>
-
-            <dt>
-                @Html.DisplayNameFor(model => model.IsPublished)
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.IsPublished)
-            </dd>
-
-            <dt>
-                @Html.DisplayNameFor(model => model.Info.Blurb)
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.Info.Blurb)
-            </dd>
-
-        </dl>
+<section id="description" name="Description" class="col-12">
+    <div class="row">
+        <div id="name" class="col-sm-9">
+            @Html.DisplayFor(model => model.Name)
+        </div>
+        <div id="pic" class="col-sm-3">
+            <img src="~/Content/img/item/@Model.PictureFileName" />
+            @if (Model.PictureFileName != "default.jpg" && Model.Artist != null)
+            {
+                <div class="overlay">Art by @Model.Artist</div>
+            }
+        </div>
     </div>
+    <div class="row">
+        <div id="blurb">
+            @Html.DisplayFor(model => model.Blurb)
+        </div>
+    </div>
+    @if (Model.DescriptionText != "Nada")
+    {
+            <h2 class="line">
+                @Html.DisplayNameFor(model => model.DescriptionText)
+            </h2>
+            <div class="hang">
+                @Html.Raw(Model.DescriptionText)
+            </div>
+    }
+</section>
+@if (Model.PropertyText != "Nada")
+{
+    <section id="properties" name="Properties" class="col-12">
+        <h2 class="line">
+            @Html.DisplayNameFor(model => model.PropertyText)
+        </h2>
+        <div class="hang">
+            @Html.Raw(Model.PropertyText)
+        </div>
+    </section>
+}
+@if (Model.HistoryText != "Nada")
+{
+    <section id="history" name="History" class="col-12">
+        <h2 class="line">
+            @Html.DisplayNameFor(model => model.HistoryText)
+        </h2>
+        <div class="hang">
+            @Html.Raw(Model.HistoryText)
+        </div>
+    </section>
+}
+@Html.Action("_Details", "Secrets", new { id = Model.InfoId })
+@Html.Action("_Stories", "Stories", new { id = Model.InfoId })
+<section id="rumors" class="col-12" name="Rumors">
+    <h2 class="line">Rumors</h2>
+    @Html.Action("_Rumors", "Rumors", new { id = Model.InfoId })
+    @Html.Action("CreateRumor", "Rumors", new { id = Model.InfoId })
+</section>
+<footer id="tags" class="col-12">
+    @Html.Action("_TagList", "Infos", new { id = Model.InfoId })
     <p>
-        @Html.ActionLink("Edit", "Edit", new { id = Model.ItemId }) |
         @Html.ActionLink("Back to List", "Index")
     </p>
-</div>
+</footer>
+@if (User.IsInRole("Admin"))
+{
+    <nav id="adminNav" class="navbar fixed-bottom navbar-light navbar-expand-md">
+        <span class="navbar-brand">Katherine's Bar</span>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    @Html.ActionLink("Edit", "Edit", new { id = Model.ItemId }, new { @class = "nav-link" })
+                </li>
+                <li class="nav-item">
+                    @Html.ActionLink("Edit Complex", "AssoEdit", new { id = Model.ItemId }, new { @class = "nav-link" })
+                </li>
+                <li class="nav-item">
+                    @Html.ActionLink("Delete", "Delete", new { id = Model.ItemId }, new { @class = "nav-link" })
+                </li>
+                <li class="nav-item">
+                    @Html.ActionLink("Back to List", "Index", null, new { @class = "nav-link" })
+                </li>
+            </ul>
+        </div>
+        <span class="navbar-text @Model.Pub.ToLower()">
+            @Model.Pub
+        </span>
+    </nav>
+}
+
+
+@section Scripts{
+    <script src="~/Scripts/MyJS/story.js"></script>
+    <script src="~/Scripts/MyJS/rumor.js"></script>
+    <script src="~/Scripts/MyJS/secret.js"></script>
+}
+
+@*<div class="col-12">
+        <h2>Details</h2>
+
+        <div>
+            <h4>Item</h4>
+            <hr />
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.Name)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Name)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Blurb)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Blurb)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.PictureFileName)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.PictureFileName)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.DescriptionText)
+                </dt>
+
+                <dd>
+                    @Html.Raw(Model.DescriptionText)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.PropertyText)
+                </dt>
+
+                <dd>
+                    @Html.Raw(Model.PropertyText)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.HistoryText)
+                </dt>
+
+                <dd>
+                    @Html.Raw(Model.HistoryText)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.IsPublished)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.IsPublished)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Info.Blurb)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Info.Blurb)
+                </dd>
+
+            </dl>
+        </div>
+        <p>
+            @Html.ActionLink("Edit", "Edit", new { id = Model.ItemId }) |
+            @Html.ActionLink("Back to List", "Index")
+        </p>
+    </div>*@

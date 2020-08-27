@@ -58,7 +58,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "IsAboutId,DateTold,CommissionedBy,IsCannon,TheContent,Title")] StoryCreateVM story,
+        public ActionResult Create([Bind(Include = "IsAboutId,CommissionedBy,IsCannon,TheContent,Title")] StoryCreateVM story,
             List<short> tags)
         {
             story.DateTold = System.DateTime.Now.Date;
@@ -88,11 +88,12 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                 }
                 #endregion
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Details", "Infos", new { id = story.IsAboutId });
             }
 
             ViewBag.IsAboutId = new SelectList(db.Infos, "InfoId", "Name", story.IsAboutId);
             ViewBag.Tags = new MultiSelectList(db.Tags, "TagId", "TagName", tags);
+
             return View(story);
         }
 
@@ -109,7 +110,13 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                 return HttpNotFound();
             }
             ViewBag.IsAboutId = new SelectList(db.Infos, "InfoId", "Name", story.IsAboutId);
-            return View(story);
+            StoryEditVM model = new StoryEditVM(story);
+
+            List<short> selectedTags = db.StoryTags.Where(t => t.StoryId == id).Select(t => t.TagId).ToList();
+            ViewBag.Selected = selectedTags;
+            ViewBag.Tags = db.Tags.ToList();
+
+            return View(model);
         }
 
         // POST: Stories/Edit/5
@@ -117,15 +124,68 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "StoryId,IsAboutId,DateTold,CommissionedBy,IsCannon,TheContent,Title")] Story story)
+        public ActionResult Edit([Bind(Include = "StoryId,IsAboutId,DateTold,CommissionedBy,IsCannon,TheContent,Title")] StoryEditVM story,
+            List<short> tags)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(story).State = EntityState.Modified;
+                #region Update Story
+                Story daStory = new Story
+                {
+                    StoryId = story.StoryId,
+                    DateTold = story.DateTold,
+                    CommissionedBy = story.CommissionedBy,
+                    IsAboutId = story.IsAboutId,
+                    IsCannon = story.IsCannon,
+                    TheContent = story.TheContent,
+                    Title = story.Title
+                };
+                db.Entry(daStory).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                #endregion
+
+                #region Update Tags
+                List<short> currentTagIds = db.StoryTags.Where(x => x.StoryId == story.StoryId).Select(x => x.StoryId).ToList();
+                if (tags != null)
+                {
+                    foreach (short t in tags)
+                    {
+                        //if this is an already existing tag 
+                        if (currentTagIds.Contains(t))
+                        {
+                            currentTagIds.Remove(t);
+                        }
+                        else
+                        {
+                            StoryTag newTag = new StoryTag { StoryId = story.StoryId, TagId = t };
+                            db.StoryTags.Add(newTag);
+                        }
+                    }
+                }
+
+                if (currentTagIds.Count != 0)
+                {
+                    foreach (short id in currentTagIds)
+                    {
+                        StoryTag gone = db.StoryTags.Where(x => x.StoryId == story.StoryId & x.TagId == id).FirstOrDefault();
+                        db.StoryTags.Remove(gone);
+                    }
+                }
+                db.SaveChanges();
+                #endregion
+                return RedirectToAction("Details", "Infos", new { id = story.IsAboutId });
             }
             ViewBag.IsAboutId = new SelectList(db.Infos, "InfoId", "Name", story.IsAboutId);
+            ViewBag.Tags = db.Tags.ToList();
+            if (tags != null)
+            {
+                ViewBag.Selected = tags;
+            }
+            else
+            {
+                ViewBag.Selected = new List<short>();
+            }
+
             return View(story);
         }
 

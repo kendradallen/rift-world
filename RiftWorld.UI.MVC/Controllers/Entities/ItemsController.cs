@@ -11,6 +11,7 @@ using RiftWorld.UI.MVC.Models;
 
 namespace RiftWorld.UI.MVC.Controllers.Entities
 {
+    //todo - uncomment to lockdown controller
     //[Authorize(Roles ="Admin")]
     public class ItemsController : Controller
     {
@@ -20,7 +21,12 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
         [OverrideAuthorization]
         public ActionResult Index()
         {
+            //v1 - for testing so I don't have to constantly switch accounts
             var items = db.Items.Include(i => i.Info);
+
+            //v2 - prevent non-admin from seeing unpublished work
+            //todo - uncomment below to prevent users from seeing un-published work
+            //var items = db.Items.Include(i => i.Info).Where(i => i.IsPublished);
             return View(items.ToList());
         }
 
@@ -37,6 +43,14 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             {
                 return HttpNotFound();
             }
+
+            //todo - uncomment below to prevent users from seeing un-published work
+            //if (!item.IsPublished && !User.IsInRole("Admin"))
+            //{
+            //    return View("Error");
+            //    //todo change redirect to a error 404 page
+            //}
+
             return View(item);
         }
 
@@ -45,9 +59,6 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
         {
             //ViewBag.Tags = db.Tags.ToList();
             ViewBag.Tags = new MultiSelectList(db.Tags, "TagId", "TagName");
-            ViewBag.startName= 50;
-            ViewBag.startBlurb = 100;
-            ViewBag.startArtist = 40;
             return View();
         }
 
@@ -58,7 +69,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Name,Blurb,PictureFileName,DescriptionText,PropertyText,HistoryText, Artist")] ItemCreateVM item,
             HttpPostedFileBase picture,
-            List<short> tags, 
+            List<short> tags,
             string submit)
         {
             //so it seems that - at least for none complicated associations like tags - I am actually able to just use the base submit 
@@ -131,7 +142,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
 
                 #region Image uploads
                 string[] goodExts = { ".jpg", ".jpeg", ".gif", ".png" };
-
+                item.PictureFileName = "default.jpg";
                 if (picture != null)
                 {
                     string imgName = picture.FileName;
@@ -143,10 +154,6 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                         imgName = "item-" + infoId.ToString() + ext;
 
                         picture.SaveAs(Server.MapPath("~/Content/img/item/" + imgName));
-                    }
-                    else
-                    {
-                        imgName = "default.jpg";
                     }
                     item.PictureFileName = imgName;
 
@@ -175,34 +182,20 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                 short maxi = db.Items.Max(i => i.ItemId);
                 info.IdWithinType = maxi;
                 db.Entry(info).State = EntityState.Modified;
-                db.SaveChanges(); 
+                db.SaveChanges();
                 #endregion
-            
+
                 return RedirectToAction("Details", new { id = maxi });
             }
 
             //if model is not valid
             ViewBag.Tags = new MultiSelectList(db.Tags, "TagId", "TagName", tags);
-            ViewBag.startName = 50;
-            ViewBag.startBlurb = 100;
-            ViewBag.startArtist = 40;
-            if (item.Name != null)
-            {
-                ViewBag.startName = 50 - item.Name.Length;
-            }
-            if (item.Blurb != null)
-            {
-                ViewBag.startBlurb = 100 - item.Blurb.Length;
-            }
-            if (item.Artist != null)
-            {
-                ViewBag.startArtist = 40 - item.Artist.Length;
-            }
 
             if (picture != null)
             {
                 ModelState.AddModelError("PictureFileName", "Hey, there was some error, so you have to re-upload the picture");
             }
+            ModelState.AddModelError("", "Something has gone wrong. Look for red text to see where is went wrong");
             return View(item);
         }
 
@@ -223,7 +216,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             List<short> selectedTags = db.InfoTags.Where(t => t.InfoId == infoid).Select(t => t.TagId).ToList();
             //make editVM
             ItemEditVM model = new ItemEditVM(item);
-       
+
             ViewBag.Selected = selectedTags;
             ViewBag.Tags = db.Tags.ToList();
 
@@ -235,8 +228,8 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ItemId,InfoId,Name,Blurb,PictureFileName,DescriptionText,PropertyText,HistoryText, Artist")] ItemEditPostVM item, 
-            HttpPostedFileBase picture, 
+        public ActionResult Edit([Bind(Include = "ItemId,InfoId,Name,Blurb,PictureFileName,DescriptionText,PropertyText,HistoryText, Artist")] ItemEditPostVM item,
+            HttpPostedFileBase picture,
             List<short> tags, string submit)
         {
             #region Save or Publish?
@@ -272,7 +265,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                     ModelState.AddModelError("Artist", "Katherine, you're trying to submit something with a picture without an artist. That's a no-no! But seriously, if something came up that means you need to change this rule, you know who to call.");
                 }
             }
-            else if (item.PictureFileName != null && item.Artist == null)
+            else if (item.PictureFileName != "default.jpg" && item.Artist == null)
             {
                 ModelState.AddModelError("Artist", "Yo bud, you tired? Seems you deleted the artist by accident. Why don't ya fix that?");
 
@@ -282,13 +275,13 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             if (ModelState.IsValid)
             {
                 var infoid = item.InfoId;
-                    #region Info Update
-                    //Info info = db.Infos.Find(infoid);
-                    Info info = db.Infos.Where(i => i.InfoId == infoid).FirstOrDefault();
-                    info.Name = item.Name;
-                    info.Blurb = item.Blurb;
-                    info.IsPublished = item.IsPublished;
-                    #endregion
+                #region Info Update
+                //Info info = db.Infos.Find(infoid);
+                Info info = db.Infos.Where(i => i.InfoId == infoid).FirstOrDefault();
+                info.Name = item.Name;
+                info.Blurb = item.Blurb;
+                info.IsPublished = item.IsPublished;
+                #endregion
 
                 #region Update tags
                 List<short> currentTagIds = db.InfoTags.Where(x => x.InfoId == infoid).Select(x => x.TagId).ToList();
@@ -297,7 +290,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                 {
                     foreach (short tag in tags)
                     {
-                       //if this is an already existing tag 
+                        //if this is an already existing tag 
                         if (currentTagIds.Contains(tag))
                         {
                             currentTagIds.Remove(tag);
@@ -383,6 +376,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             {
                 ModelState.AddModelError("PictureFileName", "Hey, there was some error, so you have to re-upload the picture");
             }
+            ModelState.AddModelError("", "Something has gone wrong. Look for red text to see where is went wrong");
             ItemEditVM aItem = new ItemEditVM(item);
             return View(aItem);
         }
@@ -407,19 +401,25 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(short id)
         {
-            //todo -test this action
             Item item = db.Items.Find(id);
             short infoId = item.InfoId;
+            string picture = item.PictureFileName;
             db.Items.Remove(item);
-            //todo remove picture
 
-            //remove rumors
+            #region Remove Picture
+            string fullPath = Request.MapPath("~/Content/img/item/" + picture);
+            if (System.IO.File.Exists(fullPath))
+            {
+                System.IO.File.Delete(fullPath);
+            }
+            #endregion
+
             #region Remove Rumors
             var rumors = db.Rumors.Where(r => r.RumorOfId == infoId);
             foreach (Rumor r in rumors)
             {
                 db.Rumors.Remove(r);
-            } 
+            }
             #endregion
 
             #region Remove Secrets

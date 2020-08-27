@@ -1,0 +1,65 @@
+﻿@model RiftWorld.UI.MVC.Models._MemberFullVM
+@using RiftWorld.UI.MVC.Models
+
+@if (Model.CurrentMembers.Count == 0)
+{
+    <p>No one important</p>
+}
+else
+{
+    <h2 class="line">Known Members</h2>
+    <ul>
+        @foreach (var item in Model.CurrentMembers)
+        {
+            <li>
+                <a href="~/@(item.IsPlayer ? "Characters" : "NPCs")/Details/@item.Id">
+                    @Html.DisplayFor(modelItem => item.Name)
+                </a>
+                @(item.Blurb.IsEmpty() ? "" : " - ")
+                <i>
+                    @Html.DisplayFor(modelItem => item.Blurb)
+                </i>
+            </li>
+        }
+    </ul>
+
+}
+<br />
+@if (Model.PastMembers.Count != 0)
+{
+    <h2 class="line">Past Members</h2>
+    <ul>
+        @foreach (var item in Model.PastMembers)
+        {
+            <li>
+                <a href="~/@(item.IsPlayer ? "Characters" : "NPCs")/Details/@item.Id">
+                    @Html.DisplayFor(modelItem => item.Name)
+                </a>
+                @(item.Blurb.IsEmpty() ? "" : " - ")
+                <i>
+                    @Html.DisplayFor(modelItem => item.Blurb)
+                </i>
+            </li>
+        }
+    </ul>
+    <br />
+}
+@if (Request.IsAuthenticated && User.IsInRole("Admin") && Model.SecretMembers.Count != 0)
+{
+    <h2 class="line">Secret Members</h2>
+    <ul>
+        @foreach (var item in Model.SecretMembers)
+        {
+            <li>
+                <a href="~/@(item.IsPlayer ? "Characters" : "NPCs")/Details/@item.Id">
+                    @Html.DisplayFor(modelItem => item.Name)
+                </a>
+                @(item.Blurb.IsEmpty() ? "" : " - ")
+                <i>
+                    @Html.DisplayFor(modelItem => item.Blurb)
+                </i>
+            </li>
+        }
+    </ul>
+    <br />
+}

@@ -88,7 +88,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
         }
 
         // GET: Journals/Edit/5
-        [Authorize(Roles = "Player, Mod")]
+        [Authorize(Roles = "Character")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -107,10 +107,6 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             if (User.Identity.GetUserId() != player.UserId)
             {
                 //this journal is not yours. You can't edit it. 
-            }
-            if (!journal.Character.IsApproved)
-            {
-                //this character is under approval and cannot use the journal function till it is approved.
             }
             if (player.CurrentCharacterId != journal.CharacterId && journal.Character.IsApproved)
             {
@@ -177,8 +173,23 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Mod, Admin")]
-        public ActionResult Approve([Bind(Include = "JournalId,CharacterId,OocDateWritten,TheContent")] Journal journal)
+        public ActionResult Approve(int journalId)
         {
+            //todo - add logic to check if the approved thing and what's on the db match
+            Journal journal = db.Journals.Where(x => x.JournalId == journalId).FirstOrDefault();
+            //check to see if other mod/admin has already denied this (thus it won't exist)
+            if (journal == null)
+            {
+                ViewBag.Message = "Looks like another mod or the admin denied this journal's existance";
+                return View("Error");
+            }
+            //check to see if other mod/admin has already approved this
+            if (journal.IsApproved == true)
+            {
+                ViewBag.Message = "Looks like another mod or the admin approved this";
+                return View("Approvals", "Infos");
+            }
+
             journal.IsApproved = true;
             journal.HasUnseenEdit = false;
             if (ModelState.IsValid)
@@ -188,6 +199,30 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                 return RedirectToAction("Index");
             }
             return View(journal);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Mod, Admin")]
+        public ActionResult Deny(int journalId)
+        {
+            Journal journal = db.Journals.Where(x => x.JournalId == journalId).FirstOrDefault();
+            //check to see if other mod/admin has already denied this (thus it won't exist)
+            if (journal == null)
+            {
+                ViewBag.Message = "Looks like another mod or the admin denied this journals's existance";
+                return View("Approvals", "Infos");
+            }
+            //check to see if other mod/admin has already approved this
+            if (journal.IsApproved == true)
+            {
+                ViewBag.Message = "Looks like another mod or the admin approved this. If Katherine is reading this, you'll have to manually delete the journal in order to undo this";
+                return View("Error");
+            }
+            db.Journals.Remove(journal);
+
+            db.SaveChanges();
+            return RedirectToAction("Approvals", "Infos");
         }
 
         // GET: Journals/Delete/5

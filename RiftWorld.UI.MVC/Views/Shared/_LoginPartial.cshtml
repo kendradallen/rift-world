@@ -35,7 +35,7 @@
         @Html.AntiForgeryToken()
 
 <ul @*class="nav navbar-nav navbar-right"*@>
-    @if (Request.IsAuthenticated && (User.IsInRole("Player") || User.IsInRole("Mod")))
+    @if (Request.IsAuthenticated && User.IsInRole("Character"))
     {
         <li><a href="@Url.Action("Create", "Journals")">Journal <i class="fas fa-feather-alt"></i></a></li>
         <li><a href="@Url.Action("Hub", "Characters", new { id = charId })">Character</a></li>
@@ -43,15 +43,20 @@
     else if (Request.IsAuthenticated && User.IsInRole("Admin"))
     {
         <li><a href="@Url.Action("CreateWhat", "Infos")">Create New</a></li>
-        <li><a href="@Url.Action("Approvals", "Infos")">Approvals</a> <span class="badge badge-pill badge-info">@pendingStuff</span> @if (onlyAdmin > 0) {<span class="badge badge-pill badge-danger">@onlyAdmin</span>}</li>
-
+        <li>
+            <a href="@Url.Action("Approvals", "Infos")">Approvals</a> <span class="badge badge-pill badge-info">@pendingStuff</span> @if (onlyAdmin > 0)
+            {<span class="badge badge-pill badge-danger">@onlyAdmin</span>}
+        </li>
     }
-    <li>@Html.ActionLink("Profile", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })</li>
-    @if (User.IsInRole("Mod"))
+    else if (Request.IsAuthenticated && (User.IsInRole("Player") || User.IsInRole("Mod")))
+    {
+        <li><a href="@Url.Action("Create", "Characters")">Create Character</a></li>
+    }
+    @if (Request.IsAuthenticated && User.IsInRole("Mod"))
     {
         <li><a href="@Url.Action("Approvals", "Infos")">Approvals</a> <span class="badge badge-pill badge-info">@pendingStuff</span></li>
     }
-
+    <li>@Html.ActionLink("Profile", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })</li>
     <li>
         @Html.ActionLink("Hi " + (!charName.IsEmpty() ? charName : discordName) + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
     </li>

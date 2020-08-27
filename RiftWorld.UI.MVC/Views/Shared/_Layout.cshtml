@@ -259,8 +259,8 @@
     <div class="search-model">
         <div class="h-100 d-flex align-items-center justify-content-center">
             <div class="search-close-switch">+</div>
-            <form class="search-model-form">
-                <input type="text" id="search-input" placeholder="Search here.....">
+            <form action="/Infos/Search" method="get" class="search-model-form">
+                <input type="text" id="search-input" name="Search" placeholder="Search here.....">
             </form>
         </div>
     </div>
@@ -306,12 +306,13 @@
         var counter = 0;
         $("section").each(function () {
             var id = $(this).attr("id");
+            var name = $(this).attr("name");
             var top = 20 + 60 * counter;
             var adjust = $("header").outerHeight();
-            $("#mySidenav").append('<a href="#' + id + '" id="' + id + '-nav" style="top:' + top + 'px;">' + id + '</a>');
+            $("#mySidenav").append('<a href="#' + id + '" id="' + id + '-nav" style="top:' + top + 'px;">' + name + '</a>');
             counter++;
             window.addEventListener("scroll", event => {
-                let fromTop = window.scrollY - adjust + 4; /*284 is the size of the top nav bar*/
+                let fromTop = window.scrollY - adjust + 4; 
                 let daLink = document.querySelector("#mySidenav a#" + id + "-nav");
                 let section = document.querySelector(daLink.hash);
 

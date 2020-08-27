@@ -167,6 +167,11 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\BehindTheScenes\ClassesController.cs" />
+    <Compile Include="Controllers\BehindTheScenes\GendersController.cs" />
+    <Compile Include="Controllers\BehindTheScenes\SecretTagsController.cs" />
+    <Compile Include="Controllers\BehindTheScenes\SpeciesController.cs" />
+    <Compile Include="Controllers\BehindTheScenes\TagsController.cs" />
     <Compile Include="Controllers\Entities\CharactersController.cs" />
     <Compile Include="Controllers\Entities\EventsController.cs" />
     <Compile Include="Controllers\Entities\InfosController.cs" />
@@ -190,6 +195,7 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\AdminViewModel.cs" />
     <Compile Include="Models\CharacterViewModel.cs" />
+    <Compile Include="Models\EventViewModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\InfoViewModel.cs" />
     <Compile Include="Models\ItemViewModel.cs" />
@@ -229,7 +235,7 @@
     <Content Include="Content\img\npc\default.jpg" />
     <Content Include="Content\img\logo.png" />
     <Content Include="Content\img\npc\org_default.jpg" />
-    <Content Include="Content\img\org\org_default.jpg" />
+    <Content Include="Content\img\org\default.jpg" />
     <Content Include="Content\img\rsz_caeritheinmap.png" />
     <Content Include="Content\img\testmap.jpg" />
     <Content Include="Content\SelectBoxes\multi.css" />
@@ -276,6 +282,8 @@
     <Content Include="Scripts\js\owl.carousel.min.js" />
     <Content Include="Scripts\MyJS\assoedit.js" />
     <Content Include="Scripts\MyJS\edit.js" />
+    <Content Include="Scripts\MyJS\rumor.js" />
+    <Content Include="Scripts\MyJS\secret.js" />
     <Content Include="Scripts\MyJS\story.js" />
     <Content Include="Scripts\popper-utils.js" />
     <Content Include="Scripts\popper-utils.min.js" />
@@ -655,11 +663,8 @@
     <Content Include="_Archive\fonts\fontawesome-webfont.woff2" />
     <Content Include="_Archive\fonts\FontAwesome.otf" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\NPCs\CreateV2.cshtml" />
     <Content Include="Views\NPCs\DetailsV2.cshtml" />
     <Content Include="Views\NPCs\_OrgsPartial.cshtml" />
-    <Content Include="Views\NPCs\Test.cshtml" />
-    <Content Include="Views\NPCs\Test2.cshtml" />
     <Content Include="Views\Secrets\_Details.cshtml" />
     <Content Include="Views\Stories\_Stories.cshtml" />
     <Content Include="Views\Rumors\_Rumors.cshtml" />
@@ -689,7 +694,6 @@
     <Content Include="Views\Rifts\Details.cshtml" />
     <Content Include="Views\Rifts\Edit.cshtml" />
     <Content Include="Views\Rifts\Index.cshtml" />
-    <Content Include="Views\NPCs\Test3.cshtml" />
     <Content Include="Scripts\jquery-3.5.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.5.1.min.map" />
     <Content Include="Scripts\umd\popper.min.js.map" />
@@ -722,7 +726,6 @@
     <Content Include="Views\NPCs\Confirmed.cshtml" />
     <Content Include="Views\Infos\CreateWhat.cshtml" />
     <Content Include="Views\Infos\Approvals.cshtml" />
-    <Content Include="Views\NPCs\CreateRumor.cshtml" />
     <Content Include="Views\Rumors\Confirmed.cshtml" />
     <Content Include="Views\Rumors\RumorFailed.cshtml" />
     <Content Include="Views\Rifts\CreateCombo.cshtml" />
@@ -745,6 +748,40 @@
     <Content Include="Views\Locales\AssoEdit.cshtml" />
     <Content Include="Views\Orgs\AssoEdit.cshtml" />
     <Content Include="Views\Orgs\AssoCreate.cshtml" />
+    <Content Include="Views\NPCs\AssoCreate.cshtml" />
+    <Content Include="Views\NPCs\AssoEdit.cshtml" />
+    <Content Include="Views\Events\AssoEdit.cshtml" />
+    <Content Include="Views\Events\AssoCreate.cshtml" />
+    <Content Include="Views\Infos\Search.cshtml" />
+    <Content Include="Views\Stories\Edit.cshtml" />
+    <Content Include="Views\Stories\Index.cshtml" />
+    <Content Include="Views\Orgs\_Members.cshtml" />
+    <Content Include="Views\Orgs\_Events.cshtml" />
+    <Content Include="Views\Species\Create.cshtml" />
+    <Content Include="Views\Species\Delete.cshtml" />
+    <Content Include="Views\Species\Details.cshtml" />
+    <Content Include="Views\Species\Edit.cshtml" />
+    <Content Include="Views\Species\Index.cshtml" />
+    <Content Include="Views\Tags\Create.cshtml" />
+    <Content Include="Views\Tags\Delete.cshtml" />
+    <Content Include="Views\Tags\Details.cshtml" />
+    <Content Include="Views\Tags\Edit.cshtml" />
+    <Content Include="Views\Tags\Index.cshtml" />
+    <Content Include="Views\SecretTags\Create.cshtml" />
+    <Content Include="Views\SecretTags\Delete.cshtml" />
+    <Content Include="Views\SecretTags\Details.cshtml" />
+    <Content Include="Views\SecretTags\Edit.cshtml" />
+    <Content Include="Views\SecretTags\Index.cshtml" />
+    <Content Include="Views\Genders\Index.cshtml" />
+    <Content Include="Views\Genders\Create.cshtml" />
+    <Content Include="Views\Genders\Edit.cshtml" />
+    <Content Include="Views\Genders\Delete.cshtml" />
+    <Content Include="Views\Classes\Index.cshtml" />
+    <Content Include="Views\Classes\Details.cshtml" />
+    <Content Include="Views\Classes\Create.cshtml" />
+    <Content Include="Views\Classes\Edit.cshtml" />
+    <Content Include="Views\Classes\Delete.cshtml" />
+    <Content Include="Views\Home\Community.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

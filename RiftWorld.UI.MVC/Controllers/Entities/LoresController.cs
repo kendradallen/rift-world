@@ -11,6 +11,7 @@ using RiftWorld.UI.MVC.Models;
 
 namespace RiftWorld.UI.MVC.Controllers.Entities
 {
+    //todo - uncomment to lockdown controller
     //[Authorize(Roles = "Admin")]
     public class LoresController : Controller
     {
@@ -20,7 +21,12 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
         [OverrideAuthorization]
         public ActionResult Index()
         {
+            //v1 - for testing so I don't have to constantly switch accounts
             var lores = db.Lores.Include(l => l.Info);
+
+            //v2 - prevent non-admin from seeing unpublished work
+            //todo - uncomment below to prevent users from seeing un-published work
+            //var lores = db.Lores.Include(l => l.Info).Where(l => l.IsPublished);
             return View(lores.ToList());
         }
 
@@ -37,6 +43,13 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             {
                 return HttpNotFound();
             }
+
+            //todo - uncomment below to prevent users from seeing un-published work
+            //if (!lore.IsPublished && !User.IsInRole("Admin"))
+            //{
+            //    return View("Error");
+            //    //todo change redirect to a error 404 page
+            //}
             return View(lore);
         }
 
@@ -44,9 +57,6 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
         public ActionResult Create()
         {
             ViewBag.Tags = new MultiSelectList(db.Tags, "TagId", "TagName");
-            ViewBag.startName = 50;
-            ViewBag.startBlurb = 100;
-
             return View();
         }
 
@@ -126,18 +136,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
 
             //if model is not valid
             ViewBag.Tags = new MultiSelectList(db.Tags, "TagId", "TagName", tags);
-            ViewBag.startName = 50;
-            ViewBag.startBlurb = 100;
-
-            if (lore.Name != null)
-            {
-                ViewBag.startName = 50 - lore.Name.Length;
-            }
-            if (lore.Blurb != null)
-            {
-                ViewBag.startBlurb = 100 - lore.Blurb.Length;
-            }
-
+            ModelState.AddModelError("", "Something has gone wrong. Look for red text to see where is went wrong");
             return View(lore);
         }
 
@@ -254,6 +253,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             {
                 ViewBag.Selected = new List<short>();
             }
+            ModelState.AddModelError("", "Something has gone wrong. Look for red text to see where is went wrong");
             return View(lore);
         }
 
@@ -278,7 +278,65 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
         public ActionResult DeleteConfirmed(short id)
         {
             Lore lore = db.Lores.Find(id);
+            short infoId = lore.InfoId;
             db.Lores.Remove(lore);
+
+            #region Remove Rumors
+            var rumors = db.Rumors.Where(r => r.RumorOfId == infoId);
+            foreach (Rumor r in rumors)
+            {
+                db.Rumors.Remove(r);
+            }
+            #endregion
+
+            #region Remove Secrets
+            var secrets = db.Secrets.Where(s => s.IsAboutId == infoId);
+            List<short> secretIds = db.Secrets.Where(s => s.IsAboutId == infoId).Select(s => s.SecretId).ToList();
+            List<SecretSecretTag> ssts = db.SecretSecretTags.Where(s => secretIds.Contains(s.SecretId)).ToList();
+
+            //remove sst
+            foreach (SecretSecretTag secretSecretTag in ssts)
+            {
+                db.SecretSecretTags.Remove(secretSecretTag);
+            }
+
+            //remove secrets
+            foreach (Secret secret in secrets)
+            {
+                db.Secrets.Remove(secret);
+            }
+
+            #endregion
+
+            #region remove stories
+            var stories = db.Stories.Where(s => s.IsAboutId == infoId);
+            List<short> storyIds = db.Stories.Where(s => s.IsAboutId == infoId).Select(s => s.StoryId).ToList();
+            List<StoryTag> st = db.StoryTags.Where(s => storyIds.Contains(s.StoryId)).ToList();
+
+            //remove story tags
+            foreach (StoryTag storyTag in st)
+            {
+                db.StoryTags.Remove(storyTag);
+            }
+
+            //remove stories
+            foreach (Story story in stories)
+            {
+                db.Stories.Remove(story);
+            }
+            #endregion
+
+            #region Remove info
+            Info info = db.Infos.Where(i => i.InfoId == infoId).First();
+            var infoTags = db.InfoTags.Where(it => it.InfoId == infoId).ToList();
+            foreach (InfoTag infoTag in infoTags)
+            {
+                db.InfoTags.Remove(infoTag);
+            }
+
+            db.Infos.Remove(info);
+            #endregion
+
             db.SaveChanges();
             return RedirectToAction("Index");
         }

@@ -14,615 +14,29 @@ using RiftWorld.UI.MVC.Models;
 
 namespace RiftWorld.UI.MVC.Controllers.Entities
 {
+    //todo - uncomment to lockdown controller
+    //[Authorize(Roles = "Admin")]
     public class NPCsController : Controller
     {
         private RiftWorldEntities db = new RiftWorldEntities();
 
-        //----------------Yeah model binding does jack diddly. Validation is going to have to be hand coded. 
-        //private bool Validate(AWSmol aWSmol)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        return true;
-        //    }
-        //    return false;
-        //}
-
-        /*//public ActionResult Confirmed()
-        //{
-        //    return View();
-        //}
-        //// GET: Rumors/Create
-        //[OverrideAuthorization]
-        //public PartialViewResult CreateRumor(short id)
-        //{
-        //    //ViewBag.HasChar = null;
-        //    var userId = User.Identity.GetUserId();
-        //    var character = db.UserDetails.Where(u => u.UserId == userId).Select(u => u.CurrentCharacterId).FirstOrDefault();
-        //    RumorCreateVM model = new RumorCreateVM { RumorOfId = id, AuthorId = character, IsApproved = false };
-        //    return PartialView(model);
-        //}
-
-        //// POST: Rumors/Create
-        //// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        //// more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //[OverrideAuthorization]
-        //[Authorize(Roles ="Player, Mod")]
-        //public ActionResult CreateRumor([Bind(Include = "RumorOfId,RumorText, AuthorId, IsApproved")] RumorCreateVM rumor)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        Rumor daRumor = new Rumor { RumorOfId = rumor.RumorOfId, IsApproved = rumor.IsApproved, RumorText = rumor.RumorText, AuthorId = (short)rumor.AuthorId };
-        //        db.Rumors.Add(daRumor);
-        //        db.SaveChanges();
-        //        return RedirectToAction("Confirmed");
-        //    }
-        //    else
-        //    {
-        //        return RedirectToAction("Error");
-        //    }
-        //}*/
-
-        //public bool IsRealOrg(List<AssociationWork> asso)
-        //{
-        //    foreach (AssociationWork a in asso)
-        //    {
-        //        Org org = db.Orgs.Where(o => o.OrgId == a.OrgId).FirstOrDefault();
-        //        if (org == null)
-        //        {
-        //            return false;
-        //        }
-        //    }
-
-        //    return true;
-        //}
-        ////todo all of these privates should go into the ctor for the model 
-        //private IEnumerable<SelectListItem> GetAsso()
-        //{
-        //    List<SelectListItem> list = new List<SelectListItem>();
-
-        //    var orgs = db.Orgs.ToList();
-        //    foreach (var o in orgs)
-        //    {
-        //        list.Add(new SelectListItem { Text = o.Name, Value = o.OrgId.ToString() });
-        //    }
-        //    return list;
-        //}
-
-        //private IEnumerable<SelectListItem> GetOrgs()
-        //{
-        //    List<SelectListItem> list = new List<SelectListItem>();
-
-        //    var orgs = db.Orgs.ToList();
-        //    foreach (var o in orgs)
-        //    {
-        //        list.Add(new SelectListItem { Text = o.Name, Value = o.OrgId.ToString() });
-        //    }
-        //    return list;
-        //}
-
-        //private IEnumerable<SelectListItem> GetClasses()
-        //{
-        //    List<SelectListItem> list = new List<SelectListItem>();
-
-        //    var classes = db.Classes.ToList();
-        //    foreach (var o in classes)
-        //    {
-        //        list.Add(new SelectListItem { Text = o.ClassName, Value = o.ClassId.ToString() });
-        //    }
-        //    return list;
-        //}
-
-        //private IEnumerable<SelectListItem> GetTags()
-        //{
-        //    List<SelectListItem> list = new List<SelectListItem>();
-
-        //    var tags = db.Tags.ToList();
-        //    foreach (var o in tags)
-        //    {
-        //        list.Add(new SelectListItem { Text = o.TagName, Value = o.TagId.ToString() });
-        //    }
-        //    return list;
-        //}
-
-        //public ActionResult Test3()
-        //{
-        //    //all the multi-selects with extra options
-        //    //var model = new NpcCreateGetVM
-        //    //{
-        //    //    //OptionsOrgs = GetOrgs(),
-        //    //    //OptionsClasses = GetClasses(),
-        //    //    //OptionsTags = GetTags()
-        //    //};
-
-        //    //race and location dropdowns
-        //    ViewBag.LastLocationId = new SelectList(db.Locales, "LocaleId", "Name");
-        //    ViewBag.RaceId = new SelectList(db.Races, "RaceId", "RaceName");
-        //    ViewBag.Orgs = db.Orgs.ToList();
-        //    ViewBag.Classes = db.Classes.ToList();
-        //    ViewBag.Tags = db.Tags.ToList();
-
-        //    return View();
-        //}
-
-        //[HttpPost]
-        //public ActionResult Test3(string name, string alias, string quote, byte? raceId, string apperanceText, string aboutText, byte? lastLocationId, List<Npc_Class> assoClasses, List<Npc_Org> assoOrgs, List<Npc_Tag> assoTags)
-        //{
-
-        //    System.Diagnostics.Debug.WriteLine(name);
-        //    foreach (Npc_Class a in assoClasses)
-        //    {
-        //        System.Diagnostics.Debug.WriteLine("ClassID: " + a.ClassId);
-        //        System.Diagnostics.Debug.WriteLine("Order: " + a.ClassOrder);
-        //    }
-        //    foreach (Npc_Org a in assoOrgs)
-        //    {
-        //        System.Diagnostics.Debug.WriteLine("OrgId: " + a.OrgId);
-        //        System.Diagnostics.Debug.WriteLine("OrderNpc: " + a.OrderNpc);
-        //        System.Diagnostics.Debug.WriteLine("OrderOrg: " + a.OrderOrg);
-
-        //    }
-        //    foreach (Npc_Tag a in assoTags)
-        //    {
-        //        System.Diagnostics.Debug.WriteLine("TagId: " + a.TagId);
-        //    }
-
-        //    //System.Diagnostics.Debug.WriteLine(dave);
-        //    //System.Diagnostics.Debug.WriteLine(dave);
-        //    //System.Diagnostics.Debug.WriteLine(dave);
-        //    //System.Diagnostics.Debug.WriteLine(dave);
-        //    //System.Diagnostics.Debug.WriteLine(dave);
-
-        //    return View();
-        //}
-
-        ////[HttpPost]
-        ////public ActionResult Test3([Bind(Include = "Name,Alias,Quote,PortraitFileName,RaceId,CrestFileName,ApperanceText,AboutText,LastLocationId,IsPublished, Blurb")] NpcCreatePostVM npc,
-        ////List<Npc_Class> classes,
-        ////List<Npc_Org> orgs,
-        ////List<Npc_Tag> tags)
-        ////{
-        ////    return View();
-        ////}
-
-        //public ActionResult Test2()
-        //{
-        //    var model = new AssociationWork_Full
-        //    {
-        //        AssociationOptions = GetAsso()
-        //    };
-
-
-        //    return View(model);
-        //}
-
-        //[HttpPost]
-        //public ActionResult Test2(string name, List<AssociationWork> associations)
-        //{
-        //    AssociationWork_Full returnOnError = new AssociationWork_Full { Name = name, AssociationOptions = GetAsso(), Associations = associations };
-        //    System.Diagnostics.Debug.WriteLine(name);
-
-        //    foreach (AssociationWork a in associations)
-        //    {
-        //        System.Diagnostics.Debug.WriteLine("OrgId: " + a.OrgId);
-        //        System.Diagnostics.Debug.WriteLine("Order: " + a.Order);
-        //    }
-
-        //    AWSmol test = new AWSmol(name, associations);
-        //    //bool dave = Validate(test);
-        //    bool dave = test.Validate();
-        //    System.Diagnostics.Debug.WriteLine(dave);
-
-        //    if (!dave || !IsRealOrg(associations)) //<---- something done messed up, the data is invalid, second part checks that all orgids given were actually real
-        //    {
-        //        //here is where I have those values to return to the create menu again cause it was invalid
-        //        //or just an error page if I'm lazy.....
-        //        ViewBag.Message = "Look, the curse is a hard thing to deal with. Something went wrong. What? I can't tell you. But you need to try again.";
-        //        return View(returnOnError);
-        //    }
-
-        //    //NPC npc;
-        //    //npc = new NPC();
-        //    //npc.Name = name;
-
-        //    //Info info;
-
-        //    //short oldLargestInfoId = db.Infos.Max(i => i.InfoId);
-
-        //    //info = new Info
-        //    //{
-        //    //    InfoTypeId = 2, // <----- type 2 = NPC
-        //    //    IdWithinType = (short)(db.NPCs.Max(n => n.NpcId) + 1), //hack in order to not have to come back to this AGAIN later. But if needed cna be done after NPC actually made
-        //    //    Blurb = "filler", //npc.Blurb,
-        //    //    Name = npc.Name,
-        //    //    IsPublished = npc.IsPublished //TODO rewrite logic for a save and publish button scheme
-        //    //};
-        //    //db.Infos.Add(info);
-
-        //    //db.SaveChanges();
-
-        //    //short infoID = db.Infos.Max(i => i.InfoId);
-
-        //    //npc.InfoId = infoID;
-        //    //npc.Alias = "filler";
-        //    //npc.Quote = "filler";
-        //    //npc.PortraitFileName = null;
-        //    //npc.RaceId = 1;
-        //    //npc.CrestFileName = null;
-        //    //npc.ApperanceText = "filler";
-        //    //npc.AboutText = "filler";
-        //    //npc.LastLocationId = 1;
-
-        //    //db.NPCs.Add(npc);
-        //    //db.SaveChanges();
-        //    //short npcId = db.NPCs.Max(i => i.NpcId);
-
-        //    ////now make the connections 
-        //    //foreach (AssociationWork a in associations)
-        //    //{
-        //    //    var org = new NpcOrg
-        //    //    {
-        //    //        NpcId = npcId,
-        //    //        OrgId = a.OrgId,
-        //    //        IsCurrent = true,
-        //    //        OrgOrder = a.Order
-        //    //    };
-
-        //    //    db.NpcOrgs.Add(org);
-        //    //    db.SaveChanges();
-        //    //}//end foreach
-
-        //    return RedirectToAction("Index");
-        //}
-
-        //public ActionResult Test()
-        //{
-        //    //var model = new TesterVM
-        //    //{
-        //    //    OrgAssociations = GetOrgs()
-        //    //};
-
-
-        //    return View();
-        //}
-
-        //// GET: NPCs
-        //public ActionResult Index()
-        //{
-        //    //DO NOT, under any circumstances, not include Info. Not until you experiment and figure out if you don't need it when doing the secrets, rumors, stories, and tags
-        //    var nPCs = db.NPCs.Include(n => n.Info).Include(n => n.Locale).Include(n => n.Race);
-
-        //    //var npcAndClass = from n in db.NPCs
-        //    //            join cn in db.ClassNPCs on n.NpcId equals cn.NpcId
-        //    //            join c in db.Classes on cn.ClassId equals c.ClassId
-        //    //            select new
-        //    //            {
-        //    //                NpcId = n.NpcId,
-        //    //                ClassId = c.ClassId
-        //    //                //other assignments
-        //    //            }
-        //    //        ;
-
-        //    return View(nPCs.ToList());
-        //}
-
-        //// GET: NPCs/Details/5
-        //public ActionResult Details(short? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    NPC nPC = db.NPCs.Find(id);
-        //    if (nPC == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    return View(nPC);
-        //}
-
-        //// GET: NPCs/Details/5
-        //public ActionResult DetailsV2(short? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    NPC nPC = db.NPCs.Find(id);
-        //    if (nPC == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    var npcAndClass = from n in db.NPCs
-        //                      join cn in db.ClassNPCs on n.NpcId equals cn.NpcId
-        //                      join c in db.Classes on cn.ClassId equals c.ClassId
-        //                      select new
-        //                      {
-        //                          NpcId = n.NpcId,
-        //                          ClassId = c.ClassId
-        //                          //other assignments
-        //                      }
-        //            ;
-        //    //add the npc's classes
-        //    //var classes = db.ClassNPCs.Where(c => c.NpcId == id).OrderBy(c => c.ClassOrder.HasValue ).Select(c => c.Class).ToList();
-        //    List<Class> classes = (from cn in db.ClassNPCs
-        //                           where cn.NpcId == id
-        //                           orderby cn.ClassOrder.HasValue descending, cn.ClassOrder, cn.Class.ClassName
-        //                           select cn.Class)
-        //                   .ToList()
-        //                   ;
-
-        //    int classLength = classes.Count();
-        //    string holder;
-        //    switch (classLength)
-        //    {
-        //        case 0:
-        //            holder = "Unknown";
-        //            break;
-        //        case 1:
-        //            holder = classes[0].ClassName;
-        //            break;
-        //        case 2:
-        //            holder = classes[0].ClassName + "/" + classes[1].ClassName;
-        //            break;
-        //        default:
-        //            holder = "Lots";
-        //            break;
-        //    }
-        //    ViewBag.Classes = holder;
-        //    //rumors section
-        //    ViewBag.HasChar = null;
-        //    if (User.IsInRole("Player") || User.IsInRole("Mod"))
-        //    {
-        //        var userId = User.Identity.GetUserId();
-        //        var character = db.UserDetails.Where(u => u.UserId == userId).Select(u => u.CurrentCharacterId).FirstOrDefault();
-        //        ViewBag.HasChar = character;
-        //        ViewBag.Approved = db.Characters.Where(c => c.CharacterId == character).Select(c => c.IsApproved);
-        //    }
-        //    return View(nPC);
-        //}
-
-        //[HttpGet]
-        //public PartialViewResult _OrgsPartial(short id)
-        //{
-        //    List<OrgVM> orgs = (from no in db.NpcOrgs
-        //                        join o in db.Orgs on no.OrgId equals o.OrgId
-        //                        where no.NpcId == id && no.IsCurrent == true && o.IsPublished == true
-        //                        orderby no.OrgOrder.HasValue descending, no.OrgOrder, o.Name
-        //                        select new OrgVM
-        //                        {
-        //                            Name = o.Name,
-        //                            Blurb = no.BlurbNpcPage
-        //                        })
-        //               .ToList()
-        //                ;
-
-        //    return PartialView(orgs);
-        //}
-
-
-        //// GET: NPCs/Create
-        //public ActionResult CreateV2()
-        //{
-        //    ViewBag.LastLocationId = new SelectList(db.Locales, "LocaleId", "Name");
-        //    ViewBag.RaceId = new SelectList(db.Races, "RaceId", "RaceName");
-
-        //    return View();
-        //}
-
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        ////public ActionResult Create([Bind(Include = "NpcId,InfoId,Name,Alias,Quote,PortraitFileName,RaceId,CrestFileName,ApperanceText,AboutText,LastLocationId,IsPublished")] NPC nPC, string blurb)
-        //public ActionResult CreateV2([Bind(Include = "Name,Alias,Quote,PortraitFileName,RaceId,CrestFileName,ApperanceText,AboutText,LastLocationId,IsPublished, Blurb")] NpcCreatePostVM nPC)
-        //{
-
-
-        //    //make corresponding info 
-        //    Info info;
-
-        //    if (ModelState.IsValid) //actual making of the info
-        //    {
-        //        short oldLargestInfoId = db.Infos.Max(i => i.InfoId);
-
-        //        info = new Info
-        //        {
-        //            InfoTypeId = 2, // <----- type 2 = NPC
-        //            IdWithinType = (short)(db.NPCs.Max(n => n.NpcId) + 1), //hack in order to not have to come back to this AGAIN later. But if needed cna be done after NPC actually made
-        //            Blurb = nPC.Blurb,
-        //            Name = nPC.Name,
-        //            IsPublished = nPC.IsPublished
-        //        };
-        //        db.Infos.Add(info);
-
-        //        db.SaveChanges();
-
-        //    }
-        //    else //if blurb is too long (and thus not valid)
-        //    {
-        //        ViewBag.LastLocationId = new SelectList(db.Locales, "LocaleId", "Name", nPC.LastLocationId);
-        //        ViewBag.RaceId = new SelectList(db.Races, "RaceId", "RaceName", nPC.RaceId);
-        //        ViewBag.Blurb = nPC.Blurb;
-        //        return View(nPC);
-        //    }
-
-        //    //adding proper InfoId to NPC before checking if Model is valid (cause till now, it wasn't)
-        //    short infoID = db.Infos.Max(i => i.InfoId);
-
-
-
-        //    if (ModelState.IsValid)
-        //    {
-        //        NPC actualNpc = new NPC
-        //        {
-        //            InfoId = infoID,
-        //            Name = nPC.Name,
-        //            Alias = nPC.Alias,
-        //            Quote = nPC.Quote,
-        //            PortraitFileName = nPC.PortraitFileName,
-        //            RaceId = nPC.RaceId,
-        //            CrestFileName = nPC.CrestFileName,
-        //            ApperanceText = nPC.ApperanceText,
-        //            AboutText = nPC.AboutText,
-        //            LastLocationId = nPC.LastLocationId,
-        //            IsPublished = nPC.IsPublished
-        //        };
-        //        db.NPCs.Add(actualNpc);
-        //        db.SaveChanges();
-        //        return RedirectToAction("Index");
-        //    }
-
-        //    ViewBag.LastLocationId = new SelectList(db.Locales, "LocaleId", "Name", nPC.LastLocationId);
-        //    ViewBag.RaceId = new SelectList(db.Races, "RaceId", "RaceName", nPC.RaceId);
-        //    return View(nPC);
-        //}
-
-        // GET: NPCs/Create
-        public ActionResult Create()
+        // GET: NPCs
+        [OverrideAuthorization]
+        public ActionResult Index()
         {
-            ViewBag.InfoId = new SelectList(db.Infos, "InfoId", "Blurb");
-            ViewBag.LastLocationId = new SelectList(db.Locales, "LocaleId", "Name");
-            ViewBag.RaceId = new SelectList(db.Races, "RaceId", "RaceName");
-            return View();
+            //v1 - for testing so I don't have to constantly switch accounts
+            var nPCs = db.NPCs.Include(n => n.Info).Include(n => n.Locale).Include(n => n.Race);
+
+            //v2 - prevent non-admin from seeing unpublished work
+            //todo - uncomment below to prevent users from seeing un-published work
+            //var nPCs = db.NPCs.Include(n => n.Info).Include(n => n.Locale).Include(n => n.Race).Where(n => n.IsPublished);
+
+            return View(nPCs.ToList());
         }
 
-        // POST: NPCs/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        //public ActionResult Create([Bind(Include = "NpcId,InfoId,Name,Alias,Quote,PortraitFileName,RaceId,CrestFileName,ApperanceText,AboutText,LastLocationId,IsPublished")] NPC nPC, string blurb)
-        public ActionResult Create([Bind(Include = "NpcId,InfoId,Name,Alias,Quote,PortraitFileName,RaceId,CrestFileName,ApperanceText,AboutText,LastLocationId,IsPublished")] NPC nPC,
-            HttpPostedFileBase portraitPic,
-            HttpPostedFileBase crestPic)
-        {
-            //note: add blurb to creation form and binding (also figure out how ModelState and Bind actually work. This is pseudo code
-            //TODO - make this real code. It is making a Info at same time as new NPC
-            Info info;
-            short npcId = (short)(db.NPCs.Max(n => n.NpcId) + 1);
-            string[] goodExts = { ".jpg", ".jpeg", ".gif", ".png" };
-
-            //note to self - this really should be placed after the modelstat is checked valid. After all, null is valid for the portraits. 
-            #region Image Upload -Portrait
-            if (portraitPic != null)
-            {
-                string imgName = portraitPic.FileName;
-
-                //string[] goodExts = { ".jpg", ".jpeg", ".gif", ".png" };
-                string ext = imgName.Substring(imgName.LastIndexOf('.'));
-
-                if (goodExts.Contains(ext.ToLower()))
-                {
-                    imgName = "npc-portrait-" + npcId.ToString() + ext;
-
-                    //portraitPic.SaveAs(Path.Combine("~/Content/img/npc/", imgName));
-                    portraitPic.SaveAs(Server.MapPath("~/Content/img/npc/" + imgName));
-                    nPC.PortraitFileName = imgName;
-                }
-                else
-                {
-                    imgName = "default.jpg";
-                }
-
-            }
-            #endregion
-
-            #region Image Upload -Crest
-            if (crestPic != null)
-            {
-                string imgName = crestPic.FileName;
-
-                string ext = imgName.Substring(imgName.LastIndexOf('.'));
-
-                if (goodExts.Contains(ext.ToLower()))
-                {
-                    imgName = "npc-crest-" + npcId.ToString() + ext;
-
-                    crestPic.SaveAs(Server.MapPath("~/Content/img/npc/" + imgName));
-                    nPC.CrestFileName = imgName;
-                }
-                else
-                {
-                    imgName = "org_default.jpg";
-                }
-
-            }
-            #endregion
-
-
-            string blurb = "things";
-            if (blurb.Length <= 100)
-            {
-                short oldLargestInfoId = db.Infos.Max(i => i.InfoId);
-
-                info = new Info
-                {
-                    InfoTypeId = 2,
-                    IdWithinType = (short)(db.NPCs.Max(n => n.NpcId) + 1),
-                    Blurb = blurb,
-                    Name = nPC.Name,
-                    IsPublished = nPC.IsPublished
-                };
-                db.Infos.Add(info);
-                //short newLargestInfoId = db.Infos.Max(i => i.InfoId);
-                //if (oldLargestInfoId != newLargestInfoId)
-                //{
-                //    //ViewBag.Message = "yup. Old = " + oldLargestInfoId + ". New = " + newLargestInfoId;
-                //    ViewBag.Message = nPC.NpcId;
-                //    return View("test");
-                //}
-                //else
-                //{
-                //    //ViewBag.Message = "NOOOOOOOOOOOOOOO. Old = " + oldLargestInfoId + ". New = " + newLargestInfoId;
-                //    ViewBag.Message = nPC.NpcId;
-                //    return View("test");
-
-                //}
-
-                db.SaveChanges();
-
-                //short newLargestInfoId = db.Infos.Max(i => i.InfoId);
-                //if (oldLargestInfoId != newLargestInfoId)
-                //{
-                //    ViewBag.Message = "yup. Old = " + oldLargestInfoId + ". New = " + newLargestInfoId;
-                //}
-                //else
-                //{
-                //    ViewBag.Message = "NOOOOOOOOOOOOOOO. Old = " + oldLargestInfoId + ". New = " + newLargestInfoId;
-                //}
-
-            }
-            else
-            {
-                ViewBag.Message = "Blurb was too long, try again";
-                ViewBag.InfoId = new SelectList(db.Infos, "InfoId", "Blurb", nPC.InfoId);
-                ViewBag.LastLocationId = new SelectList(db.Locales, "LocaleId", "Name", nPC.LastLocationId);
-                ViewBag.RaceId = new SelectList(db.Races, "RaceId", "RaceName", nPC.RaceId);
-                ViewBag.Blurb = blurb;
-                return View(nPC);
-            }
-
-            short blue = db.Infos.Max(i => i.InfoId);
-            nPC.InfoId = blue;
-            ViewBag.SecondMessage = blue;
-
-
-            if (ModelState.IsValid)
-            {
-                db.NPCs.Add(nPC);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-
-            ViewBag.InfoId = new SelectList(db.Infos, "InfoId", "Blurb", nPC.InfoId);
-            ViewBag.LastLocationId = new SelectList(db.Locales, "LocaleId", "Name", nPC.LastLocationId);
-            ViewBag.RaceId = new SelectList(db.Races, "RaceId", "RaceName", nPC.RaceId);
-            return View(nPC);
-        }
-
-        // GET: NPCs/Edit/5
-        public ActionResult Edit(short? id)
+        // GET: NPCs/Details/5
+        [OverrideAuthorization]
+        public ActionResult Details(short? id)
         {
             if (id == null)
             {
@@ -633,10 +47,464 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             {
                 return HttpNotFound();
             }
-            ViewBag.InfoId = new SelectList(db.Infos, "InfoId", "Blurb", nPC.InfoId);
-            ViewBag.LastLocationId = new SelectList(db.Locales, "LocaleId", "Name", nPC.LastLocationId);
-            ViewBag.RaceId = new SelectList(db.Races, "RaceId", "RaceName", nPC.RaceId);
+
+            //todo - uncomment below to prevent users from seeing un-published work
+            //if (!nPC.IsPublished && !User.IsInRole("Admin"))
+            //{
+            //    return View("Error");
+            //    //todo change redirect to a error 404 page
+            //}
+
             return View(nPC);
+        }
+
+        // GET: NPCs/Details/5
+        public ActionResult DetailsV2(short? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            NPC nPC = db.NPCs.Find(id);
+            if (nPC == null)
+            {
+                return HttpNotFound();
+            }
+            var npcAndClass = from n in db.NPCs
+                              join cn in db.ClassNPCs on n.NpcId equals cn.NpcId
+                              join c in db.Classes on cn.ClassId equals c.ClassId
+                              select new
+                              {
+                                  NpcId = n.NpcId,
+                                  ClassId = c.ClassId
+                                  //other assignments
+                              }
+                    ;
+            //add the npc's classes
+            //var classes = db.ClassNPCs.Where(c => c.NpcId == id).OrderBy(c => c.ClassOrder.HasValue ).Select(c => c.Class).ToList();
+            List<Class> classes = (from cn in db.ClassNPCs
+                                   where cn.NpcId == id
+                                   orderby cn.ClassOrder.HasValue descending, cn.ClassOrder, cn.Class.ClassName
+                                   select cn.Class)
+                           .ToList()
+                           ;
+
+            int classLength = classes.Count();
+            string holder;
+            switch (classLength)
+            {
+                case 0:
+                    holder = "Unknown";
+                    break;
+                case 1:
+                    holder = classes[0].ClassName;
+                    break;
+                case 2:
+                    holder = classes[0].ClassName + "/" + classes[1].ClassName;
+                    break;
+                default:
+                    holder = "Lots";
+                    break;
+            }
+            ViewBag.Classes = holder;
+            //rumors section
+            ViewBag.HasChar = null;
+            if (User.IsInRole("Player") || User.IsInRole("Mod"))
+            {
+                var userId = User.Identity.GetUserId();
+                var character = db.UserDetails.Where(u => u.UserId == userId).Select(u => u.CurrentCharacterId).FirstOrDefault();
+                ViewBag.HasChar = character;
+                ViewBag.Approved = db.Characters.Where(c => c.CharacterId == character).Select(c => c.IsApproved);
+            }
+            return View(nPC);
+        }
+
+        [HttpGet]
+        [OverrideAuthorization]
+        public PartialViewResult _OrgsPartial(short id)
+        {
+            List<_NpcOrgVM> orgs = (from no in db.NpcOrgs
+                                join o in db.Orgs on no.OrgId equals o.OrgId
+                                where no.NpcId == id && no.IsCurrent == true && o.IsPublished == true
+                                orderby no.OrgOrder.HasValue descending, no.OrgOrder, o.Name
+                                select new _NpcOrgVM
+                                {
+                                    Name = o.Name,
+                                    Blurb = no.BlurbNpcPage
+                                })
+                       .ToList()
+                        ;
+
+            return PartialView(orgs);
+        }
+
+        [OverrideAuthorization]
+        public PartialViewResult _ClassNpc(short id)
+        {
+            return PartialView();
+        }
+
+        // GET: NPCs/Create
+        public ActionResult Create()
+        {
+            ViewBag.LastLocationId = new SelectList(db.Locales, "LocaleId", "Name");
+            ViewBag.RaceId = new SelectList(db.Races, "RaceId", "RaceName");
+            ViewBag.GenderId = new SelectList(db.Genders, "GenderId", "GenderName");
+            ViewBag.Tags = new MultiSelectList(db.Tags, "TagId", "TagName");
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create([Bind(Include = "Name,Alias,Quote,PortraitFileName,RaceId,CrestFileName,ApperanceText,AboutText,LastLocationId,PortraitArtist,CrestArtist,IsDead,GenderId, Blurb")] NpcCreateVM npc,
+            List<short> tags,
+            HttpPostedFileBase portraitPic,
+            HttpPostedFileBase crestPic,
+            string submit)
+        {
+            #region Pre-model picture check
+            if (portraitPic != null)
+            {
+                string[] goodExts = { ".jpg", ".jpeg", ".gif", ".png" };
+                string imgName = portraitPic.FileName;
+
+                string ext = imgName.Substring(imgName.LastIndexOf('.'));
+
+                if (!goodExts.Contains(ext.ToLower()))
+                {
+                    ModelState.AddModelError("PortraitFileName", "You have submitted a incorrect file type for your portrait. Please use either: .jpg, .jpeg, .gif, or .png");
+                }
+
+                if (npc.PortraitArtist == null)
+                {
+                    ModelState.AddModelError("PortraitArtist", "Katherine, you're trying to submit something with a picture without an artist. That's a no-no! But seriously, if something came up that means you need to change this rule, you know who to call.");
+                }
+            }
+
+            if (crestPic != null)
+            {
+                string[] goodExts = { ".jpg", ".jpeg", ".gif", ".png" };
+                string imgName = crestPic.FileName;
+
+                string ext = imgName.Substring(imgName.LastIndexOf('.'));
+
+                if (!goodExts.Contains(ext.ToLower()))
+                {
+                    ModelState.AddModelError("CrestFileName", "You have submitted a incorrect file type for your portrait. Please use either: .jpg, .jpeg, .gif, or .png");
+                }
+
+                if (npc.CrestArtist == null)
+                {
+                    ModelState.AddModelError("CrestArtist", "Katherine, you're trying to submit something with a picture without an artist. That's a no-no! But seriously, if something came up that means you need to change this rule, you know who to call.");
+                }
+            }
+            #endregion
+
+            npc.IsPublished = false;
+            if (ModelState.IsValid)
+            {
+                #region Info
+                Info info;
+                info = new Info
+                {
+                    InfoTypeId = 2,  //<-------------------Info Type ID. CHANGE UPON COPY
+                    IdWithinType = null,
+                    Blurb = npc.Blurb,
+                    Name = npc.Name,
+                    IsPublished = npc.IsPublished
+                };
+                db.Infos.Add(info);
+                db.SaveChanges(); //this has to go here in order to ensure that the infoId short below is accurate. Also at this point I am doing no further gets on validity so there is no point to not saving 
+                #endregion
+                short infoId = db.Infos.Max(i => i.InfoId);
+
+                #region Adding Tags
+                if (tags != null)
+                {
+                    foreach (short t in tags)
+                    {
+                        InfoTag infoTag = new InfoTag { InfoId = infoId, TagId = t };
+                        db.InfoTags.Add(infoTag);
+                    }
+                }
+                #endregion
+
+                #region Image Uploads
+                string[] goodExts = { ".jpg", ".jpeg", ".gif", ".png" };
+
+                #region Image Upload -Portrait    
+                npc.PortraitFileName = "default.jpg";
+                if (portraitPic != null)
+                {
+                    string imgName = portraitPic.FileName;
+
+                    string ext = imgName.Substring(imgName.LastIndexOf('.'));
+
+                    if (goodExts.Contains(ext.ToLower()))
+                    {
+                        imgName = "npc-portrait-" + infoId.ToString() + ext;
+                        portraitPic.SaveAs(Server.MapPath("~/Content/img/npc/" + imgName));
+                    }
+                    npc.PortraitFileName = imgName;
+                }
+                #endregion
+
+                #region Image Upload -Crest
+                npc.CrestFileName = "org_default.jpg";
+                if (crestPic != null)
+                {
+                    string imgName = crestPic.FileName;
+
+                    string ext = imgName.Substring(imgName.LastIndexOf('.'));
+
+                    if (goodExts.Contains(ext.ToLower()))
+                    {
+                        imgName = "npc-crest-" + infoId.ToString() + ext;
+
+                        crestPic.SaveAs(Server.MapPath("~/Content/img/npc/" + imgName));
+                    }
+                    npc.CrestFileName = imgName;
+                }
+                #endregion
+
+                #endregion
+
+                #region NPC
+                NPC daNpc = new NPC
+                {
+                    InfoId = infoId,
+                    Name = npc.Name,
+                    Alias = npc.Alias,
+                    Quote = npc.Quote,
+                    PortraitFileName = npc.PortraitFileName,
+                    RaceId = npc.RaceId,
+                    CrestFileName = npc.CrestFileName,
+                    ApperanceText = npc.ApperanceText,
+                    AboutText = npc.AboutText,
+                    LastLocationId = npc.LastLocationId,
+                    IsPublished = npc.IsPublished,
+                    PortraitArtist = npc.PortraitArtist,
+                    CrestArtist = npc.CrestArtist,
+                    IsDead = npc.IsDead,
+                    GenderId = npc.GenderId
+                };
+                db.NPCs.Add(daNpc);
+                db.SaveChanges();
+                #endregion
+
+                #region give info the IdWithinType
+                short maxi = db.NPCs.Max(i => i.NpcId);
+                info.IdWithinType = maxi;
+                db.Entry(info).State = EntityState.Modified;
+                db.SaveChanges();
+                #endregion
+
+                return RedirectToAction("AssoCreate", new { id = maxi, submit = submit });
+            }
+
+            #region model invalid
+            ViewBag.LastLocationId = new SelectList(db.Locales, "LocaleId", "Name", npc.LastLocationId);
+            ViewBag.RaceId = new SelectList(db.Races, "RaceId", "RaceName", npc.RaceId);
+            ViewBag.GenderId = new SelectList(db.Genders, "GenderId", "GenderName", npc.GenderId);
+            ViewBag.Tags = new MultiSelectList(db.Tags, "TagId", "TagName", tags);
+
+            if (portraitPic != null)
+            {
+                ModelState.AddModelError("PortraitFileName", "Hey, there was some error, so you have to re-upload the picture");
+            }
+            if (crestPic != null)
+            {
+                ModelState.AddModelError("CrestFileName", "Hey, there was some error, so you have to re-upload the picture");
+            }
+            ModelState.AddModelError("", "Something has gone wrong. Look for red text to see where is went wrong");
+
+            #endregion
+            return View(npc);
+        }
+
+        public ActionResult AssoCreate(short? id, string submit)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            NPC npc = db.NPCs.Find(id);
+            if (npc == null)
+            {
+                return HttpNotFound();
+            }
+            ViewBag.Orgs = db.Orgs.ToList();
+            var selected = db.NpcOrgs.Where(x => x.NpcId == npc.NpcId).ToList();
+            List<AssoOrg_Npc> assoOrgs = new List<AssoOrg_Npc>();
+            foreach (NpcOrg npcOrg in selected)
+            {
+                AssoOrg_Npc toAdd = new AssoOrg_Npc(npcOrg);
+                assoOrgs.Add(toAdd);
+            }
+
+            ViewBag.Classes = db.Classes.ToList();
+            var selected2 = db.ClassNPCs.Where(x => x.NpcId == npc.NpcId).ToList();
+            List<AssoClass_Npc> assoClasses = new List<AssoClass_Npc>();
+            foreach (ClassNPC asso in selected2)
+            {
+                AssoClass_Npc toAdd = new AssoClass_Npc(asso);
+                assoClasses.Add(toAdd);
+            }
+
+            var infoid = npc.InfoId;
+            AssoNpcVM model = new AssoNpcVM { InfoId = infoid, NpcId = npc.NpcId, Submit = submit, Name = npc.Name, AssoClasses = assoClasses, AssoOrgs = assoOrgs };
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AssoCreate(short infoId, short npcId, string submit,
+            List<AssoClass_Npc> assoClasses,
+            List<AssoOrg_Npc> orgs)
+        {
+            var npc = db.NPCs.Where(i => i.NpcId == npcId).FirstOrDefault();
+            if (ModelState.IsValid)
+            {
+                var info = db.Infos.Where(i => i.InfoId == infoId).FirstOrDefault();
+                #region Save or Publish?
+                switch (submit)
+                {
+                    case "Save Progress":
+                    case "Un-Publish":
+                    case "Save and Continue":
+                        info.IsPublished = false;
+                        npc.IsPublished = false;
+                        break;
+                    case "Publish":
+                    case "Save":
+                        info.IsPublished = true;
+                        npc.IsPublished = true;
+                        break;
+                    default:
+                        break;
+                }
+                db.Entry(npc).State = EntityState.Modified;
+                db.Entry(info).State = EntityState.Modified;
+                #endregion
+
+                #region Add Classes
+                List<byte> currentClassId = db.ClassNPCs.Where(x => x.NpcId == npcId).Select(x => (byte)x.ClassId).ToList();
+                if (assoClasses != null)
+                {
+                    foreach (AssoClass_Npc cn in assoClasses)
+                    {
+                        //if the association already exists
+                        if (currentClassId.Contains(cn.ClassId))
+                        {
+                            ClassNPC toEdit = db.ClassNPCs.Where(x => x.ClassId == cn.ClassId && x.NpcId == npcId).First();
+                            toEdit.ClassOrder = cn.ClassOrder;
+                            db.Entry(toEdit).State = EntityState.Modified;
+                            db.SaveChanges();
+                            currentClassId.Remove(cn.ClassId);
+                        }
+                        else
+                        {
+                            ClassNPC toAdd = new ClassNPC
+                            {
+                                NpcId = npcId,
+                                ClassId = cn.ClassId,
+                                ClassOrder = cn.ClassOrder
+                            };
+                            db.ClassNPCs.Add(toAdd);
+                        }
+                    }
+                }
+                if (currentClassId.Count != 0)
+                {
+                    foreach (byte id in currentClassId)
+                    {
+                        ClassNPC gone = db.ClassNPCs.Where(x => x.NpcId == npcId && x.ClassId == id).FirstOrDefault();
+                        db.ClassNPCs.Remove(gone);
+                    }
+                }
+                db.SaveChanges();
+                #endregion
+
+                #region Add Orgs
+                List<short> currentOrgId = db.NpcOrgs.Where(x => x.NpcId == npcId).Select(x => x.OrgId).ToList();
+                if (orgs != null)
+                {
+                    foreach (AssoOrg_Npc assoOrg in orgs)
+                    {
+                        //if the association already exists
+                        if (currentOrgId.Contains(assoOrg.OrgId))
+                        {
+                            NpcOrg toEdit = db.NpcOrgs.Where(x => x.OrgId == assoOrg.OrgId && x.NpcId == npcId).First();
+                            toEdit.OrgOrder = assoOrg.OrgOrder;
+                            toEdit.BlurbNpcPage = assoOrg.BlurbNpcPage;
+                            toEdit.BlurbOrgPage = assoOrg.BlurbOrgPage;
+                            toEdit.MemberOrder = assoOrg.MemberOrder;
+                            toEdit.IsCurrent = assoOrg.IsCurrent;
+
+                            db.Entry(toEdit).State = EntityState.Modified;
+                            db.SaveChanges();
+                            currentOrgId.Remove(assoOrg.OrgId);
+                        }
+                        else
+                        {
+                            NpcOrg toAdd = new NpcOrg
+                            {
+                                NpcId = npcId,
+                                OrgId = assoOrg.OrgId,
+                                OrgOrder = assoOrg.OrgOrder,
+                                BlurbNpcPage = assoOrg.BlurbNpcPage,
+                                BlurbOrgPage = assoOrg.BlurbOrgPage,
+                                MemberOrder = assoOrg.MemberOrder,
+                                IsCurrent = assoOrg.IsCurrent
+                            };
+                            db.NpcOrgs.Add(toAdd);
+                        }
+                    }
+                }
+                if (currentOrgId.Count != 0)
+                {
+                    foreach (short id in currentOrgId)
+                    {
+                        NpcOrg gone = db.NpcOrgs.Where(x => x.NpcId == npcId & x.OrgId == id).FirstOrDefault();
+                        db.NpcOrgs.Remove(gone);
+                    }
+                }
+                db.SaveChanges();
+                #endregion
+                return Json(true);
+            }
+            //if model fails
+            ViewBag.Orgs = db.Orgs.ToList();
+            ViewBag.Classes = db.Classes.ToList();
+            AssoNpcVM model = new AssoNpcVM { InfoId = infoId, NpcId = npcId, Submit = submit, Name = npc.Name, AssoClasses = assoClasses, AssoOrgs = orgs };
+            return View(model);
+        }
+
+        // GET: NPCs/Edit/5
+        public ActionResult Edit(short? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            NPC npc = db.NPCs.Find(id);
+            if (npc == null)
+            {
+                return HttpNotFound();
+            }
+            ViewBag.LastLocationId = new SelectList(db.Locales, "LocaleId", "Name", npc.LastLocationId);
+            ViewBag.RaceId = new SelectList(db.Races, "RaceId", "RaceName", npc.RaceId);
+            ViewBag.GenderId = new SelectList(db.Genders, "GenderId", "GenderName", npc.GenderId);
+
+            short infoid = npc.InfoId;
+            string blurb = db.Infos.Where(i => i.InfoId == infoid).Select(i => i.Blurb).First();
+            NpcEditVM model = new NpcEditVM(npc, blurb);
+
+            List<short> selectedTags = db.InfoTags.Where(t => t.InfoId == infoid).Select(t => t.TagId).ToList();
+            ViewBag.Selected = selectedTags;
+            ViewBag.Tags = db.Tags.ToList();
+
+            return View(model);
         }
 
         // POST: NPCs/Edit/5
@@ -644,18 +512,349 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "NpcId,InfoId,Name,Alias,Quote,PortraitFileName,RaceId,CrestFileName,ApperanceText,AboutText,LastLocationId,IsPublished")] NPC nPC)
+        public ActionResult Edit([Bind(Include = "NpcId,InfoId,Name,Alias,Quote,PortraitFileName,RaceId,CrestFileName,ApperanceText,AboutText,LastLocationId,PortraitArtist,CrestArtist,IsDead,GenderId, Blurb")] NpcEditPostVM npc,
+            List<short> tags,
+            HttpPostedFileBase portraitPic,
+            HttpPostedFileBase crestPic,
+            string submit)
+        {
+            #region Save or Publish?
+            switch (submit)
+            {
+                case "Save Progress":
+                case "Un-Publish":
+                    npc.IsPublished = false;
+                    break;
+                case "Publish":
+                case "Save":
+                    npc.IsPublished = true;
+                    break;
+                case "Save and go to complex edit":
+                    break;
+            }
+            #endregion
+
+            #region Pre-model picture check
+            if (portraitPic != null)
+            {
+                string[] goodExts = { ".jpg", ".jpeg", ".gif", ".png" };
+                string imgName = portraitPic.FileName;
+
+                string ext = imgName.Substring(imgName.LastIndexOf('.'));
+
+                if (!goodExts.Contains(ext.ToLower()))
+                {
+                    ModelState.AddModelError("PortraitFileName", "You have submitted a incorrect file type for your portrait. Please use either: .jpg, .jpeg, .gif, or .png");
+                }
+
+                if (npc.PortraitArtist == null)
+                {
+                    ModelState.AddModelError("PortraitArtist", "Katherine, you're trying to submit something with a picture without an artist. That's a no-no! But seriously, if something came up that means you need to change this rule, you know who to call.");
+                }
+            }
+            else if ((npc.PortraitFileName != "default.jpg" && npc.PortraitFileName != null) && npc.PortraitArtist == null)
+            {
+                ModelState.AddModelError("PortraitArtist", "Yo bud, you tired? Seems you deleted the artist by accident. Why don't ya fix that?");
+            }
+
+            if (crestPic != null)
+            {
+                string[] goodExts = { ".jpg", ".jpeg", ".gif", ".png" };
+                string imgName = crestPic.FileName;
+
+                string ext = imgName.Substring(imgName.LastIndexOf('.'));
+
+                if (!goodExts.Contains(ext.ToLower()))
+                {
+                    ModelState.AddModelError("CrestFileName", "You have submitted a incorrect file type for your portrait. Please use either: .jpg, .jpeg, .gif, or .png");
+                }
+
+                if (npc.CrestArtist == null)
+                {
+                    ModelState.AddModelError("CrestArtist", "Katherine, you're trying to submit something with a picture without an artist. That's a no-no! But seriously, if something came up that means you need to change this rule, you know who to call.");
+                }
+            }
+            else if ((npc.CrestFileName != "org_default.jpg" && npc.CrestFileName != null) && npc.CrestArtist == null)
+            {
+                ModelState.AddModelError("CrestArtist", "Yo bud, you tired? Seems you deleted the artist by accident. Why don't ya fix that?");
+            }
+            #endregion
+
+            if (ModelState.IsValid)
+            {
+                var infoid = npc.InfoId;
+                #region Info Update
+                //Info info = db.Infos.Find(infoid);
+                Info info = db.Infos.Where(i => i.InfoId == infoid).FirstOrDefault();
+                info.Name = npc.Name;
+                info.Blurb = npc.Blurb;
+                info.IsPublished = npc.IsPublished;
+                #endregion
+
+                #region Update tags
+                List<short> currentTagIds = db.InfoTags.Where(x => x.InfoId == infoid).Select(x => x.TagId).ToList();
+
+                if (tags != null)
+                {
+                    foreach (short tag in tags)
+                    {
+                        //if this is an already existing tag 
+                        if (currentTagIds.Contains(tag))
+                        {
+                            currentTagIds.Remove(tag);
+                        }
+                        //if this is a newly added tag
+                        else
+                        {
+                            InfoTag newTag = new InfoTag { InfoId = infoid, TagId = tag };
+                            db.InfoTags.Add(newTag);
+                        }
+                    }
+                }
+
+                if (currentTagIds.Count != 0)
+                {
+                    foreach (short id in currentTagIds)
+                    {
+                        InfoTag gone = db.InfoTags.Where(x => x.InfoId == infoid & x.TagId == id).FirstOrDefault();
+                        db.InfoTags.Remove(gone);
+                    }
+                }
+
+                #endregion
+
+                #region Image Update/Upload
+                string[] goodExts = { ".jpg", ".jpeg", ".gif", ".png" };
+
+                #region Image Update -Portrait    
+                if (portraitPic != null)
+                {
+                    string imgName = portraitPic.FileName;
+
+                    string ext = imgName.Substring(imgName.LastIndexOf('.'));
+
+                    if (goodExts.Contains(ext.ToLower()))
+                    {
+                        imgName = "npc-portrait-" + infoid.ToString() + ext;
+                        portraitPic.SaveAs(Server.MapPath("~/Content/img/npc/" + imgName));
+                    }
+                    npc.PortraitFileName = imgName;
+                }
+                #endregion
+
+                #region Image Update -Crest
+                if (crestPic != null)
+                {
+                    string imgName = crestPic.FileName;
+
+                    string ext = imgName.Substring(imgName.LastIndexOf('.'));
+
+                    if (goodExts.Contains(ext.ToLower()))
+                    {
+                        imgName = "npc-crest-" + infoid.ToString() + ext;
+
+                        crestPic.SaveAs(Server.MapPath("~/Content/img/npc/" + imgName));
+                    }
+                    npc.CrestFileName = imgName;
+                }
+                #endregion
+
+                #endregion
+
+                #region Update Npc
+                NPC daNpc = new NPC
+                {
+                    NpcId = npc.NpcId,
+                    InfoId = npc.InfoId,
+                    Name = npc.Name,
+                    Alias = npc.Alias,
+                    Quote = npc.Quote,
+                    PortraitFileName = npc.PortraitFileName,
+                    RaceId = npc.RaceId,
+                    CrestFileName = npc.CrestFileName,
+                    ApperanceText = npc.ApperanceText,
+                    AboutText = npc.AboutText,
+                    LastLocationId = npc.LastLocationId,
+                    IsPublished = npc.IsPublished,
+                    PortraitArtist = npc.PortraitArtist,
+                    CrestArtist = npc.CrestArtist,
+                    IsDead = npc.IsDead,
+                    GenderId = npc.GenderId
+                };
+                db.Entry(daNpc).State = EntityState.Modified;
+                db.Entry(info).State = EntityState.Modified;
+                db.SaveChanges();
+                #endregion
+                if (submit == "Save and go to complex edit")
+                {
+                    return RedirectToAction("AssoEdit", new { id = npc.NpcId });
+                }
+                return RedirectToAction("Details", new { id = npc.NpcId });
+            }
+
+            #region if model invalid
+            ViewBag.LastLocationId = new SelectList(db.Locales, "LocaleId", "Name", npc.LastLocationId);
+            ViewBag.RaceId = new SelectList(db.Races, "RaceId", "RaceName", npc.RaceId);
+            ViewBag.GenderId = new SelectList(db.Genders, "GenderId", "GenderName", npc.GenderId);
+            ViewBag.Tags = db.Tags.ToList();
+            if (tags != null)
+            {
+                ViewBag.Selected = tags;
+            }
+            else
+            {
+                ViewBag.Selected = new List<short>();
+            }
+
+            if (portraitPic != null)
+            {
+                ModelState.AddModelError("PortraitFileName", "Hey, there was some error, so you have to re-upload the picture");
+            }
+            if (crestPic != null)
+            {
+                ModelState.AddModelError("CrestFileName", "Hey, there was some error, so you have to re-upload the picture");
+            }
+            ModelState.AddModelError("", "Something has gone wrong. Look for red text to see where is went wrong");
+            #endregion
+
+            NpcEditVM aNpc = new NpcEditVM(npc);
+            return View(aNpc);
+        }
+
+        public ActionResult AssoEdit(short? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            NPC npc = db.NPCs.Find(id);
+            if (npc == null)
+            {
+                return HttpNotFound();
+            }
+            ViewBag.Orgs = db.Orgs.ToList();
+            var selected = db.NpcOrgs.Where(x => x.NpcId == npc.NpcId).ToList();
+            List<AssoOrg_Npc> assoOrgs = new List<AssoOrg_Npc>();
+            foreach (NpcOrg npcOrg in selected)
+            {
+                AssoOrg_Npc toAdd = new AssoOrg_Npc(npcOrg);
+                assoOrgs.Add(toAdd);
+            }
+
+            ViewBag.Classes = db.Classes.ToList();
+            var selected2 = db.ClassNPCs.Where(x => x.NpcId == npc.NpcId).ToList();
+            List<AssoClass_Npc> assoClasses = new List<AssoClass_Npc>();
+            foreach (ClassNPC asso in selected2)
+            {
+                AssoClass_Npc toAdd = new AssoClass_Npc(asso);
+                assoClasses.Add(toAdd);
+            }
+
+            var infoid = npc.InfoId;
+            AssoNpcVM model = new AssoNpcVM { InfoId = infoid, NpcId = npc.NpcId, Submit = "Save", Name = npc.Name, AssoClasses = assoClasses, AssoOrgs = assoOrgs };
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AssoEdit(short infoId, short npcId, string submit,
+            List<AssoClass_Npc> assoClasses,
+            List<AssoOrg_Npc> orgs)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(nPC).State = EntityState.Modified;
+                #region Add Classes
+                List<byte> currentClassId = db.ClassNPCs.Where(x => x.NpcId == npcId).Select(x => (byte)x.ClassId).ToList();
+                if (assoClasses != null)
+                {
+                    foreach (AssoClass_Npc cn in assoClasses)
+                    {
+                        //if the association already exists
+                        if (currentClassId.Contains(cn.ClassId))
+                        {
+                            ClassNPC toEdit = db.ClassNPCs.Where(x => x.ClassId == cn.ClassId && x.NpcId == npcId).First();
+                            toEdit.ClassOrder = cn.ClassOrder;
+                            db.Entry(toEdit).State = EntityState.Modified;
+                            db.SaveChanges();
+                            currentClassId.Remove(cn.ClassId);
+                        }
+                        else
+                        {
+                            ClassNPC toAdd = new ClassNPC
+                            {
+                                NpcId = npcId,
+                                ClassId = cn.ClassId,
+                                ClassOrder = cn.ClassOrder
+                            };
+                            db.ClassNPCs.Add(toAdd);
+                        }
+                    }
+                }
+                if (currentClassId.Count != 0)
+                {
+                    foreach (byte id in currentClassId)
+                    {
+                        ClassNPC gone = db.ClassNPCs.Where(x => x.NpcId == npcId && x.ClassId == id).FirstOrDefault();
+                        db.ClassNPCs.Remove(gone);
+                    }
+                }
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                #endregion
+
+                #region Add Orgs
+                List<short> currentOrgId = db.NpcOrgs.Where(x => x.NpcId == npcId).Select(x => x.OrgId).ToList();
+                if (orgs != null)
+                {
+                    foreach (AssoOrg_Npc assoOrg in orgs)
+                    {
+                        //if the association already exists
+                        if (currentOrgId.Contains(assoOrg.OrgId))
+                        {
+                            NpcOrg toEdit = db.NpcOrgs.Where(x => x.OrgId == assoOrg.OrgId && x.NpcId == npcId).First();
+                            toEdit.OrgOrder = assoOrg.OrgOrder;
+                            toEdit.BlurbNpcPage = assoOrg.BlurbNpcPage;
+                            toEdit.BlurbOrgPage = assoOrg.BlurbOrgPage;
+                            toEdit.MemberOrder = assoOrg.MemberOrder;
+                            toEdit.IsCurrent = assoOrg.IsCurrent;
+
+                            db.Entry(toEdit).State = EntityState.Modified;
+                            db.SaveChanges();
+                            currentOrgId.Remove(assoOrg.OrgId);
+                        }
+                        else
+                        {
+                            NpcOrg toAdd = new NpcOrg
+                            {
+                                NpcId = npcId,
+                                OrgId = assoOrg.OrgId,
+                                OrgOrder = assoOrg.OrgOrder,
+                                BlurbNpcPage = assoOrg.BlurbNpcPage,
+                                BlurbOrgPage = assoOrg.BlurbOrgPage,
+                                MemberOrder = assoOrg.MemberOrder,
+                                IsCurrent = assoOrg.IsCurrent
+                            };
+                            db.NpcOrgs.Add(toAdd);
+                        }
+                    }
+                }
+                if (currentOrgId.Count != 0)
+                {
+                    foreach (short id in currentOrgId)
+                    {
+                        NpcOrg gone = db.NpcOrgs.Where(x => x.NpcId == npcId & x.OrgId == id).FirstOrDefault();
+                        db.NpcOrgs.Remove(gone);
+                    }
+                }
+                db.SaveChanges();
+                #endregion
+                return Json(true);
             }
-            ViewBag.InfoId = new SelectList(db.Infos, "InfoId", "Blurb", nPC.InfoId);
-            ViewBag.LastLocationId = new SelectList(db.Locales, "LocaleId", "Name", nPC.LastLocationId);
-            ViewBag.RaceId = new SelectList(db.Races, "RaceId", "RaceName", nPC.RaceId);
-            return View(nPC);
+            //if model fails
+            ViewBag.Orgs = db.Orgs.ToList();
+            ViewBag.Classes = db.Classes.ToList();
+            var npc = db.NPCs.Find(npcId);
+            AssoNpcVM model = new AssoNpcVM { InfoId = infoId, NpcId = npcId, Submit = submit, Name = npc.Name, AssoClasses = assoClasses, AssoOrgs = orgs };
+            return View(model);
         }
 
         // GET: NPCs/Delete/5
@@ -679,7 +878,102 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
         public ActionResult DeleteConfirmed(short id)
         {
             NPC nPC = db.NPCs.Find(id);
+            short infoId = nPC.InfoId;
+            string picture1 = nPC.PortraitFileName;
+            string picture2 = nPC.CrestFileName;
             db.NPCs.Remove(nPC);
+
+            #region Remove Pictures
+            //portrait
+            string fullPath = Request.MapPath("~/Content/img/npc/" + picture1);
+            if (System.IO.File.Exists(fullPath))
+            {
+                System.IO.File.Delete(fullPath);
+            }
+
+            //crest
+            string fullPath2 = Request.MapPath("~/Content/img/npc/" + picture2);
+            if (System.IO.File.Exists(fullPath2))
+            {
+                System.IO.File.Delete(fullPath2);
+            }
+            #endregion
+
+            #region Remove Associations
+
+            #region Remove ClassNpcs
+            List<ClassNPC> classes = db.ClassNPCs.Where(x => x.NpcId == id).ToList();
+            foreach (ClassNPC gone in classes)
+            {
+                db.ClassNPCs.Remove(gone);
+            }
+            #endregion
+
+            #region Remove NpcOrgs
+            List<NpcOrg> orgs = db.NpcOrgs.Where(x => x.NpcId == id).ToList();
+            foreach (NpcOrg gone in orgs)
+            {
+                db.NpcOrgs.Remove(gone);
+            }
+            #endregion
+            #endregion
+
+            #region Remove Rumors
+            var rumors = db.Rumors.Where(r => r.RumorOfId == infoId);
+            foreach (Rumor r in rumors)
+            {
+                db.Rumors.Remove(r);
+            }
+            #endregion
+
+            #region Remove Secrets
+            var secrets = db.Secrets.Where(s => s.IsAboutId == infoId);
+            List<short> secretIds = db.Secrets.Where(s => s.IsAboutId == infoId).Select(s => s.SecretId).ToList();
+            List<SecretSecretTag> ssts = db.SecretSecretTags.Where(s => secretIds.Contains(s.SecretId)).ToList();
+
+            //remove sst
+            foreach (SecretSecretTag secretSecretTag in ssts)
+            {
+                db.SecretSecretTags.Remove(secretSecretTag);
+            }
+
+            //remove secrets
+            foreach (Secret secret in secrets)
+            {
+                db.Secrets.Remove(secret);
+            }
+
+            #endregion
+
+            #region remove stories
+            var stories = db.Stories.Where(s => s.IsAboutId == infoId);
+            List<short> storyIds = db.Stories.Where(s => s.IsAboutId == infoId).Select(s => s.StoryId).ToList();
+            List<StoryTag> st = db.StoryTags.Where(s => storyIds.Contains(s.StoryId)).ToList();
+
+            //remove story tags
+            foreach (StoryTag storyTag in st)
+            {
+                db.StoryTags.Remove(storyTag);
+            }
+
+            //remove stories
+            foreach (Story story in stories)
+            {
+                db.Stories.Remove(story);
+            }
+            #endregion
+
+            #region Remove info
+            Info info = db.Infos.Where(i => i.InfoId == infoId).First();
+            var infoTags = db.InfoTags.Where(it => it.InfoId == infoId).ToList();
+            foreach (InfoTag infoTag in infoTags)
+            {
+                db.InfoTags.Remove(infoTag);
+            }
+
+            db.Infos.Remove(info);
+            #endregion
+
             db.SaveChanges();
             return RedirectToAction("Index");
         }

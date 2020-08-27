@@ -1,125 +1,281 @@
-﻿@model RiftWorld.DATA.EF.NPC
+﻿@model RiftWorld.UI.MVC.Models.NpcCreateVM
 
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "NPC Create";
+    int nameMax;
+    int blurbMax;
+    int portraitMax;
+    int crestMax;
+    int aliasMax;
+    int quoteMax;
+    int startName = nameMax = 30;
+    int startBlurb = blurbMax = 100;
+    int startPortraitArtist = portraitMax = 40;
+    int startCrestArtist = crestMax = 40;
+    int startAlias = aliasMax = 500;
+    int startQuote = quoteMax = 150;
+    if (Model != null)
+    {
+        if (Model.Name != null)
+        {
+            startName -= Model.Name.Length;
+        }
+        if (Model.Blurb != null)
+        {
+            startBlurb -= Model.Blurb.Length;
+        }
+        if (Model.PortraitArtist != null)
+        {
+            startPortraitArtist -= Model.PortraitArtist.Length;
+        }
+        if (Model.CrestArtist != null)
+        {
+            startCrestArtist -= Model.CrestArtist.Length;
+        }
+        if (Model.Alias != null)
+        {
+            startAlias -= Model.Alias.Length;
+        }
+        if (Model.Quote != null)
+        {
+            startQuote -= Model.Quote.Length;
+        }
+    }
 }
 
-<h2>Create</h2>
+<div class="col-12">
+    <h2>@ViewBag.Title</h2>
 
+    @using (Html.BeginForm("Create", "NPCs", FormMethod.Post,
+        new { @enctype = "multipart/form-data" }))  ///FOR THE LOVE OF ALL THAT IS KENDRA STOP FORGETTING THIS FOR FILE UPLOADS. IT IS CRUCIAL
+    {
+        @Html.AntiForgeryToken()
 
-@using (Html.BeginForm("Create", "NPCs", FormMethod.Post, 
-    new { @enctype = "multipart/form-data" }))  ///FOR THE LOVE OF ALL THAT IS KENDRA STOP FORGETTING THIS FOR FILE UPLOADS. IT IS CRUCIAL
-{
-                @Html.AntiForgeryToken()
-
-                <div class="form-horizontal">
-        <h4>NPC</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="form-group">
-            @Html.LabelFor(model => model.InfoId, "InfoId", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownList("InfoId", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.InfoId, "", new { @class = "text-danger" })
+        <div class="form-horizontal">
+            <hr />
+            <div class="col-auto oops-summary">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
             </div>
-        </div>
+            @Html.HiddenFor(model => model.IsPublished)
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            <div class="form-group">
+                @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label" })
+                <div class="col-12">
+                    <div class="da-focus">
+                        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control count", data_max = nameMax } })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                    <div id="tcp-Name" class="col-md-offset-2 col-12 @(startName <0 ? "invalid":"")"><span id="tc-Name">@startName</span> character(s) left.</div>
+                </div>
             </div>
-        </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Alias, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Alias, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Alias, "", new { @class = "text-danger" })
+            <div class="form-group">
+                @Html.LabelFor(model => model.Blurb, htmlAttributes: new { @class = "control-label" })
+                <div class="col-12">
+                    <div class="da-focus">
+                        @Html.EditorFor(model => model.Blurb, new { htmlAttributes = new { @class = "form-control count", data_max = blurbMax, style = "height:4em;" } })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.Blurb, "", new { @class = "text-danger" })
+                    <div id="tcp-Blurb" class="col-md-offset-2 col-12 @(startBlurb <0 ? "invalid":"")"><span id="tc-Blurb">@startBlurb</span> character(s) left.</div>
+                </div>
             </div>
-        </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Quote, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Quote, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Quote, "", new { @class = "text-danger" })
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Alias, htmlAttributes: new { @class = "control-label" })
+                <div class="col-12">
+                    <div class="da-focus">
+                        @Html.EditorFor(model => model.Alias, new { htmlAttributes = new { @class = "form-control count", data_max = aliasMax, style = "height:4em;" } })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.Alias, "", new { @class = "text-danger" })
+                    <div id="tcp-Alias" class="col-md-offset-2 col-12 @(startAlias <0 ? "invalid":"")"><span id="tc-Alias">@startAlias</span> character(s) left.</div>
+                </div>
             </div>
-        </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.PortraitFileName, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <input type="file" name="portraitPic" />
-                <img class="img-fluid img-thumbnail border-00" src="~/Content/img/npc/default.jpg" /> 
-                @Html.HiddenFor(model => model.PortraitFileName)
+            <div class="form-group">
+                @Html.LabelFor(model => model.Quote, htmlAttributes: new { @class = "control-label" })
+                <div class="col-12">
+                    <div class="da-focus">
+                        @Html.EditorFor(model => model.Quote, new { htmlAttributes = new { @class = "form-control count", data_max = quoteMax, style = "height:4em;" } })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.Quote, "", new { @class = "text-danger" })
+                    <div id="tcp-Quote" class="col-md-offset-2 col-12 @(startQuote <0 ? "invalid":"")"><span id="tc-Quote">@startQuote</span> character(s) left.</div>
+                </div>
             </div>
-        </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.RaceId, "RaceId", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownList("RaceId", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.RaceId, "", new { @class = "text-danger" })
+            <div class="form-group row align-items-center">
+                @Html.LabelFor(model => model.PortraitFileName, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10 row">
+                    @Html.HiddenFor(model => model.PortraitFileName)
+                    <div class="col-12">
+                        <input type="file" name="portraitPic" />
+                        <img class="img-fluid img-thumbnail border-00" src="~/Content/img/npc/default.jpg" />
+                    </div>
+                    <div class="col-12">
+                        @Html.ValidationMessageFor(model => model.PortraitFileName, "", new { @class = "text-danger" })
+                    </div>
+
+                </div>
             </div>
-        </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.CrestFileName, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <input type="file" name="crestPic" />
-                <img class="img-fluid img-thumbnail border-00" src="~/Content/img/npc/org_default.jpg" />
-                @Html.HiddenFor(model => model.CrestFileName)
+            <div class="form-group">
+                @Html.LabelFor(model => model.PortraitArtist, htmlAttributes: new { @class = "control-label" })
+                <div class="col-12">
+                    <div class="da-focus">
+                        @Html.EditorFor(model => model.PortraitArtist, new { htmlAttributes = new { @class = "form-control count", data_max = portraitMax } })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.PortraitArtist, "", new { @class = "text-danger" })
+                    <div id="tcp-PortraitArtist" class="col-md-offset-2 col-12 @(startPortraitArtist <0 ? "invalid":"")"><span id="tc-PortraitArtist">@startPortraitArtist</span> character(s) left.</div>
+                </div>
             </div>
-        </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.ApperanceText, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.ApperanceText, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.ApperanceText, "", new { @class = "text-danger" })
+            <div class="form-group">
+                @Html.LabelFor(model => model.RaceId, htmlAttributes: new { @class = "control-label" })
+                <div class="col-md-8">
+                    @Html.DropDownList("RaceId", (SelectList)ViewBag.RaceId, "", htmlAttributes: new { @class = "" })
+                    @Html.ValidationMessageFor(model => model.RaceId, "", new { @class = "text-danger" })
+                </div>
             </div>
-        </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.AboutText, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.AboutText, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.AboutText, "", new { @class = "text-danger" })
+            <div class="form-group">
+                @Html.LabelFor(model => model.GenderId, htmlAttributes: new { @class = "control-label" })
+                <div class="col-md-8">
+                    @Html.DropDownList("GenderId", (SelectList)ViewBag.GenderId, "", htmlAttributes: new { @class = "" })
+                    @Html.ValidationMessageFor(model => model.GenderId, "", new { @class = "text-danger" })
+                </div>
             </div>
-        </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.LastLocationId, "LastLocationId", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownList("LastLocationId", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.LastLocationId, "", new { @class = "text-danger" })
+            <div class="form-group">
+                <div class="form-check">
+                    <div class="checkbox">
+                        @Html.EditorFor(model => model.IsDead, new { htmlAttribute = new { @class = "form-check-input" } })
+                        @Html.LabelFor(model => model.IsDead, htmlAttributes: new { @class = "form-check-label" })
+                    </div>
+                </div>
             </div>
-        </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.IsPublished, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <div class="checkbox">
-                    @Html.EditorFor(model => model.IsPublished)
-                    @Html.ValidationMessageFor(model => model.IsPublished, "", new { @class = "text-danger" })
+            <div class="form-group">
+                @Html.LabelFor(model => model.LastLocationId, htmlAttributes: new { @class = "control-label" })
+                <div class="col-md-8">
+                    @Html.DropDownList("LastLocationId", (SelectList)ViewBag.LastLocationId, "-- Unknown --", new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.LastLocationId, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group row align-items-center">
+                @Html.LabelFor(model => model.CrestFileName, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10 row">
+                    @Html.HiddenFor(model => model.CrestFileName)
+                    <div class="col-12">
+                        <input type="file" name="crestPic" />
+                        <img class="img-fluid img-thumbnail border-00" src="~/Content/img/npc/org_default.jpg" />
+                    </div>
+                    <div class="col-12">
+                        @Html.ValidationMessageFor(model => model.PortraitFileName, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.CrestArtist, htmlAttributes: new { @class = "control-label" })
+                <div class="col-12">
+                    <div class="da-focus">
+                        @Html.EditorFor(model => model.CrestArtist, new { htmlAttributes = new { @class = "form-control count", data_max = crestMax } })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.CrestArtist, "", new { @class = "text-danger" })
+                    <div id="tcp-CrestArtist" class="col-md-offset-2 col-12 @(startCrestArtist <0 ? "invalid":"")"><span id="tc-CrestArtist">@startCrestArtist</span> character(s) left.</div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.ApperanceText, htmlAttributes: new { @class = "control-label" })
+                <div class="col-12">
+                    @Html.EditorFor(model => model.ApperanceText, new { htmlAttributes = new { @class = "form-control rich",
+                   style = "height:20em;" } })
+                    @Html.ValidationMessageFor(model => model.ApperanceText, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.AboutText, htmlAttributes: new { @class = "control-label" })
+                <div class="col-12">
+                    @Html.EditorFor(model => model.AboutText, new { htmlAttributes = new { @class = "form-control rich", style = "height:20em;" } })
+                    @Html.ValidationMessageFor(model => model.AboutText, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="tags">Tags</label>
+                @Html.ListBox("tags", (MultiSelectList)ViewBag.Tags)
+            </div>
+
+            <div class="form-group">
+                <div class="col-12 btn-group">
+                    <input type="submit" name="submit" value="Save Progress" class="btn btn-warning" />
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#confirmModal">
+                        Publish
+                    </button>
                 </div>
             </div>
         </div>
 
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
+        <!-- Modal -->
+        <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to publish?</p>
+                        <div id="nulled">
+
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <input type="submit" name="submit" value="Publish" class="btn btn-success" />
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-}
 
-<div>
-    @Html.ActionLink("Back to List", "Index")
+    }
+
+    <div style="text-align:left;">
+        @Html.ActionLink("Back to List", "Index")
+    </div>
 </div>
 
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
+@section Scripts{
+    <script src="~/Scripts/MyJS/edit.js"></script>
+
+    <script>
+        $('select#GenderId option:first-child').attr("data-placeholder", "true");
+        $('select#RaceId option:first-child').attr("data-placeholder", "true");
+
+        new SlimSelect({
+            select: '#tags'
+        })
+        new SlimSelect({
+            select: '#GenderId',
+            placeholder: 'Choose Gender'
+        })
+        new SlimSelect({
+            select: '#RaceId',
+            placeholder: 'Choose species'
+        })
+        new SlimSelect({
+            select: '#LastLocationId'
+        })
+    </script>
+    <script>
+        var nullables = ['AboutText', 'ApperanceText'];
+        $('#confirmModal').on('show.bs.modal', function () {
+            ConfirmModal(nullables);
+        });
+    </script>
+
 }

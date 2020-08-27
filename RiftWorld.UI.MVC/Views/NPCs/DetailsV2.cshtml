@@ -8,11 +8,11 @@
         status = "dead";
     }
 }
-
+@Html.HiddenFor(model => model.InfoId)
 @* TODO - transfer detailsV2 to details view (and ensure controller actions are okay *@
 @*<article class="container" id="content" >
     <div class="row">*@
-<section id="start" class="col-12">
+<section id="start" class="col-12" name="The Basics">
     <div id="quote" class="clearfix">
         <blockquote>
             <h4>
@@ -92,7 +92,7 @@
         </div>
     </div>
 </section>
-<section id="apperance" class="col-12">
+<section id="apperance" class="col-12" name="Apperance">
     <h2 class="line">
         @Html.DisplayNameFor(model => model.ApperanceText)
     </h2>
@@ -105,7 +105,7 @@
             <p>After joining the Slayer's Take, Percy has the brand of the guild on his right arm.</p>*@
     </div>
 </section>
-<section id="about" class="col-12">
+<section id="about" class="col-12" name="About">
     <h2 class="line">
         @Html.DisplayNameFor(model => model.AboutText)
     </h2>
@@ -128,7 +128,7 @@
 </section>
 @Html.Action("_Details", "Secrets", new { id = Model.InfoId })
 @Html.Action("_Stories", "Stories", new { id = Model.InfoId })
-<section id="story" class="col-12">
+<section id="story" class="col-12" name="Stories">
     <h2 class="line">Stories</h2>
     <div class="tab">
         <button class="tablinks" onclick="openStory(event, 'London')">London</button>
@@ -171,28 +171,14 @@
     </div>
     <br />
 </section>
-<section id="rumors" class="col-12">
+<section id="rumors" class="col-12" name="Rumors">
     <h2 class="line">Rumors</h2>
-    @*<div id="rumor-list">
-            <div class="daRumor">
-                <h6>Kinna whispers...</h6>
-                <div class="speechbubble"><p>That once Wren was totally the one who messed with Ben. </p></div>
-            </div>
-            <div class="daRumor">
-                <h6>Kinna whispers...</h6>
-                <div class="speechbubble"><p>That once Wren was totally the one who messed with Ben. </p></div>
-            </div>
-        </div>*@
     @Html.Action("_Rumors", "Rumors", new { id = Model.InfoId })
-    <div class="clearfix"></div>
-    <div id="make-rumor">
-        @Html.Action("CreateRumor", "Rumors", new { id = Model.InfoId })
-    </div>
+    @Html.Action("CreateRumor", "Rumors", new { id = Model.InfoId })
 </section>
-<footer id="tags">
+<footer id="tags" class="col-12">
     @Html.Action("_TagList", "Infos", new { id = Model.InfoId })
     <p>
-        @Html.ActionLink("Edit", "Edit", new { id = Model.NpcId }) |
         @Html.ActionLink("Back to List", "Index")
     </p>
 
@@ -229,7 +215,9 @@
 
 @section Scripts{
     <script src="~/Scripts/MyJS/story.js"></script>
-    <script>
+    <script src="~/Scripts/MyJS/rumor.js"></script>
+    <script src="~/Scripts/MyJS/secret.js"></script>
+    @*<script>
         const okButton = document.getElementById('daSubmit');
         $('#RumorText').keyup(function (e) {
             var max = 300
@@ -249,7 +237,6 @@
 
         });
     </script>
-    @*below is failed ajax submit attempt. Just SOOOOO many errors.*@
     <script>
         class RumorData {
             constructor() {
@@ -283,5 +270,11 @@
             });
             return false;
         });
-    </script>
+    </script>*@
+
+    @*<script>
+        $('#secret p').click(function () {
+            $(this).addClass('revealed');
+        });
+    </script>*@
 }

@@ -11,6 +11,7 @@ using RiftWorld.UI.MVC.Models;
 
 namespace RiftWorld.UI.MVC.Controllers.Entities
 {
+    //todo - uncomment to lockdown controller
     //[Authorize(Roles = "Admin")]
     public class LocalesController : Controller
     {
@@ -20,7 +21,13 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
         [OverrideAuthorization]
         public ActionResult Index()
         {
+            //v1 - for testing so I don't have to constantly switch accounts
             var locales = db.Locales.Include(l => l.Info).Include(l => l.LocaleLevel).Include(l => l.Locale1).Include(l => l.Locale2).Include(l => l.NPC);
+
+            //v2 - prevent non-admin from seeing unpublished work
+            //todo - uncomment below to prevent users from seeing un-published work
+            //var locales = db.Locales.Include(l => l.Info).Include(l => l.LocaleLevel).Include(l => l.Locale1).Include(l => l.Locale2).Include(l => l.NPC).Where(l =>l.IsPublished);
+
             return View(locales.ToList());
         }
 
@@ -37,7 +44,27 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             {
                 return HttpNotFound();
             }
+
+            //todo - uncomment below to prevent users from seeing un-published work
+            //if (!locale.IsPublished && !User.IsInRole("Admin"))
+            //{
+            //    return View("Error");
+            //    //todo change redirect to a error 404 page
+            //}
+
             return View(locale);
+        }
+
+        [OverrideAuthorization]
+        public PartialViewResult _Majorities(short id)
+        {
+            return PartialView();
+        }
+
+        [OverrideAuthorization]
+        public PartialViewResult _Events(short id)
+        {
+            return PartialView();
         }
 
         // GET: Locales/Create
@@ -48,11 +75,6 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             ViewBag.ClosestCityId = new SelectList(db.Locales.Where(l => l.LevelOfLocaleId == 2), "LocaleId", "Name"); //<-- only locales of city type
             ViewBag.CouncilDelegateId = new SelectList(db.NPCs, "NpcId", "Name");
             ViewBag.Tags = new MultiSelectList(db.Tags, "TagId", "TagName");
-
-            ViewBag.startName = 50;
-            ViewBag.startBlurb = 100;
-            ViewBag.startAppointed = 8000;
-            ViewBag.startAvg = 3000;
 
             return View();
         }
@@ -118,14 +140,14 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                 #endregion
 
                 #region give info the IdWithinType
-                short localeId = db.Locales.Max(l => l.LocaleId);
-                info.IdWithinType = localeId;
+                short maxi = db.Locales.Max(l => l.LocaleId);
+                info.IdWithinType = maxi;
                 db.Entry(info).State = EntityState.Modified;
                 db.SaveChanges();
                 #endregion
 
                 //move to step 2
-                return RedirectToAction("AssoCreate", new { id = localeId, submit = submit });
+                return RedirectToAction("AssoCreate", new { id = maxi, submit = submit });
             }
 
             //if model is not valid
@@ -136,29 +158,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
 
             ViewBag.Tags = new MultiSelectList(db.Tags, "TagId", "TagName", tags);
 
-            ViewBag.startName = 50;
-            ViewBag.startBlurb = 100;
-            ViewBag.startAppointed = 8000;
-            ViewBag.startAvg = 3000;
-            if (locale.Name != null)
-            {
-                ViewBag.startName = 50 - locale.Name.Length;
-
-            }
-            if (locale.Blurb != null)
-            {
-                ViewBag.startBlurb = 100 - locale.Blurb.Length;
-
-            }
-            if (locale.Appointed != null)
-            {
-                ViewBag.startAppointed = 8000 - locale.Appointed.Length;
-
-            }
-            if (locale.AvgLifestyle != null)
-            {
-                ViewBag.startAvg = 3000 - locale.AvgLifestyle.Length;
-            }
+            ModelState.AddModelError("", "Something has gone wrong. Look for red text to see where is went wrong");
             return View(locale);
         }
 
@@ -453,6 +453,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             {
                 ViewBag.Selected = new List<short>();
             }
+            ModelState.AddModelError("", "Something has gone wrong. Look for red text to see where is went wrong");
             LocaleEditVM aLocale = new LocaleEditVM(locale);
             return View(aLocale);
         }
@@ -607,7 +608,84 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
         public ActionResult DeleteConfirmed(short id)
         {
             Locale locale = db.Locales.Find(id);
+            short infoId = locale.InfoId;
             db.Locales.Remove(locale);
+
+            #region Remove Associations
+
+            #region Remove Majorities
+            List<Majority> majs = db.Majorities.Where(x => x.LocaleId == id).ToList();
+            foreach (Majority gone in majs)
+            {
+                db.Majorities.Remove(gone);
+            }
+            #endregion
+
+            #region Remove LocaleEvents
+            List<LocaleEvent> events = db.LocaleEvents.Where(x => x.LocaleId == id).ToList();
+            foreach (LocaleEvent gone in events)
+            {
+                db.LocaleEvents.Remove(gone);
+            }
+            #endregion
+            #endregion
+
+            #region Remove Rumors
+            var rumors = db.Rumors.Where(r => r.RumorOfId == infoId);
+            foreach (Rumor r in rumors)
+            {
+                db.Rumors.Remove(r);
+            }
+            #endregion
+
+            #region Remove Secrets
+            var secrets = db.Secrets.Where(s => s.IsAboutId == infoId);
+            List<short> secretIds = db.Secrets.Where(s => s.IsAboutId == infoId).Select(s => s.SecretId).ToList();
+            List<SecretSecretTag> ssts = db.SecretSecretTags.Where(s => secretIds.Contains(s.SecretId)).ToList();
+
+            //remove sst
+            foreach (SecretSecretTag secretSecretTag in ssts)
+            {
+                db.SecretSecretTags.Remove(secretSecretTag);
+            }
+
+            //remove secrets
+            foreach (Secret secret in secrets)
+            {
+                db.Secrets.Remove(secret);
+            }
+
+            #endregion
+
+            #region remove stories
+            var stories = db.Stories.Where(s => s.IsAboutId == infoId);
+            List<short> storyIds = db.Stories.Where(s => s.IsAboutId == infoId).Select(s => s.StoryId).ToList();
+            List<StoryTag> st = db.StoryTags.Where(s => storyIds.Contains(s.StoryId)).ToList();
+
+            //remove story tags
+            foreach (StoryTag storyTag in st)
+            {
+                db.StoryTags.Remove(storyTag);
+            }
+
+            //remove stories
+            foreach (Story story in stories)
+            {
+                db.Stories.Remove(story);
+            }
+            #endregion
+
+            #region Remove info
+            Info info = db.Infos.Where(i => i.InfoId == infoId).First();
+            var infoTags = db.InfoTags.Where(it => it.InfoId == infoId).ToList();
+            foreach (InfoTag infoTag in infoTags)
+            {
+                db.InfoTags.Remove(infoTag);
+            }
+
+            db.Infos.Remove(info);
+            #endregion
+
             db.SaveChanges();
             return RedirectToAction("Index");
         }

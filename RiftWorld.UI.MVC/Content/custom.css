@@ -20,12 +20,20 @@ body {
     box-shadow: inset -1px 1px 20px 20px #e8b182;
 }*/
 
+.col-md-6 h2.line{
+    font-size: 2em;
+}
+
+.centered{
+    text-align:center;
+}
+
 pre {
     color: unset;
     font-family: "Grenze Gotisch", cursive;
     font-size: unset;
     white-space: pre-wrap;
-    font-weight:300;
+    font-weight: 300;
 }
 
 #adminNav {
@@ -62,14 +70,36 @@ pre {
         text-shadow: none;
     }
 
-.form-group {
+.form-group,
+.oops-summary {
     padding-left: 10%;
     padding-right: 10%;
 }
 
+    .form-check.larger {
+        font-size: 2em;
+        line-height: 1;
+        text-align:center;
+    }
+
+    .form-check.larger input[type=checkbox]{
+        width:30px;
+        height: 30px;
+    }
+
+.oops-summary {
+    font-size: 1.25em;
+    text-align: center;
+}
+
+    .oops-summary li {
+        list-style-type: none;
+    }
+
 .form-horizontal {
     text-align: left;
 }
+
 
 #nulled ul {
     padding-left: 35%;
@@ -294,28 +324,29 @@ p {
     border-bottom: solid 5px rgba(218, 165, 32, .5);
 }
 
-span.dt{
-    font-weight:700;
+span.dt {
+    font-weight: 700;
 }
 
-.chara-space{
+.chara-space {
     font-size: 1.1em;
 }
 
-.chara-space .col-auto:first-child{
-    padding-right:0;
-}
-.chara-space .col-auto.end{
-    padding-left:0
-}
+    .chara-space .col-auto:first-child {
+        padding-right: 0;
+    }
 
-.chara-space .divider{
-    color:goldenrod;
-}
+    .chara-space .col-auto.end {
+        padding-left: 0
+    }
 
-.chara-space.topper{
-    padding-top:.2em;
-}
+    .chara-space .divider {
+        color: goldenrod;
+    }
+
+    .chara-space.topper {
+        padding-top: .2em;
+    }
 
 footer.chara-space {
     font-style: italic;
@@ -324,8 +355,8 @@ footer.chara-space {
     border-top: solid #EAC87B;
 }
 
-.begin{
-    border:dashed #f4deb5;
+.begin {
+    border: dashed #f4deb5;
 }
 
 .overlay-character {
@@ -342,7 +373,8 @@ footer.chara-space {
     padding: 20px;
     text-align: center;
 }
-h2.line.chara{
+
+h2.line.chara {
     color: slategray;
 }
 /* When you mouse over the container, fade in the overlay title */
@@ -360,7 +392,7 @@ h2.line.chara{
     transition: filter 0.5s;
 }
 
-#picture.retired .padder:hover img, #picture.dead .padder:hover img{
+#picture.retired .padder:hover img, #picture.dead .padder:hover img {
     filter: none;
 }
 /**************  blockquote ****************/
@@ -483,13 +515,20 @@ h2.line {
     text-align: center;
     background: black;
     font-size: 1.5em; /*or 1.25em*/
-    color: gray;
+    /*color: gray;*/
+    color:black;
     padding: .5em 1em;
     border-radius: 2em 1em 4em / 0.5em 3em;
     margin-bottom: unset;
     text-transform: lowercase;
+    transition: all 0.3s;
+    cursor:pointer;
 }
 
+    #secret p.revealed {
+        color: gray;
+        cursor:default;
+    }
 
 /**************  Stories  ****************/
 /* Style the tab */
@@ -678,24 +717,31 @@ main .rift {
     box-shadow: -1px 8px 20px 0px rgba(0,0,0, .28);
 }
 
-#rumor-list .col-sm-6:nth-child(2n) {
-    float: left;
+#rumor-list .col-12:nth-child(2n),
+#rumor-list .col-12:nth-child(2n) .col-sm-9{
+    justify-content: flex-start;
 }
 
-    #rumor-list .col-sm-6:nth-child(2n+1) h6 {
+#rumor-list .col-12:nth-child(2n+1) h6 {
+    text-align:left;
+}
+
+#rumor-list .col-12:nth-child(2n+1),
+#rumor-list .col-12:nth-child(2n+1) .col-sm-9 {
+    justify-content: flex-end;
+}
+
+    #rumor-list .col-12:nth-child(2n) h6 {
         text-align: right;
-    }
-
-#rumor-list .col-sm-6:nth-child(2n) {
-    float: right;
-}
-
-    #rumor-list .col-sm-6:nth-child(2n) h6 {
-        text-align: left;
     }
 
 #make-rumor {
     text-align: left;
+}
+
+#make-rumor #daSubmit{
+    font-size:.8em;
+    border: 1px solid darkgoldenrod;
 }
 /**************  Making the template my own  ****************/
 .ht-options {
@@ -729,6 +775,7 @@ main .rift {
         background: none;
         border: 1px solid #f5f5f56b;
         box-shadow: 0px 0px 2px #ffffffc2;
+        transition: all 0.3s;
     }
 
     .nav-options .nav-menu ul li a {
@@ -739,7 +786,9 @@ main .rift {
         box-shadow: 0px 0px 2px #ffffffc2;
     }
 
-    .nav-options .nav-menu ul li:hover > a {
+    .nav-options .nav-menu ul li:hover > a,
+    .nav-options .humberger-menu:hover, 
+    .nav-options .nav-search:hover {
         background: rgba(0, 212, 255, .84);
         text-shadow: 1px 0px 0px #ffffff;
         box-shadow: 0px 0px 11px;
@@ -780,6 +829,23 @@ a {
 .nav-options .nav-menu ul li.active a {
     background: rgba(0, 212, 255, .84);
 }
+
+.tags {
+    text-align:left;
+}
+
+    .tags a {
+        display: inline-block;
+        font-size: .75em;
+        padding: 6px 12px 5px;
+        border: 1px solid #363636;
+        -webkit-transform: skewX(-15deg);
+        -ms-transform: skewX(-15deg);
+        transform: skewX(-15deg);
+        margin-right: 9px;
+        margin-bottom: 15px;
+        background-color: ghostwhite;
+    }
 
 /**************  Editing style  ****************/
 
@@ -877,7 +943,7 @@ input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:foc
 }
 
 /* width */
-textarea::-webkit-scrollbar, 
+textarea::-webkit-scrollbar,
 .multi-wrapper ::-webkit-scrollbar {
     width: 10px;
 }
@@ -977,4 +1043,12 @@ textarea::-webkit-scrollbar-thumb,
 .modal-header,
 .modal-footer {
     border-color: goldenrod;
+}
+/**************  Index  ****************/
+.info-box{
+    margin:.3em;
+}
+.info-box .col-auto{
+    border:solid;
+    cursor:pointer;
 }

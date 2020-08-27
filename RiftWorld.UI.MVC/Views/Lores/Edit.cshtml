@@ -3,16 +3,17 @@
 @{
     ViewBag.Title = "Editing " + Model.Name;
     List<short> theSelected = ViewBag.Selected;
-    int startName = 50;
+    int nameMax;
+    int blurbMax;
+    int startName = nameMax = 50;
+    int startBlurb = blurbMax = 100;
     if (Model.Name != null)
     {
-        startName = 50 - Model.Name.Length;
-
+        startName -= Model.Name.Length;
     }
-    int startBlurb = 100;
     if (Model.Blurb != null)
     {
-        startBlurb = 100 - Model.Blurb.Length;
+        startBlurb -= Model.Blurb.Length;
     }
 }
 
@@ -38,7 +39,9 @@
 
         <div class="form-horizontal">
             <hr />
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="col-auto oops-summary">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            </div>
             @Html.HiddenFor(model => model.LoreId)
             @Html.HiddenFor(model => model.InfoId)
             @Html.HiddenFor(model => model.IsPublished)
@@ -47,7 +50,7 @@
                 @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label" })
                 <div class="col-12">
                     <div class="da-focus">
-                        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control count", data_max = 50 } })
+                        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control count", data_max = nameMax } })
                     </div>
                     @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
                     <div id="tcp-Name" class="col-md-offset-2 col-12 @(startName <0 ? "invalid":"")"><span id="tc-Name">@startName</span> character(s) left.</div>
@@ -58,7 +61,7 @@
                 @Html.LabelFor(model => model.Blurb, htmlAttributes: new { @class = "control-label" })
                 <div class="col-12">
                     <div class="da-focus">
-                        @Html.EditorFor(model => model.Blurb, new { htmlAttributes = new { @class = "form-control count", data_max = 100, style = "height:4em;" } })
+                        @Html.EditorFor(model => model.Blurb, new { htmlAttributes = new { @class = "form-control count", data_max = blurbMax, style = "height:4em;" } })
                     </div>
                     @Html.ValidationMessageFor(model => model.Blurb, "", new { @class = "text-danger" })
                     <div id="tcp-Blurb" class="col-md-offset-2 col-12 @(startBlurb <0 ? "invalid":"")"><span id="tc-Blurb">@startBlurb</span> character(s) left.</div>

@@ -7,39 +7,70 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using RiftWorld.DATA.EF;
+using RiftWorld.UI.MVC.Models;
 
 namespace RiftWorld.UI.MVC.Controllers.Entities
 {
+    //todo - uncomment to lockdown controller
+    //[Authorize(Roles = "Admin")]
     public class EventsController : Controller
     {
         private RiftWorldEntities db = new RiftWorldEntities();
 
         // GET: Events
+        [OverrideAuthorization]
         public ActionResult Index()
         {
+            //v1 - for testing so I don't have to constantly switch accounts
             var events = db.Events.Include(i => i.Info);
+
+            //v2 - prevent non-admin from seeing unpublished work
+            //todo - uncomment below to prevent users from seeing un-published work
+            //var events = db.Events.Include(i => i.Info).Where(i => i.IsPublished);
+
             return View(events.ToList());
         }
 
         // GET: Events/Details/5
+        [OverrideAuthorization]
         public ActionResult Details(short? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Event @event = db.Events.Find(id);
-            if (@event == null)
+            Event taevent = db.Events.Find(id);
+            if (taevent == null)
             {
                 return HttpNotFound();
             }
-            return View(@event);
+
+            //todo - uncomment below to prevent users from seeing un-published work
+            //if (!taevent.IsPublished && !User.IsInRole("Admin"))
+            //{
+            //    return View("Error");
+            //    //todo change redirect to a error 404 page
+            //}
+
+            return View(taevent);
+        }
+
+        [OverrideAuthorization]
+        public PartialViewResult _Locale(short id)
+        {
+            return PartialView();
+        }
+
+        [OverrideAuthorization]
+        public PartialViewResult _Orgs(short id)
+        {
+            return PartialView();
         }
 
         // GET: Events/Create
         public ActionResult Create()
         {
-            ViewBag.InfoId = new SelectList(db.Infos, "InfoId", "Blurb");
+            ViewBag.Tags = new MultiSelectList(db.Tags, "TagId", "TagName");
             return View();
         }
 
@@ -48,17 +79,223 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "EventId,InfoId,Name,IsHistory,AboutText,NormalParticipants,IsPublished,DateDay,DateMonth,DateYear,DateEra")] Event @event)
+        public ActionResult Create([Bind(Include = "Name,IsHistory,AboutText,NormalParticipants,DateDay,DateMonth,DateYear,DateEra, Blurb")] EventCreateVM taevent,
+            List<short> tags,
+            string submit)
         {
+            taevent.IsPublished = false;
             if (ModelState.IsValid)
             {
-                db.Events.Add(@event);
+                #region Info
+                Info info;
+                info = new Info
+                {
+                    InfoTypeId = 6,  //<-------------------Info Type ID. CHANGE UPON COPY
+                    IdWithinType = null,
+                    Blurb = taevent.Blurb,
+                    Name = taevent.Name,
+                    IsPublished = taevent.IsPublished
+                };
+                db.Infos.Add(info);
+                db.SaveChanges(); //this has to go here in order to ensure that the infoId short below is accurate. Also at this point I am doing no further gets on validity so there is no point to not saving 
+                #endregion
+                short infoId = db.Infos.Max(i => i.InfoId);
+
+                #region Adding Tags
+                if (tags != null)
+                {
+                    foreach (short t in tags)
+                    {
+                        InfoTag infoTag = new InfoTag { InfoId = infoId, TagId = t };
+                        db.InfoTags.Add(infoTag);
+                    }
+                }
+                #endregion
+
+                #region Event
+                Event daEvent = new Event
+                {
+                    Name = taevent.Name,
+                    IsHistory = taevent.IsHistory,
+                    AboutText = taevent.AboutText,
+                    NormalParticipants = taevent.NormalParticipants,
+                    IsPublished = taevent.IsPublished,
+                    DateDay = taevent.DateDay,
+                    DateMonth = taevent.DateMonth,
+                    DateYear = taevent.DateYear,
+                    DateEra = taevent.DateEra
+                };
+                db.Events.Add(daEvent);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                #endregion
+
+                #region give info the IdWithinType
+                short maxi = db.Events.Max(l => l.EventId);
+                info.IdWithinType = maxi;
+                db.Entry(info).State = EntityState.Modified;
+                db.SaveChanges();
+                #endregion
+
+                //move to step 2
+                return RedirectToAction("AssoCreate", new { id = maxi, submit = submit });
             }
 
-            ViewBag.InfoId = new SelectList(db.Infos, "InfoId", "Blurb", @event.InfoId);
-            return View(@event);
+            //if model is not valid
+            ViewBag.Tags = new MultiSelectList(db.Tags, "TagId", "TagName", tags);
+
+            ModelState.AddModelError("", "Something has gone wrong. Look for red text to see where is went wrong");
+            return View(taevent);
+        }
+
+        public ActionResult AssoCreate(short? id, string submit)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Event taevent = db.Events.Find(id);
+            if (taevent == null)
+            {
+                return HttpNotFound();
+            }
+            ViewBag.Locales = db.Locales.ToList();
+            var selected = db.LocaleEvents.Where(i => i.EventId == taevent.EventId).ToList();
+            List<AssoLocale_Event> assoLocales = new List<AssoLocale_Event>();
+            foreach (LocaleEvent locale in selected)
+            {
+                AssoLocale_Event toAdd = new AssoLocale_Event(locale);
+                assoLocales.Add(toAdd);
+            }
+
+            ViewBag.Orgs = db.Orgs.ToList();
+            var selected2 = db.OrgEvents.Where(i => i.EventId == taevent.EventId).ToList();
+            List<AssoOrg_Event> assoOrgs = new List<AssoOrg_Event>();
+            foreach (OrgEvent org in selected2)
+            {
+                AssoOrg_Event toAdd = new AssoOrg_Event(org);
+                assoOrgs.Add(toAdd);
+            }
+
+            var infoid = taevent.InfoId;
+            AssoEventVM model = new AssoEventVM { InfoId = infoid, EventId = taevent.EventId, Submit = submit, Name = taevent.Name, AssoLocales = assoLocales, AssoOrgs = assoOrgs };
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AssoCreate(short infoId, short eventId, string submit,
+            List<AssoLocale_Event> locales,
+            List<AssoOrg_Event> orgs)
+        {
+            var taevent = db.Events.Where(i => i.EventId == eventId).FirstOrDefault();
+            if (ModelState.IsValid)
+            {
+                var info = db.Infos.Where(i => i.InfoId == infoId).FirstOrDefault();
+                #region Save or Publish?
+                switch (submit)
+                {
+                    case "Save Progress":
+                    case "Un-Publish":
+                    case "Save and Continue":
+                        info.IsPublished = false;
+                        taevent.IsPublished = false;
+                        break;
+                    case "Publish":
+                    case "Save":
+                        info.IsPublished = true;
+                        taevent.IsPublished = true;
+                        break;
+                    default:
+                        break;
+                }
+                db.Entry(taevent).State = EntityState.Modified;
+                db.Entry(info).State = EntityState.Modified;
+                #endregion
+
+                #region Add Locales
+                List<short> currentLocaleId = db.LocaleEvents.Where(x => x.EventId == eventId).Select(x => x.LocaleId).ToList();
+                if (locales != null)
+                {
+                    foreach (AssoLocale_Event le in locales)
+                    {
+                        //if the association already exists
+                        if (currentLocaleId.Contains(le.LocaleId))
+                        {
+                            LocaleEvent toEdit = db.LocaleEvents.Where(x => x.LocaleId == le.LocaleId && x.EventId == eventId).First();
+                            //if I ever add more columns to LocaleEvent, edit them here
+                            //db.Entry(toEdit).State = EntityState.Modified;
+                            //db.SaveChanges();
+                            currentLocaleId.Remove(le.LocaleId);
+                        }
+                        else
+                        {
+                            LocaleEvent toAdd = new LocaleEvent
+                            {
+                                EventId = eventId,
+                                LocaleId = le.LocaleId
+                            };
+                            db.LocaleEvents.Add(toAdd);
+                        }
+                    }
+                }
+                if (currentLocaleId.Count != 0)
+                {
+                    foreach (short id in currentLocaleId)
+                    {
+                        LocaleEvent gone = db.LocaleEvents.Where(x => x.EventId == eventId && x.LocaleId == id).FirstOrDefault();
+                        db.LocaleEvents.Remove(gone);
+                    }
+                }
+                db.SaveChanges();
+                #endregion
+
+                #region Add Orgs
+                List<short> currentOrgId = db.OrgEvents.Where(x => x.EventId == eventId).Select(x => x.OrgId).ToList();
+                if (orgs != null)
+                {
+                    foreach (AssoOrg_Event assoOrg in orgs)
+                    {
+                        //if the association already exists
+                        if (currentOrgId.Contains(assoOrg.OrgId))
+                        {
+                            OrgEvent toEdit = db.OrgEvents.Where(x => x.OrgId == assoOrg.OrgId && x.EventId == eventId).First();
+                            toEdit.Blurb = assoOrg.Blurb;
+                            db.Entry(toEdit).State = EntityState.Modified;
+                            db.SaveChanges();
+                            currentOrgId.Remove(assoOrg.OrgId);
+                        }
+                        else
+                        {
+                            OrgEvent toAdd = new OrgEvent
+                            {
+                                EventId = eventId,
+                                OrgId = assoOrg.OrgId,
+                                Blurb = assoOrg.Blurb
+                            };
+                            db.OrgEvents.Add(toAdd);
+                        }
+                    }
+
+                }
+                if (currentOrgId.Count != 0)
+                {
+                    foreach (short id in currentOrgId)
+                    {
+                        OrgEvent gone = db.OrgEvents.Where(x => x.EventId == eventId && x.OrgId == id).FirstOrDefault();
+                        db.OrgEvents.Remove(gone);
+                    }
+                }
+                db.SaveChanges();
+                #endregion
+                return Json(true);
+            }
+
+            //if model fails
+            ViewBag.Locales = db.Locales.ToList();
+            ViewBag.Orgs = db.Orgs.ToList();
+            //if I actually was handling if the model failed (as currently I'm using the bandaid solution of just preventing the submition ) this would not cut it. It does not account for orgs or locales being null
+            AssoEventVM model = new AssoEventVM { InfoId = infoId, EventId = eventId, Submit = submit, Name = taevent.Name, AssoOrgs = orgs, AssoLocales = locales };
+            return View(model);
         }
 
         // GET: Events/Edit/5
@@ -68,13 +305,21 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Event @event = db.Events.Find(id);
-            if (@event == null)
+            Event taevent = db.Events.Find(id);
+            if (taevent == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.InfoId = new SelectList(db.Infos, "InfoId", "Blurb", @event.InfoId);
-            return View(@event);
+
+            short infoid = taevent.InfoId;
+            string blurb = db.Infos.Where(i => i.InfoId == infoid).Select(i => i.Blurb).First();
+            EventEditVM model = new EventEditVM(taevent, blurb);
+
+            List<short> selectedTags = db.InfoTags.Where(t => t.InfoId == infoid).Select(t => t.TagId).ToList();
+            ViewBag.Selected = selectedTags;
+            ViewBag.Tags = db.Tags.ToList();
+
+            return View(model);
         }
 
         // POST: Events/Edit/5
@@ -82,16 +327,237 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "EventId,InfoId,Name,IsHistory,AboutText,NormalParticipants,IsPublished,DateDay,DateMonth,DateYear,DateEra")] Event @event)
+        public ActionResult Edit([Bind(Include = "EventId,InfoId,Name,IsHistory,AboutText,NormalParticipants,IsPublished,DateDay,DateMonth,DateYear,DateEra, Blurb")] EventEditPostVM taevent,
+            List<short> tags,
+            string submit)
+        {
+            #region Save or Publish?
+            switch (submit)
+            {
+                case "Save Progress":
+                case "Un-Publish":
+                    taevent.IsPublished = false;
+                    break;
+                case "Publish":
+                case "Save":
+                    taevent.IsPublished = true;
+                    break;
+                case "Save and go to complex edit":
+                    break;
+            }
+            #endregion
+
+            if (ModelState.IsValid)
+            {
+                var infoid = taevent.InfoId;
+                #region Info Update
+                //Info info = db.Infos.Find(infoid);
+                Info info = db.Infos.Where(i => i.InfoId == infoid).FirstOrDefault();
+                info.Name = taevent.Name;
+                info.Blurb = taevent.Blurb;
+                info.IsPublished = taevent.IsPublished;
+                #endregion
+
+                #region Update tags
+                List<short> currentTagIds = db.InfoTags.Where(x => x.InfoId == infoid).Select(x => x.TagId).ToList();
+
+                if (tags != null)
+                {
+                    foreach (short tag in tags)
+                    {
+                        //if this is an already existing tag 
+                        if (currentTagIds.Contains(tag))
+                        {
+                            currentTagIds.Remove(tag);
+                        }
+                        //if this is a newly added tag
+                        else
+                        {
+                            InfoTag newTag = new InfoTag { InfoId = infoid, TagId = tag };
+                            db.InfoTags.Add(newTag);
+                        }
+                    }
+                }
+
+                if (currentTagIds.Count != 0)
+                {
+                    foreach (short id in currentTagIds)
+                    {
+                        InfoTag gone = db.InfoTags.Where(x => x.InfoId == infoid & x.TagId == id).FirstOrDefault();
+                        db.InfoTags.Remove(gone);
+                    }
+                }
+
+                #endregion
+
+                #region Update Event
+                Event daEvent = new Event
+                {
+                    InfoId = taevent.InfoId,
+                    EventId = taevent.EventId,
+                    Name = taevent.Name,
+                    IsHistory = taevent.IsHistory,
+                    AboutText = taevent.AboutText,
+                    NormalParticipants = taevent.NormalParticipants,
+                    IsPublished = taevent.IsPublished,
+                    DateDay = taevent.DateDay,
+                    DateMonth = taevent.DateMonth,
+                    DateYear = taevent.DateYear,
+                    DateEra = taevent.DateEra
+                };
+                db.Entry(daEvent).State = EntityState.Modified;
+                db.Entry(info).State = EntityState.Modified;
+                db.SaveChanges();
+                #endregion
+                if (submit == "Save and go to complex edit")
+                {
+                    return RedirectToAction("AssoEdit", new { id = taevent.EventId });
+                }
+                return RedirectToAction("Details", new { id = taevent.EventId });
+            }
+
+            //if model invalid
+            ViewBag.Tags = db.Tags.ToList();
+            if (tags != null)
+            {
+                ViewBag.Selected = tags;
+            }
+            else
+            {
+                ViewBag.Selected = new List<short>();
+            }
+            ModelState.AddModelError("", "Something has gone wrong. Look for red text to see where is went wrong");
+            EventEditVM aEvent = new EventEditVM(taevent);
+            return View(aEvent);
+        }
+
+        public ActionResult AssoEdit(short? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Event taevent = db.Events.Find(id);
+            if (taevent == null)
+            {
+                return HttpNotFound();
+            }
+            ViewBag.Locales = db.Locales.ToList();
+            var selected = db.LocaleEvents.Where(i => i.EventId == taevent.EventId).ToList();
+            List<AssoLocale_Event> assoLocales = new List<AssoLocale_Event>();
+            foreach (LocaleEvent locale in selected)
+            {
+                AssoLocale_Event toAdd = new AssoLocale_Event(locale);
+                assoLocales.Add(toAdd);
+            }
+
+            ViewBag.Orgs = db.Orgs.ToList();
+            var selected2 = db.OrgEvents.Where(i => i.EventId == taevent.EventId).ToList();
+            List<AssoOrg_Event> assoOrgs = new List<AssoOrg_Event>();
+            foreach (OrgEvent org in selected2)
+            {
+                AssoOrg_Event toAdd = new AssoOrg_Event(org);
+                assoOrgs.Add(toAdd);
+            }
+
+            var infoid = taevent.InfoId;
+            AssoEventVM model = new AssoEventVM { InfoId = infoid, EventId = taevent.EventId, Submit = "Save", Name = taevent.Name, AssoLocales = assoLocales, AssoOrgs = assoOrgs };
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AssoEdit(short infoId, short eventId, string submit,
+            List<AssoLocale_Event> locales,
+            List<AssoOrg_Event> orgs)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(@event).State = EntityState.Modified;
+                #region Add Locales
+                List<short> currentLocaleId = db.LocaleEvents.Where(x => x.EventId == eventId).Select(x => x.LocaleId).ToList();
+                if (locales != null)
+                {
+                    foreach (AssoLocale_Event le in locales)
+                    {
+                        //if the association already exists
+                        if (currentLocaleId.Contains(le.LocaleId))
+                        {
+                            LocaleEvent toEdit = db.LocaleEvents.Where(x => x.LocaleId == le.LocaleId && x.EventId == eventId).First();
+                            //if I ever add more columns to LocaleEvent, edit them here
+                            //db.Entry(toEdit).State = EntityState.Modified;
+                            //db.SaveChanges();
+                            currentLocaleId.Remove(le.LocaleId);
+                        }
+                        else
+                        {
+                            LocaleEvent toAdd = new LocaleEvent
+                            {
+                                EventId = eventId,
+                                LocaleId = le.LocaleId
+                            };
+                            db.LocaleEvents.Add(toAdd);
+                        }
+                    }
+                }
+                if (currentLocaleId.Count != 0)
+                {
+                    foreach (short id in currentLocaleId)
+                    {
+                        LocaleEvent gone = db.LocaleEvents.Where(x => x.EventId == eventId && x.LocaleId == id).FirstOrDefault();
+                        db.LocaleEvents.Remove(gone);
+                    }
+                }
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                #endregion
+
+                #region Add Orgs
+                List<short> currentOrgId = db.OrgEvents.Where(x => x.EventId == eventId).Select(x => x.OrgId).ToList();
+                if (orgs != null)
+                {
+                    foreach (AssoOrg_Event assoOrg in orgs)
+                    {
+                        //if the association already exists
+                        if (currentOrgId.Contains(assoOrg.OrgId))
+                        {
+                            OrgEvent toEdit = db.OrgEvents.Where(x => x.OrgId == assoOrg.OrgId && x.EventId == eventId).First();
+                            toEdit.Blurb = assoOrg.Blurb;
+                            db.Entry(toEdit).State = EntityState.Modified;
+                            db.SaveChanges();
+                            currentOrgId.Remove(assoOrg.OrgId);
+                        }
+                        else
+                        {
+                            OrgEvent toAdd = new OrgEvent
+                            {
+                                EventId = eventId,
+                                OrgId = assoOrg.OrgId,
+                                Blurb = assoOrg.Blurb
+                            };
+                            db.OrgEvents.Add(toAdd);
+                        }
+                    }
+
+                }
+                if (currentOrgId.Count != 0)
+                {
+                    foreach (short id in currentOrgId)
+                    {
+                        OrgEvent gone = db.OrgEvents.Where(x => x.EventId == eventId && x.OrgId == id).FirstOrDefault();
+                        db.OrgEvents.Remove(gone);
+                    }
+                }
+                db.SaveChanges();
+                #endregion
+                return Json(true);
             }
-            ViewBag.InfoId = new SelectList(db.Infos, "InfoId", "Blurb", @event.InfoId);
-            return View(@event);
+
+            //if model fails
+            ViewBag.Locales = db.Locales.ToList();
+            ViewBag.Orgs = db.Orgs.ToList();
+            var taevent = db.Events.Find(eventId);
+            //if I actually was handling if the model failed (as currently I'm using the bandaid solution of just preventing the submition ) this would not cut it. It does not account for orgs or locales being null
+            AssoEventVM model = new AssoEventVM { InfoId = infoId, EventId = eventId, Submit = submit, Name = taevent.Name, AssoOrgs = orgs, AssoLocales = locales };
+            return View(model);
         }
 
         // GET: Events/Delete/5
@@ -101,12 +567,12 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Event @event = db.Events.Find(id);
-            if (@event == null)
+            Event taevent = db.Events.Find(id);
+            if (taevent == null)
             {
                 return HttpNotFound();
             }
-            return View(@event);
+            return View(taevent);
         }
 
         // POST: Events/Delete/5
@@ -114,8 +580,85 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(short id)
         {
-            Event @event = db.Events.Find(id);
-            db.Events.Remove(@event);
+            Event taevent = db.Events.Find(id);
+            short infoId = taevent.InfoId;
+            db.Events.Remove(taevent);
+
+            #region Remove Associations
+
+            #region Remove LocaleEvents
+            List<LocaleEvent> locales = db.LocaleEvents.Where(x => x.EventId == id).ToList();
+            foreach (LocaleEvent gone in locales)
+            {
+                db.LocaleEvents.Remove(gone);
+            }
+            #endregion
+
+            #region Remove OrgEvents
+            List<OrgEvent> orgs = db.OrgEvents.Where(x => x.EventId == id).ToList();
+            foreach (OrgEvent gone in orgs)
+            {
+                db.OrgEvents.Remove(gone);
+            }
+            #endregion
+            #endregion
+
+            #region Remove Rumors
+            var rumors = db.Rumors.Where(r => r.RumorOfId == infoId);
+            foreach (Rumor r in rumors)
+            {
+                db.Rumors.Remove(r);
+            }
+            #endregion
+
+            #region Remove Secrets
+            var secrets = db.Secrets.Where(s => s.IsAboutId == infoId);
+            List<short> secretIds = db.Secrets.Where(s => s.IsAboutId == infoId).Select(s => s.SecretId).ToList();
+            List<SecretSecretTag> ssts = db.SecretSecretTags.Where(s => secretIds.Contains(s.SecretId)).ToList();
+
+            //remove sst
+            foreach (SecretSecretTag secretSecretTag in ssts)
+            {
+                db.SecretSecretTags.Remove(secretSecretTag);
+            }
+
+            //remove secrets
+            foreach (Secret secret in secrets)
+            {
+                db.Secrets.Remove(secret);
+            }
+
+            #endregion
+
+            #region remove stories
+            var stories = db.Stories.Where(s => s.IsAboutId == infoId);
+            List<short> storyIds = db.Stories.Where(s => s.IsAboutId == infoId).Select(s => s.StoryId).ToList();
+            List<StoryTag> st = db.StoryTags.Where(s => storyIds.Contains(s.StoryId)).ToList();
+
+            //remove story tags
+            foreach (StoryTag storyTag in st)
+            {
+                db.StoryTags.Remove(storyTag);
+            }
+
+            //remove stories
+            foreach (Story story in stories)
+            {
+                db.Stories.Remove(story);
+            }
+            #endregion
+
+            #region Remove info
+            Info info = db.Infos.Where(i => i.InfoId == infoId).First();
+            var infoTags = db.InfoTags.Where(it => it.InfoId == infoId).ToList();
+            foreach (InfoTag infoTag in infoTags)
+            {
+                db.InfoTags.Remove(infoTag);
+            }
+
+            db.Infos.Remove(info);
+            #endregion
+
             db.SaveChanges();
             return RedirectToAction("Index");
         }

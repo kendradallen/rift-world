@@ -4,94 +4,260 @@
 @{
     ViewBag.Title = "Approvals";
 }
+
+@section styles{
+    <style>
+        .tablink-a {
+            background-color: #555;
+            color: white;
+            float: left;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 14px 16px;
+            font-size: 17px;
+            width: 15%;
+        }
+
+            .tablink-a:hover {
+                background-color: #777;
+            }
+
+        /* Style the tab content (and add height:100% for full page content) */
+        .tabcontent-a {
+            /*color: white;*/
+            display: none;
+            padding: 100px 20px;
+            /*height: 100%;*/
+        }
+    </style>
+    }
 <div class="col-12">
     <h2>Approvals</h2>
     @if (Request.IsAuthenticated && User.IsInRole("Admin"))
     {
+    <button class="tablink-a" onclick="openPage('Users', this, 'red')">Users (@Model.Users.Count)</button>
+    }
+    <button class="tablink-a" onclick="openPage('Characters', this, 'green')" id="defaultOpen">Characters (@Model.Characters.Count)</button>
+    <button class="tablink-a" onclick="openPage('Rumors', this, 'green')">Rumors (@Model.Rumors.Count)</button>
+    <button class="tablink-a" onclick="openPage('Journals', this, 'green')">Journals (@Model.Journals.Count)</button>
+    <button class="tablink-a" onclick="openPage('JournalEdits', this, 'yellow')">Journal Edits (@Model.JournalEdits.Count)</button>
+    <button class="tablink-a" onclick="openPage('CharacterEdits', this, 'yellow')">Character Edits (@Model.CharacterEdits.Count)</button>
+
+    @if (Request.IsAuthenticated && User.IsInRole("Admin"))
+    {
+        <div id="Users" class="tabcontent-a">
+            <table class="table">
+                <tr>
+                    <th>
+                        User
+                    </th>
+                    <th>
+                    </th>
+                </tr>
+
+                @if (Model.Users.Count != 0)
+                {
+                    foreach (UserDetail item in Model.Users)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DiscordFull)
+                            </td>
+                            <td>
+                                @Html.ActionLink("Decide", "Approve", "UsersAdmin", new { id = item.UserId }, null)
+                            </td>
+                        </tr>
+                    }
+
+                }
+
+            </table>
+        </div>
+    }
+    <div id="Characters" class="tabcontent-a">
+
         <table class="table">
-            <thead>Users</thead>
             <tr>
                 <th>
                     User
                 </th>
                 <th>
+                    Character Name
+                </th>
+                <th>
+                </th>
+            </tr>
+            @if (Model.Characters.Count != 0)
+            {
+                foreach (Character item in Model.Characters)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.UserDetail.DiscordFull)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CharacterName)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Decide", "Approve", "Characters", new { id = item.CharacterId }, null)
+                        </td>
+                    </tr>
+                }
+
+            }
+
+
+        </table>
+    </div>
+    <div id="Rumors" class="tabcontent-a">
+
+        <table class="table">
+            <tr>
+                <th>
+                    Character
+                </th>
+                <th>
+                    Info Rumor about
+                </th>
+                <th>
                 </th>
             </tr>
 
-
-            @foreach (UserDetail item in Model.Users)
+            @if (Model.Rumors.Count != 0)
             {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.DiscordFull)
-                    </td>
-                    <td>
-                        @Html.ActionLink("Decide", "Approve", "UsersAdmin", new { id = item.UserId }, null)
-                    </td>
-                </tr>
+                foreach (Rumor item in Model.Rumors)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Character.CharacterName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Info.Name)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Decide", "Approve", "Rumors", new { id = item.RumorsId }, null)
+                        </td>
+                    </tr>
+                }
+
             }
 
         </table>
-    }
-    <table class="table">
-        <thead>Characters</thead>
-        <tr>
-            <th>
-                User
-            </th>
-            <th>
-                Character Name
-            </th>
-            <th>
-            </th>
-        </tr>
+    </div>
 
-        @foreach (Character item in Model.Characters)
-        {
+    <div id="Journals" class="tabcontent-a">
+
+        <table class="table">
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.UserDetail.DiscordFull)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CharacterName)
-                </td>
-                <td>
-                    @Html.ActionLink("Decide", "Approve", "Characters", new { id = item.CharacterId }, null)
-                </td>
+                <th>
+                    Character
+                </th>
+                <th>
+                </th>
             </tr>
-        }
 
+            @if (Model.Journals.Count != 0)
+            {
+                foreach (Journal item in Model.Journals)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Character.CharacterName)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Decide", "Approve", "Journals", new { id = item.JournalId }, null)
+                        </td>
+                    </tr>
+                }
 
-    </table>
+            }
 
-    <table class="table">
-        <thead>Rumors</thead>
-        <tr>
-            <th>
-                Character
-            </th>
-            <th>
-                Info Rumor about
-            </th>
-            <th>
-            </th>
-        </tr>
+        </table>
+    </div>
+    <div id="JournalEdits" class="tabcontent-a">
 
-
-        @foreach (Rumor item in Model.Rumors)
-        {
+        <table class="table">
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Character.CharacterName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Info.Name)
-                </td>
-                <td>
-                    @Html.ActionLink("Decide", "Approve", "Rumors", new { id = item.RumorsId }, null)
-                </td>
+                <th>
+                    Character
+                </th>
+                <th>
+                </th>
             </tr>
-        }
 
-    </table>
+            @if (Model.JournalEdits.Count != 0)
+            {
+                foreach (Journal item in Model.JournalEdits)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Character.CharacterName)
+                        </td>
+                        <td>
+                            recognize change
+                        </td>
+                    </tr>
+                }
+
+            }
+
+        </table>
+    </div>
+
+    <div id="CharacterEdits" class="tabcontent-a">
+
+        <table class="table">
+            <tr>
+                <th>
+                    Character Name
+                </th>
+                <th>
+                </th>
+            </tr>
+            @if (Model.CharacterEdits.Count != 0)
+            {
+                foreach (Character item in Model.CharacterEdits)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CharacterName)
+                        </td>
+                        <td>
+                            recognize change
+                        </td>
+                    </tr>
+                }
+
+            }
+
+        </table>
+    </div>
 </div>
+@section Scripts{
+    <script>
+        function openPage(pageName, elmnt, color) {
+            // Hide all elements with class="tabcontent" by default */
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tabcontent-a");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+
+            // Remove the background color of all tablinks/buttons
+            tablinks = document.getElementsByClassName("tablink-a");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].style.backgroundColor = "";
+            }
+
+            // Show the specific tab content
+            document.getElementById(pageName).style.display = "block";
+
+            // Add the specific color to the button used to open the tab content
+            elmnt.style.backgroundColor = color;
+        }
+
+        // Get the element with id="defaultOpen" and click on it
+        document.getElementById("defaultOpen").click();
+    </script>
+    }

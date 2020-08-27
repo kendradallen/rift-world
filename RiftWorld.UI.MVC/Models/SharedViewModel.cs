@@ -9,8 +9,9 @@ using RiftWorld.DATA.EF;
 
 namespace RiftWorld.UI.MVC.Models
 {
-    public class SecretCreate
+    public class SecretCreateVM
     {
+        [Display(Name = "Is About")]
         public short IsAboutId { get; set; }
 
         [Required]
@@ -21,9 +22,11 @@ namespace RiftWorld.UI.MVC.Models
 
     }
 
-    public class SecretEdit
+    public class SecretEditVM
     {
         public short SecretId { get; set; }
+
+        [Display(Name = "Is About")]
         public short IsAboutId { get; set; }
 
         [Required]
@@ -32,11 +35,11 @@ namespace RiftWorld.UI.MVC.Models
         [AllowHtml]
         public string TheContent { get; set; }
 
-        public SecretEdit()
+        public SecretEditVM()
         {
 
         }
-        public SecretEdit(Secret secret)
+        public SecretEditVM(Secret secret)
         {
             SecretId = secret.SecretId;
             IsAboutId = secret.IsAboutId;
@@ -46,26 +49,68 @@ namespace RiftWorld.UI.MVC.Models
 
     public class StoryCreateVM
     {
+        [Display(Name = "Is About")]
         public short IsAboutId { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:d}")]
         public System.DateTime DateTold { get; set; }
 
-        [StringLength(50)]
+        [StringLength(50, ErrorMessage = " ")]
         [DisplayFormat(NullDisplayText = "an anonymous source")]
+        [Display(Name = "Commissioned By")]
         public string CommissionedBy { get; set; }
 
         public bool IsCannon { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "...I have no words. The story content was empty")]
         [UIHint("MultilineText")]
         [Display(Name = "Content")]
         [AllowHtml]
         public string TheContent { get; set; }
 
         [Required]
-        [StringLength(20)]
+        [StringLength(20, ErrorMessage = " ")]
         public string Title { get; set; }
+    }
+
+    public class StoryEditVM
+    {
+        public short StoryId { get; set; }
+
+        [Display(Name = "Is About")]
+        public short IsAboutId { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:d}")]
+        public System.DateTime DateTold { get; set; }
+
+        [StringLength(50, ErrorMessage = " ")]
+        [DisplayFormat(NullDisplayText = "an anonymous source")]
+        [Display(Name = "Commissioned By")]
+        public string CommissionedBy { get; set; }
+
+        public bool IsCannon { get; set; }
+
+        [Required(ErrorMessage = "...I have no words. The story content was empty")]
+        [UIHint("MultilineText")]
+        [Display(Name = "Content")]
+        [AllowHtml]
+        public string TheContent { get; set; }
+
+        [Required]
+        [StringLength(20, ErrorMessage = " ")]
+        public string Title { get; set; }
+
+        public StoryEditVM() { }
+        public StoryEditVM(Story story)
+        {
+            StoryId = story.StoryId;
+            IsAboutId = story.IsAboutId;
+            DateTold = story.DateTold;
+            CommissionedBy = story.CommissionedBy;
+            IsCannon = story.IsCannon;
+            TheContent = story.TheContent;
+            Title = story.Title;
+        }
     }
 
     public class RumorCreateVM

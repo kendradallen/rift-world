@@ -13,7 +13,7 @@
     }
 }
 
-<section id="start" class="col-12">
+<section id="start" class="col-12" name="The Basics">
     <div id="startTop" class="row">
         @if (Model.PortraitFileName != null)
         {
@@ -78,13 +78,13 @@
         </div>
     </div>
 </section>
-<section id="description" class="col-12">
+<section id="description" class="col-12" name="Description">
     <h2 class="line chara">
         @Html.DisplayNameFor(model => model.Description)
     </h2>
     <pre>@Html.DisplayFor(model => model.Description)</pre>
 </section>
-<section id="about" class="col-12">
+<section id="about" class="col-12" name="About">
     <h2 class="line chara">
         @Html.DisplayNameFor(model => model.About)
     </h2>

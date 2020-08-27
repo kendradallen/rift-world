@@ -28,6 +28,7 @@ namespace RiftWorld.UI.MVC.Models
 
         public string SymbolFileName { get; set; }
 
+        [Display(Name = "Base of Operations")]
         public Nullable<short> BaseLocationId { get; set; }
 
         //[Required]
@@ -81,6 +82,7 @@ namespace RiftWorld.UI.MVC.Models
 
         public string SymbolFileName { get; set; }
 
+        [Display(Name = "Base of Operations")]
         public Nullable<short> BaseLocationId { get; set; }
 
         //[Required]
@@ -153,6 +155,7 @@ namespace RiftWorld.UI.MVC.Models
 
         public string SymbolFileName { get; set; }
 
+        [Display(Name = "Base of Operations")]
         public Nullable<short> BaseLocationId { get; set; }
 
         //[Required]
@@ -223,7 +226,6 @@ namespace RiftWorld.UI.MVC.Models
         }
         #endregion
     }
-
 
     public class AssoOrgVM
     {
@@ -305,5 +307,52 @@ namespace RiftWorld.UI.MVC.Models
             IsCurrent = charOrg.IsCurrent;
             KatherineApproved = charOrg.KatherineApproved;
         }
+    }
+
+    //display vms
+    public class _MemberFullVM
+    {
+        public List<_MembersVM> CurrentMembers { get; set; }
+        public List<_MembersVM> PastMembers { get; set; }
+        public List<_MembersVM> SecretMembers { get; set; }
+    }
+    public class _MembersVM
+    {
+        public string Name { get; set; }
+        public string Blurb { get; set; }
+        public short Id { get; set; }
+        public bool IsPlayer { get; set; }
+        public Nullable<byte> DisplayOrder { get; set; }
+
+        public _MembersVM() { }
+        public _MembersVM(CharOrg charorg)
+        {
+            Name = charorg.Character.CharacterName;
+            Blurb = charorg.BlurbOrgPage;
+            Id = charorg.CharId;
+            IsPlayer = true;
+            DisplayOrder = null;
+        }
+        public _MembersVM(NpcOrg npcOrg)
+        {
+            Name = npcOrg.NPC.Name;
+            Blurb = npcOrg.BlurbOrgPage;
+            Id = npcOrg.NpcId;
+            IsPlayer = false;
+            DisplayOrder = npcOrg.MemberOrder;
+        }
+    }
+
+    public class _EventOrgFullVM
+    {
+        public List<_EventsOrgVM> Holidays { get; set; }
+        public List<_EventsOrgVM> PastEvents { get; set; }
+    }
+
+    public class _EventsOrgVM
+    {
+        public string Name { get; set; }
+        public short Id { get; set; }
+        public string Blurb { get; set; }
     }
 }

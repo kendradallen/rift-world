@@ -2,11 +2,30 @@
 
 @{
     ViewBag.Title = "Edit" + Model.CharacterName;
-    int startCharacterName = ViewBag.startCharacterName;
-    int startDescription = ViewBag.startDescription;
-    int startAbout = ViewBag.startAbout;
-    int startClass = ViewBag.startClass;
-
+    int nameMax;
+    int descripMax;
+    int aboutMax;
+    int classMax;
+    int startCharacterName = nameMax = 25;
+    int startDescription = descripMax = 2000;
+    int startAbout = aboutMax = 8000;
+    int startClassString = classMax = 40;
+    if (Model.CharacterName != null)
+    {
+        startCharacterName -= Model.CharacterName.Length;
+    }
+    if (Model.Description != null)
+    {
+        startDescription -= Model.Description.Length;
+    }
+    if (Model.About != null)
+    {
+        startAbout -= Model.About.Length;
+    }
+    if (Model.ClassString != null)
+    {
+        startClassString -= Model.ClassString.Length;
+    }
 }
 
 <div class="col-12 player">
@@ -30,7 +49,7 @@
                 @Html.LabelFor(model => model.CharacterName, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
                     <div class="da-focus">
-                        @Html.EditorFor(model => model.CharacterName, new { htmlAttributes = new { @class = "form-control count", data_max = 25 } })
+                        @Html.EditorFor(model => model.CharacterName, new { htmlAttributes = new { @class = "form-control count", data_max = nameMax } })
                     </div>
                     @Html.ValidationMessageFor(model => model.CharacterName, "", new { @class = "text-danger" })
                     <div id="tcp-CharacterName" class="col-md-offset-2 col-12 @(startCharacterName <0 ? "invalid":"")"><span id="tc-CharacterName">@startCharacterName</span> character(s) left.</div>
@@ -58,10 +77,10 @@
                 @Html.LabelFor(model => model.ClassString, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
                     <div class="da-focus">
-                        @Html.EditorFor(model => model.ClassString, new { htmlAttributes = new { @class = "form-control count", data_max = 40 } })
+                        @Html.EditorFor(model => model.ClassString, new { htmlAttributes = new { @class = "form-control count", data_max = classMax } })
                     </div>
                     @Html.ValidationMessageFor(model => model.ClassString, "", new { @class = "text-danger" })
-                    <div id="tcp-Class" class="col-md-offset-2 col-12 @(startClass <0 ? "invalid":"")"><span id="tc-Class">@startClass</span> character(s) left.</div>
+                    <div id="tcp-ClassString" class="col-md-offset-2 col-12 @(startClassString <0 ? "invalid":"")"><span id="tc-ClassString">@startClassString</span> character(s) left.</div>
 
                 </div>
             </div>
@@ -114,7 +133,7 @@
                 @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
                     <div class="da-focus">
-                        @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control count", data_max = 2000, style = "height: 7em" } })
+                        @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control count", data_max = descripMax, style = "height: 7em" } })
                     </div>
                     @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
                     <div id="tcp-Description" class="col-md-offset-2 col-12 @(startDescription <0 ? "invalid":"")"><span id="tc-Description">@startDescription</span> character(s) left.</div>
@@ -126,7 +145,7 @@
                 @Html.LabelFor(model => model.About, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
                     <div class="da-focus">
-                        @Html.EditorFor(model => model.About, new { htmlAttributes = new { @class = "form-control count", data_max = 8000, style = "height: 10em" } })
+                        @Html.EditorFor(model => model.About, new { htmlAttributes = new { @class = "form-control count", data_max = aboutMax, style = "height: 10em" } })
                     </div>
                     @Html.ValidationMessageFor(model => model.About, "", new { @class = "text-danger" })
                     <div id="tcp-About" class="col-md-offset-2 col-12 @(startAbout <0 ? "invalid":"")"><span id="tc-About">@startAbout</span> character(s) left.</div>

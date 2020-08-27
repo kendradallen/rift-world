@@ -115,7 +115,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
         //// more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "IsAboutId,TheContent")] SecretCreate secret,
+        public ActionResult Create([Bind(Include = "IsAboutId,TheContent")] SecretCreateVM secret,
             List<short> tags)
         {
             if (ModelState.IsValid)
@@ -167,7 +167,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             ViewBag.IsAboutId = new SelectList(db.Infos, "InfoId", "Name", secret.IsAboutId);
 
             List<short> selectedTags = db.SecretSecretTags.Where(s => s.SecretId == id).Select(s => s.SecretTagId).ToList();
-            SecretEdit model = new SecretEdit(secret);
+            SecretEditVM model = new SecretEditVM(secret);
             ViewBag.Tags = db.SecretTags.ToList();
             ViewBag.Selected = selectedTags;
 
@@ -179,7 +179,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "SecretId,IsAboutId,TheContent")] SecretEdit secret,
+        public ActionResult Edit([Bind(Include = "SecretId,IsAboutId,TheContent")] SecretEditVM secret,
             List<short> tags)
         {
             if (ModelState.IsValid)
@@ -233,7 +233,14 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             }
             ViewBag.IsAboutId = new SelectList(db.Infos, "InfoId", "Name", secret.IsAboutId);
             ViewBag.Tags = db.SecretTags.ToList();
-            ViewBag.Selected = tags;
+            if (tags != null)
+            {
+                ViewBag.Selected = tags;
+            }
+            else
+            {
+                ViewBag.Selected = new List<short>();
+            }
             return View(secret);
         }
 

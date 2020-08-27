@@ -76,7 +76,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
         [HttpPost]
         [ValidateAntiForgeryToken]
         [OverrideAuthorization]
-        [Authorize(Roles = "Player, Mod")]
+        [Authorize(Roles = "Character")]
         public ActionResult CreateRumor([Bind(Include = "RumorOfId,RumorText, AuthorId, IsApproved")] RumorCreateVM rumor)
         {
             //v2
@@ -120,48 +120,49 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
         //    }
         //    return RedirectToAction("Failed");
         //}
-        public ActionResult Failed()
-        {
-            return View();
-        }
+        //public ActionResult Failed()
+        //{
+        //    return View();
+        //}
         //todo make sure every action of a post validates antiforgery token
 
-        // GET: Rumors/Edit/5
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Rumor rumor = db.Rumors.Find(id);
-            if (rumor == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.AuthorId = new SelectList(db.Characters, "CharacterId", "PlayerId", rumor.AuthorId);
-            ViewBag.RumorOfId = new SelectList(db.Infos, "InfoId", "Blurb", rumor.RumorOfId);
-            return View(rumor);
-        }
+        //// GET: Rumors/Edit/5
+        //public ActionResult Edit(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        //    }
+        //    Rumor rumor = db.Rumors.Find(id);
+        //    if (rumor == null)
+        //    {
+        //        return HttpNotFound();
+        //    }
+        //    ViewBag.AuthorId = new SelectList(db.Characters, "CharacterId", "PlayerId", rumor.AuthorId);
+        //    ViewBag.RumorOfId = new SelectList(db.Infos, "InfoId", "Blurb", rumor.RumorOfId);
+        //    return View(rumor);
+        //}
 
-        // POST: Rumors/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "RumorsId,RumorOfId,AuthorId,IsApproved,RumorText")] Rumor rumor)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Entry(rumor).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            ViewBag.AuthorId = new SelectList(db.Characters, "CharacterId", "PlayerId", rumor.AuthorId);
-            ViewBag.RumorOfId = new SelectList(db.Infos, "InfoId", "Blurb", rumor.RumorOfId);
-            return View(rumor);
-        }
+        //// POST: Rumors/Edit/5
+        //// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        //// more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult Edit([Bind(Include = "RumorsId,RumorOfId,AuthorId,IsApproved,RumorText")] Rumor rumor)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        db.Entry(rumor).State = EntityState.Modified;
+        //        db.SaveChanges();
+        //        return RedirectToAction("Index");
+        //    }
+        //    ViewBag.AuthorId = new SelectList(db.Characters, "CharacterId", "PlayerId", rumor.AuthorId);
+        //    ViewBag.RumorOfId = new SelectList(db.Infos, "InfoId", "Blurb", rumor.RumorOfId);
+        //    return View(rumor);
+        //}
 
         // GET: Rumors/Delete/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -179,6 +180,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
         // POST: Rumors/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public ActionResult DeleteConfirmed(int id)
         {
             Rumor rumor = db.Rumors.Find(id);
@@ -187,6 +189,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             return RedirectToAction("Index");
         }
 
+        [Authorize(Roles = "Mod, Admin")]
         public ActionResult Approve(int? id)
         {
             if (id == null)
@@ -206,9 +209,22 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Mod, Admin")]
         public ActionResult Approve(int rumorsId)
         {
-            Rumor rumor = db.Rumors.Where(x => x.RumorsId == rumorsId).First();
+            Rumor rumor = db.Rumors.Where(x => x.RumorsId == rumorsId).FirstOrDefault();
+            if (rumor == null)
+            {
+                ViewBag.Message = "Looks like another mod or the admin denied this rumor's existance";
+                return View("Error");
+            }
+            //check to see if other mod/admin has already approved this
+            if (rumor.IsApproved == true)
+            {
+                ViewBag.Message = "Looks like another mod or the admin approved this";
+                return View("Approvals", "Infos");
+            }
+
             rumor.IsApproved = true;
 
             if (ModelState.IsValid)
@@ -220,6 +236,28 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             return View(rumor);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Mod, Admin")]
+        public ActionResult Deny(int rumorsId)
+        {
+            Rumor rumor = db.Rumors.Where(x => x.RumorsId == rumorsId).FirstOrDefault();
+            //check to see if other mod/admin has already denied this (thus it won't exist)
+            if (rumor == null)
+            {
+                ViewBag.Message = "Looks like another mod or the admin denied this rumor's existance";
+                return View("Approvals", "Infos");
+            }
+            //check to see if other mod/admin has already approved this
+            if (rumor.IsApproved == true)
+            {
+                ViewBag.Message = "Looks like another mod or the admin approved this. If Katherine is reading this, you'll have to manually delete the rumor in order to undo this";
+                return View("Error");
+            }
+            db.Rumors.Remove(rumor);
+            db.SaveChanges();
+            return RedirectToAction("Approvals", "Infos");
+        }
         protected override void Dispose(bool disposing)
         {
             if (disposing)

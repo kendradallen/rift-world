@@ -1,0 +1,164 @@
+﻿@model RiftWorld.UI.MVC.Models.AssoEventVM
+
+@{
+    ViewBag.Title = "Editing " + Model.Name + " - Complex";
+    List<short> theSelectedLocales = Model.AssoLocales.Select(a => a.LocaleId).ToList();
+    List<short> theSelectedOrgs = Model.AssoOrgs.Select(a => a.OrgId).ToList();
+
+    int orgBlurb_Max = 100;
+}
+
+<div class="col-12">
+    <h2>@ViewBag.Title</h2>
+    <button class="btn btn-outline-secondary" onclick="ShowAll()">Show All</button>
+    <button class="btn btn-outline-secondary" onclick="HideAll()">Hide All</button>
+    @using (Html.BeginForm("AssoEdit", "Events", FormMethod.Post, new { id = "daForm" }))
+    {
+        @Html.AntiForgeryToken()
+        <div class="form-horizontal">
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.HiddenFor(model => model.InfoId)
+            @Html.HiddenFor(model => model.EventId)
+            @Html.HiddenFor(model => model.Submit)
+            <div class="form-group">
+                <label for="locale">Locales</label>
+                <select multiple="multiple" name="locale" id="locale">
+                    @foreach (var x in ViewBag.Locales)
+                    {
+                        <option value="@x.LocaleId" @(theSelectedLocales.Contains(x.LocaleId) ? "selected" : "") data-list="locale">@x.Name</option>
+                    }
+                </select>
+                <div class="other-stuff" data-list="locale">
+                    @foreach (var x in ViewBag.Locales)
+                    {
+                        <div data-value="@x.LocaleId" data-list="locale" style="display:none" class="@(theSelectedLocales.Contains(x.LocaleId) ? "yes-man": "")">
+                            <h5>@x.Name</h5>
+                            @*<div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">[put variable name here]</span>
+                                    </div>
+                                    <div class="da-focus asso input-group-append form-control">
+                                        <input class="form-control" data-value="@x.LocaleId"  />
+                                    </div>
+                                </div>*@
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="org">Organizations</label>
+                <select multiple="multiple" name="org" id="org">
+                    @foreach (var x in ViewBag.Orgs)
+                    {
+                        <option class="@(x.IsPublished ? "":"unpub")" value="@x.OrgId" @(theSelectedOrgs.Contains(x.OrgId) ? "selected" : "") data-list="org">@x.Name</option>
+                    }
+                </select>
+                <div class="other-stuff" data-list="org">
+                    @foreach (var x in ViewBag.Orgs)
+                    {
+                        <div data-value="@x.OrgId" data-list="org" style="display:none" class="@(theSelectedOrgs.Contains(x.OrgId) ? "yes-man": "")">
+                            <h5>@x.Name</h5>
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">Blurb</span>
+                                </div>
+                                <div class="da-focus asso input-group-append form-control">
+                                    <input class="form-control count" data-value="@x.OrgId" type="text" data-list="org" data-name="blurb" data-max="@orgBlurb_Max" value="@(theSelectedOrgs.Contains(x.OrgId) ? (Model.AssoOrgs.Where(a => a.OrgId == x.OrgId).Select(a => a.Blurb).FirstOrDefault()) : "")" />
+                                </div>
+                                <div id="tcp_org-blurb-@x.OrgId" class="tcp col-md-offset-2 col-12">
+                                    <span id="tc_org-blurb-@x.OrgId">
+                                        @(theSelectedOrgs.Contains(x.OrgId) ? (Model.AssoOrgs.Where(a => a.OrgId == x.OrgId).Select(a => a.Blurb).FirstOrDefault() == null ? orgBlurb_Max.ToString() : (orgBlurb_Max - Model.AssoOrgs.Where(a => a.OrgId == x.OrgId).Select(a => a.Blurb).First().Length).ToString()) : orgBlurb_Max.ToString())
+                                    </span> character(s) left.
+                                </div>
+                            </div>
+
+                        </div>
+                    }
+
+                </div>
+
+            </div>
+
+            <div class="form-group">
+                <div class="col-12">
+                    <input id="daSubmit" type="submit" value="Save" class="btn btn-block btn-success btn-lg" />
+                </div>
+            </div>
+        </div>
+    }
+    <div style="text-align:left;">
+        @Html.ActionLink("Back to List", "Index")
+    </div>
+</div>
+@section Scripts{
+    <script src="~/Scripts/SelectBoxes/multi.js"></script>
+    <script src="~/Scripts/MyJS/assoedit.js"></script>
+    <script>
+        class AssoLocale {
+            constructor(localeid) {
+                this.LocaleId = localeid;
+            }
+        }
+
+        class AssoOrg {
+            constructor(orgid, blurb) {
+                this.OrgId = orgid;
+                this.Blurb = blurb;
+            }
+        }
+
+        class TheSubmitted {
+            constructor(locales, orgs) {
+                this.InfoId = $("#InfoId").val();
+                this.EventId = $("#EventId").val();
+                this.Submit = $("#Submit").val();
+                this.__RequestVerificationToken = $('input[name="__RequestVerificationToken"]', $('#daForm')).val();
+                this.Locales = locales;
+                this.Orgs = orgs;
+            }
+        }
+
+        $("#daForm").submit(function (e) {
+            e.preventDefault();
+            var postLocale = [];
+            var postOrg = [];
+            $(function () {
+                $(".selected-wrapper a").each(function () {
+                    var t = $(this).data("value");
+                    var list = $(this).data("list");
+                    switch (list) {
+                        case "org":
+                            var blurb = GetDataPt(t, "blurb", list);
+                            postOrg.push(new AssoOrg(t, blurb));
+                            break;
+                        case "locale":
+                            //get other data of localeevent if any added
+                            postLocale.push(new AssoLocale(t));
+                            break;
+                    }
+                });
+
+                var deFormData = new TheSubmitted(postLocale, postOrg);
+                 $(document).ready(function () {
+                    $.ajax({
+                        url: "@Url.Action("AssoEdit","Events")",
+                        type: "POST",
+                        data: deFormData,
+                        success: function (data) {
+                            if (data == true) {
+                                window.location.href = "/Events/Details/" + @Model.EventId;
+                            }
+                            else {
+
+                            }
+                        }
+                    });
+                });
+            });
+
+        });
+
+    </script>
+}
+

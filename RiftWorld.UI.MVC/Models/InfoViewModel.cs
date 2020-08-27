@@ -14,6 +14,9 @@ namespace RiftWorld.UI.MVC.Models
         public List<Rumor> Rumors { get; set; }
         public List<Character> Characters { get; set; }
         public List<Journal> Journals { get; set; }
+        public List<Character> CharacterEdits { get; set; }
+        public List<Journal> JournalEdits { get; set; }
+
 
         public List<UserDetail> Users { get; set; }
     }

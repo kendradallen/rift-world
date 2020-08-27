@@ -28,7 +28,10 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             var rumors = db.Rumors.Where(r => !r.IsApproved).ToList();
             var characters = db.Characters.Where(c => !c.IsApproved).ToList();
             var journals = db.Journals.Where(j => !j.IsApproved).ToList();
-            ApprovalVM model = new ApprovalVM { Rumors = rumors, Characters = characters, Journals = journals };
+            var characterEdits = db.Characters.Where(c => c.HasUnseenEdit).ToList();
+            var journalEdits = db.Journals.Where(j => j.HasUnseenEdit).ToList();
+
+            ApprovalVM model = new ApprovalVM { Rumors = rumors, Characters = characters, Journals = journals, CharacterEdits = characterEdits, JournalEdits = journalEdits };
             if (User.IsInRole("Admin"))
             {
                 var users = db.UserDetails.Where(x => !x.IsApproved).ToList();
@@ -98,6 +101,32 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
         public ActionResult CreateWhat()
         {
             return View();
+        }
+
+        [HttpGet]
+        public ActionResult Search(string search)
+        {
+            List<short> result = (from i in db.Infos
+                                  join spaner in db.InfoTags on i.InfoId equals spaner.InfoId
+                                  join t in db.Tags on spaner.TagId equals t.TagId
+                                  where i.Name.ToLower().Contains(search.ToLower())
+                                      || t.TagName.ToLower().Contains(search.ToLower())
+                                      || i.InfoId == (from n in db.NPCs
+                                                      where n.Alias.ToLower().Contains(search.ToLower())
+                                                      select n.InfoId).FirstOrDefault()
+                        select i.InfoId 
+                        )
+                        .Distinct()
+                        .ToList()
+                        ;
+            //todo - add the story search too
+            List<Info> model = new List<Info>();
+            foreach (short id in result)
+            {
+                Info toAdd = db.Infos.Where(i => i.InfoId == id).First();
+                model.Add(toAdd);
+            }
+            return View(model);
         }
 
         // GET: Infos/Edit/5

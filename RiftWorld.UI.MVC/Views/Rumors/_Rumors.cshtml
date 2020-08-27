@@ -3,14 +3,14 @@
 <div id="rumor-list" class="row">
     @foreach (var item in Model)
     {
-        <div class="col-sm-6"></div>
-        <div class="col-sm-6 row">
-            <div class="daRumor col-auto">
-                <h6>@item.Character.CharacterName whispers...</h6>
-                <div class="speechbubble"><p>@item.RumorText</p></div>
+        <div class="col-12 row">
+            <div class="col-sm-9 row">
+                <div class="daRumor col-auto">
+                    <h6>@item.Character.CharacterName whispers...</h6>
+                    <div class="speechbubble"><p>@item.RumorText</p></div>
+                </div>
             </div>
         </div>
-        <div class="col-sm-6"></div>
     }
 </div>
 

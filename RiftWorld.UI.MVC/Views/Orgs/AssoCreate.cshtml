@@ -5,6 +5,11 @@
     List<short> theSelectedNpcs = Model.AssoNpcs.Select(a => a.NpcId).ToList();
     List<short> theSelectedEvents = Model.AssoEvents.Select(a => a.EventId).ToList();
     List<short> theSelectedCharas = Model.AssoChars.Select(a => a.CharId).ToList();
+
+    int npcNpcPageBlurb_Max = 100;
+    int npcOrgPageBlurb_Max = 100;
+    int eventBlurb_Max = 100;
+    int charBlurb_Max = 100;
 }
 
 <div class="col-12">
@@ -49,11 +54,11 @@
                                     <span class="input-group-text">Blurb for NPC's page about postion in org</span>
                                 </div>
                                 <div class="da-focus asso input-group-append form-control">
-                                    <input class="form-control count" data-value="@x.NpcId" type="text" data-name="blurb-npc-page" data-max="100"  data-list="npc" value="@(theSelectedNpcs.Contains(x.NpcId) ? (Model.AssoNpcs.Where(a => a.NpcId == x.NpcId).Select(a => a.BlurbNpcPage).FirstOrDefault()) : "")" />
+                                    <input class="form-control count" data-value="@x.NpcId" type="text" data-name="blurb-npc-page" data-max="@npcNpcPageBlurb_Max"  data-list="npc" value="@(theSelectedNpcs.Contains(x.NpcId) ? (Model.AssoNpcs.Where(a => a.NpcId == x.NpcId).Select(a => a.BlurbNpcPage).FirstOrDefault()) : "")" />
                                 </div>
                                 <div id="tcp_npc-blurb-npc-page-@x.NpcId" class=" tcp col-md-offset-2 col-12">
                                     <span id="tc_npc-blurb-npc-page-@x.NpcId">
-                                        @(theSelectedNpcs.Contains(x.NpcId) ? (Model.AssoNpcs.Where(a => a.NpcId == x.NpcId).Select(a => a.BlurbNpcPage).FirstOrDefault() == null ? "100" : (100 - Model.AssoNpcs.Where(a => a.NpcId == x.NpcId).Select(a => a.BlurbNpcPage).First().Length).ToString()) : "100")
+                                        @(theSelectedNpcs.Contains(x.NpcId) ? (Model.AssoNpcs.Where(a => a.NpcId == x.NpcId).Select(a => a.BlurbNpcPage).FirstOrDefault() == null ? npcNpcPageBlurb_Max.ToString() : (npcNpcPageBlurb_Max - Model.AssoNpcs.Where(a => a.NpcId == x.NpcId).Select(a => a.BlurbNpcPage).First().Length).ToString()) : npcNpcPageBlurb_Max.ToString())
                                     </span> character(s) left.
                                 </div>
 
@@ -64,11 +69,11 @@
                                     <span class="input-group-text">Blurb for org's page about NPC's role</span>
                                 </div>
                                 <div class="da-focus asso input-group-append form-control">
-                                    <input class="form-control count" data-value="@x.NpcId" type="text" data-name="blurb-org-page" data-max="100" data-list="npc" value="@(theSelectedNpcs.Contains(x.NpcId) ? (Model.AssoNpcs.Where(a => a.NpcId == x.NpcId).Select(a => a.BlurbOrgPage).FirstOrDefault()) : "")" />
+                                    <input class="form-control count" data-value="@x.NpcId" type="text" data-name="blurb-org-page" data-max="@npcOrgPageBlurb_Max" data-list="npc" value="@(theSelectedNpcs.Contains(x.NpcId) ? (Model.AssoNpcs.Where(a => a.NpcId == x.NpcId).Select(a => a.BlurbOrgPage).FirstOrDefault()) : "")" />
                                 </div>
                                 <div id="tcp_npc-blurb-org-page-@x.NpcId" class=" tcp col-md-offset-2 col-12">
                                     <span id="tc_npc-blurb-org-page-@x.NpcId">
-                                        @(theSelectedNpcs.Contains(x.NpcId) ? (Model.AssoNpcs.Where(a => a.NpcId == x.NpcId).Select(a => a.BlurbOrgPage).FirstOrDefault() == null ? "100" : (100 - Model.AssoNpcs.Where(a => a.NpcId == x.NpcId).Select(a => a.BlurbOrgPage).First().Length).ToString()) : "100")
+                                        @(theSelectedNpcs.Contains(x.NpcId) ? (Model.AssoNpcs.Where(a => a.NpcId == x.NpcId).Select(a => a.BlurbOrgPage).FirstOrDefault() == null ? npcOrgPageBlurb_Max.ToString() : (npcOrgPageBlurb_Max - Model.AssoNpcs.Where(a => a.NpcId == x.NpcId).Select(a => a.BlurbOrgPage).First().Length).ToString()) : npcOrgPageBlurb_Max.ToString())
                                     </span> character(s) left.
                                 </div>
 
@@ -113,11 +118,11 @@
                                     <span class="input-group-text">Blurb</span>
                                 </div>
                                 <div class="da-focus asso input-group-append form-control">
-                                    <input class="form-control count" data-value="@x.EventId" type="text" data-list="event" data-name="blurb" data-max="100" value="@(theSelectedEvents.Contains(x.EventId) ? (Model.AssoEvents.Where(a => a.EventId == x.EventId).Select(a => a.Blurb).FirstOrDefault()) : "")" />
+                                    <input class="form-control count" data-value="@x.EventId" type="text" data-list="event" data-name="blurb" data-max="@eventBlurb_Max" value="@(theSelectedEvents.Contains(x.EventId) ? (Model.AssoEvents.Where(a => a.EventId == x.EventId).Select(a => a.Blurb).FirstOrDefault()) : "")" />
                                 </div>
                                 <div id="tcp_event-blurb-@x.EventId" class=" tcp col-md-offset-2 col-12">
                                     <span id="tc_event-blurb-@x.EventId">
-                                        @(theSelectedEvents.Contains(x.EventId) ? (Model.AssoEvents.Where(a => a.EventId == x.EventId).Select(a => a.Blurb).FirstOrDefault() == null ? "100" : (100 - Model.AssoEvents.Where(a => a.EventId == x.EventId).Select(a => a.Blurb).First().Length).ToString()) : "100")
+                                        @(theSelectedEvents.Contains(x.EventId) ? (Model.AssoEvents.Where(a => a.EventId == x.EventId).Select(a => a.Blurb).FirstOrDefault() == null ? eventBlurb_Max.ToString() : (eventBlurb_Max - Model.AssoEvents.Where(a => a.EventId == x.EventId).Select(a => a.Blurb).First().Length).ToString()) : eventBlurb_Max.ToString())
                                     </span> character(s) left.
                                 </div>
                             </div>
@@ -145,11 +150,11 @@
                                     <span class="input-group-text">Blurb for org page</span>
                                 </div>
                                 <div class="da-focus asso input-group-append form-control">
-                                    <input class="form-control count" data-value="@x.CharacterId" type="text" data-list="chara" data-name="blurb" data-max="100" value="@(theSelectedCharas.Contains(x.CharacterId) ? (Model.AssoChars.Where(a => a.CharId == x.CharacterId).Select(a => a.BlurbOrgPage).FirstOrDefault()) : "")" />
+                                    <input class="form-control count" data-value="@x.CharacterId" type="text" data-list="chara" data-name="blurb" data-max="@charBlurb_Max" value="@(theSelectedCharas.Contains(x.CharacterId) ? (Model.AssoChars.Where(a => a.CharId == x.CharacterId).Select(a => a.BlurbOrgPage).FirstOrDefault()) : "")" />
                                 </div>
                                 <div id="tcp_chara-blurb-@x.CharacterId" class=" tcp col-md-offset-2 col-12">
                                     <span id="tc_chara-blurb-@x.CharacterId">
-                                        @(theSelectedCharas.Contains(x.CharacterId) ? (Model.AssoChars.Where(a => a.CharId == x.CharacterId).Select(a => a.BlurbOrgPage).FirstOrDefault() == null ? "100" : (100 - Model.AssoChars.Where(a => a.CharId == x.CharacterId).Select(a => a.BlurbOrgPage).First().Length).ToString()) : "100")
+                                        @(theSelectedCharas.Contains(x.CharacterId) ? (Model.AssoChars.Where(a => a.CharId == x.CharacterId).Select(a => a.BlurbOrgPage).FirstOrDefault() == null ? charBlurb_Max.ToString() : (charBlurb_Max - Model.AssoChars.Where(a => a.CharId == x.CharacterId).Select(a => a.BlurbOrgPage).First().Length).ToString()) : charBlurb_Max.ToString())
                                     </span> character(s) left.
                                 </div>
                             </div>

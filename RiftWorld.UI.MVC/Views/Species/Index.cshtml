@@ -1,0 +1,39 @@
+﻿@model IEnumerable<RiftWorld.DATA.EF.Race>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.RaceName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IsPlayerEnabled)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.RaceName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.IsPlayerEnabled)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.RaceId }) |
+            @Html.ActionLink("Details", "Details", new { id=item.RaceId }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.RaceId })
+        </td>
+    </tr>
+}
+
+</table>

@@ -684,6 +684,8 @@ namespace RiftWorld.DATA.EF
 
         public string SymbolFileName { get; set; }
 
+        [DisplayFormat(NullDisplayText = "Location Unknown")]
+        [Display(Name = "Base of Operations")]
         public Nullable<short> BaseLocationId { get; set; }
 
         [Required]

@@ -1,94 +1,110 @@
-﻿@model RiftWorld.DATA.EF.Story
+﻿@*@model RiftWorld.DATA.EF.Story*@
+@model RiftWorld.UI.MVC.Models.StoryCreateVM
 
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "Story Create";
+    int commMax;
+    int titleMax;
+    int startCommissionedBy = commMax = 50;
+    int startTitle = titleMax = 20;
+    if (Model != null)
+    {
+        if (Model.CommissionedBy != null)
+        {
+            startCommissionedBy -= Model.CommissionedBy.Length;
+        }
+        if (Model.Title != null)
+        {
+            startTitle -= Model.Title.Length;
+        }
+    }
 }
 
 <div class="col-12">
-    <h2>Create</h2>
+    <h2>@ViewBag.Title</h2>
 
     @using (Html.BeginForm())
     {
         @Html.AntiForgeryToken()
 
-    <div class="form-horizontal">
-        <h4>Story</h4>
-        <hr />
-        @Html.HiddenFor(model => model.DateTold)
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="form-group">
-            @Html.LabelFor(model => model.IsAboutId, "IsAboutId", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownList("IsAboutId", null, htmlAttributes: new { @class = "" })
-                @Html.ValidationMessageFor(model => model.IsAboutId, "", new { @class = "text-danger" })
+        <div class="form-horizontal">
+            <hr />
+            @Html.HiddenFor(model => model.DateTold)
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group row">
+                @Html.LabelFor(model => model.IsAboutId, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownList("IsAboutId", (SelectList)ViewBag.IsAboutId, "", htmlAttributes: new { @class = "" })
+                    @Html.ValidationMessageFor(model => model.IsAboutId, "", new { @class = "text-danger" })
+                </div>
             </div>
-        </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.CommissionedBy, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.CommissionedBy, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.CommissionedBy, "", new { @class = "text-danger" })
+            <div class="form-group row">
+                @Html.LabelFor(model => model.CommissionedBy, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <div class="da-focus">
+                        @Html.EditorFor(model => model.CommissionedBy, new { htmlAttributes = new { @class = "form-control count", data_max = commMax } })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.CommissionedBy, "", new { @class = "text-danger" })
+                    <div id="tcp-CommissionedBy" class="col-md-offset-2 col-12 @(startCommissionedBy <0 ? "invalid":"")"><span id="tc-CommissionedBy">@startCommissionedBy</span> character(s) left.</div>
+                </div>
             </div>
-        </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.IsCannon, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <div class="checkbox">
-                    @Html.EditorFor(model => model.IsCannon)
-                    @Html.ValidationMessageFor(model => model.IsCannon, "", new { @class = "text-danger" })
+            <div class="form-group">
+                <div class="form-check larger">
+                    <div class="checkbox">
+                        @Html.EditorFor(model => model.IsCannon, new { htmlAttribute = new { @class = "form-check-input" } })
+                        @Html.LabelFor(model => model.IsCannon, htmlAttributes: new { @class = "form-check-label" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <div class="da-focus">
+                        @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control count", data_max = titleMax } })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+                    <div id="tcp-Title" class="col-md-offset-2 col-12 @(startTitle <0 ? "invalid":"")"><span id="tc-Title">@startTitle</span> character(s) left.</div>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                @Html.LabelFor(model => model.TheContent, htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.ValidationMessageFor(model => model.TheContent, "", new { @class = "text-danger col-auto" })
+                <div class="col-12">
+                    @Html.EditorFor(model => model.TheContent, new { htmlAttributes = new { @class = "form-control rich", style = "height:20em;" } })
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-md-2" for="tags">Tags</label>
+                @Html.ListBox("tags", (MultiSelectList)ViewBag.Tags)
+            </div>
+
+            <div class="form-group row">
+                <div class="col-12">
+                    <input type="submit" value="Create" class="btn btn-success btn-block btn-lg" />
                 </div>
             </div>
         </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.TheContent, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.TheContent, new { htmlAttributes = new { @class = "form-control rich" } })
-                @Html.ValidationMessageFor(model => model.TheContent, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label class="col-md-2" for="tags">Tags</label>
-            @Html.ListBox("tags", (MultiSelectList)ViewBag.Tags)
-        </div>
-
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
-            </div>
-        </div>
-    </div>
     }
 
-    <div>
+    <div style="text-align:left;">
         @Html.ActionLink("Back to Create New", "CreateWhat", "Infos")
     </div>
 </div>
 @section Scripts{
+    <script src="~/Scripts/MyJS/edit.js"></script>
     <script>
-        type = "text/javascript" >
-            tinymce.init({
-                selector: '.rich'
-            });
-    </script>
-    <script>
+        $('select#IsAboutId option:first-child').attr("data-placeholder", "true");
         new SlimSelect({
-            select: '#IsAboutId'
+            select: '#IsAboutId',
+            placeholder: 'Whose this story about?'
         })
         new SlimSelect({
             select: '#tags'
         })
-
     </script>
 }

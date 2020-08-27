@@ -4,21 +4,23 @@
 @{
     ViewBag.Title = "Editing " + Model.Name;
     List<short> theSelected = ViewBag.Selected;
-    int startName = 50;
+    int nameMax;
+    int blurbMax;
+    int artistMax;
+    int startName = nameMax = 50;
+    int startBlurb = blurbMax = 100;
+    int startArtist = artistMax = 40;
     if (Model.Name != null)
     {
-        startName = 50 - Model.Name.Length;
-
+        startName -= Model.Name.Length;
     }
-    int startBlurb = 100;
     if (Model.Blurb != null)
     {
-        startBlurb = 100 - Model.Blurb.Length;
+        startBlurb -= Model.Blurb.Length;
     }
-    int startArtist = 40;
     if (Model.Artist != null)
     {
-        startArtist = 40 - Model.Artist.Length;
+        startArtist -= Model.Artist.Length;
     }
 }
 
@@ -46,117 +48,119 @@
     {
         @Html.AntiForgeryToken()
 
-        <div class="form-horizontal">
-            <hr />
+    <div class="form-horizontal">
+        <hr />
+        <div class="col-auto oops-summary">
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-            @Html.HiddenFor(model => model.ItemId)
-            @Html.HiddenFor(model => model.InfoId)
-            @Html.HiddenFor(model => model.IsPublished)
+        </div>
+        @Html.HiddenFor(model => model.ItemId)
+        @Html.HiddenFor(model => model.InfoId)
+        @Html.HiddenFor(model => model.IsPublished)
 
-            <div class="form-group" id="qName">
-                @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label" })
-                <div class="col-12">
-                    <div class="da-focus">
-                        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control count", data_max = 50 } })
-                    </div>
-                    @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
-                    <div id="tcp-Name" class="col-md-offset-2 col-12 @(startName <0 ? "invalid":"")"><span id="tc-Name">@startName</span> character(s) left.</div>
+        <div class="form-group" id="qName">
+            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label" })
+            <div class="col-12">
+                <div class="da-focus">
+                    @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control count", data_max = nameMax } })
                 </div>
-            </div>
-
-            <div class="form-group" id="qBlurb">
-                @Html.LabelFor(model => model.Blurb, htmlAttributes: new { @class = "control-label" })
-                <div class="col-12">
-                    <div class="da-focus">
-                        @Html.EditorFor(model => model.Blurb, new { htmlAttributes = new { @class = "form-control count", data_max = 100, style = "height:4em;" } })
-                    </div>
-                    @Html.ValidationMessageFor(model => model.Blurb, "", new { @class = "text-danger" })
-                    <div id="tcp-Blurb" class="col-md-offset-2 col-12 @(startBlurb <0 ? "invalid":"")"><span id="tc-Blurb">@startBlurb</span> character(s) left.</div>
-                </div>
-            </div>
-
-            <div class="form-group row align-items-center" id="qPicture">
-                @Html.LabelFor(model => model.PictureFileName, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10 row">
-                    @Html.HiddenFor(model => model.PictureFileName)
-                    <div class="col-12">
-                        <input type="file" name="picture" />
-                        <img class="img-fluid img-thumbnail border-00" src="~/Content/img/item/@Model.PictureFileName" />
-                    </div>
-                    <div class="col-12">
-                        @Html.ValidationMessageFor(model => model.PictureFileName, "", new { @class = "text-danger" })
-                    </div>
-
-                </div>
-            </div>
-
-            <div class="form-group" id="qArtist">
-                @Html.LabelFor(model => model.Artist, htmlAttributes: new { @class = "control-label" })
-                <div class="col-12">
-                    <div class="da-focus">
-                        @Html.EditorFor(model => model.Artist, new { htmlAttributes = new { @class = "form-control count", data_max = 40 } })
-                    </div>
-                    @Html.ValidationMessageFor(model => model.Artist, "", new { @class = "text-danger" })
-                    <div id="tcp-Artist" class="col-md-offset-2 col-12 @(startArtist <0 ? "invalid":"")"><span id="tc-Artist">@startArtist</span> character(s) left.</div>
-
-                </div>
-            </div>
-
-            <div class="form-group" id="qDescription">
-                @Html.LabelFor(model => model.DescriptionText, htmlAttributes: new { @class = "control-label" })
-                <div class="col-12">
-                    @Html.EditorFor(model => model.DescriptionText, new { htmlAttributes = new { @class = "form-control rich", style = "height:20em;" } })
-                    @Html.ValidationMessageFor(model => model.DescriptionText, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group" id="qProperties">
-                @Html.LabelFor(model => model.PropertyText, htmlAttributes: new { @class = "control-label" })
-                <div class="col-12">
-                    @Html.EditorFor(model => model.PropertyText, new { htmlAttributes = new { @class = "form-control rich", style = "height:20em;" } })
-                    @Html.ValidationMessageFor(model => model.PropertyText, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group" id="qHistory">
-                @Html.LabelFor(model => model.HistoryText, htmlAttributes: new { @class = "control-label" })
-                <div class="col-12">
-                    @Html.EditorFor(model => model.HistoryText, new { htmlAttributes = new { @class = "form-control rich", style = "height:20em;" } })
-                    @Html.ValidationMessageFor(model => model.HistoryText, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-
-            <div class="form-group" id="qTags">
-                <label for="tags">Tags</label>
-                <div class="col-12">
-                    <select multiple="multiple" name="tags" id="tags">
-                        @foreach (var x in ViewBag.Tags)
-                        {
-                            <option value="@x.TagId" @(theSelected.Contains(x.TagId) ? "selected" : "")>@x.TagName</option>
-                        }
-                    </select>
-                </div>
-            </div>
-
-            <div class="form-group" id="qFinish">
-                @if (!Model.IsPublished)
-                {
-                    <div class="col-md-offset-2 col-md-10 btn-group">
-                        <input type="submit" name="submit" value="Save Progress" class="btn btn-warning" />
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#confirmModal">Publish</button>
-                    </div>
-                }
-                else
-                {
-                    <p>This item has been made public</p>
-                    <div class="col-md-offset-2 col-md-10 btn-group">
-                        <input type="submit" name="submit" value="Un-Publish" class="btn btn-danger" />
-                        <input type="submit" name="submit" value="Save" class="btn btn-success" />
-                    </div>
-                }
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                <div id="tcp-Name" class="col-md-offset-2 col-12 @(startName <0 ? "invalid":"")"><span id="tc-Name">@startName</span> character(s) left.</div>
             </div>
         </div>
+
+        <div class="form-group" id="qBlurb">
+            @Html.LabelFor(model => model.Blurb, htmlAttributes: new { @class = "control-label" })
+            <div class="col-12">
+                <div class="da-focus">
+                    @Html.EditorFor(model => model.Blurb, new { htmlAttributes = new { @class = "form-control count", data_max = blurbMax, style = "height:4em;" } })
+                </div>
+                @Html.ValidationMessageFor(model => model.Blurb, "", new { @class = "text-danger" })
+                <div id="tcp-Blurb" class="col-md-offset-2 col-12 @(startBlurb <0 ? "invalid":"")"><span id="tc-Blurb">@startBlurb</span> character(s) left.</div>
+            </div>
+        </div>
+
+        <div class="form-group row align-items-center" id="qPicture">
+            @Html.LabelFor(model => model.PictureFileName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10 row">
+                @Html.HiddenFor(model => model.PictureFileName)
+                <div class="col-12">
+                    <input type="file" name="picture" />
+                    <img class="img-fluid img-thumbnail border-00" src="~/Content/img/item/@Model.PictureFileName" />
+                </div>
+                <div class="col-12">
+                    @Html.ValidationMessageFor(model => model.PictureFileName, "", new { @class = "text-danger" })
+                </div>
+
+            </div>
+        </div>
+
+        <div class="form-group" id="qArtist">
+            @Html.LabelFor(model => model.Artist, htmlAttributes: new { @class = "control-label" })
+            <div class="col-12">
+                <div class="da-focus">
+                    @Html.EditorFor(model => model.Artist, new { htmlAttributes = new { @class = "form-control count", data_max = artistMax } })
+                </div>
+                @Html.ValidationMessageFor(model => model.Artist, "", new { @class = "text-danger" })
+                <div id="tcp-Artist" class="col-md-offset-2 col-12 @(startArtist <0 ? "invalid":"")"><span id="tc-Artist">@startArtist</span> character(s) left.</div>
+
+            </div>
+        </div>
+
+        <div class="form-group" id="qDescription">
+            @Html.LabelFor(model => model.DescriptionText, htmlAttributes: new { @class = "control-label" })
+            <div class="col-12">
+                @Html.EditorFor(model => model.DescriptionText, new { htmlAttributes = new { @class = "form-control rich", style = "height:20em;" } })
+                @Html.ValidationMessageFor(model => model.DescriptionText, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group" id="qProperties">
+            @Html.LabelFor(model => model.PropertyText, htmlAttributes: new { @class = "control-label" })
+            <div class="col-12">
+                @Html.EditorFor(model => model.PropertyText, new { htmlAttributes = new { @class = "form-control rich", style = "height:20em;" } })
+                @Html.ValidationMessageFor(model => model.PropertyText, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group" id="qHistory">
+            @Html.LabelFor(model => model.HistoryText, htmlAttributes: new { @class = "control-label" })
+            <div class="col-12">
+                @Html.EditorFor(model => model.HistoryText, new { htmlAttributes = new { @class = "form-control rich", style = "height:20em;" } })
+                @Html.ValidationMessageFor(model => model.HistoryText, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        <div class="form-group" id="qTags">
+            <label for="tags">Tags</label>
+            <div class="col-12">
+                <select multiple="multiple" name="tags" id="tags">
+                    @foreach (var x in ViewBag.Tags)
+                    {
+                        <option value="@x.TagId" @(theSelected.Contains(x.TagId) ? "selected" : "")>@x.TagName</option>
+                    }
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group" id="qFinish">
+            @if (!Model.IsPublished)
+            {
+                <div class="col-md-offset-2 col-md-10 btn-group">
+                    <input type="submit" name="submit" value="Save Progress" class="btn btn-warning" />
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#confirmModal">Publish</button>
+                </div>
+            }
+            else
+            {
+                <p>This item has been made public</p>
+                <div class="col-md-offset-2 col-md-10 btn-group">
+                    <input type="submit" name="submit" value="Un-Publish" class="btn btn-danger" />
+                    <input type="submit" name="submit" value="Save" class="btn btn-success" />
+                </div>
+            }
+        </div>
+    </div>
 
         <!-- Modal -->
         <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel" aria-hidden="true">

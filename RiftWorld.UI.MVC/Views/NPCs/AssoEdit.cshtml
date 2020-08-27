@@ -1,0 +1,218 @@
+﻿@model RiftWorld.UI.MVC.Models.AssoNpcVM
+
+@{
+    ViewBag.Title = "Editing " + Model.Name + " - Complex";
+    List<byte> theSelectedClasses = Model.AssoClasses.Select(a => (byte)a.ClassId).ToList();
+    List<short> theSelectedOrgs = Model.AssoOrgs.Select(a => a.OrgId).ToList();
+
+    int orgNpcPageBlurb_Max = 100;
+    int orgOrgPageBlurb_Max = 100;
+
+}
+
+<div class="col-12">
+    <h2>@ViewBag.Title</h2>
+    <button class="btn btn-outline-secondary" onclick="ShowAll()">Show All</button>
+    <button class="btn btn-outline-secondary" onclick="HideAll()">Hide All</button>
+    @using (Html.BeginForm("AssoEdit", "NPCs", FormMethod.Post, new { id = "daForm" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.HiddenFor(model => model.InfoId)
+            @Html.HiddenFor(model => model.NpcId)
+            @Html.HiddenFor(model => model.Submit)
+            <div class="form-group">
+                <label for="daClass">Classes</label>
+                <select multiple="multiple" name="daClass" id="daClass">
+                    @foreach (var x in ViewBag.Classes)
+                    {
+                        <option value="@x.ClassId" @(theSelectedClasses.Contains(x.ClassId) ? "selected" : "") data-list="daClass">@x.ClassName</option>
+                    }
+                </select>
+                <div class="other-stuff" data-list="daClass">
+                    @foreach (var x in ViewBag.Classes)
+                    {
+                        <div data-value="@x.ClassId" data-list="daClass" style="display:none" class="@(theSelectedClasses.Contains(x.ClassId) ? "yes-man": "")">
+                            <h5>@x.ClassName</h5>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">Display Priority</span>
+                                </div>
+                                <div class="da-focus asso input-group-append form-control">
+                                    <input class="form-control" data-value="@x.ClassId" type="number" data-name="order" value="@(theSelectedClasses.Contains(x.ClassId) ? (Model.AssoClasses.Where(a => a.ClassId == x.ClassId).Select(a => a.ClassOrder).FirstOrDefault().ToString()) : "")" />
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="org">Organizations</label>
+                <select multiple="multiple" name="org" id="org">
+                    @foreach (var x in ViewBag.Orgs)
+                    {
+                        <option class="@(x.IsPublished ? "":"unpub")" value="@x.OrgId" @(theSelectedOrgs.Contains(x.OrgId) ? "selected" : "") data-list="org">@x.Name</option>
+                    }
+                </select>
+                <div class="other-stuff" data-list="org">
+                    @foreach (var x in ViewBag.Orgs)
+                    {
+                        <div data-value="@x.OrgId" data-list="org" style="display:none" class="@(theSelectedOrgs.Contains(x.OrgId) ? "yes-man": "")">
+                            <h5>@x.Name</h5>
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">Org Order</span>
+                                </div>
+                                <div class="da-focus asso input-group-append form-control">
+                                    <input class="form-control" data-value="@x.OrgId" type="number" data-name="org-order" value="@(theSelectedOrgs.Contains(x.OrgId) ? (Model.AssoOrgs.Where(a => a.OrgId == x.OrgId).Select(a => a.OrgOrder).FirstOrDefault().ToString()) : "")" />
+                                </div>
+                            </div>
+
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">Blurb for NPC's page about postion in org</span>
+                                </div>
+                                <div class="da-focus asso input-group-append form-control">
+                                    <input class="form-control count" data-value="@x.OrgId" type="text" data-name="blurb-npc-page" data-max="@orgNpcPageBlurb_Max" data-list="org" value="@(theSelectedOrgs.Contains(x.OrgId) ? (Model.AssoOrgs.Where(a => a.OrgId == x.OrgId).Select(a => a.BlurbNpcPage).FirstOrDefault()) : "")" />
+                                </div>
+                                <div id="tcp_org-blurb-npc-page-@x.OrgId" class=" tcp col-md-offset-2 col-12">
+                                    <span id="tc_org-blurb-npc-page-@x.OrgId">
+                                        @(theSelectedOrgs.Contains(x.OrgId) ? (Model.AssoOrgs.Where(a => a.OrgId == x.OrgId).Select(a => a.BlurbNpcPage).FirstOrDefault() == null ? orgNpcPageBlurb_Max.ToString() : (orgNpcPageBlurb_Max - Model.AssoOrgs.Where(a => a.OrgId == x.OrgId).Select(a => a.BlurbNpcPage).First().Length).ToString()) : orgNpcPageBlurb_Max.ToString())
+                                    </span> character(s) left.
+                                </div>
+
+                            </div>
+
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">Blurb for org's page about NPC's role</span>
+                                </div>
+                                <div class="da-focus asso input-group-append form-control">
+                                    <input class="form-control count" data-value="@x.OrgId" type="text" data-name="blurb-org-page" data-max="@orgOrgPageBlurb_Max" data-list="org" value="@(theSelectedOrgs.Contains(x.OrgId) ? (Model.AssoOrgs.Where(a => a.OrgId == x.OrgId).Select(a => a.BlurbOrgPage).FirstOrDefault()) : "")" />
+                                </div>
+                                <div id="tcp_org-blurb-org-page-@x.OrgId" class=" tcp col-md-offset-2 col-12">
+                                    <span id="tc_org-blurb-org-page-@x.OrgId">
+                                        @(theSelectedOrgs.Contains(x.OrgId) ? (Model.AssoOrgs.Where(a => a.OrgId == x.OrgId).Select(a => a.BlurbOrgPage).FirstOrDefault() == null ? orgOrgPageBlurb_Max.ToString() : (orgOrgPageBlurb_Max - Model.AssoOrgs.Where(a => a.OrgId == x.OrgId).Select(a => a.BlurbOrgPage).First().Length).ToString()) : orgOrgPageBlurb_Max.ToString())
+                                    </span> character(s) left.
+                                </div>
+
+                            </div>
+
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">Priority of NPC display on org's page</span>
+                                </div>
+                                <div class="da-focus asso input-group-append form-control">
+                                    <input class="form-control" data-value="@x.OrgId" type="number" data-name="member-order" value="@(theSelectedOrgs.Contains(x.OrgId) ? (Model.AssoOrgs.Where(a => a.OrgId == x.OrgId).Select(a => a.MemberOrder).FirstOrDefault().ToString()) : "")" />
+                                </div>
+                            </div>
+
+                            <div class="input-group">
+                                <div class="form-check">
+                                    <input class="form-check-input" data-value="@x.OrgId" type="checkbox" value="" data-name="current" @(Model.AssoOrgs.Where(a => a.OrgId == x.OrgId && !a.IsCurrent).FirstOrDefault() != null ? "" : "checked" ) />
+                                    <label class="form-check-label" for="@x.OrgId">current member</label>
+                                </div>
+                            </div>
+
+                        </div>
+                    }
+
+                </div>
+
+            </div>
+            <div class="form-group">
+                <div class="col-12">
+                    <input id="daSubmit" type="submit" value="Save" class="btn btn-block btn-success btn-lg" />
+                </div>
+            </div>
+        </div>
+    }
+    <div style="text-align:left;">
+        @Html.ActionLink("Back to List", "Index")
+    </div>
+</div>
+
+@section Scripts{
+    <script src="~/Scripts/SelectBoxes/multi.js"></script>
+    <script src="~/Scripts/MyJS/assoedit.js"></script>
+    <script>
+        class AssoClass {
+            constructor(daClassid, daClassOrder) {
+                this.ClassId = daClassid;
+                this.ClassOrder = daClassOrder;
+            }
+        }
+
+        class AssoOrg {
+            constructor(orgid, orgOrder, blurbNpc, blurbOrg, memberOrder, isCurrent) {
+                this.OrgId = orgid;
+                this.OrgOrder = orgOrder;
+                this.BlurbNpcPage = blurbNpc;
+                this.BlurbOrgPage = blurbOrg;
+                this.MemberOrder = memberOrder;
+                this.IsCurrent = isCurrent;
+            }
+        }
+
+        class TheSubmitted {
+            constructor(daclasses, orgs) {
+                this.InfoId = $("#InfoId").val();
+                this.NpcId = $("#NpcId").val();
+                this.Submit = $("#Submit").val();
+                this.__RequestVerificationToken = $('input[name="__RequestVerificationToken"]', $('#daForm')).val();
+                this.AssoClasses = daclasses;
+                this.Orgs = orgs;
+            }
+        }
+
+        //submitting the associations
+        $("#daForm").submit(function (e) {
+            e.preventDefault();
+            var postClass = [];
+            var postOrg =[]
+            $(function () {
+                $(".selected-wrapper a").each(function () {
+                    var t = $(this).data("value");
+                    var list = $(this).data("list");
+                    var order = GetDataPt(t, "order", list);
+                    switch (list) {
+                        case "daClass":
+                            var order = GetDataPt(t, "order", list);
+                            postClass.push(new AssoClass(t, order));
+                            break;
+                        case "org":
+                            var orgOrder = GetDataPt(t, "org-order", list);
+                            var blurbnpc = GetDataPt(t, "blurb-npc-page", list);
+                            var blurborg = GetDataPt(t, "blurb-org-page", list);
+                            var memOrder = GetDataPt(t, "member-order", list);
+                            var current = IsChecked(t, "current", list);
+                            postOrg.push(new AssoOrg(t, orgOrder, blurbnpc, blurborg, memOrder, current));
+                            break;
+                    }
+                });
+
+                var deFormData = new TheSubmitted(postClass, postOrg);
+                 $(document).ready(function () {
+                    $.ajax({
+                        url: "@Url.Action("AssoEdit","NPCs")",
+                        type: "POST",
+                        data: deFormData,
+                        success: function (data) {
+                            if (data == true) {
+                                window.location.href = "/NPCs/Details/" + @Model.NpcId;
+                            }
+                            else {
+
+                            }
+                        }
+                    });
+                });
+            });
+
+        });
+
+    </script>
+}

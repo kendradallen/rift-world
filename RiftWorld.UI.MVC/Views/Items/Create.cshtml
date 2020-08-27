@@ -4,9 +4,27 @@
 
 @{
     ViewBag.Title = "Item Create";
-    int startName = ViewBag.startName;
-    int startBlurb = ViewBag.startBlurb;
-    int startArtist = ViewBag.startArtist;
+    int nameMax;
+    int blurbMax;
+    int artistMax;
+    int startName = nameMax = 50;
+    int startBlurb = blurbMax = 100;
+    int startArtist = artistMax = 40;
+    if (Model != null)
+    {
+        if (Model.Name != null)
+        {
+            startName -= Model.Name.Length;
+        }
+        if (Model.Blurb != null)
+        {
+            startBlurb -= Model.Blurb.Length;
+        }
+        if (Model.Artist != null)
+        {
+            startArtist -= Model.Artist.Length;
+        }
+    }
 }
 
 <div class="col-12">
@@ -18,7 +36,7 @@
 
         <div class="form-horizontal">
             <hr />
-            <div class="col-12">
+            <div class="col-auto oops-summary">
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
             </div>
             @Html.HiddenFor(model => model.IsPublished)
@@ -26,7 +44,7 @@
                 @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label" })
                 <div class="col-12">
                     <div class="da-focus">
-                        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control count", data_max = 50 } })
+                        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control count", data_max = nameMax } })
                     </div>
                     @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
                     <div id="tcp-Name" class="col-md-offset-2 col-12 @(startName <0 ? "invalid":"")"><span id="tc-Name">@startName</span> character(s) left.</div>
@@ -37,7 +55,7 @@
                 @Html.LabelFor(model => model.Blurb, htmlAttributes: new { @class = "control-label" })
                 <div class="col-12">
                     <div class="da-focus">
-                        @Html.EditorFor(model => model.Blurb, new { htmlAttributes = new { @class = "form-control count", data_max = 100, style = "height:4em;" } })
+                        @Html.EditorFor(model => model.Blurb, new { htmlAttributes = new { @class = "form-control count", data_max = blurbMax, style = "height:4em;" } })
                     </div>
                     @Html.ValidationMessageFor(model => model.Blurb, "", new { @class = "text-danger" })
                     <div id="tcp-Blurb" class="col-md-offset-2 col-12 @(startBlurb <0 ? "invalid":"")"><span id="tc-Blurb">@startBlurb</span> character(s) left.</div>
@@ -63,7 +81,7 @@
                 @Html.LabelFor(model => model.Artist, htmlAttributes: new { @class = "control-label" })
                 <div class="col-12">
                     <div class="da-focus">
-                        @Html.EditorFor(model => model.Artist, new { htmlAttributes = new { @class = "form-control count", data_max = 40 } })
+                        @Html.EditorFor(model => model.Artist, new { htmlAttributes = new { @class = "form-control count", data_max = artistMax } })
                     </div>
                     @Html.ValidationMessageFor(model => model.Artist, "", new { @class = "text-danger" })
                     <div id="tcp-Artist" class="col-md-offset-2 col-12 @(startArtist <0 ? "invalid":"")"><span id="tc-Artist">@startArtist</span> character(s) left.</div>

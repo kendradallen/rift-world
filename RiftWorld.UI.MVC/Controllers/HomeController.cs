@@ -54,5 +54,12 @@ namespace RiftWorld.UI.MVC.Controllers
                 ;
             return View("Search Result", result);
         }
+
+        [HttpGet]
+        public ActionResult Community()
+        {
+            return View();
+        }
+
     }
 }

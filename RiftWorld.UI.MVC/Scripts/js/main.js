@@ -31,13 +31,13 @@
     $(".humberger-open").on('click', function () {
         $(".humberger-menu-wrapper").addClass("show-humberger-menu");
         $(".humberger-menu-overlay").addClass("active");
-        $(".nav-options").addClass("humberger-change");
+        //$(".nav-options").addClass("humberger-change");
     });
 
     $(".humberger-menu-overlay").on('click', function () {
         $(".humberger-menu-wrapper").removeClass("show-humberger-menu");
         $(".humberger-menu-overlay").removeClass("active");
-        $(".nav-options").removeClass("humberger-change");
+        //$(".nav-options").removeClass("humberger-change");
     });
 
     // Search model

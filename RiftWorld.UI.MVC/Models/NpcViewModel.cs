@@ -382,7 +382,8 @@ namespace RiftWorld.UI.MVC.Models
         public string Submit { get; set; }
         public string Name { get; set; }
 
-
+        public List<AssoOrg_Npc> AssoOrgs { get; set; }
+        public List<AssoClass_Npc> AssoClasses { get; set; }
     }
 
     public class AssoOrg_Npc
@@ -426,8 +427,15 @@ namespace RiftWorld.UI.MVC.Models
         public AssoClass_Npc() { }
         public AssoClass_Npc(ClassNPC classNPC)
         {
-            ClassId = classNPC.ClassId;
+            ClassId = (byte)classNPC.ClassId;
             ClassOrder = classNPC.ClassOrder;
         }
+    }
+
+    //now displaying models 
+    public class _NpcOrgVM
+    {
+        public string Name { get; set; }
+        public string Blurb { get; set; }
     }
 }

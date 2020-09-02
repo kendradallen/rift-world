@@ -16,7 +16,7 @@
     <div id="name" class="col-12">
         @Html.DisplayFor(model => model.Name)
     </div>
-    <h4 id="base" class="col-12">
+    <h4 id="base" class="col-12"style="margin-bottom:15px;">
         @Html.DisplayNameFor(model => model.BaseLocationId): @(Model.BaseLocationId == null ? Html.DisplayFor(model => model.BaseLocationId) : Html.DisplayFor(model => model.Locale.Name))
     </h4>
 </section>

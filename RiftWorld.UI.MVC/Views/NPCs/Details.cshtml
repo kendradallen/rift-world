@@ -26,12 +26,12 @@
                 <h5>
                     @Html.DisplayNameFor(model => model.Alias)
                 </h5>
-                <p>
-                    @if (Model.Alias != "Nada")
-                    {
-                        Html.DisplayFor(model => model.Alias);
-                    }
-                </p>
+                @if (Model.Alias != "Nada")
+                {
+                    <p>
+                        @Html.DisplayFor(model => model.Alias)
+                    </p>
+                }
             </div>
             @if (Model.IsDead)
             {

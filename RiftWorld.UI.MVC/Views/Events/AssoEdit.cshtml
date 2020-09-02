@@ -26,7 +26,7 @@
                 <select multiple="multiple" name="locale" id="locale">
                     @foreach (var x in ViewBag.Locales)
                     {
-                        <option value="@x.LocaleId" @(theSelectedLocales.Contains(x.LocaleId) ? "selected" : "") data-list="locale">@x.Name</option>
+                        <option class="@(x.IsPublished ? "":"unpub")" value="@x.LocaleId" @(theSelectedLocales.Contains(x.LocaleId) ? "selected" : "") data-list="locale">@x.Name</option>
                     }
                 </select>
                 <div class="other-stuff" data-list="locale">
@@ -61,7 +61,7 @@
                             <h5>@x.Name</h5>
                             <div class="input-group mb-3">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text">Blurb</span>
+                                    <span class="input-group-text">Blurb for org page</span>
                                 </div>
                                 <div class="da-focus asso input-group-append form-control">
                                     <input class="form-control count" data-value="@x.OrgId" type="text" data-list="org" data-name="blurb" data-max="@orgBlurb_Max" value="@(theSelectedOrgs.Contains(x.OrgId) ? (Model.AssoOrgs.Where(a => a.OrgId == x.OrgId).Select(a => a.Blurb).FirstOrDefault()) : "")" />
@@ -87,9 +87,9 @@
             </div>
         </div>
     }
-    <div style="text-align:left;">
-        @Html.ActionLink("Back to List", "Index")
-    </div>
+        <div style="text-align:left;">
+            @Html.ActionLink("Cancel", "Details", new { id = Model.EventId })
+        </div>
 </div>
 @section Scripts{
     <script src="~/Scripts/SelectBoxes/multi.js"></script>

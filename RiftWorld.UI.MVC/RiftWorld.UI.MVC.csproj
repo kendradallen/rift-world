@@ -174,6 +174,7 @@
     <Compile Include="Controllers\BehindTheScenes\TagsController.cs" />
     <Compile Include="Controllers\Entities\CharactersController.cs" />
     <Compile Include="Controllers\Entities\EventsController.cs" />
+    <Compile Include="Controllers\Entities\HubController.cs" />
     <Compile Include="Controllers\Entities\InfosController.cs" />
     <Compile Include="Controllers\Entities\ItemsController.cs" />
     <Compile Include="Controllers\Entities\JournalsController.cs" />
@@ -183,6 +184,7 @@
     <Compile Include="Controllers\Entities\RiftsController.cs" />
     <Compile Include="Controllers\Entities\SecretsController.cs" />
     <Compile Include="Controllers\Entities\StoriesController.cs" />
+    <Compile Include="Controllers\ExploreController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\Entities\NPCsController.cs" />
@@ -733,9 +735,7 @@
     <Content Include="Views\Infos\TagIndex.cshtml" />
     <Content Include="Views\UsersAdmin\Approve.cshtml" />
     <Content Include="Views\UsersAdmin\_Delete.cshtml" />
-    <Content Include="Views\Characters\Hub.cshtml" />
     <Content Include="Views\Characters\JournalHub.cshtml" />
-    <Content Include="Views\Characters\_Secrets.cshtml" />
     <Content Include="Views\Characters\_Journals.cshtml" />
     <Content Include="Views\Characters\Journal.cshtml" />
     <Content Include="Views\Journals\Create.cshtml" />
@@ -777,11 +777,24 @@
     <Content Include="Views\Genders\Edit.cshtml" />
     <Content Include="Views\Genders\Delete.cshtml" />
     <Content Include="Views\Classes\Index.cshtml" />
-    <Content Include="Views\Classes\Details.cshtml" />
     <Content Include="Views\Classes\Create.cshtml" />
     <Content Include="Views\Classes\Edit.cshtml" />
     <Content Include="Views\Classes\Delete.cshtml" />
     <Content Include="Views\Home\Community.cshtml" />
+    <Content Include="Views\Explore\Index.cshtml" />
+    <Content Include="Views\Hub\Index.cshtml" />
+    <Content Include="Views\Hub\_Secrets.cshtml" />
+    <Content Include="Views\Hub\_UnderApproval.cshtml" />
+    <Content Include="Views\Hub\_JournalLog.cshtml" />
+    <Content Include="Views\Hub\_Orgs.cshtml" />
+    <Content Include="Views\Home\BTSIndex.cshtml" />
+    <Content Include="Views\Rumors\Index.cshtml" />
+    <Content Include="Views\Events\_Orgs.cshtml" />
+    <Content Include="Views\Characters\KnownSecrets.cshtml" />
+    <Content Include="Views\Secrets\GiveSecretSingle.cshtml" />
+    <Content Include="Views\Secrets\RemoveSecret.cshtml" />
+    <Content Include="Views\Locales\_Events.cshtml" />
+    <Content Include="Views\Events\_Locales.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -11,8 +11,7 @@ using RiftWorld.UI.MVC.Models;
 
 namespace RiftWorld.UI.MVC.Controllers.Entities
 {
-    //todo - uncomment to lockdown controller
-    //[Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
     public class RiftsController : Controller
     {
         private RiftWorldEntities db = new RiftWorldEntities();
@@ -74,12 +73,12 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                 return HttpNotFound();
             }
 
-            //todo - uncomment below to prevent users from seeing un-published work
-            //if (!rift.IsPublished && !User.IsInRole("Admin"))
-            //{
-            //    return View("Error");
-            //    //todo change redirect to a error 404 page
-            //}
+            //prevent users from seeing un-published work
+            if (!rift.IsPublished && !User.IsInRole("Admin"))
+            {
+                return View("Error");
+                //todo change redirect to a error 404 page
+            }
 
             ViewBag.Variety = Variety((short)id);
             return View(rift);
@@ -188,7 +187,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             {
                 return HttpNotFound();
             }
-            ViewBag.Races = db.Races.ToList();
+            ViewBag.Races = db.Races.OrderBy(r=>r.RaceName).ToList();
             //List<byte> selected = db.VarietyOfInhabitants.Where(v => v.RiftId == rift.RiftId).Select(v => v.RaceId).ToList();
             //ViewBag.Selected = selected;
 
@@ -278,13 +277,42 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
 
             }
             //if model fails
-            ViewBag.Races = db.Races.ToList();
+            ViewBag.Races = db.Races.OrderBy(r => r.RaceName).ToList();
             AssoRiftVM model = new AssoRiftVM { InfoId = infoId, RiftId = riftId, Submit = submit, Assos = varieties, Name =  rift.Nickname};
             ViewBag.Selected = varieties.Select(v => v.RaceId).ToList();
             return Json(model);
         }
 
+        public ActionResult Skip(short infoId, short riftId, string submit)
+        {
+            var rift = db.Rifts.Where(i => i.RiftId == riftId).FirstOrDefault();
+            var info = db.Infos.Where(i => i.InfoId == infoId).FirstOrDefault();
 
+            #region Save or Publish?
+            switch (submit)
+            {
+                case "Save Progress":
+                case "Un-Publish":
+                case "Save and Continue":
+                    info.IsPublished = false;
+                    rift.IsPublished = false;
+                    break;
+                case "Publish":
+                case "Save":
+                    info.IsPublished = true;
+                    rift.IsPublished = true;
+                    break;
+                case "Save and associate":
+                    break;
+                default:
+                    break;
+            }
+            #endregion
+            db.Entry(rift).State = EntityState.Modified;
+            db.Entry(info).State = EntityState.Modified;
+            db.SaveChanges();
+            return RedirectToAction("Details", new { id = riftId });
+        }
 
         // GET: Rifts/Edit/5
         public ActionResult Edit(short? id)
@@ -427,7 +455,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             {
                 return HttpNotFound();
             }
-            ViewBag.Races = db.Races.ToList();
+            ViewBag.Races = db.Races.OrderBy(r => r.RaceName).ToList();
 
             var selected = db.VarietyOfInhabitants.Where(v => v.RiftId == rift.RiftId).ToList();
             List<AssoVar> theSelected = new List<AssoVar>();
@@ -489,7 +517,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
 
             }
             //if model fails
-            ViewBag.Races = db.Races.ToList();
+            ViewBag.Races = db.Races.OrderBy(r => r.RaceName).ToList();
             var rift = db.Rifts.Find(riftId);
             AssoRiftVM model = new AssoRiftVM { InfoId = infoId, RiftId = riftId, Submit = submit, Assos = varieties, Name = rift.Nickname };
             return View(model);

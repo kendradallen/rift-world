@@ -55,3 +55,8 @@ $(document).ready(function () {
         return false;
     });
 });
+
+$(document).ready(function () {
+    document.getElementById("defaultOpen").click();
+});
+

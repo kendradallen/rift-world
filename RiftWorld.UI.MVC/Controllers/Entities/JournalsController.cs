@@ -43,7 +43,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
         }
 
         // GET: Journals/Create
-        [Authorize(Roles = "Player, Mod")]
+        [Authorize(Roles = "Character")]
         public ActionResult Create()
         {
             string userId = User.Identity.GetUserId();
@@ -62,7 +62,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Player, Mod")]
+        [Authorize(Roles = "Character")]
         public ActionResult Create([Bind(Include = "JournalId,TheContent")] Journal journal)
         {
             string userId = User.Identity.GetUserId();
@@ -84,70 +84,6 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                 return RedirectToAction("Hub", "Characters", new { id = currentUser.CurrentCharacterId });
             }
 
-            return View(journal);
-        }
-
-        // GET: Journals/Edit/5
-        [Authorize(Roles = "Character")]
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Journal journal = db.Journals.Find(id);
-            if (journal == null)
-            {
-                return HttpNotFound();
-            }
-            UserDetail player = journal.Character.UserDetail;
-            
-            //todo - add actual redirects to prevent the anyone but current character player from editing journal
-            //error cases
-            if (User.Identity.GetUserId() != player.UserId)
-            {
-                //this journal is not yours. You can't edit it. 
-            }
-            if (player.CurrentCharacterId != journal.CharacterId && journal.Character.IsApproved)
-            {
-                //this character is retired and can no longer be journaled upon by player
-            }
-
-            return View(journal);
-        }
-
-        // POST: Journals/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Player, Mod")]
-        public ActionResult Edit([Bind(Include = "JournalId,CharacterId,OocDateWritten,TheContent,IsApproved")] Journal journal)
-        {
-            journal.HasUnseenEdit = true;
-            UserDetail player = journal.Character.UserDetail;
-
-            //todo - add actual redirects to prevent the anyone but current character player from editing journal
-            //error cases
-            if (User.Identity.GetUserId() != player.UserId)
-            {
-                //this journal is not yours. You can't edit it. 
-            }
-            if (!journal.Character.IsApproved)
-            {
-                //this character is under approval and cannot use the journal function till it is approved.
-            }
-            if (player.CurrentCharacterId != journal.CharacterId && journal.Character.IsApproved)
-            {
-                //this character is retired and can no longer be journaled upon by player
-            }
-
-            if (ModelState.IsValid)
-            {
-                db.Entry(journal).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Hub", "Characters", new { id = journal.CharacterId });
-            }
             return View(journal);
         }
 
@@ -225,7 +161,99 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             return RedirectToAction("Approvals", "Infos");
         }
 
+        // GET: Journals/Edit/5
+        [Authorize(Roles = "Character, Mod, Admin")]
+        public ActionResult Edit(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Journal journal = db.Journals.Find(id);
+            if (journal == null)
+            {
+                return HttpNotFound();
+            }
+            UserDetail player = journal.Character.UserDetail;
+
+            //todo - add actual redirects to prevent the anyone but current character player from editing journal
+            //error cases
+            if (User.Identity.GetUserId() != player.UserId)
+            {
+                //this journal is not yours. You can't edit it. 
+            }
+            if (player.CurrentCharacterId != journal.CharacterId && journal.Character.IsApproved)
+            {
+                //this character is retired and can no longer be journaled upon by player
+            }
+
+            return View(journal);
+        }
+
+        // POST: Journals/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Character, Mod, Admin")]
+        public ActionResult Edit([Bind(Include = "JournalId,CharacterId,OocDateWritten,TheContent,IsApproved")] Journal journal)
+        {
+            #region Is this yours?
+            string userid = User.Identity.GetUserId();
+            short? currentCharacter = db.UserDetails.Where(u => u.UserId == userid).Select(u => u.CurrentCharacterId).FirstOrDefault();
+            if (User.IsInRole("Character") && !User.IsInRole("Mod") && currentCharacter != journal.CharacterId)
+            {
+                ViewBag.Message = "Hello Mr.Rogue. I am sorry but my amazing security skills have once again foiled yours. The character you are trying to edit does not belong to you.";
+                return View("Error");
+            }
+            #endregion
+            if (User.IsInRole("Player"))
+            {
+                journal.HasUnseenEdit = true;
+            }
+            else
+            {
+                journal.HasUnseenEdit = false;
+            }
+            UserDetail player = journal.Character.UserDetail;
+
+            //todo - add actual redirects to prevent the anyone but current character player from editing journal
+            //error cases
+            if (User.Identity.GetUserId() != player.UserId)
+            {
+                //this journal is not yours. You can't edit it. 
+            }
+            if (!journal.Character.IsApproved)
+            {
+                //this character is under approval and cannot use the journal function till it is approved.
+            }
+            if (player.CurrentCharacterId != journal.CharacterId && journal.Character.IsApproved)
+            {
+                //this character is retired and can no longer be journaled upon by player
+            }
+
+            if (ModelState.IsValid)
+            {
+                db.Entry(journal).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("Hub", "Characters", new { id = journal.CharacterId });
+            }
+            return View(journal);
+        }
+
+        [Authorize(Roles = "Mod, Admin")]
+        public ActionResult RecognizeEdit(short id)
+        {
+            Journal journal = db.Journals.Where(x => x.JournalId == id).FirstOrDefault();
+            journal.HasUnseenEdit = false;
+            db.Entry(journal).State = EntityState.Modified;
+            db.SaveChanges();
+            return RedirectToAction("Approvals", "Infos");
+        }
+
+
         // GET: Journals/Delete/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -243,6 +271,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
         // POST: Journals/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public ActionResult DeleteConfirmed(int id)
         {
             Journal journal = db.Journals.Find(id);

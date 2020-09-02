@@ -108,8 +108,8 @@
                 <div class="col-md-10 row">
                     @Html.HiddenFor(model => model.PortraitFileName)
                     <div class="col-12">
-                        <input type="file" name="portraitPic" />
-                        <img class="img-fluid img-thumbnail border-00" src="~/Content/img/npc/default.jpg" />
+                        <input type="file" name="portraitPic" id="imgInp"/>
+                        <img class="img-fluid img-thumbnail border-00" src="~/Content/img/npc/default.jpg" id="imgPre"/>
                     </div>
                     <div class="col-12">
                         @Html.ValidationMessageFor(model => model.PortraitFileName, "", new { @class = "text-danger" })
@@ -167,8 +167,8 @@
                 <div class="col-md-10 row">
                     @Html.HiddenFor(model => model.CrestFileName)
                     <div class="col-12">
-                        <input type="file" name="crestPic" />
-                        <img class="img-fluid img-thumbnail border-00" src="~/Content/img/npc/org_default.jpg" />
+                        <input type="file" name="crestPic" id="imgInp2"/>
+                        <img class="img-fluid img-thumbnail border-00" src="~/Content/img/npc/org_default.jpg" id="imgPre2"/>
                     </div>
                     <div class="col-12">
                         @Html.ValidationMessageFor(model => model.PortraitFileName, "", new { @class = "text-danger" })
@@ -244,9 +244,9 @@
 
     }
 
-    <div style="text-align:left;">
-        @Html.ActionLink("Back to List", "Index")
-    </div>
+        <div style="text-align:left;">
+            @Html.ActionLink("Cancel", "CreateWhat", "Infos", null, null)
+        </div>
 </div>
 
 @section Scripts{
@@ -272,6 +272,14 @@
         })
     </script>
     <script>
+        $("#imgInp").change(function () {
+            readURL(this, '#imgPre');
+        });
+
+        $("#imgInp2").change(function () {
+            readURL(this, '#imgPre2');
+        });
+
         var nullables = ['AboutText', 'ApperanceText'];
         $('#confirmModal').on('show.bs.modal', function () {
             ConfirmModal(nullables);

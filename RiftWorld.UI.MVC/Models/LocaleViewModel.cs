@@ -19,7 +19,7 @@ namespace RiftWorld.UI.MVC.Models
         #endregion
 
         [Required]
-        [StringLength(50, ErrorMessage =" ")]
+        [StringLength(50, ErrorMessage = " ")]
         public string Name { get; set; }
 
         [Required]
@@ -37,7 +37,7 @@ namespace RiftWorld.UI.MVC.Models
 
         [StringLength(8000)]
         [UIHint("MultilineText")]
-        [AllowHtml] 
+        [AllowHtml]
         public string Appointed
         {
             get { return _appointed; }
@@ -236,7 +236,7 @@ namespace RiftWorld.UI.MVC.Models
         public string Blurb { get; set; }
 
         #region ctors
-        public LocaleEditPostVM(){ }
+        public LocaleEditPostVM() { }
         public LocaleEditPostVM(Locale locale, string blurb)
         {
             InfoId = locale.InfoId;
@@ -478,6 +478,58 @@ namespace RiftWorld.UI.MVC.Models
         public AssoEvent_Locale(LocaleEvent localeEvent)
         {
             EventId = localeEvent.EventId;
+        }
+    }
+
+    public class _LocaleEventsFullVM
+    {
+        public List<_LocaleEventsVM> PastEvents { get; set; }
+        public List<_LocaleEventsVM> Holidays { get; set; }
+    }
+
+    public class _LocaleEventsVM
+    {
+        public string Name { get; set; }
+        public short Id { get; set; }
+
+        public byte Day { get; set; }
+        public byte DateMonth { get; set; }
+        public Nullable<short> Year { get; set; }
+        public string Era { get; set; }
+        public string Month
+        {
+            get
+            {
+                switch (DateMonth)
+                {
+                    case 1:
+                        return "Hammer";
+                    case 2:
+                        return "Alturiak";
+                    case 3:
+                        return "Ches";
+                    case 4:
+                        return "Tarsakh";
+                    case 5:
+                        return "Mirthul";
+                    case 6:
+                        return "Kythorn";
+                    case 7:
+                        return "Flamerule";
+                    case 8:
+                        return "Eleasias";
+                    case 9:
+                        return "Elient";
+                    case 10:
+                        return "Marpenoth";
+                    case 11:
+                        return "Uktar";
+                    case 12:
+                        return "Nightal";
+                    default:
+                        return "Uhhhhh, wait...";
+                }
+            }
         }
     }
 }

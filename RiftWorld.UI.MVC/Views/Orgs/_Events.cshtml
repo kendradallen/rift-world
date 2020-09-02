@@ -1,4 +1,4 @@
-﻿@model RiftWorld.UI.MVC.Models._EventOrgFullVM
+﻿@model RiftWorld.UI.MVC.Models._OrgEventsFullVM
 @using RiftWorld.UI.MVC.Models
 
 
@@ -8,15 +8,14 @@
     <ul>
         @foreach (var item in Model.Holidays)
         {
-            <li>
-                <a href="~/Events/Details/@item.Id">
-                    @Html.DisplayFor(modelItem => item.Name)
-                </a>
-                @(item.Blurb.IsEmpty() ? "" : " - ")
-                <i>
-                    @Html.DisplayFor(modelItem => item.Blurb)
-                </i>
-            </li>
+        <li>
+            (@Html.DisplayFor(modelItem => item.Month) @Html.DisplayFor(modelItem => item.Day))
+            @Html.ActionLink(item.Name, "Details", "Events", new { id = item.Id }, null)
+            @(item.Blurb.IsEmpty() ? "" : " - ")
+            <i>
+                @Html.DisplayFor(modelItem => item.Blurb)
+            </i>
+        </li>
         }
     </ul>
     <br/>
@@ -27,15 +26,17 @@
     <ul>
         @foreach (var item in Model.PastEvents)
         {
-            <li>
-                <a href="~/Events/Details/@item.Id">
-                    @Html.DisplayFor(modelItem => item.Name)
-                </a>
-                @(item.Blurb.IsEmpty() ? "" : " - ")
-                <i>
-                    @Html.DisplayFor(modelItem => item.Blurb)
-                </i>
-            </li>
+        <li>
+            @Html.ActionLink(item.Name, "Details", "Events", new { id = item.Id }, null)
+            (@Html.DisplayFor(modelItem => item.Month) @Html.DisplayFor(modelItem => item.Day), @Html.DisplayFor(modelItem => item.Year) @(item.Era.IsEmpty() ? "" : "of the " + Html.DisplayFor(modelItem => item.Era) + " era"))
+            @*<a href="~/Events/Details/@item.Id">
+            @Html.DisplayFor(modelItem => item.Name)
+        </a>*@
+            @(item.Blurb.IsEmpty() ? "" : " - ")
+            <i>
+                @Html.DisplayFor(modelItem => item.Blurb)
+            </i>
+        </li>
         }
     </ul>
     <br/>

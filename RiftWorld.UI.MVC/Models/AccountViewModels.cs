@@ -49,8 +49,10 @@ namespace RiftWorld.UI.MVC.Models
     public class LoginViewModel
     {
         [Required]
-        [Display(Name = "Email")]
-        [EmailAddress]
+        [Display(Name = "Email/Username")]
+        //below removed for ability to login with either username or email
+        //[Display(Name = "Email")]
+        //[EmailAddress]
         public string Email { get; set; }
 
         [Required]

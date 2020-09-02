@@ -11,8 +11,7 @@ using RiftWorld.UI.MVC.Models;
 
 namespace RiftWorld.UI.MVC.Controllers.Entities
 {
-    //todo - uncomment to lockdown controller
-    //[Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
     public class EventsController : Controller
     {
         private RiftWorldEntities db = new RiftWorldEntities();
@@ -45,26 +44,46 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                 return HttpNotFound();
             }
 
-            //todo - uncomment below to prevent users from seeing un-published work
-            //if (!taevent.IsPublished && !User.IsInRole("Admin"))
-            //{
-            //    return View("Error");
-            //    //todo change redirect to a error 404 page
-            //}
+            //prevent users from seeing un-published work
+            if (!taevent.IsPublished && !User.IsInRole("Admin"))
+            {
+                return View("Error");
+                //todo change redirect to a error 404 page
+            }
 
             return View(taevent);
         }
 
         [OverrideAuthorization]
-        public PartialViewResult _Locale(short id)
+        public PartialViewResult _Locales(short id)
         {
-            return PartialView();
+            List<_EventLocalesVM> locales = (from le in db.LocaleEvents
+                                             join l in db.Locales on le.LocaleId equals l.LocaleId
+                                             where l.IsPublished && le.EventId == id
+                                             select new _EventLocalesVM
+                                             {
+                                                 Name = l.Name,
+                                                 Id = l.LocaleId
+                                             })
+                                             .ToList()
+                                             ;
+            return PartialView(locales);
         }
 
         [OverrideAuthorization]
         public PartialViewResult _Orgs(short id)
         {
-            return PartialView();
+            List<_EventOrgsVM> orgs = (from oe in db.OrgEvents
+                                       join o in db.Orgs on oe.OrgId equals o.OrgId
+                                       where o.IsPublished && oe.EventId == id
+                                       select new _EventOrgsVM
+                                       {
+                                           Name = o.Name,
+                                           Id = o.OrgId
+                                       })
+                                       .ToList()
+                                       ;
+            return PartialView(orgs);
         }
 
         // GET: Events/Create
@@ -115,6 +134,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                 #region Event
                 Event daEvent = new Event
                 {
+                    InfoId = infoId,
                     Name = taevent.Name,
                     IsHistory = taevent.IsHistory,
                     AboutText = taevent.AboutText,
@@ -158,7 +178,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             {
                 return HttpNotFound();
             }
-            ViewBag.Locales = db.Locales.ToList();
+            ViewBag.Locales = db.Locales.OrderBy(l=>l.Name).ToList();
             var selected = db.LocaleEvents.Where(i => i.EventId == taevent.EventId).ToList();
             List<AssoLocale_Event> assoLocales = new List<AssoLocale_Event>();
             foreach (LocaleEvent locale in selected)
@@ -167,7 +187,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                 assoLocales.Add(toAdd);
             }
 
-            ViewBag.Orgs = db.Orgs.ToList();
+            ViewBag.Orgs = db.Orgs.OrderBy(l=>l.Name).ToList();
             var selected2 = db.OrgEvents.Where(i => i.EventId == taevent.EventId).ToList();
             List<AssoOrg_Event> assoOrgs = new List<AssoOrg_Event>();
             foreach (OrgEvent org in selected2)
@@ -291,12 +311,44 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             }
 
             //if model fails
-            ViewBag.Locales = db.Locales.ToList();
-            ViewBag.Orgs = db.Orgs.ToList();
+            ViewBag.Locales = db.Locales.OrderBy(l => l.Name).ToList();
+            ViewBag.Orgs = db.Orgs.OrderBy(l => l.Name).ToList();
             //if I actually was handling if the model failed (as currently I'm using the bandaid solution of just preventing the submition ) this would not cut it. It does not account for orgs or locales being null
             AssoEventVM model = new AssoEventVM { InfoId = infoId, EventId = eventId, Submit = submit, Name = taevent.Name, AssoOrgs = orgs, AssoLocales = locales };
             return View(model);
         }
+
+        public ActionResult Skip(short infoId, short eventId, string submit)
+        {
+            var taevent = db.Events.Where(i => i.EventId == eventId).FirstOrDefault();
+            var info = db.Infos.Where(i => i.InfoId == infoId).FirstOrDefault();
+
+            #region Save or Publish?
+            switch (submit)
+            {
+                case "Save Progress":
+                case "Un-Publish":
+                case "Save and Continue":
+                    info.IsPublished = false;
+                    taevent.IsPublished = false;
+                    break;
+                case "Publish":
+                case "Save":
+                    info.IsPublished = true;
+                    taevent.IsPublished = true;
+                    break;
+                case "Save and associate":
+                    break;
+                default:
+                    break;
+            }
+            #endregion
+            db.Entry(taevent).State = EntityState.Modified;
+            db.Entry(info).State = EntityState.Modified;
+            db.SaveChanges();
+            return RedirectToAction("Details", new { id = eventId });
+        }
+
 
         // GET: Events/Edit/5
         public ActionResult Edit(short? id)
@@ -331,24 +383,24 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             List<short> tags,
             string submit)
         {
-            #region Save or Publish?
-            switch (submit)
-            {
-                case "Save Progress":
-                case "Un-Publish":
-                    taevent.IsPublished = false;
-                    break;
-                case "Publish":
-                case "Save":
-                    taevent.IsPublished = true;
-                    break;
-                case "Save and go to complex edit":
-                    break;
-            }
-            #endregion
-
             if (ModelState.IsValid)
             {
+                #region Save or Publish?
+                switch (submit)
+                {
+                    case "Save Progress":
+                    case "Un-Publish":
+                        taevent.IsPublished = false;
+                        break;
+                    case "Publish":
+                    case "Save":
+                        taevent.IsPublished = true;
+                        break;
+                    case "Save and go to complex edit":
+                        break;
+                }
+                #endregion
+
                 var infoid = taevent.InfoId;
                 #region Info Update
                 //Info info = db.Infos.Find(infoid);
@@ -442,7 +494,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             {
                 return HttpNotFound();
             }
-            ViewBag.Locales = db.Locales.ToList();
+            ViewBag.Locales = db.Locales.OrderBy(l => l.Name).ToList();
             var selected = db.LocaleEvents.Where(i => i.EventId == taevent.EventId).ToList();
             List<AssoLocale_Event> assoLocales = new List<AssoLocale_Event>();
             foreach (LocaleEvent locale in selected)
@@ -451,7 +503,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                 assoLocales.Add(toAdd);
             }
 
-            ViewBag.Orgs = db.Orgs.ToList();
+            ViewBag.Orgs = db.Orgs.OrderBy(l => l.Name).ToList();
             var selected2 = db.OrgEvents.Where(i => i.EventId == taevent.EventId).ToList();
             List<AssoOrg_Event> assoOrgs = new List<AssoOrg_Event>();
             foreach (OrgEvent org in selected2)
@@ -552,8 +604,8 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             }
 
             //if model fails
-            ViewBag.Locales = db.Locales.ToList();
-            ViewBag.Orgs = db.Orgs.ToList();
+            ViewBag.Locales = db.Locales.OrderBy(l => l.Name).ToList();
+            ViewBag.Orgs = db.Orgs.OrderBy(l => l.Name).ToList();
             var taevent = db.Events.Find(eventId);
             //if I actually was handling if the model failed (as currently I'm using the bandaid solution of just preventing the submition ) this would not cut it. It does not account for orgs or locales being null
             AssoEventVM model = new AssoEventVM { InfoId = infoId, EventId = eventId, Submit = submit, Name = taevent.Name, AssoOrgs = orgs, AssoLocales = locales };

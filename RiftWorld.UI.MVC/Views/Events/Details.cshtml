@@ -1,98 +1,179 @@
 ﻿@model RiftWorld.DATA.EF.Event
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = Model.Name;
 }
-
-<h2>Details</h2>
-
-<div>
-    <h4>Event</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-
-        <dd>
+<section id="start" class="col-12 mb-4" name="The Basics">
+    <div class="row justify-content-center" style="font-size:larger;">
+        <div class="col-auto" id="name" style="padding-right:unset;">
             @Html.DisplayFor(model => model.Name)
-        </dd>
+        </div>
+        <div class="col-auto align-self-end" id="date">
+            <p style="margin-bottom:unset;">
+                @Model.Month
+                @Html.DisplayFor(model => model.DateDay)@(Model.IsHistory ? "," : "")
+                @if (Model.IsHistory)
+                {
+                    <span> @Html.DisplayFor(model => model.DateYear) @(Model.DateEra.IsEmpty() ? "" : "of the " + Html.DisplayFor(model => model.DateEra) + " era")</span>
+                }
+            </p>
+        </div>
+    </div>
+</section>
+<section id="normies" class="col-12" name="Normal Particpants">
+    <h2 class="line">
+        @Html.DisplayNameFor(model => model.NormalParticipants)
+    </h2>
+    <div class="hang">
+        @Html.Raw(Model.NormalParticipants)
+    </div>
+</section>
+<section id="about" class="col-12" name="About">
+    <h2 class="line">
+        @Html.DisplayNameFor(model => model.AboutText)
+    </h2>
+    <div class="hang">
+        @Html.Raw(Model.AboutText)
+    </div>
+</section>
+@Html.Action("_Orgs", "Events", new { id = Model.EventId })
+@Html.Action("_Locales", "Events", new { id = Model.EventId })
 
-        <dt>
-            @Html.DisplayNameFor(model => model.IsHistory)
-        </dt>
+@Html.Action("_Details", "Secrets", new { id = Model.InfoId })
+@Html.Action("_Stories", "Stories", new { id = Model.InfoId })
+<section id="rumors" class="col-12" name="Rumors">
+    <h2 class="line">Rumors</h2>
+    @Html.Action("_Rumors", "Rumors", new { id = Model.InfoId })
+    @Html.Action("CreateRumor", "Rumors", new { id = Model.InfoId })
+</section>
+<footer id="tags" class="col-12">
+    @Html.Action("_TagList", "Infos", new { id = Model.InfoId })
+    <p>
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+</footer>
+@if (User.IsInRole("Admin"))
+{
+    <nav id="adminNav" class="navbar fixed-bottom navbar-light navbar-expand-md">
+        <span class="navbar-brand">Katherine's Bar</span>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    @Html.ActionLink("Edit", "Edit", new { id = Model.EventId }, new { @class = "nav-link" })
+                </li>
+                <li class="nav-item">
+                    @Html.ActionLink("Edit Complex", "AssoEdit", new { id = Model.EventId }, new { @class = "nav-link" })
+                </li>
+                <li class="nav-item">
+                    @Html.ActionLink("Add Secret", "Create", "Secrets", new { infoId = Model.InfoId }, new { @class = "nav-link" })
+                </li>
+                <li class="nav-item">
+                    @Html.ActionLink("Delete", "Delete", new { id = Model.EventId }, new { @class = "nav-link" })
+                </li>
+                <li class="nav-item">
+                    @Html.ActionLink("Back to List", "Index", null, new { @class = "nav-link" })
+                </li>
+            </ul>
+        </div>
+        <span class="navbar-text @Model.Pub.ToLower()">
+            @Model.Pub
+        </span>
+    </nav>
+}
+@section Scripts{
+    <script src="~/Scripts/MyJS/story.js"></script>
+    <script src="~/Scripts/MyJS/rumor.js"></script>
+    <script src="~/Scripts/MyJS/secret.js"></script>
+}
+@*<div>
+        <h4>Event</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.Name)
+            </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.IsHistory)
-        </dd>
+            <dd>
+                @Html.DisplayFor(model => model.Name)
+            </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.AboutText)
-        </dt>
+            <dt>
+                @Html.DisplayNameFor(model => model.IsHistory)
+            </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.AboutText)
-        </dd>
+            <dd>
+                @Html.DisplayFor(model => model.IsHistory)
+            </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.NormalParticipants)
-        </dt>
+            <dt>
+                @Html.DisplayNameFor(model => model.AboutText)
+            </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.NormalParticipants)
-        </dd>
+            <dd>
+                @Html.DisplayFor(model => model.AboutText)
+            </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.IsPublished)
-        </dt>
+            <dt>
+                @Html.DisplayNameFor(model => model.NormalParticipants)
+            </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.IsPublished)
-        </dd>
+            <dd>
+                @Html.DisplayFor(model => model.NormalParticipants)
+            </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.DateDay)
-        </dt>
+            <dt>
+                @Html.DisplayNameFor(model => model.IsPublished)
+            </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.DateDay)
-        </dd>
+            <dd>
+                @Html.DisplayFor(model => model.IsPublished)
+            </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.DateMonth)
-        </dt>
+            <dt>
+                @Html.DisplayNameFor(model => model.DateDay)
+            </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.DateMonth)
-        </dd>
+            <dd>
+                @Html.DisplayFor(model => model.DateDay)
+            </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.DateYear)
-        </dt>
+            <dt>
+                @Html.DisplayNameFor(model => model.DateMonth)
+            </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.DateYear)
-        </dd>
+            <dd>
+            </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.DateEra)
-        </dt>
+            <dt>
+                @Html.DisplayNameFor(model => model.DateYear)
+            </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.DateEra)
-        </dd>
+            <dd>
+                @Html.DisplayFor(model => model.DateYear)
+            </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Info.Blurb)
-        </dt>
+            <dt>
+                @Html.DisplayNameFor(model => model.DateEra)
+            </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Info.Blurb)
-        </dd>
+            <dd>
+                @Html.DisplayFor(model => model.DateEra)
+            </dd>
 
-    </dl>
-</div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.EventId }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+            <dt>
+                @Html.DisplayNameFor(model => model.Info.Blurb)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Info.Blurb)
+            </dd>
+
+        </dl>
+    </div>
+    <p>
+        @Html.ActionLink("Edit", "Edit", new { id = Model.EventId }) |
+        @Html.ActionLink("Back to List", "Index")
+    </p>*@

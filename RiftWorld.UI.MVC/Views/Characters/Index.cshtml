@@ -1,81 +1,293 @@
 ﻿@model IEnumerable<RiftWorld.DATA.EF.Character>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Hall of Heroes";
+}
+@section styles{
+    <style>
+        .tablink-a {
+            background-color: #555;
+            color: white;
+            float: left;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            /*padding: 14px 16px;*/
+            /*font-size: 17px;*/
+            /*width: 15%;*/
+        }
+
+            .tablink-a:hover {
+                background-color: #777;
+            }
+
+        /* Style the tab content (and add height:100% for full page content) */
+        .tab-content-a {
+            /*color: white;*/
+            display: none;
+            /*padding: 100px 20px;*/
+            /*height: 100%;*/
+        }
+    </style>
 }
 
-<h2>Index</h2>
+    <div class="col-12">
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.CharacterName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.PortraitFileName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.IsRetired)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.IsApproved)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Gender.GenderName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Locale.Name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Race.RaceName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Tier.TierName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.UserDetail.DiscordName)
-        </th>
-        <th></th>
-    </tr>
+        <h2>@ViewBag.Title</h2>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.CharacterName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.PortraitFileName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.IsRetired)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.IsApproved)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Gender.GenderName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Locale.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Race.RaceName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Tier.TierName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.UserDetail.DiscordName)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.CharacterId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.CharacterId }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.CharacterId })
-        </td>
-    </tr>
+
+        <div class="row">
+
+            <button class="tablink-a col" onclick="openPage('Current', this, 'green')" id="defaultOpen">The Future</button>
+            <button class="tablink-a col" onclick="openPage('Past', this, 'green')">The Past</button>
+            <button class="tablink-a col" onclick="openPage('Fallen', this, 'green')">The Fallen</button>
+        </div>
+
+        <div id="Current" class="tab-content-a">
+            <table class="table">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.CharacterName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.PortraitFileName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.IsRetired)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.IsApproved)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Gender.GenderName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Locale.Name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Race.RaceName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Tier.TierName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.UserDetail.DiscordName)
+                    </th>
+                    <th></th>
+                </tr>
+
+                @foreach (var item in Model.Where(model => !model.IsRetired))
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CharacterName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PortraitFileName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.IsRetired)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.IsApproved)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Gender.GenderName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Locale.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Race.RaceName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Tier.TierName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.UserDetail.DiscordName)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Edit", "Edit", new { id = item.CharacterId }) |
+                            @Html.ActionLink("Details", "Details", new { id = item.CharacterId }) |
+                            @Html.ActionLink("Delete", "Delete", new { id = item.CharacterId })
+                        </td>
+                    </tr>
+                }
+
+            </table>
+        </div>
+        <div id="Past" class="tab-content-a">
+            <table class="table">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.CharacterName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.PortraitFileName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.IsRetired)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.IsApproved)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Gender.GenderName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Locale.Name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Race.RaceName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Tier.TierName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.UserDetail.DiscordName)
+                    </th>
+                    <th></th>
+                </tr>
+
+                @foreach (var item in Model.Where(model => model.IsRetired && !model.IsDead))
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CharacterName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PortraitFileName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.IsRetired)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.IsApproved)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Gender.GenderName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Locale.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Race.RaceName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Tier.TierName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.UserDetail.DiscordName)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Edit", "Edit", new { id = item.CharacterId }) |
+                            @Html.ActionLink("Details", "Details", new { id = item.CharacterId }) |
+                            @Html.ActionLink("Delete", "Delete", new { id = item.CharacterId })
+                        </td>
+                    </tr>
+                }
+
+            </table>
+        </div>
+        <div id="Fallen" class="tab-content-a">
+            <table class="table">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.CharacterName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.PortraitFileName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.IsRetired)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.IsApproved)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Gender.GenderName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Locale.Name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Race.RaceName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Tier.TierName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.UserDetail.DiscordName)
+                    </th>
+                    <th></th>
+                </tr>
+
+                @foreach (var item in Model.Where(model => model.IsDead))
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CharacterName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PortraitFileName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.IsRetired)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.IsApproved)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Gender.GenderName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Locale.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Race.RaceName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Tier.TierName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.UserDetail.DiscordName)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Edit", "Edit", new { id = item.CharacterId }) |
+                            @Html.ActionLink("Details", "Details", new { id = item.CharacterId }) |
+                            @Html.ActionLink("Delete", "Delete", new { id = item.CharacterId })
+                        </td>
+                    </tr>
+                }
+
+            </table>
+        </div>
+    </div>
+
+@section Scripts{
+    <script>
+        function openPage(pageName, elmnt, color) {
+            // Hide all elements with class="tabcontent" by default */
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tab-content-a");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+
+            // Remove the background color of all tablinks/buttons
+            tablinks = document.getElementsByClassName("tablink-a");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].style.backgroundColor = "";
+            }
+
+            // Show the specific tab content
+            document.getElementById(pageName).style.display = "block";
+
+            // Add the specific color to the button used to open the tab content
+            elmnt.style.backgroundColor = color;
+        }
+
+        // Get the element with id="defaultOpen" and click on it
+        document.getElementById("defaultOpen").click();
+    </script>
 }
-
-</table>

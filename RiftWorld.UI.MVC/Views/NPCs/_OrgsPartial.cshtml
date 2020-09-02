@@ -1,12 +1,27 @@
-﻿@model IEnumerable<RiftWorld.UI.MVC.Models._NpcOrgVM>
+﻿@model IEnumerable<RiftWorld.UI.MVC.Models._NpcOrgsVM>
 
 <ul>
     @foreach (var item in Model)
     {
-    <li>
-        @Html.DisplayFor(modelItem => item.Name) @(item.Blurb.IsEmpty() ? "" : " - ") <i>
-    @Html.DisplayFor(modelItem => item.Blurb)
-</i>
+    <li class="row">
+        <span class="order-1" style="font-weight:500">
+            @Html.DisplayFor(modelItem => item.Name) &nbsp;
+        </span>
+        @if (!item.Blurb.IsEmpty())
+        {
+        <span class="order-2">- &nbsp; </span>
+        }
+        <span style="font-style:italic" class="order-3">
+            @Html.DisplayFor(modelItem => item.Blurb) &nbsp;
+        </span>
+        <a href="@Url.Action("Details", "Orgs", new {id = item.Id})" class="order-4" style="font-size:20px"><i class="fas fa-book-open"></i></a>
+        <!-- no style link-->
+        @*<span style="font-style:italic">
+            @Html.DisplayFor(modelItem => item.Blurb)
+        </span> @(item.Blurb.IsEmpty() ? "" : " - ")*@
+        @*@Html.ActionLink(item.Name, "Details", "Orgs", new { id = item.Id}, new { @style="color:unset"})*@
+        <!--Actual links with color-->
+        @*@Html.ActionLink(item.Name, "Details", "Orgs", new { id = item.Id }, null)*@
     </li>
     }
 </ul>

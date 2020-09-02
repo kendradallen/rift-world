@@ -1,7 +1,7 @@
 ﻿@model RiftWorld.DATA.EF.Gender
 
 @{
-    ViewBag.Title = "Gender Create";
+    ViewBag.Title = "Gender Edit";
     int nameMax;
     int startGenderName = nameMax = 20;
     if (Model.GenderName != null)
@@ -19,6 +19,7 @@
         <div class="form-horizontal">
             <hr />
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.HiddenFor(model => model.GenderId)
             <div class="form-group row">
                 @Html.LabelFor(model => model.GenderName, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
@@ -39,7 +40,7 @@
     }
 
     <div style="text-align:left;">
-        @Html.ActionLink("Back to List", "Index")
+        @Html.ActionLink("Cancel", "Index")
     </div>
 </div>
 @section Scripts{

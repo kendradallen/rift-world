@@ -93,5 +93,6 @@ namespace RiftWorld.DATA.EF
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Secret>("getSecrets", mergeOption, playerIdParameter, infoIdParameter);
         }
+
     }
 }

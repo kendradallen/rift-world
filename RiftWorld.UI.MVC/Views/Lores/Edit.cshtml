@@ -68,11 +68,12 @@
                 </div>
             </div>
 
-            <div class="form-group" id="qMain">
-                @Html.LabelFor(model => model.TheContent, htmlAttributes: new { @class = "control-label" })
+            <div class="form-group row" id="qMain">
+                @Html.LabelFor(model => model.TheContent, htmlAttributes: new { @class = "control-label col-auto" })
+                @Html.ValidationMessageFor(model => model.TheContent, "", new { @class = "text-danger auto" })
+
                 <div class="col-12">
                     @Html.EditorFor(model => model.TheContent, new { htmlAttributes = new { @class = "form-control rich", style = "height:20em;" } })
-                    @Html.ValidationMessageFor(model => model.TheContent, "", new { @class = "text-danger" })
                 </div>
             </div>
 
@@ -133,7 +134,7 @@
     }
 
     <div style="text-align:left;">
-        @Html.ActionLink("Back to List", "Index")
+        @Html.ActionLink("Cancel", "Details", new { id = Model.LoreId})
     </div>
 </div>
 

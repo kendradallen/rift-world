@@ -15,8 +15,8 @@
 
 }
 <section id="location" class="col-12">
-    <p>Rift Location: @Model.Location</p>
-    <p>Aka: @Model.Nickname</p>
+    <p style="font-size:xx-large;">Rift Location: @Model.Location</p>
+    <p style="font-size:larger;">Aka: @Model.Nickname</p>
 </section>
 @if (Model.Environment != "Nada")
 {
@@ -45,7 +45,12 @@
         @Html.Action("CreateRumor", "Rumors", new { id = Model.InfoId })
     </div>
 </section>
-
+<footer id="tags" class="col-12">
+    @Html.Action("_TagList", "Infos", new { id = Model.InfoId })
+    <p>
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+</footer>
 @if (User.IsInRole("Admin")) { 
 <nav id="adminNav" class="navbar fixed-bottom navbar-light navbar-expand-md">
     <span class="navbar-brand">Katherine's Bar</span>
@@ -59,6 +64,9 @@
             </li>
             <li class="nav-item">
                 @Html.ActionLink("Edit Complex", "AssoEdit", new { id = Model.RiftId }, new { @class = "nav-link" })
+            </li>
+            <li class="nav-item">
+                @Html.ActionLink("Add Secret", "Create", "Secrets", new { infoId = Model.InfoId }, new { @class = "nav-link" })
             </li>
             <li class="nav-item">
                 @Html.ActionLink("Delete", "Delete", new { id = Model.RiftId }, new { @class = "nav-link" })

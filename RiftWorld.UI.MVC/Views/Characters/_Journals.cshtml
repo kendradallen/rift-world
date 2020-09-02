@@ -2,14 +2,19 @@
 
 <section id="journalEntries" class="col-12" name="Journal">
     <h2 class="line">Journal Entries</h2>
-    @foreach (var item in Model.Journals)
-    {
-    <div class="journal">
-        @Html.DisplayFor(modelItem => item.Written) -   @Html.DisplayFor(modelItem => item.ContentMini) @if (item.IsLonger){ @Html.ActionLink("...", "Details", "Journals", new { id = item.JournalId}, null) }
+    <div id="these-journals" class="hang" style="text-align:left; padding-left:1.8rem;">
+
+        @foreach (var item in Model.Journals)
+        {
+            <div class="journal">
+                @Html.DisplayFor(modelItem => item.Written) -   @Html.DisplayFor(modelItem => item.ContentMini) @if (item.IsLonger)
+                {@Html.ActionLink("...", "Details", "Journals", new { id = item.JournalId }, null)}
+            </div>
+        }
+        @if (Model.HasMore)
+        {
+            @Html.ActionLink("See more", "JournalHub", "Characters", new { id = Model.CharacterId }, null)
+        }
     </div>
-    }
-    @if (Model.HasMore)
-    {
-        @Html.ActionLink("See more", "JournalHub", "Characters", new { id = Model.CharacterId }, null)
-    }
+
 </section>

@@ -1,0 +1,16 @@
+﻿@model IEnumerable<RiftWorld.UI.MVC.Models._EventLocalesVM>
+
+<section id="locales" class="col-12" name="Locations">
+    <h2 class="line">
+        Locations
+    </h2>
+    <ul>
+        @foreach (var item in Model)
+        {
+            <li>
+                @Html.ActionLink(item.Name, "Details", "Locales", new { id = item.Id }, null)
+            </li>
+        }
+    </ul>
+
+</section>

@@ -103,11 +103,25 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
         //}
 
         //// GET: Secrets/Create
-        public ActionResult Create()
+        public ActionResult Create(short? infoId)
         {
+            if (infoId != null)
+            {
+
+                ViewBag.IsAboutId = new SelectList(db.Infos, "InfoId", "Name", infoId);
+                ViewBag.Tags = new MultiSelectList(db.SecretTags, "SecretTagId", "Name");
+
+                ViewBag.Override = true;
+                return View();
+
+            }
+
             ViewBag.IsAboutId = new SelectList(db.Infos, "InfoId", "Name");
+
             ViewBag.Tags = new MultiSelectList(db.SecretTags, "SecretTagId", "Name");
+
             return View();
+
         }
 
         //// POST: Secrets/Create
@@ -268,6 +282,86 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             db.Secrets.Remove(secret);
              db.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        //distribute many secrets
+        //give a character secrets
+        //edit a single character's secret tags
+
+
+        // GET: CharSecrets/Create
+        public ActionResult GiveSecretSingle(short? charId)
+        {
+            if (charId != null)
+            {
+                ViewBag.CharId = new SelectList(db.Characters.Where(c => !c.IsRetired && c.IsApproved), "CharacterId", "CharacterName", charId);
+                var alreadyTags = db.CharSecrets.Where(c => c.CharId == charId).Select(c => c.SecretId).ToList();
+                ViewBag.SecretId = new SelectList(db.SecretTags.Where(s => !alreadyTags.Contains(s.SecretTagId)), "SecretTagId", "Name");
+                ViewBag.Override = true;
+            }
+            else
+            {
+                ViewBag.CharId = new SelectList(db.Characters.Where(c => !c.IsRetired && c.IsApproved), "CharacterId", "CharacterName");
+                ViewBag.SecretId = new SelectList(db.SecretTags, "SecretTagId", "Name");
+            }
+            return View();
+        }
+
+        // POST: CharSecrets/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult GiveSecretSingle([Bind(Include = "CharSecretId,CharId,SecretId")] CharSecret charSecret)
+        {
+            if (ModelState.IsValid)
+            {
+                CharSecret doIExist = db.CharSecrets.Where(c => c.CharId == charSecret.CharId && c.SecretId == charSecret.SecretId).FirstOrDefault();
+                if (doIExist == null)
+                {
+                    db.CharSecrets.Add(charSecret);
+                    db.SaveChanges();
+                }
+                return RedirectToAction("CreateWhat", "Infos", null);
+            }
+
+            ViewBag.CharId = new SelectList(db.Characters.Where(c => !c.IsRetired && c.IsApproved), "CharacterId", "CharacterName");
+            ViewBag.SecretId = new SelectList(db.SecretTags, "SecretTagId", "Name", charSecret.SecretId);
+            return View(charSecret);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit([Bind(Include = "CharSecretId,CharId,SecretId")] CharSecret charSecret)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Entry(charSecret).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            ViewBag.CharId = new SelectList(db.Characters, "CharacterId", "PlayerId", charSecret.CharId);
+            ViewBag.SecretId = new SelectList(db.SecretTags, "SecretTagId", "Name", charSecret.SecretId);
+            return View(charSecret);
+        }
+
+        public ActionResult RemoveSecret(short charId)
+        {
+            string name = db.Characters.Find(charId).CharacterName;
+            var alreadyTags = db.CharSecrets.Where(c => c.CharId == charId).Select(c => c.SecretId).ToList();
+            var list = new SelectList(db.SecretTags.Where(s => alreadyTags.Contains(s.SecretTagId)), "SecretTagId", "Name");
+            RemoveSecretVM model = new RemoveSecretVM { Name = name, CharId = charId, SecretTags = list };
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult RemoveSecret(short charId, short secretId)
+        {
+            CharSecret toRemove = db.CharSecrets.Where(x => x.CharId == charId && x.SecretId == secretId).FirstOrDefault();
+            db.CharSecrets.Remove(toRemove);
+            db.SaveChanges();
+            return RedirectToAction("KnownSecrets", "Characters", new { id = charId });
         }
 
         protected override void Dispose(bool disposing)

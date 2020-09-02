@@ -7,6 +7,11 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
+//added for user deets and such
+using RiftWorld.DATA.EF;
+using System.Data.Entity;
+
+
 namespace RiftWorld.UI.MVC.Controllers
 {
     [Authorize]
@@ -34,7 +39,7 @@ namespace RiftWorld.UI.MVC.Controllers
             }
         }
 
-        //
+        //v2 -- purging unneeded and adding pertainent user details
         // GET: /Account/Index
         [HttpGet]
         public async Task<ActionResult> Index(ManageMessageId? message)
@@ -42,23 +47,68 @@ namespace RiftWorld.UI.MVC.Controllers
             ViewBag.StatusMessage =
                 message == ManageMessageId.ChangePasswordSuccess ? "Your password has been changed."
                 : message == ManageMessageId.SetPasswordSuccess ? "Your password has been set."
-                : message == ManageMessageId.SetTwoFactorSuccess ? "Your two factor provider has been set."
+                //: message == ManageMessageId.SetTwoFactorSuccess ? "Your two factor provider has been set."
                 : message == ManageMessageId.Error ? "An error has occurred."
-                : message == ManageMessageId.AddPhoneSuccess ? "The phone number was added."
-                : message == ManageMessageId.RemovePhoneSuccess ? "Your phone number was removed."
+                //: message == ManageMessageId.AddPhoneSuccess ? "The phone number was added."
+                //: message == ManageMessageId.RemovePhoneSuccess ? "Your phone number was removed."
                 : "";
 
             var userId = User.Identity.GetUserId();
-            var model = new IndexViewModel
+            RiftWorldEntities db = new RiftWorldEntities();
+
+            UserDetail deets = await db.UserDetails.FindAsync(userId);
+            var character = await db.Characters.Where(c => c.PlayerId == userId && !c.IsApproved).FirstOrDefaultAsync();
+
+            short? pendingId;
+            string pendingName;
+            if (character == null)
+            {
+                pendingId = null;
+                pendingName = null;
+            }
+            else
+            {
+                pendingId = character.CharacterId;
+                pendingName = character.CharacterName;
+            }
+
+            var model = new IndexViewModel2
             {
                 HasPassword = HasPassword(),
-                PhoneNumber = await UserManager.GetPhoneNumberAsync(userId),
-                TwoFactor = await UserManager.GetTwoFactorEnabledAsync(userId),
-                Logins = await UserManager.GetLoginsAsync(userId),
-                BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(userId)
+                Deets = deets,
+                PendingCharacterId = pendingId,
+                PendingCharacterName = pendingName,
+                Email = db.AspNetUsers.Where(x => x.Id == userId).Select(x => x.Email).First()
             };
             return View(model);
         }
+
+
+        //v1 -- default given
+        // GET: /Account/Index
+        //[HttpGet]
+        //public async Task<ActionResult> Index(ManageMessageId? message)
+        //{
+        //    ViewBag.StatusMessage =
+        //        message == ManageMessageId.ChangePasswordSuccess ? "Your password has been changed."
+        //        : message == ManageMessageId.SetPasswordSuccess ? "Your password has been set."
+        //        : message == ManageMessageId.SetTwoFactorSuccess ? "Your two factor provider has been set."
+        //        : message == ManageMessageId.Error ? "An error has occurred."
+        //        : message == ManageMessageId.AddPhoneSuccess ? "The phone number was added."
+        //        : message == ManageMessageId.RemovePhoneSuccess ? "Your phone number was removed."
+        //        : "";
+
+        //    var userId = User.Identity.GetUserId();
+        //    var model = new IndexViewModel
+        //    {
+        //        HasPassword = HasPassword(),
+        //        PhoneNumber = await UserManager.GetPhoneNumberAsync(userId),
+        //        TwoFactor = await UserManager.GetTwoFactorEnabledAsync(userId),
+        //        Logins = await UserManager.GetLoginsAsync(userId),
+        //        BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(userId)
+        //    };
+        //    return View(model);
+        //}
 
         //
         // GET: /Account/RemoveLogin

@@ -88,10 +88,13 @@
             Copyright © 2019 Colorlib Inc. All rights reserved
         </div>
         <div class="hw-social">
-            <a href="#"><i class="fa fa-facebook"></i></a>
+            @*<a href="#"><i class="fa fa-facebook"></i></a>*@
+            <a href="#"><i class="fab fa-discord"></i></a>
             <a href="#"><i class="fa fa-twitter"></i></a>
-            <a href="#"><i class="fa fa-youtube-play"></i></a>
-            <a href="#"><i class="fa fa-instagram"></i></a>
+            @*<a href="#"><i class="fa fa-youtube-play"></i></a>*@
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fa fa-envelope-o"></i></a>
+
         </div>
     </div>
     <!-- Humberger Menu End -->
@@ -114,9 +117,11 @@
                     </div>
                     <div class="col-lg-6 col-md-4">
                         <div class="ht-social">
-                            <a href="#"><i class="fa fa-facebook"></i></a>
+                            @*<a href="#"><i class="fa fa-facebook"></i></a>*@
+                            <a href="#"><i class="fab fa-discord"></i></a>
                             <a href="#"><i class="fa fa-twitter"></i></a>
-                            <a href="#"><i class="fa fa-instagram"></i></a>
+                            @*<a href="#"><i class="fa fa-youtube-play"></i></a>*@
+                            <a href="#"><i class="fab fa-instagram"></i></a>
                             <a href="#"><i class="fa fa-envelope-o"></i></a>
                         </div>
                     </div>
@@ -145,7 +150,7 @@
                         @* NTS: the "span" for the buttons IS required for template style *@
                         <li><a href="@Url.Action("Index", "Home")"><span>Home</span></a></li>
                         <li>
-                            <a href="#"><span>Explore <i class="fa fa-angle-down"></i></span></a>
+                            <a href="@Url.Action("Index", "Explore")"><span>Explore <i class="fa fa-angle-down"></i></span></a>
                             <ul class="dropdown">
                                 <li><a href="@Url.Action("Index", "NPCs")">NPCs</a></li>
                                 <li><a href="@Url.Action("Index", "Locales")">Locales</a></li>
@@ -167,7 +172,7 @@
                                     <li>@Html.ActionLink("Users", "Index", "UsersAdmin")</li>
                                     <li><a href="#">Character List</a></li>
                                     <li><a href="@Url.Action("Todo", "Infos")">Todo</a></li>
-                                    <li><a href="#">BTS Lists</a></li>
+                                    <li><a href="@Url.Action("BTSIndex", "Home")">BTS Lists</a></li>
                                 </ul>
                             </li>
                         }
@@ -199,11 +204,12 @@
 
     <!-- Footer Section Begin -->
     <footer class="footer-section">
-        <div class="container">
-            <div class="copyright-area">
-                <div class="row">
+        <div class="" style="    background: radial-gradient(circle, rgba(0, 212,255,.5) 37%, rgba(89,13,147,0.5) 67%);
+">
+            <div class="copyright-area pls-style" style="font-size:17px;">
+                <div class="row align-items-center">
                     <div class="col-lg-6">
-                        <div class="ca-text">
+                        <div class="">
                             <p>
                                 <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
                                 Copyright &copy;

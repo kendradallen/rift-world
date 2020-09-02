@@ -10,6 +10,7 @@ using RiftWorld.DATA.EF;
 
 namespace RiftWorld.UI.MVC.Controllers.BehindTheScenes
 {
+    [Authorize(Roles = "Admin")]
     public class SecretTagsController : Controller
     {
         private RiftWorldEntities db = new RiftWorldEntities();
@@ -52,7 +53,7 @@ namespace RiftWorld.UI.MVC.Controllers.BehindTheScenes
             {
                 db.SecretTags.Add(secretTag);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("CreateWhat", "Infos");
             }
 
             return View(secretTag);
@@ -100,6 +101,16 @@ namespace RiftWorld.UI.MVC.Controllers.BehindTheScenes
             if (secretTag == null)
             {
                 return HttpNotFound();
+            }
+
+            int characters = db.CharSecrets.Where(x => x.SecretId == id).Select(x => x.CharId).ToList().Count;
+            int secrets = db.SecretSecretTags.Where(x => x.SecretTagId == id).Select(x => x.SecretId).ToList().Count;
+            //todo - v2 cascade a removal instead of preventing deletion
+            if (characters != 0 || secrets != 0)
+            {
+                ViewBag.Message = "Something in the database is using this secret tag currently. You can't delete a secret tag unless nothing is using it. You'll have find the entries using the secret tag and change them first.";
+                return View("Error");
+
             }
             return View(secretTag);
         }

@@ -100,8 +100,8 @@
         @Html.ValidationMessageFor(model => model.PortraitFileName, "", new { @class = "text-danger" })*@
                     @Html.HiddenFor(model => model.PortraitFileName)
                     <div class="col-12">
-                        <input type="file" name="picture" />
-                        <img class="img-fluid img-thumbnail border-00" src="~/Content/img/character/@Model.PortraitFileName" />
+                        <input type="file" name="picture" id="imgInp"/>
+                        <img class="img-fluid img-thumbnail border-00" src="~/Content/img/character/@Model.PortraitFileName" id="imgPre"/>
                     </div>
                     <div class="col-12">
                         @Html.ValidationMessageFor(model => model.PortraitFileName, "", new { @class = "text-danger" })
@@ -184,5 +184,11 @@
             select: '#TierId',
             showSearch: false
         })
+
+        //preview of uploaded img
+        $("#imgInp").change(function () {
+            readURL(this, '#imgPre');
+        });
+
     </script>
 }

@@ -130,9 +130,9 @@
             </div>
         </div>
     }
-    <div style="text-align:left;">
-        @Html.ActionLink("Back to List", "Index")
-    </div>
+        <div style="text-align:left;">
+            @Html.ActionLink("Skip", "Skip", new { infoId = Model.InfoId, npcId = Model.NpcId, submit = Model.Submit })
+        </div>
 </div>
 
 @section Scripts{

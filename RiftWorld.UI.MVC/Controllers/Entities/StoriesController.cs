@@ -20,7 +20,22 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
         {
             var stories = db.Stories.Where(r => r.IsAboutId == id).ToList();
 
-            return PartialView(stories);
+            List<StoryVM> model = new List<StoryVM>();
+
+            foreach (Story story in stories)
+            {
+                List<Tag> tags = (from st in db.StoryTags
+                                    join t in db.Tags on st.TagId equals t.TagId
+                                  where st.StoryId == story.StoryId
+                                  select t
+                                )
+                                .ToList()
+                                ;
+                StoryVM toAdd = new StoryVM { Story = story, Tags = tags };
+                model.Add(toAdd);
+            }
+
+            return PartialView(model);
         }
 
         // GET: Stories
@@ -78,6 +93,17 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
 
                 short storyId = db.Stories.Max(s => s.StoryId);
                 #region Adding Tags
+                //if the story is labled as non-canon auto add the non-cannon tag as the first tag
+                if (!story.IsCannon)
+                {
+                    short noncanTagID = db.Tags.Where(t => t.TagName == "Non-Canon").Select(t => t.TagId).First();
+                    if (tags.Contains(noncanTagID))
+                    {
+                        tags.Remove(noncanTagID);
+                    }
+                    tags.Insert(0, noncanTagID);
+                }
+                //add story tags 
                 if (tags != null)
                 {
                     foreach (short t in tags)

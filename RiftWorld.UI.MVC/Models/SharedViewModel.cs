@@ -113,6 +113,12 @@ namespace RiftWorld.UI.MVC.Models
         }
     }
 
+    public class StoryVM
+    {
+        public Story Story { get; set; }
+        public List<Tag> Tags { get; set; }
+    }
+
     public class RumorCreateVM
     {
         public short RumorOfId { get; set; }
@@ -129,23 +135,6 @@ namespace RiftWorld.UI.MVC.Models
 
     }
 
-    //public class GetSecretHubVM
-    //{
-    //    private RiftWorldEntities db = new RiftWorldEntities();
-
-    //    public List<SecretComplete_PlayerVM> Secrets { get; set; }
-
-    //    public GetSecretHubVM(short characterId)
-    //    {
-    //        var selfTags = db.CharSecrets.Where(x => x.CharId == characterId).Select(x => x.SecretId);
-    //        Secrets = (from t in db.SecretSecretTags
-    //                    where selfTags.Contains(t.SecretTagId)
-    //                    select new SecretComplete_PlayerVM(t.SecretId, characterId)
-    //                    ).ToList()
-    //                    ;
-    //    }
-    //}
-
     public class SecretCompleteVM
     {
         public Secret Secret { get; set; }
@@ -155,22 +144,22 @@ namespace RiftWorld.UI.MVC.Models
 
     public class SecretComplete_PlayerVM
     {
-        //private RiftWorldEntities db = new RiftWorldEntities();
-
         public Secret Secret { get; set; }
         public List<SecretTag> Tags { get; set; }
+    }
 
-        //public SecretComplete_PlayerVM(short secretId, short characterId)
-        //{
-        //    Secret = db.Secrets.Find(secretId);
+    public class SeePlayerSecrets
+    {
+        public List<SecretComplete_PlayerVM> Secrets { get; set; }
+        public string CharacterName { get; set; }
+        public List<SecretTag> Tags { get; set; }
+        public short CharId { get; set; }
+    }
 
-        //    var selfTags = db.CharSecrets.Where(x => x.CharId == characterId).Select(x => x.SecretId);
-        //    Tags = (from s in db.SecretSecretTags
-        //            join st in db.SecretTags on s.SecretTagId equals st.SecretTagId
-        //            where s.SecretId == secretId && selfTags.Contains(s.SecretTagId)
-        //            select st)
-        //           .ToList()
-        //           ;
-        //}
+    public class RemoveSecretVM
+    {
+        public string Name { get; set; }
+        public short CharId { get; set; }
+        public IEnumerable<SelectListItem> SecretTags { get; set; }
     }
 }

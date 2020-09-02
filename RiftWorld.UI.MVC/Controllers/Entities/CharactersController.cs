@@ -21,13 +21,28 @@ namespace RiftWorld.UI.MVC.Controllers
         public ActionResult Index()
         {
             //v1 - for testing so I don't have to constantly switch accounts
-            var characters = db.Characters.Include(c => c.Gender).Include(c => c.Locale).Include(c => c.Race).Include(c => c.Tier).Include(c => c.UserDetails);
+            //var characters = db.Characters.Include(c => c.Gender).Include(c => c.Locale).Include(c => c.Race).Include(c => c.Tier).Include(c => c.UserDetails);
 
             //v2 - don't list unapproved characters
-            //todo - uncomment below to stop listing unapproved characters
-            //var characters = db.Characters.Include(c => c.Gender).Include(c => c.Locale).Include(c => c.Race).Include(c => c.Tier).Include(c => c.UserDetails).Where(c => c.IsApproved);
+            var characters = db.Characters.Include(c => c.Gender).Include(c => c.Locale).Include(c => c.Race).Include(c => c.Tier).Include(c => c.UserDetails).Where(c => c.IsApproved);
 
             return View(characters.ToList());
+        }
+
+        public ActionResult JournalHub(short? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Character character = db.Characters.Find(id);
+            if (character == null)
+            {
+                return HttpNotFound();
+            }
+
+            var journals = db.Journals.Where(x => x.CharacterId == id && x.IsApproved);
+            return View(journals.ToList());
         }
 
         // GET: Characters/Details/5
@@ -42,13 +57,71 @@ namespace RiftWorld.UI.MVC.Controllers
             {
                 return HttpNotFound();
             }
-            //todo - uncomment below to prevent getting an un-approved character
-            //if (!character.IsApproved)
-            //{
-            //    return View("Error");
-            //    //todo change redirect to a error page
-            //}
+            //prevent getting an un-approved character
+            if (!character.IsApproved && !User.IsInRole("Mod") && !User.IsInRole("Admin"))
+            {
+                return View("Error");
+                //todo change redirect to a error page
+            }
             return View(character);
+        }
+
+        public PartialViewResult _Journals(short id)
+        {
+            var journalsHolder = db.Journals.Where(x => x.CharacterId == id && x.IsApproved).OrderByDescending(x => x.OocDateWritten);
+            bool hasMore = false;
+            if (journalsHolder.Count() > 5)
+            {
+                hasMore = true;
+            }
+
+            List<MiniJournalVM> journalsMini = new List<MiniJournalVM>();
+            foreach (Journal journal in journalsHolder.Take(5))
+            {
+                MiniJournalVM toAdd = new MiniJournalVM(journal);
+                journalsMini.Add(toAdd);
+            }
+            JournalVM journals = new JournalVM { Journals = journalsMini, HasMore = hasMore, CharacterId = id };
+            return PartialView(journals);
+        }
+
+        [Authorize(Roles = "Admin")]
+        public ActionResult KnownSecrets(short? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Character character = db.Characters.Find(id);
+            if (character == null)
+            {
+                return HttpNotFound();
+            }
+            var selfTags = from c in db.CharSecrets
+                           where c.CharId == character.CharacterId
+                           select c.SecretId
+              ;
+            var known = from t in db.SecretSecretTags
+                        where selfTags.Contains(t.SecretTagId)
+                        select t.Secret
+                        ;
+            List<SecretComplete_PlayerVM> list = new List<SecretComplete_PlayerVM>() { };
+            foreach (Secret secret in known)
+            {
+                SecretComplete_PlayerVM toAdd = new SecretComplete_PlayerVM
+                {
+                    Secret = secret,
+                    Tags = (from s in db.SecretSecretTags
+                            join st in db.SecretTags on s.SecretTagId equals st.SecretTagId
+                            where s.SecretId == secret.SecretId && selfTags.Contains(s.SecretTagId)
+                            select st)
+                             .ToList()
+                };
+                list.Add(toAdd);
+            }
+            var tags = db.CharSecrets.Include(c => c.SecretTag).Where(c => c.CharId == id).Select(c => c.SecretTag).ToList();
+            SeePlayerSecrets model = new SeePlayerSecrets { CharacterName = character.CharacterName, CharId = character.CharacterId, Secrets = list, Tags = tags };
+            return View(model);
         }
 
         // GET: Characters/Create
@@ -165,8 +238,113 @@ namespace RiftWorld.UI.MVC.Controllers
             return View(character);
         }
 
+        [Authorize(Roles = "Mod, Admin")]
+        public ActionResult Approve(short? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Character character = db.Characters.Find(id);
+            if (character == null)
+            {
+                return HttpNotFound();
+            }
+
+            return View(character);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Mod, Admin")]
+        public ActionResult Approve(short characterId)
+        {
+            //todo - add logic to check if the approved thing and what's on the db match
+            Character character = db.Characters.Where(x => x.CharacterId == characterId).FirstOrDefault();
+            //check to see if other mod/admin has already denied this (thus it won't exist)
+            if (character == null)
+            {
+                ViewBag.Message = "Looks like another mod or the admin denied this character's existance";
+                return View("Error");
+            }
+            //check to see if other mod/admin has already approved this
+            if (character.IsApproved == true)
+            {
+                ViewBag.Message = "Looks like another mod or the admin approved this";
+                return View("Approvals", "Infos");
+            }
+            character.IsApproved = true;
+            character.HasUnseenEdit = false;
+
+            UserDetail playerDetail = db.UserDetails.Where(u => u.UserId == character.PlayerId).FirstOrDefault();
+            //check if the player actually exists
+            if (playerDetail == null)
+            {
+                character.IsRetired = true;
+                db.Entry(character).State = EntityState.Modified;
+                db.SaveChanges();
+
+                ViewBag.Message = "The player assigned to this character no longer exists, but the character has been approved. It will be labeled as retired";
+                return View("Approvals", "Infos");
+            }
+            playerDetail.CurrentCharacterId = character.CharacterId;
+
+            //role grabbing in preperation for changing acess throughout website (through adding of role "Character")
+            var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext()));
+
+            var player = db.AspNetUsers.Find(character.PlayerId);
+            var userRoles = userManager.GetRoles(player.Id);
+
+            var charRole = db.AspNetRoles.FirstOrDefault(u => u.Name.Equals("Character"));
+            var charRoleConvert = Convert.ToString(charRole.Name);
+            if (charRole != null && !userRoles.Contains(charRoleConvert))
+            {
+                userManager.AddToRole(player.Id, charRoleConvert);
+            }
+
+            db.Entry(character).State = EntityState.Modified;
+            db.Entry(playerDetail).State = EntityState.Modified;
+            db.SaveChanges();
+            return RedirectToAction("Details", new { id = characterId });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Mod, Admin")]
+        public ActionResult Deny(short characterId)
+        {
+            Character character = db.Characters.Where(x => x.CharacterId == characterId).FirstOrDefault();
+            //check to see if other mod/admin has already denied this (thus it won't exist)
+            if (character == null)
+            {
+                ViewBag.Message = "Looks like another mod or the admin denied this character's existance";
+                return View("Approvals", "Infos");
+            }
+            //check to see if other mod/admin has already approved this
+            if (character.IsApproved == true)
+            {
+                ViewBag.Message = "Looks like another mod or the admin approved this. If Katherine is reading this, you'll have to manually delete the character in order to undo this";
+                return View("Error");
+            }
+
+            //remove character from db
+            string picture = character.PortraitFileName;
+            db.Characters.Remove(character);
+
+            #region Remove Picture
+            string fullPath = Request.MapPath("~/Content/img/character/" + picture);
+            if (System.IO.File.Exists(fullPath))
+            {
+                System.IO.File.Delete(fullPath);
+            }
+            #endregion
+
+            db.SaveChanges();
+            return RedirectToAction("Approvals", "Infos");
+        }
+
         // GET: Characters/Edit/5
-        [Authorize(Roles = "Character, Mod, Admin")]
+        [Authorize(Roles = "Player, Admin, Mod, Character")]
         public ActionResult Edit(short? id)
         {
             if (id == null)
@@ -182,8 +360,13 @@ namespace RiftWorld.UI.MVC.Controllers
             string userid = User.Identity.GetUserId();
             short? currentCharacter = db.UserDetails.Where(u => u.UserId == userid).Select(u => u.CurrentCharacterId).FirstOrDefault();
 
+            if (!User.IsInRole("Character") && User.IsInRole("Player") && character.PlayerId != userid)
+            {
+                ViewBag.Message = "Hello Mr.Rogue. I am sorry but my amazing security skills have once again foiled yours. The character you are trying to edit does not belong to you.";
+                return View("Error");
+            }
             //if this isn't a mod, check that the character actually belongs to the current user (and is their 
-            if (User.IsInRole("Character") && !User.IsInRole("Mod") && currentCharacter != id)
+            else if (User.IsInRole("Character") && !User.IsInRole("Mod") && currentCharacter != id)
             {
                 ViewBag.Message = "Hello Mr.Rogue. I am sorry but my amazing security skills have once again foiled yours. The character you are trying to edit does not belong to you.";
                 return View("Error");
@@ -202,7 +385,7 @@ namespace RiftWorld.UI.MVC.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Character, Mod, Admin")]
+        [Authorize(Roles = "Player, Character, Mod, Admin")]
         public ActionResult Edit([Bind(Include = "CharacterId,PlayerId,CharacterName,RaceId,GenderId,PortraitFileName,Description,About,CurrentLocationId,TierId,IsRetired,IsApproved, Artist, ClassString, IsDead")] Character character,
             HttpPostedFileBase picture)
         {
@@ -210,7 +393,12 @@ namespace RiftWorld.UI.MVC.Controllers
             //make sure that if whoever is editing this is not a mod or admin that this is actually their character
             string userid = User.Identity.GetUserId();
             short? currentCharacter = db.UserDetails.Where(u => u.UserId == userid).Select(u => u.CurrentCharacterId).FirstOrDefault();
-            if (User.IsInRole("Character") && !User.IsInRole("Mod") && currentCharacter != character.CharacterId)
+            if (!User.IsInRole("Character") && User.IsInRole("Player") && character.PlayerId != userid)
+            {
+                ViewBag.Message = "Hello Mr.Rogue. I am sorry but my amazing security skills have once again foiled yours. The character you are trying to edit does not belong to you.";
+                return View("Error");
+            }
+            else if (User.IsInRole("Character") && !User.IsInRole("Mod") && currentCharacter != character.CharacterId)
             {
                 ViewBag.Message = "Hello Mr.Rogue. I am sorry but my amazing security skills have once again foiled yours. The character you are trying to edit does not belong to you.";
                 return View("Error");
@@ -272,6 +460,18 @@ namespace RiftWorld.UI.MVC.Controllers
                     imgName = "character-" + character.CharacterId.ToString() + ext;
 
                     picture.SaveAs(Server.MapPath("~/Content/img/character/" + imgName));
+                    //remove old picture if it had a different extension (and thus would not be overridden)
+                    string oldName = character.PortraitFileName;
+                    string oldExt = oldName.Substring(oldName.LastIndexOf('.'));
+                    if (oldExt != ext)
+                    {
+                        string fullPath = Request.MapPath("~/Content/img/character/" + oldName);
+                        if (System.IO.File.Exists(fullPath))
+                        {
+                            System.IO.File.Delete(fullPath);
+                        }
+                    }
+                    //assign new PortraitFileName
                     character.PortraitFileName = imgName;
                 }
                 #endregion
@@ -290,6 +490,16 @@ namespace RiftWorld.UI.MVC.Controllers
                 ModelState.AddModelError("PortraitFileName", "Hey, there was some error, so you have to re-upload the picture");
             }
             return View(character);
+        }
+
+        [Authorize(Roles = "Mod, Admin")]
+        public ActionResult RecognizeEdit(short id)
+        {
+            Character character = db.Characters.Where(x => x.CharacterId == id).FirstOrDefault();
+            character.HasUnseenEdit = false;
+            db.Entry(character).State = EntityState.Modified;
+            db.SaveChanges();
+            return RedirectToAction("Approvals", "Infos");
         }
 
         // GET: Characters/Delete/5
@@ -392,178 +602,6 @@ namespace RiftWorld.UI.MVC.Controllers
             return RedirectToAction("Index");
         }
 
-        [Authorize(Roles = "Character, Admin")]
-        public PartialViewResult _Secrets(short id)
-        {
-            #region Is this yours?
-            //make sure that if whoever is editing this is not a mod or admin that this is actually their character
-            string userid = User.Identity.GetUserId();
-            short? currentCharacter = db.UserDetails.Where(u => u.UserId == userid).Select(u => u.CurrentCharacterId).FirstOrDefault();
-            if (User.IsInRole("Character") && currentCharacter != id)
-            {
-                ViewBag.Message = "Hello Mr.Rogue. I am sorry but my amazing security skills have once again foiled yours. This list of secrets is not yours to see." ;
-                return PartialView("Error");
-            }
-            #endregion
-
-
-            var selfTags = from c in db.CharSecrets
-                           where c.CharId == id
-                           select c.SecretId
-                          ;
-            var known = from t in db.SecretSecretTags
-                        where selfTags.Contains(t.SecretTagId)
-                        select t.Secret
-                        ;
-            List<SecretComplete_PlayerVM> list = new List<SecretComplete_PlayerVM>() { };
-            foreach (Secret secret in known)
-            {
-                SecretComplete_PlayerVM toAdd = new SecretComplete_PlayerVM
-                {
-                    Secret = secret,
-                    Tags = (from s in db.SecretSecretTags
-                            join st in db.SecretTags on s.SecretTagId equals st.SecretTagId
-                            where s.SecretId == secret.SecretId && selfTags.Contains(s.SecretTagId)
-                            select st)
-                             .ToList()
-                };
-                list.Add(toAdd);
-            }
-            //GetSecretHubVM known = new GetSecretHubVM(id);
-            return PartialView(list);
-        }
-
-        [Authorize(Roles = "Mod, Admin")]
-        public ActionResult Approve(short? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Character character = db.Characters.Find(id);
-            if (character == null)
-            {
-                return HttpNotFound();
-            }
-
-            return View(character);
-        }
-
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Mod, Admin")]
-        public ActionResult Approve(short characterId)
-        {
-            //todo - add logic to check if the approved thing and what's on the db match
-            Character character = db.Characters.Where(x => x.CharacterId == characterId).FirstOrDefault();
-            //check to see if other mod/admin has already denied this (thus it won't exist)
-            if (character == null)
-            {
-                ViewBag.Message = "Looks like another mod or the admin denied this character's existance";
-                return View("Error");
-            }
-            //check to see if other mod/admin has already approved this
-            if (character.IsApproved == true)
-            {
-                ViewBag.Message = "Looks like another mod or the admin approved this";
-                return View("Approvals", "Infos");
-            }
-            character.IsApproved = true;
-            character.HasUnseenEdit = false;
-
-            UserDetail playerDetail = db.UserDetails.Where(u => u.UserId == character.PlayerId).FirstOrDefault();
-            //check if the player actually exists
-            if (playerDetail == null)
-            {
-                character.IsRetired = true;
-                db.Entry(character).State = EntityState.Modified;
-                db.SaveChanges();
-
-                ViewBag.Message = "The player assigned to this character no longer exists, but the character has been approved. It will be labeled as retired";
-                return View("Approvals", "Infos");
-            }
-            playerDetail.CurrentCharacterId = character.CharacterId;
-
-            //role grabbing in preperation for changing acess throughout website (through adding of role "Character")
-            var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext()));
-
-            var player = db.AspNetUsers.Find(character.PlayerId);
-            var userRoles = userManager.GetRoles(player.Id);
-
-            var charRole = db.AspNetRoles.FirstOrDefault(u => u.Name.Equals("Character"));
-            var charRoleConvert = Convert.ToString(charRole.Name);
-            if (charRole != null && !userRoles.Contains(charRoleConvert))
-            {
-                userManager.AddToRole(player.Id, charRoleConvert);
-            }
-
-            db.Entry(character).State = EntityState.Modified;
-            db.Entry(playerDetail).State = EntityState.Modified;
-            db.SaveChanges();
-            return RedirectToAction("Details", new { id = characterId });
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Mod, Admin")]
-        public ActionResult Deny(short characterId)
-        {
-            Character character = db.Characters.Where(x => x.CharacterId == characterId).FirstOrDefault();
-            //check to see if other mod/admin has already denied this (thus it won't exist)
-            if (character == null)
-            {
-                ViewBag.Message = "Looks like another mod or the admin denied this character's existance";
-                return View("Approvals", "Infos");
-            }
-            //check to see if other mod/admin has already approved this
-            if (character.IsApproved == true)
-            {
-                ViewBag.Message = "Looks like another mod or the admin approved this. If Katherine is reading this, you'll have to manually delete the character in order to undo this";
-                return View("Error");
-            }
-
-            //remove character from db
-            string picture = character.PortraitFileName;
-            db.Characters.Remove(character);
-
-            #region Remove Picture
-            string fullPath = Request.MapPath("~/Content/img/character/" + picture);
-            if (System.IO.File.Exists(fullPath))
-            {
-                System.IO.File.Delete(fullPath);
-            }
-            #endregion
-
-            db.SaveChanges();
-            return RedirectToAction("Approvals", "Infos");
-        }
-
-        [Authorize(Roles = "Character")]
-        public ActionResult Hub(short? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Character character = db.Characters.Find(id);
-            if (character == null)
-            {
-                return HttpNotFound();
-            }
-
-            string userid = User.Identity.GetUserId();
-            short? currentCharacter = db.UserDetails.Where(u => u.UserId == userid).Select(u => u.CurrentCharacterId).FirstOrDefault();
-            //check if this is the user's actual character
-            if (currentCharacter != id)
-            {
-                ViewBag.Message = "Excuse me, rogue. Yes, you at the screen. This isn't your current character. You can't go there.";
-                return View("Error");
-            }
-            return View(character);
-        }
-
         [Authorize(Roles = "Mod, Admin")]
         public ActionResult Retire(short? id, bool didTheyDie)
         {
@@ -603,41 +641,6 @@ namespace RiftWorld.UI.MVC.Controllers
 
             db.SaveChanges();
             return RedirectToAction("Details", new { id = id });
-        }
-
-        public ActionResult JournalHub(short? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Character character = db.Characters.Find(id);
-            if (character == null)
-            {
-                return HttpNotFound();
-            }
-
-            var journals = db.Journals.Where(x => x.CharacterId == id && x.IsApproved);
-            return View(journals.ToList());
-        }
-
-        public PartialViewResult _Journals(short id)
-        {
-            var journalsHolder = db.Journals.Where(x => x.CharacterId == id && x.IsApproved).OrderByDescending(x => x.OocDateWritten);
-            bool hasMore = false;
-            if (journalsHolder.Count() > 5)
-            {
-                hasMore = true;
-            }
-
-            List<MiniJournalVM> journalsMini = new List<MiniJournalVM>();
-            foreach (Journal journal in journalsHolder.Take(5))
-            {
-                MiniJournalVM toAdd = new MiniJournalVM(journal);
-                journalsMini.Add(toAdd);
-            }
-            JournalVM journals = new JournalVM { Journals = journalsMini, HasMore = hasMore, CharacterId = id };
-            return PartialView(journals);
         }
 
         protected override void Dispose(bool disposing)

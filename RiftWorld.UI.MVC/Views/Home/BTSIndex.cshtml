@@ -1,0 +1,19 @@
+﻿
+@{
+    ViewBag.Title = "BTSIndex";
+}
+
+<div class="col-12">
+
+    <h2>BTS Lists</h2>
+    @Html.ActionLink("Classes", "Index", "Classes", null, new { @class="btn btn-info"})
+    @Html.ActionLink("Species", "Index", "Species", null, new { @class = "btn btn-info" })
+    @Html.ActionLink("Genders", "Index", "Genders", null, new { @class = "btn btn-info" })
+    @Html.ActionLink("Secret Tags", "Index", "SecretTags", null, new { @class = "btn btn-info" })
+    @Html.ActionLink("Tags","Index", "Tags", null, new { @class = "btn btn-info" })
+    @Html.ActionLink("Secrets", "Index", "Secrets", null, new { @class = "btn btn-info" })
+
+    <h2>Less useful (but just in case)</h2>
+    @Html.ActionLink("Stories", "Index", "Stories", null, new { @class = "btn btn-info" })
+    @Html.ActionLink("Rumors", "Index", "Rumors", null, new { @class = "btn btn-info" })
+</div>

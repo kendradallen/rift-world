@@ -1,77 +1,139 @@
-﻿@model RiftWorld.UI.MVC.Models.IndexViewModel
+﻿@model RiftWorld.UI.MVC.Models.IndexViewModel2
 @{
     ViewBag.Title = "Manage your account";
 }
 
-<h2>@ViewBag.Title.</h2>
-<p class="text-success">@ViewBag.StatusMessage</p>
-<div class="row">
-    <div class="col-md-8">
-        <p>
-            @(Model.HasPassword ? Html.ActionLink("Change your password", "ChangePassword") 
-                : Html.ActionLink("Pick a password", "SetPassword"))
-        </p>
-        <p>
-            Phone Number: @(Model.PhoneNumber ?? "None") [
-            @if (Model.PhoneNumber != null)
+<div class="col-12">
+
+    <h2>@ViewBag.Title</h2>
+    <p class="text-success">@ViewBag.StatusMessage</p>
+    <div class="row">
+        <div class="col-md-12">
+            <p>
+                @(Model.HasPassword ? Html.ActionLink("Change your password", "ChangePassword")
+                                    : Html.ActionLink("Pick a password", "SetPassword"))
+            </p>
+        </div>
+        <div class="col-md-12">
+            <h4>Account Details</h4> 
+            <div class="row">
+                <p class="col-12">
+                    <b>@Html.LabelFor(model => model.Email): </b> @Html.DisplayFor(model => model.Email)
+                </p>
+                <div class="col-12">
+                    <p>
+                        <b>Discord Account:</b> @Html.DisplayFor(model => model.Deets.DiscordFull)
+                    </p>
+                </div>
+                <aside>If any of the above are incorrect please contact Katherine in order to fix them</aside>
+                <div class="col-12">
+                    @if(Model.PendingCharacterId != null)
+                    {
+                        <h5 class="text-danger">Currently @Html.DisplayFor(model => model.PendingCharacterName) is currently under approval</h5>
+                        @Html.ActionLink("Edit", "Edit", "Characters", new { id = Model.PendingCharacterId}, new { @class = "btn btn-warning" })
+                    }
+                    else if (Model.Deets.CurrentCharacterId != null)
+                    {
+                        <h5>Current Character</h5>
+                        @Html.ActionLink(Model.Deets.Character.CharacterName, "Index", "Hub",null, null)
+                    }
+                    else
+                    {
+                        <p>You don't have a character right now. Not even under approval</p>
+                        if (!User.IsInRole("Admin"))
+                        {
+                            @Html.ActionLink("Would you like to make one?", "Create", "Characters", null, null)
+                        }
+                    }
+                </div>
+                @if (Model.Deets.ConsentFileName != null)
+                {
+                    <div class="col-md-8 offset-md-2">
+                        <h5>Current Consent File</h5>
+                        <iframe src="~/Content/ConsentFiles/@Model.Deets.ConsentFileName" width="100%" height="500px"></iframe>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@*@model RiftWorld.UI.MVC.Models.IndexViewModel
+    @{
+        ViewBag.Title = "Manage your account";
+    }
+
+    <h2>@ViewBag.Title.</h2>
+    <p class="text-success">@ViewBag.StatusMessage</p>
+    <div class="row">
+        <div class="col-md-8">
+            <p>
+                @(Model.HasPassword ? Html.ActionLink("Change your password", "ChangePassword")
+                    : Html.ActionLink("Pick a password", "SetPassword"))
+            </p>
+            <p>
+                Phone Number: @(Model.PhoneNumber ?? "None") [
+                @if (Model.PhoneNumber != null)
+                {
+                    @Html.ActionLink("Change", "AddPhoneNumber")
+                    @: &nbsp;|&nbsp;
+                    @Html.ActionLink("Remove", "RemovePhoneNumber")
+                }
+                else
+                {
+                    @Html.ActionLink("Add", "AddPhoneNumber")
+                }
+                ]
+            </p>
+            <p>
+                External Logins: @Model.Logins.Count
+                @Html.ActionLink("[Manage]", "ManageLogins")
+            </p>
+            @if (Model.TwoFactor)
             {
-                @Html.ActionLink("Change", "AddPhoneNumber")
-                @: &nbsp;|&nbsp;
-                @Html.ActionLink("Remove", "RemovePhoneNumber")
+                using (Html.BeginForm("DisableTFA", "Manage", FormMethod.Post, new {@class = "form-horizontal", role = "form"}))
+                {
+                     @Html.AntiForgeryToken()
+                     <p>
+                         Two factor is currently enabled:
+                         <input type="submit" value="Disable" class="btn btn-default"/>
+                     </p>
+                }
             }
             else
             {
-                @Html.ActionLink("Add", "AddPhoneNumber")
+                using (Html.BeginForm("EnableTFA", "Manage", FormMethod.Post, new {@class = "form-horizontal", role = "form"}))
+                {
+                    @Html.AntiForgeryToken()
+                    <p>
+                        Two factor is currently disabled:
+                        <input type="submit" value="Enable" class="btn btn-default"/>
+                    </p>
+                }
             }
-            ]
-        </p>
-        <p>
-            External Logins: @Model.Logins.Count
-            @Html.ActionLink("[Manage]", "ManageLogins")
-        </p>
-        @if (Model.TwoFactor)
-        {
-            using (Html.BeginForm("DisableTFA", "Manage", FormMethod.Post, new {@class = "form-horizontal", role = "form"}))
+            @if (Model.BrowserRemembered)
             {
-                 @Html.AntiForgeryToken()
-                 <p>
-                     Two factor is currently enabled:
-                     <input type="submit" value="Disable" class="btn btn-default"/>
-                 </p>
+                using (Html.BeginForm("ForgetBrowser", "Manage", FormMethod.Post, new {@class = "form-horizontal", role = "form"}))
+                {
+                    @Html.AntiForgeryToken()
+                    <p>
+                        Browser is curently remembered for two factor:
+                        <input type="submit" value="Forget Browser" class="btn btn-default" />
+                    </p>
+                }
             }
-        }
-        else
-        {
-            using (Html.BeginForm("EnableTFA", "Manage", FormMethod.Post, new {@class = "form-horizontal", role = "form"}))
+            else
             {
-                @Html.AntiForgeryToken()
-                <p>
-                    Two factor is currently disabled:
-                    <input type="submit" value="Enable" class="btn btn-default"/>
-                </p>
+                using (Html.BeginForm("RememberBrowser", "Manage", FormMethod.Post, new {@class = "form-horizontal", role = "form"}))
+                {
+                    @Html.AntiForgeryToken()
+                    <p>
+                        Browser is curently not remembered for two factor:
+                        <input type="submit" value="Remember Browser" class="btn btn-default"/>
+                    </p>
+                }
             }
-        }
-        @if (Model.BrowserRemembered)
-        {
-            using (Html.BeginForm("ForgetBrowser", "Manage", FormMethod.Post, new {@class = "form-horizontal", role = "form"}))
-            {
-                @Html.AntiForgeryToken()
-                <p>
-                    Browser is curently remembered for two factor:
-                    <input type="submit" value="Forget Browser" class="btn btn-default" />
-                </p>
-            }
-        }
-        else
-        {
-            using (Html.BeginForm("RememberBrowser", "Manage", FormMethod.Post, new {@class = "form-horizontal", role = "form"}))
-            {
-                @Html.AntiForgeryToken()
-                <p>
-                    Browser is curently not remembered for two factor:
-                    <input type="submit" value="Remember Browser" class="btn btn-default"/>
-                </p>
-            }
-        }
-    </div>
-</div>
+        </div>
+    </div>*@

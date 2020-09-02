@@ -1,0 +1,52 @@
+﻿@model RiftWorld.UI.MVC.Models._LocaleEventsFullVM
+@using RiftWorld.UI.MVC.Models
+
+@{
+    bool bothExist = true;
+    if (Model.Holidays.Count == 0 || Model.PastEvents.Count == 0)
+    {
+        bothExist = false;
+    }
+    bool exist = true;
+    if (Model.Holidays.Count == 0 && Model.PastEvents.Count == 0)
+    {
+        exist = false;
+    }
+}
+
+@if (exist)
+{
+    <section id="events" class="col-12 row" name="Events">
+        @if (Model.Holidays.Count != 0)
+        {
+            <div class="@(bothExist ? "col-md-6": "col-12")">
+                <h2 class="line">@Html.DisplayNameFor(model => model.Holidays)</h2>
+                <ul>
+                    @foreach (var item in Model.Holidays)
+                    {
+                        <li>
+                            @Html.DisplayFor(modelItem => item.Month) @Html.DisplayFor(modelItem => item.Day) -
+                            @Html.ActionLink(item.Name, "Details", "Events", new { id = item.Id }, null)
+                        </li>
+                    }
+                </ul>
+            </div>
+        }
+        @if (Model.PastEvents.Count != 0)
+        {
+            <div class="@(bothExist ? "col-md-6": "col-12")">
+                <h2 class="line">@Html.DisplayNameFor(model => model.PastEvents)</h2>
+                <ul>
+                    @foreach (var item in Model.PastEvents)
+                    {
+                        <li>
+                            @Html.DisplayFor(modelItem => item.Month) @Html.DisplayFor(modelItem => item.Day), @Html.DisplayFor(modelItem => item.Year) @(item.Era.IsEmpty() ? "" : "of the " + Html.DisplayFor(modelItem => item.Era) + " era") -
+                            @Html.ActionLink(item.Name, "Details", "Events", new { id = item.Id }, null)
+                        </li>
+                    }
+                </ul>
+            </div>
+        }
+
+    </section>
+}

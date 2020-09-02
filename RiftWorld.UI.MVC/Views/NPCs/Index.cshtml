@@ -100,7 +100,7 @@
                 </td>*@
             <td>
                 @Html.ActionLink("Edit", "Edit", new { id = item.NpcId }) |
-                @Html.ActionLink("Details", "DetailsV2", new { id = item.NpcId }) |
+                @Html.ActionLink("Details", "Details", new { id = item.NpcId }) |
                 @Html.ActionLink("Delete", "Delete", new { id = item.NpcId })
             </td>
         </tr>
@@ -112,7 +112,7 @@
     <script>
         $('.info-box-click').click(function () {
             var daid = $(this).attr("id");
-            window.location.href = "/NPCs/DetailsV2/" + daid;
+            window.location.href = "/NPCs/Details/" + daid;
         })
     </script>
     }

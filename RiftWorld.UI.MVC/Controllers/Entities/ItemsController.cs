@@ -11,8 +11,7 @@ using RiftWorld.UI.MVC.Models;
 
 namespace RiftWorld.UI.MVC.Controllers.Entities
 {
-    //todo - uncomment to lockdown controller
-    //[Authorize(Roles ="Admin")]
+    [Authorize(Roles = "Admin")]
     public class ItemsController : Controller
     {
         private RiftWorldEntities db = new RiftWorldEntities();
@@ -44,12 +43,12 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                 return HttpNotFound();
             }
 
-            //todo - uncomment below to prevent users from seeing un-published work
-            //if (!item.IsPublished && !User.IsInRole("Admin"))
-            //{
-            //    return View("Error");
-            //    //todo change redirect to a error 404 page
-            //}
+            //prevent users from seeing un-published work
+            if (!item.IsPublished && !User.IsInRole("Admin"))
+            {
+                return View("Error");
+                //todo change redirect to a error 404 page
+            }
 
             return View(item);
         }
@@ -228,23 +227,10 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ItemId,InfoId,Name,Blurb,PictureFileName,DescriptionText,PropertyText,HistoryText, Artist")] ItemEditPostVM item,
+        public ActionResult Edit([Bind(Include = "ItemId,InfoId,Name,Blurb,PictureFileName,DescriptionText,PropertyText,HistoryText, Artist, IsPublished")] ItemEditPostVM item,
             HttpPostedFileBase picture,
             List<short> tags, string submit)
         {
-            #region Save or Publish?
-            switch (submit)
-            {
-                case "Save Progress":
-                case "Un-Publish":
-                    item.IsPublished = false;
-                    break;
-                case "Publish":
-                case "Save":
-                    item.IsPublished = true;
-                    break;
-            }
-            #endregion
 
             #region Pre-model picture check
             if (picture != null)
@@ -274,6 +260,20 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
 
             if (ModelState.IsValid)
             {
+                #region Save or Publish?
+                switch (submit)
+                {
+                    case "Save Progress":
+                    case "Un-Publish":
+                        item.IsPublished = false;
+                        break;
+                    case "Publish":
+                    case "Save":
+                        item.IsPublished = true;
+                        break;
+                }
+                #endregion
+
                 var infoid = item.InfoId;
                 #region Info Update
                 //Info info = db.Infos.Find(infoid);
@@ -332,10 +332,18 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
 
                         picture.SaveAs(Server.MapPath("~/Content/img/item/" + imgName));
                     }
-                    else
+                    //remove old picture if it had a different extension (and thus would not be overridden)
+                    string oldName = item.PictureFileName;
+                    string oldExt = oldName.Substring(oldName.LastIndexOf('.'));
+                    if (oldExt != ext)
                     {
-                        imgName = "default.jpg";
+                        string fullPath = Request.MapPath("~/Content/img/item/" + oldName);
+                        if (System.IO.File.Exists(fullPath))
+                        {
+                            System.IO.File.Delete(fullPath);
+                        }
                     }
+                    //assign new PictureFileName
                     item.PictureFileName = imgName;
                 }
                 #endregion

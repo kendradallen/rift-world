@@ -10,6 +10,7 @@ using RiftWorld.DATA.EF;
 
 namespace RiftWorld.UI.MVC.Controllers.BehindTheScenes
 {
+    [Authorize(Roles ="Admin")]
     public class ClassesController : Controller
     {
         private RiftWorldEntities db = new RiftWorldEntities();
@@ -21,19 +22,19 @@ namespace RiftWorld.UI.MVC.Controllers.BehindTheScenes
         }
 
         // GET: Classes/Details/5
-        public ActionResult Details(byte? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Class @class = db.Classes.Find(id);
-            if (@class == null)
-            {
-                return HttpNotFound();
-            }
-            return View(@class);
-        }
+        //public ActionResult Details(byte? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        //    }
+        //    Class taclass = db.Classes.Find(id);
+        //    if (taclass == null)
+        //    {
+        //        return HttpNotFound();
+        //    }
+        //    return View(taclass);
+        //}
 
         // GET: Classes/Create
         public ActionResult Create()
@@ -46,16 +47,17 @@ namespace RiftWorld.UI.MVC.Controllers.BehindTheScenes
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ClassId,ClassName,IsPlayerEnabled")] Class @class)
+        public ActionResult Create([Bind(Include = "ClassId,ClassName,IsPlayerEnabled")] Class taclass)
         {
+            //todo - on this and every other BTS controller, prevent the creation of a duplicate name
             if (ModelState.IsValid)
             {
-                db.Classes.Add(@class);
+                db.Classes.Add(taclass);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("CreateWhat", "Infos");
             }
 
-            return View(@class);
+            return View(taclass);
         }
 
         // GET: Classes/Edit/5
@@ -65,12 +67,12 @@ namespace RiftWorld.UI.MVC.Controllers.BehindTheScenes
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Class @class = db.Classes.Find(id);
-            if (@class == null)
+            Class taclass = db.Classes.Find(id);
+            if (taclass == null)
             {
                 return HttpNotFound();
             }
-            return View(@class);
+            return View(taclass);
         }
 
         // POST: Classes/Edit/5
@@ -78,15 +80,15 @@ namespace RiftWorld.UI.MVC.Controllers.BehindTheScenes
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ClassId,ClassName,IsPlayerEnabled")] Class @class)
+        public ActionResult Edit([Bind(Include = "ClassId,ClassName,IsPlayerEnabled")] Class taclass)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(@class).State = EntityState.Modified;
+                db.Entry(taclass).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(@class);
+            return View(taclass);
         }
 
         // GET: Classes/Delete/5
@@ -96,12 +98,19 @@ namespace RiftWorld.UI.MVC.Controllers.BehindTheScenes
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Class @class = db.Classes.Find(id);
-            if (@class == null)
+            Class taclass = db.Classes.Find(id);
+            if (taclass == null)
             {
                 return HttpNotFound();
             }
-            return View(@class);
+            int characters = db.ClassCharacters.Where(x => x.ClassId == id).Select(x => x.CharacterId).ToList().Count;
+            int npcs = db.ClassNPCs.Where(x => x.ClassId == id).Select(x => x.NpcId).ToList().Count;
+            if (characters != 0 || npcs != 0)
+            {
+                ViewBag.Message = "Something in the database is using this class currently. You can't delete a class unless nothing is using it. You'll have find the entries using the class and change them first.";
+                return View("Error");
+            }
+            return View(taclass);
         }
 
         // POST: Classes/Delete/5
@@ -109,8 +118,8 @@ namespace RiftWorld.UI.MVC.Controllers.BehindTheScenes
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(byte id)
         {
-            Class @class = db.Classes.Find(id);
-            db.Classes.Remove(@class);
+            Class taclass = db.Classes.Find(id);
+            db.Classes.Remove(taclass);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

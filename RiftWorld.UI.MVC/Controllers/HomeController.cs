@@ -42,21 +42,29 @@ namespace RiftWorld.UI.MVC.Controllers
             return View();
         }
 
-        public ActionResult SearchSite(string search)
-        {
-            List<Info> result =
-                (
-                from ti in db.InfoTags
-                where ti.Info.Name.Contains(search)
-                    || ti.Tag.TagName.Contains(search)
-                select ti.Info
-                ).ToList()
-                ;
-            return View("Search Result", result);
-        }
+        //public ActionResult SearchSite(string search)
+        //{
+        //    List<Info> result =
+        //        (
+        //        from ti in db.InfoTags
+        //        where ti.Info.Name.Contains(search)
+        //            || ti.Tag.TagName.Contains(search)
+        //        select ti.Info
+        //        ).ToList()
+        //        ;
+        //    return View("Search Result", result);
+        //}
 
         [HttpGet]
         public ActionResult Community()
+        {
+            return View();
+        }
+
+
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        public ActionResult BTSIndex()
         {
             return View();
         }

@@ -38,7 +38,7 @@
     @if (Request.IsAuthenticated && User.IsInRole("Character"))
     {
         <li><a href="@Url.Action("Create", "Journals")">Journal <i class="fas fa-feather-alt"></i></a></li>
-        <li><a href="@Url.Action("Hub", "Characters", new { id = charId })">Character</a></li>
+        <li><a href="@Url.Action("Index", "Hub")">Character</a></li>
     }
     else if (Request.IsAuthenticated && User.IsInRole("Admin"))
     {

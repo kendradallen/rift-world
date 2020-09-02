@@ -96,7 +96,8 @@
                 @*@Html.EditorFor(model => model.PortraitFileName, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.PortraitFileName, "", new { @class = "text-danger" })*@
                 @Html.HiddenFor(model => model.PortraitFileName)
-                <input type="file" name="picture" />
+                <input type="file" name="picture" id="imgInp" />
+                <img class="img-fluid img-thumbnail border-00" src="#" id="imgPre" />
                 @Html.ValidationMessageFor(model => model.PortraitFileName, "", new { @class = "text-danger" })
 
             </div>
@@ -188,5 +189,11 @@
             showSearch: false,
             placeholder: 'Placeholder Text Here'
         })
+
+        //preview of uploaded img
+        $("#imgInp").change(function () {
+            readURL(this, '#imgPre');
+        });
+
     </script>
 }

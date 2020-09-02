@@ -70,6 +70,10 @@ namespace RiftWorld.DATA.EF
         {
             get
             {
+                if (IsDead)
+                {
+                    return "Dead";
+                }
                 if (IsRetired)
                 {
                     return "Retired";
@@ -126,7 +130,9 @@ namespace RiftWorld.DATA.EF
         //public byte ClassId { get; set; }
         [Required(ErrorMessage = "Katherine, seriously. If you're going to make a new class you need to actually name it.")]
         [StringLength(15, ErrorMessage = "Too long. You have 15 characters; try again.")]
+        [Display(Name ="Name")]
         public string ClassName { get; set; }
+        [Display(Name ="Player Enabled")]
         public bool IsPlayerEnabled { get; set; }
 
     }
@@ -215,6 +221,42 @@ namespace RiftWorld.DATA.EF
                 }
             }
         }
+        public string Month
+        {
+            get
+            {
+                //note to self, when changing these remember to also change the ViewModels of _LocaleEventsVM and _OrgEventsVM
+                switch (DateMonth)
+                {
+                    case 1:
+                        return "Hammer";
+                    case 2:
+                        return "Alturiak";
+                    case 3:
+                        return "Ches";
+                    case 4:
+                        return "Tarsakh";
+                    case 5:
+                        return "Mirthul";
+                    case 6:
+                        return "Kythorn";
+                    case 7:
+                        return "Flamerule";
+                    case 8:
+                        return "Eleasias";
+                    case 9:
+                        return "Elient";
+                    case 10:
+                        return "Marpenoth";
+                    case 11:
+                        return "Uktar";
+                    case 12:
+                        return "Nightal";
+                    default:
+                        return "Uhhhhh, wait...";
+                }
+            }
+        }
     }
 
     #endregion
@@ -224,7 +266,7 @@ namespace RiftWorld.DATA.EF
     {
         //public byte GenderId { get; set; }
         [Required(ErrorMessage = "No matter how much you want it, I can't let you make a nameless gender.")]
-        [StringLength(20, ErrorMessage = "Do me a favor and please make it shorter. I only planned for gender names of 15 characters.")]
+        [StringLength(20, ErrorMessage = "Do me a favor and please make it shorter. I only planned for gender names of 20 characters.")]
         [Display(Name = "Gender")]
         public string GenderName { get; set; }
 
@@ -891,11 +933,11 @@ namespace RiftWorld.DATA.EF
         //public short SecretTagId { get; set; }
 
         [Required]
-        [StringLength(30)]
+        [StringLength(30, ErrorMessage = " ")]
         public string Name { get; set; }
 
         [Required]
-        [StringLength(75)]
+        [StringLength(75, ErrorMessage = " ")]
         public string Description { get; set; }
     }
 
@@ -949,11 +991,11 @@ namespace RiftWorld.DATA.EF
     {
         //public short TagId { get; set; }
         [Required]
-        [StringLength(25)]
+        [StringLength(25, ErrorMessage = " ")]
         [Display(Name = "Name")]
         public string TagName { get; set; }
 
-        [StringLength(75)]
+        [StringLength(75, ErrorMessage = " ")]
         public string Description { get; set; }
 
     }
@@ -1015,7 +1057,7 @@ namespace RiftWorld.DATA.EF
         {
             get
             {
-                return DiscordName + "#" + DiscordDiscriminator;
+                return $"{DiscordName}#{DiscordDiscriminator:D4}";
             }
         }
     }

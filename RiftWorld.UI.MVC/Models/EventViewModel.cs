@@ -44,6 +44,7 @@ namespace RiftWorld.UI.MVC.Models
 
         [UIHint("MultilineText")]
         [Display(Name = "Normal Participants")]
+        [AllowHtml]
         public string NormalParticipants
         {
             get { return _normalParticipants; }
@@ -62,6 +63,7 @@ namespace RiftWorld.UI.MVC.Models
 
         [UIHint("MultilineText")]
         [Display(Name = "About")]
+        [AllowHtml]
         public string AboutText
         {
             get { return _aboutText; }
@@ -120,6 +122,7 @@ namespace RiftWorld.UI.MVC.Models
 
         [UIHint("MultilineText")]
         [Display(Name = "Normal Participants")]
+        [AllowHtml]
         public string NormalParticipants
         {
             get { return _normalParticipants; }
@@ -138,6 +141,7 @@ namespace RiftWorld.UI.MVC.Models
 
         [UIHint("MultilineText")]
         [Display(Name = "About")]
+        [AllowHtml]
         public string AboutText
         {
             get { return _aboutText; }
@@ -214,6 +218,7 @@ namespace RiftWorld.UI.MVC.Models
 
         [UIHint("MultilineText")]
         [Display(Name = "Normal Participants")]
+        [AllowHtml]
         public string NormalParticipants
         {
             get
@@ -242,6 +247,7 @@ namespace RiftWorld.UI.MVC.Models
 
         [UIHint("MultilineText")]
         [Display(Name = "About")]
+        [AllowHtml]
         public string AboutText
         {
             get
@@ -340,5 +346,17 @@ namespace RiftWorld.UI.MVC.Models
             OrgId = orgEvent.OrgId;
             Blurb = orgEvent.Blurb;
         }
+    }
+
+    public class _EventOrgsVM
+    {
+        public string Name { get; set; }
+        public short Id { get; set; }
+    }
+
+    public class _EventLocalesVM
+    {
+        public string Name { get; set; }
+        public short Id { get; set; }
     }
 }

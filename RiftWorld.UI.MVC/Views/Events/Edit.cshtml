@@ -192,9 +192,9 @@
 
     }
 
-    <div style="text-align:left;">
-        @Html.ActionLink("Back to List", "Index")
-    </div>
+        <div style="text-align:left;">
+            @Html.ActionLink("Cancel", "Details", new { id = Model.EventId })
+        </div>
 </div>
 @section Scripts{
     <script src="~/Scripts/MyJS/edit.js"></script>

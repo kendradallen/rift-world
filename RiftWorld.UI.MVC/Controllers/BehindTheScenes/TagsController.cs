@@ -10,11 +10,13 @@ using RiftWorld.DATA.EF;
 
 namespace RiftWorld.UI.MVC.Controllers.BehindTheScenes
 {
+    [Authorize(Roles = "Admin")]
     public class TagsController : Controller
     {
         private RiftWorldEntities db = new RiftWorldEntities();
 
         // GET: Tags
+        [OverrideAuthorization]
         public ActionResult Index()
         {
             return View(db.Tags.ToList());
@@ -48,11 +50,12 @@ namespace RiftWorld.UI.MVC.Controllers.BehindTheScenes
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "TagId,TagName,Description")] Tag tag)
         {
+            //todo - add a trim to all creates and edits for bts and names in general (this is a bonus goal)
             if (ModelState.IsValid)
             {
                 db.Tags.Add(tag);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("CreateWhat", "Infos");
             }
 
             return View(tag);
@@ -100,6 +103,15 @@ namespace RiftWorld.UI.MVC.Controllers.BehindTheScenes
             if (tag == null)
             {
                 return HttpNotFound();
+            }
+
+            int infos = db.InfoTags.Where(x => x.TagId == id).Select(x => x.InfoId).ToList().Count;
+            int stories = db.StoryTags.Where(x => x.TagId == id).Select(x => x.StoryId).ToList().Count;
+            //todo - v2 cascade a removal instead of preventing deletion
+            if (infos != 0 || stories != 0)
+            {
+                ViewBag.Message = "Something in the database is using this tag currently. You can't delete a tag unless nothing is using it. You'll have find the entries using the tag and change them first.";
+                return View("Error");
             }
             return View(tag);
         }

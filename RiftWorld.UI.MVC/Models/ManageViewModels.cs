@@ -2,9 +2,21 @@
 using Microsoft.Owin.Security;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+//added for indexVM2
+using RiftWorld.DATA.EF;
+using System;
 
 namespace RiftWorld.UI.MVC.Models
 {
+    public class IndexViewModel2
+    {
+        public bool HasPassword { get; set; }
+        public UserDetail Deets { get; set; }
+        public Nullable<short> PendingCharacterId { get; set; }
+        public string PendingCharacterName { get; set; }
+        public string Email { get; set; }
+    }
+
     public class IndexViewModel
     {
         public bool HasPassword { get; set; }

@@ -22,7 +22,7 @@
                     <div class="padder">
                         @*<img src="https://vignette.wikia.nocookie.net/criticalrole/images/9/91/Percy2.png/revision/latest/scale-to-width-down/310?cb=20151228164610" />*@
                         <img src="~/Content/img/character/@Model.PortraitFileName" />
-                        <div class="overlay-character">Art by @Model.Artist</div>
+                        <div class="overlay char">Art by @Model.Artist</div>
                     </div>
                 </div>
             </div>
@@ -38,15 +38,51 @@
                     <div class="col-auto">
                         <span class="dt">@Html.DisplayNameFor(model => model.RaceId):</span> @Html.DisplayFor(model => model.Race.RaceName)
                         @*@if (Model.Gender.IconName != null)
-                        {
-                            <i class="fas fa-@Model.Gender.IconName" title="@Model.Gender.GenderName"></i>
-                        }*@
+                            {
+                                <i class="fas fa-@Model.Gender.IconName" title="@Model.Gender.GenderName"></i>
+                            }*@
                     </div>
                     <div class="col-auto divider">
                         |
                     </div>
                     <div class="col-auto end">
-                        <span class="dt">@Html.DisplayNameFor(model => model.GenderId):</span> @Model.Gender.GenderName
+                        <span class="dt">@Html.DisplayNameFor(model => model.GenderId):</span>
+                        @if (Model.Gender.GenderName == "Wildcard")
+                        {
+                            <span style="color: red;">W</span>
+                            <span style="color: orange;">i</span>
+                            <span style="color: gold;">l</span>
+                            <span style="color: green;">d</span>
+                            <span style="color: blue;">c</span>
+                            <span style="color: indigo;">a</span>
+                            <span style="color: purple;">r</span>
+                            <span>d</span>
+                        }
+                        @if (Model.Gender.GenderName == "Wildmagic Incarnate")
+                        {
+                            <span style="color: red;">W</span>
+                            <span style="color: orange;">i</span>
+                            <span style="color: gold;">l</span>
+                            <span style="color: green;">d</span>
+                            <span style="color: blue;">m</span>
+                            <span style="color: indigo;">a</span>
+                            <span style="color: purple;">g</span>
+                            <span style="color: red;">i</span>
+                            <span style="color: orange;">c &nbsp;</span>
+                            <span style="color: gold;">I</span>
+                            <span style="color: green;">n</span>
+                            <span style="color: blue;">c</span>
+                            <span style="color: indigo;">a</span>
+                            <span style="color: purple;">r</span>
+                            <span style="color: red;">n</span>
+                            <span style="color: orange;">a</span>
+                            <span style="color: gold;">t</span>
+                            <span style="color: green;">e</span>
+                        }
+                        else
+                        {
+                            @Model.Gender.GenderName
+                        }
                     </div>
                 </div>
                 <div class=" row chara-space">
@@ -91,3 +127,35 @@
     <pre>@Html.DisplayFor(model => model.About)</pre>
 </section>
 @Html.Action("_Journals", "Characters", new { id = Model.CharacterId })
+
+@if (User.IsInRole("Admin"))
+{
+    <nav id="adminNav" class="navbar fixed-bottom navbar-light navbar-expand-md">
+        <span class="navbar-brand">Katherine's Bar</span>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    @Html.ActionLink("Edit", "Edit", new { id = Model.CharacterId }, new { @class = "nav-link" })
+                </li>
+                @if (!Model.IsRetired)
+                {
+                    <li class="nav-item">
+                        @Html.ActionLink("Known Secrets", "KnownSecrets", new { id = Model.CharacterId }, new { @class = "nav-link" })
+                    </li>
+                }
+                <li class="nav-item">
+                    @Html.ActionLink("Retire", "Retire", new { id = Model.CharacterId }, new { @class = "nav-link" })
+                </li>
+                <li class="nav-item">
+                    @Html.ActionLink("Delete", "Delete", new { id = Model.CharacterId }, new { @class = "nav-link" })
+                </li>
+                <li class="nav-item">
+                    @Html.ActionLink("Back to List", "Index", null, new { @class = "nav-link" })
+                </li>
+            </ul>
+        </div>
+    </nav>
+}

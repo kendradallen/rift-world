@@ -42,6 +42,9 @@
                         @Html.ActionLink("Edit Complex", "AssoEdit", new { id = Model.LoreId }, new { @class = "nav-link" })
                     </li>*@
                 <li class="nav-item">
+                    @Html.ActionLink("Add Secret", "Create", "Secrets", new { infoId = Model.InfoId }, new { @class = "nav-link" })
+                </li>
+                <li class="nav-item">
                     @Html.ActionLink("Delete", "Delete", new { id = Model.LoreId }, new { @class = "nav-link" })
                 </li>
                 <li class="nav-item">

@@ -5,7 +5,7 @@
     ViewBag.InfoId = Model.InfoId;
 }
 <section id="start" class="col-12 row justify-content-center" name="Start">
-    <div id="pic" class=" col-sm-8 col-md-6 col-lg-3">
+    <div id="pic" class=" pic col-sm-8 col-md-6 col-lg-3">
         <img src="~/Content/img/org/@Model.SymbolFileName" />
         @*@if (Model.Artist != null)*@
         @if (Model.SymbolFileName != "default.jpg")
@@ -33,7 +33,7 @@
 }
 <section id="members" class="col-md-6" name="Members">
     @Html.Action("_Members", "Orgs", new { id = Model.OrgId })
-    @if (Model.IsPlayerEnabled)
+    @if (Model.IsPlayerEnabled && User.IsInRole("Character"))
     {
         <button class="btn btn-dark btn-block">JOIN TODAY!</button>
     }
@@ -68,6 +68,9 @@
                 </li>
                 <li class="nav-item">
                     @Html.ActionLink("Edit Complex", "AssoEdit", new { id = Model.OrgId }, new { @class = "nav-link" })
+                </li>
+                <li class="nav-item">
+                    @Html.ActionLink("Add Secret", "Create", "Secrets", new { infoId = Model.InfoId }, new { @class = "nav-link" })
                 </li>
                 <li class="nav-item">
                     @Html.ActionLink("Delete", "Delete", new { id = Model.OrgId }, new { @class = "nav-link" })

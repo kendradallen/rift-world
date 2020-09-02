@@ -61,7 +61,7 @@
                     @foreach (var x in ViewBag.Events)
                     {
                         <div data-value="@x.EventId" data-list="event" style="display:none" class="@(theSelectedEvents.Contains(x.EventId) ? "yes-man": "")">
-                            <h5>@x.EventName</h5>
+                            <h5>@x.Name</h5>
                             @*<div class="input-group">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">Display Priority</span>
@@ -83,9 +83,9 @@
         </div>
     }
 
-    <div style="text-align:left;">
-        @Html.ActionLink("Back to List", "Index")
-    </div>
+        <div style="text-align:left;">
+            @Html.ActionLink("Skip", "Skip", new { infoId = Model.InfoId, localeId = Model.LocaleId, submit = Model.Submit })
+        </div>
 </div>
 @section Scripts{
     <script src="~/Scripts/SelectBoxes/multi.js"></script>

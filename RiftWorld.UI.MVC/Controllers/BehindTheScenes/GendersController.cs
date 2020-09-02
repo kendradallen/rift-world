@@ -10,6 +10,7 @@ using RiftWorld.DATA.EF;
 
 namespace RiftWorld.UI.MVC.Controllers.BehindTheScenes
 {
+    [Authorize(Roles = "Admin")]
     public class GendersController : Controller
     {
         private RiftWorldEntities db = new RiftWorldEntities();
@@ -52,7 +53,7 @@ namespace RiftWorld.UI.MVC.Controllers.BehindTheScenes
             {
                 db.Genders.Add(gender);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("CreateWhat", "Infos");
             }
             ModelState.AddModelError("", "There is preciesly ONE place that something could have gone wrong.");
 
@@ -101,6 +102,13 @@ namespace RiftWorld.UI.MVC.Controllers.BehindTheScenes
             if (gender == null)
             {
                 return HttpNotFound();
+            }
+            int characters = db.Characters.Where(x => x.GenderId == id).Select(x => x.CharacterId).ToList().Count;
+            int npcs = db.NPCs.Where(x => x.GenderId == id).Select(x => x.NpcId).ToList().Count;
+            if (characters != 0 || npcs != 0)
+            {
+                ViewBag.Message = "Something in the database is using this gender currently. You can't delete a gender unless nothing is using it. You'll have find the entries using the gender and change them first.";
+                return View("Error");
             }
             return View(gender);
         }

@@ -72,7 +72,13 @@ namespace RiftWorld.UI.MVC.Controllers
 
             ViewBag.RoleNames = await UserManager.GetRolesAsync(user.Id);
 
-            return View(user);
+            //added to make details full
+            RiftWorldEntities db = new RiftWorldEntities();
+            var userDeets = await db.UserDetails.Where(x => x.UserId == id).FirstAsync();
+            ViewBag.CurrentCharacter = await db.Characters.Where(x => x.CharacterId == userDeets.CurrentCharacterId).Select(x => x.CharacterName).FirstOrDefaultAsync();
+            ViewBag.PastCharacters = db.Characters.Where(x => x.PlayerId == id && x.IsRetired == true).Select(x => x.CharacterName).ToList();
+            EditUserViewModel2 daUser = new EditUserViewModel2 { Id = user.Id, Email = user.Email, DiscordName = userDeets.DiscordName, DiscordDiscriminator = userDeets.DiscordDiscriminator, IsApproved = userDeets.IsApproved, ConsentFileName = userDeets.ConsentFileName, CurrentCharacterId = userDeets.CurrentCharacterId };
+            return View(daUser);
         }
 
         //
@@ -93,7 +99,8 @@ namespace RiftWorld.UI.MVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = userViewModel.Email, Email = userViewModel.Email };
+                string discordFull = $"{userViewModel.DiscordName}#{userViewModel.DiscordDiscriminator:D4}";
+                var user = new ApplicationUser { UserName = discordFull, Email = userViewModel.Email };
                 var adminresult = await UserManager.CreateAsync(user, userViewModel.Password);
 
                 //Add User to the selected Roles 
@@ -108,6 +115,20 @@ namespace RiftWorld.UI.MVC.Controllers
                             ViewBag.RoleId = new SelectList(await RoleManager.Roles.ToListAsync(), "Name", "Name");
                             return View();
                         }
+
+                        //add user deets
+                        RiftWorldEntities db = new RiftWorldEntities();
+                        UserDetail newUserDeets = new UserDetail
+                        {
+                            UserId = user.Id,
+                            DiscordName = userViewModel.DiscordName,
+                            DiscordDiscriminator = userViewModel.DiscordDiscriminator,
+                            ConsentFileName = null,
+                            CurrentCharacterId = null,
+                            IsApproved = false
+                        };
+                        db.UserDetails.Add(newUserDeets);
+                        db.SaveChanges();
                     }
                 }
                 else
@@ -132,6 +153,7 @@ namespace RiftWorld.UI.MVC.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+            RiftWorldEntities db = new RiftWorldEntities();
             var user = await UserManager.FindByIdAsync(id);
             if (user == null)
             {
@@ -139,11 +161,18 @@ namespace RiftWorld.UI.MVC.Controllers
             }
 
             var userRoles = await UserManager.GetRolesAsync(user.Id);
+            var userDeets = await db.UserDetails.Where(x => x.UserId == id).FirstAsync();
+            ViewBag.CurrentCharacter = await db.Characters.Where(x => x.CharacterId == userDeets.CurrentCharacterId).Select(x => x.CharacterName).FirstOrDefaultAsync();
+            ViewBag.PastCharacters = db.Characters.Where(x => x.PlayerId == id && x.IsRetired == true).Select(x => x.CharacterName).ToList();
 
-            return View(new EditUserViewModel()
+            return View(new EditUserViewModel3()
             {
                 Id = user.Id,
                 Email = user.Email,
+                DiscordName = userDeets.DiscordName,
+                DiscordDiscriminator = userDeets.DiscordDiscriminator,
+                ConsentFileName = userDeets.ConsentFileName,
+                IsApproved = userDeets.IsApproved,
                 RolesList = RoleManager.Roles.ToList().Select(x => new SelectListItem()
                 {
                     Selected = userRoles.Contains(x.Name),
@@ -157,8 +186,15 @@ namespace RiftWorld.UI.MVC.Controllers
         // POST: /Users/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "Email,Id")] EditUserViewModel editUser, params string[] selectedRole)
+        public async Task<ActionResult> Edit([Bind(Include = "Email,Id, DiscordDiscriminator, DiscordName, CurrentCharacterId, ConsentFileName")] EditUserViewModel3 editUser,
+            params string[] selectedRole)
         {
+            RiftWorldEntities db = new RiftWorldEntities();
+            var userDeets = await db.UserDetails.Where(x => x.UserId == editUser.Id).FirstAsync();
+            ViewBag.CurrentCharacter = await db.Characters.Where(x => x.CharacterId == userDeets.CurrentCharacterId).Select(x => x.CharacterName).FirstOrDefaultAsync();
+            ViewBag.PastCharacters = db.Characters.Where(x => x.PlayerId == editUser.Id && x.IsRetired == true).Select(x => x.CharacterName).ToList();
+
+            //todo - finish this action
             if (ModelState.IsValid)
             {
                 var user = await UserManager.FindByIdAsync(editUser.Id);
@@ -167,7 +203,7 @@ namespace RiftWorld.UI.MVC.Controllers
                     return HttpNotFound();
                 }
 
-                user.UserName = editUser.Email;
+                user.UserName = $"{editUser.DiscordName}#{editUser.DiscordDiscriminator:D4}";
                 user.Email = editUser.Email;
 
                 var userRoles = await UserManager.GetRolesAsync(user.Id);
@@ -188,10 +224,26 @@ namespace RiftWorld.UI.MVC.Controllers
                     ModelState.AddModelError("", result.Errors.First());
                     return View();
                 }
+
+                //added below 
+                #region Updating User Details
+
+                userDeets.DiscordDiscriminator = editUser.DiscordDiscriminator;
+                userDeets.DiscordName = editUser.DiscordName;
+                db.Entry(userDeets).State = EntityState.Modified;
+                var result2 = await db.SaveChangesAsync();
+                #endregion
                 return RedirectToAction("Index");
             }
             ModelState.AddModelError("", "Something failed.");
-            return View();
+            editUser.RolesList = RoleManager.Roles.ToList().Select(x => new SelectListItem()
+            {
+                Selected = selectedRole.Contains(x.Name),
+                Text = x.Name,
+                Value = x.Name
+            });
+
+            return View(editUser);
         }
 
         //Approve User
@@ -232,7 +284,7 @@ namespace RiftWorld.UI.MVC.Controllers
         {
 
             RiftWorldEntities db = new RiftWorldEntities();
-            var userDeets =  db.UserDetails.Where(x => x.UserId == editUser.Id).First();
+            var userDeets = db.UserDetails.Where(x => x.UserId == editUser.Id).First();
             ViewBag.CurrentCharacter = db.Characters.Where(x => x.CharacterId == userDeets.CurrentCharacterId).Select(x => x.CharacterName).FirstOrDefault();
             ViewBag.PastCharacters = db.Characters.Where(x => x.PlayerId == editUser.Id && x.IsRetired == true).Select(x => x.CharacterName).ToList();
 
@@ -318,7 +370,7 @@ namespace RiftWorld.UI.MVC.Controllers
                 return HttpNotFound();
             }
             var userDeets = db.UserDetails.Where(x => x.UserId == id).FirstOrDefault();
-            if (userDeets  == null)
+            if (userDeets == null)
             {
                 //error
             }
@@ -349,7 +401,7 @@ namespace RiftWorld.UI.MVC.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var user =UserManager.FindById(id);
+            var user = UserManager.FindById(id);
             if (user == null)
             {
                 return HttpNotFound();

@@ -63,13 +63,13 @@
             </div>
 
 
-            <div class="form-group">
+            <div class="form-group row align-items-center">
                 @Html.LabelFor(model => model.SymbolFileName, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10 row">
                     @Html.HiddenFor(model => model.SymbolFileName)
                     <div class="col-12">
-                        <input type="file" name="picture" />
-                        <img class="img-fluid img-thumbnail border-00" src="~/Content/img/org/org_default.jpg" />
+                        <input type="file" name="picture" id="imgInp"/>
+                        <img class="img-fluid img-thumbnail border-00" src="~/Content/img/org/default.jpg" id="imgPre"/>
                     </div>
                     <div class="col-12">
                         @Html.ValidationMessageFor(model => model.SymbolFileName, "", new { @class = "text-danger" })
@@ -154,7 +154,7 @@
     }
 
     <div style="text-align:left;">
-        @Html.ActionLink("Back to List", "Index")
+        @Html.ActionLink("Cancel", "CreateWhat", "Infos", null, null)
     </div>
 </div>
 @section Scripts{
@@ -169,6 +169,10 @@
         })
     </script>
     <script>
+        $("#imgInp").change(function () {
+            readURL(this, '#imgPre');
+        });
+
         var nullables = ['AboutText'];
         $('#confirmModal').on('show.bs.modal', function () {
             ConfirmModal(nullables);

@@ -67,8 +67,8 @@
                 <div class="col-md-10 row">
                     @Html.HiddenFor(model => model.PictureFileName)
                     <div class="col-12">
-                        <input type="file" name="picture" />
-                        <img class="img-fluid img-thumbnail border-00" src="~/Content/img/item/default.jpg" />
+                        <input type="file" name="picture" id="imgInp"/>
+                        <img class="img-fluid img-thumbnail border-00" src="~/Content/img/item/default.jpg" id="imgPre"/>
                     </div>
                     <div class="col-12">
                         @Html.ValidationMessageFor(model => model.PictureFileName, "", new { @class = "text-danger" })
@@ -163,7 +163,7 @@
     }
 
     <div style="text-align:left;">
-        @Html.ActionLink("Back to List", "Index")
+        @Html.ActionLink("Cancel", "CreateWhat", "Infos", null, null)
     </div>
 </div>
 
@@ -176,11 +176,14 @@
         })
     </script>
     <script>
+        $("#imgInp").change(function () {
+            readURL(this, '#imgPre');
+        });
+
         var nullables = ['DescriptionText', 'PropertyText', 'HistoryText'];
         $('#confirmModal').on('show.bs.modal', function () {
             ConfirmModal(nullables);
         });
     </script>
-
 
 }

@@ -1,0 +1,101 @@
+﻿@model RiftWorld.UI.MVC.Models.UnderApprovalVM
+@using RiftWorld.DATA.EF
+
+<div id="underApproval" class="tabcontent-a" name="Under Approval">
+    @if (Model.Rumors.Count == 0 && Model.Orgs.Count == 0 && Model.Journals.Count == 0)
+    {
+        <p>Nothing is awaiting approval. Horray!</p>
+    }
+    else
+    {
+        <div class="row">
+            @if (Model.Rumors.Count != 0)
+            {
+                <button class="tablink-b col" onclick="openPageB('bRumors', this, 'green')">Rumors</button>
+            }
+            @if (Model.Journals.Count != 0)
+            {
+                <button class="tablink-b col" onclick="openPageB('bJournals', this, 'green')">Journals</button>
+            }
+            @if (Model.Orgs.Count != 0)
+            {
+                <button class="tablink-b col" onclick="openPageB('bOrgs', this, 'green')">Orgs</button>
+            }
+        </div>
+        if (Model.Rumors.Count != 0)
+        {
+            <div id="bRumors" class="tabcontent-b">
+                <table class="table">
+                    <tr>
+                        <th>
+                            Info
+                        </th>
+                        <th>
+                            Rumor Content
+                        </th>
+                    </tr>
+                    @foreach (Rumor item in Model.Rumors)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Info.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.RumorText)
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        }
+        if (Model.Journals.Count != 0)
+        {
+            <div id="bJournals" class="tabcontent-b">
+                <table class="table">
+                    <tr>
+                        <th>
+                            Date Written
+                        </th>
+                        <th>
+
+                        </th>
+                    </tr>
+
+                    @foreach (Journal item in Model.Journals)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.OocDateWritten)
+                            </td>
+                            <td>
+                                @Html.ActionLink("Review/Edit", "Edit", "Journals", new { id = item.JournalId })
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        }
+        if (Model.Orgs.Count != 0)
+        {
+            <div id="bOrgs" class="tabcontent-b">
+                <table class="table">
+                    <tr>
+                        <th>
+                            Org Name
+                        </th>
+                    </tr>
+
+                    @foreach (CharOrg item in Model.Orgs)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Org.Name)
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        }
+    }
+
+</div>

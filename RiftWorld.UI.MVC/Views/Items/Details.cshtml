@@ -4,32 +4,37 @@
     ViewBag.Title = Model.Name;
     ViewBag.InfoId = Model.InfoId;
 }
-<section id="description" name="Description" class="col-12">
+<section id="description" name="Description" class="col-12" style="margin-top:8px;">
     <div class="row">
-        <div id="name" class="col-sm-9">
-            @Html.DisplayFor(model => model.Name)
+        <div class="col-md-9" style="padding-left:30px;">
+            <div id="name">
+                @Html.DisplayFor(model => model.Name)
+            </div>
+            <div id="blurb" style="text-align:left;">
+                @Html.DisplayFor(model => model.Blurb)
+            </div>
         </div>
-        <div id="pic" class="col-sm-3">
-            <img src="~/Content/img/item/@Model.PictureFileName" />
-            @if (Model.PictureFileName != "default.jpg" && Model.Artist != null)
+        <div id="pic" class="col-md-3 pic align-self-center" style="padding-right:28px;">
+            <img src="~/Content/img/item/@Model.PictureFileName" style="border: 2px groove #c3733a;box-shadow: 1px 1px 6px 0px #2a433e;" />
+            @if (Model.PictureFileName != "default.jpg")
             {
-                <div class="overlay">Art by @Model.Artist</div>
+                <div class="overlay" style="right:28px; padding:15px;">Art by @Model.Artist</div>
             }
+
         </div>
+
     </div>
+    <br />
     <div class="row">
-        <div id="blurb">
-            @Html.DisplayFor(model => model.Blurb)
-        </div>
     </div>
     @if (Model.DescriptionText != "Nada")
     {
-            <h2 class="line">
-                @Html.DisplayNameFor(model => model.DescriptionText)
-            </h2>
-            <div class="hang">
-                @Html.Raw(Model.DescriptionText)
-            </div>
+        <h2 class="line">
+            @Html.DisplayNameFor(model => model.DescriptionText)
+        </h2>
+        <div class="hang">
+            @Html.Raw(Model.DescriptionText)
+        </div>
     }
 </section>
 @if (Model.PropertyText != "Nada")
@@ -79,8 +84,11 @@
                 <li class="nav-item">
                     @Html.ActionLink("Edit", "Edit", new { id = Model.ItemId }, new { @class = "nav-link" })
                 </li>
+                @*<li class="nav-item">
+                        @Html.ActionLink("Edit Complex", "AssoEdit", new { id = Model.ItemId }, new { @class = "nav-link" })
+                    </li>*@
                 <li class="nav-item">
-                    @Html.ActionLink("Edit Complex", "AssoEdit", new { id = Model.ItemId }, new { @class = "nav-link" })
+                    @Html.ActionLink("Add Secret", "Create", "Secrets", new { infoId = Model.InfoId }, new { @class = "nav-link" })
                 </li>
                 <li class="nav-item">
                     @Html.ActionLink("Delete", "Delete", new { id = Model.ItemId }, new { @class = "nav-link" })

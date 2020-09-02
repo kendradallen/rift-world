@@ -11,8 +11,7 @@ using RiftWorld.UI.MVC.Models;
 
 namespace RiftWorld.UI.MVC.Controllers.Entities
 {
-    //todo - uncomment to lockdown controller
-    //[Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
     public class LoresController : Controller
     {
         private RiftWorldEntities db = new RiftWorldEntities();
@@ -44,12 +43,12 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                 return HttpNotFound();
             }
 
-            //todo - uncomment below to prevent users from seeing un-published work
-            //if (!lore.IsPublished && !User.IsInRole("Admin"))
-            //{
-            //    return View("Error");
-            //    //todo change redirect to a error 404 page
-            //}
+            //prevent users from seeing un-published work
+            if (!lore.IsPublished && !User.IsInRole("Admin"))
+            {
+                return View("Error");
+                //todo change redirect to a error 404 page
+            }
             return View(lore);
         }
 
@@ -168,25 +167,26 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "LoreId,InfoId,Name,TheContent,Blurb")] LoreEditVM lore,
+        public ActionResult Edit([Bind(Include = "LoreId,InfoId,Name,TheContent,Blurb,IsPublished")] LoreEditVM lore,
             List<short> tags, string submit)
         {
-            #region Save or Publish?
-            switch (submit)
-            {
-                case "Save Progress":
-                case "Un-Publish":
-                    lore.IsPublished = false;
-                    break;
-                case "Publish":
-                case "Save":
-                    lore.IsPublished = true;
-                    break;
-            }
-            #endregion
 
             if (ModelState.IsValid)
             {
+                #region Save or Publish?
+                switch (submit)
+                {
+                    case "Save Progress":
+                    case "Un-Publish":
+                        lore.IsPublished = false;
+                        break;
+                    case "Publish":
+                    case "Save":
+                        lore.IsPublished = true;
+                        break;
+                }
+                #endregion
+
                 var infoid = lore.InfoId;
                 #region Info Update
                 //Info info = db.Infos.Find(infoid);

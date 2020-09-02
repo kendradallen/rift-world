@@ -19,6 +19,9 @@ body {
 .tox .tox-menubar {
     box-shadow: inset -1px 1px 20px 20px #e8b182;
 }*/
+ul{
+    list-style-position:inside;
+}
 
 .col-md-6 h2.line{
     font-size: 2em;
@@ -163,13 +166,14 @@ p {
     box-shadow: inset -1px 1px 20px 20px #e8b182;
 }
 /**************  Artist Section ****************/
-.overlay {
+.padder .overlay {
     position: absolute;
-    bottom: 50px;
     background: rgb(0, 0, 0);
     background: rgba(0, 0, 0, 0.5); /* Black see-through */
     color: #f1f1f1;
-    width: 93%;
+    /*width: 93%;*/
+    left: 10px;
+    right: 10px;
     transition: .5s ease;
     opacity: 0;
     color: white;
@@ -178,9 +182,44 @@ p {
     text-align: center;
 }
 
+    .padder .overlay.npc-por {
+        bottom: 49px;
+    }
+    .special .padder .overlay.npc-por {
+        bottom: 10px;
+    }
+    .padder .overlay.char {
+        bottom: 10px;
+    }
+
 /* When you mouse over the container, fade in the overlay title */
 .padder:hover .overlay {
     opacity: 1;
+}
+
+.overlay {
+    position: absolute;
+    bottom: 0px;
+    background: rgb(0, 0, 0);
+    background: rgba(0, 0, 0, 0.5); /* Black see-through */
+    color: #f1f1f1;
+    /*width: 100%;*/
+    left:15px;
+    right:15px; /*<----- the 15s are the padding on the col, this means it will cover the full picture*/
+    transition: .5s ease;
+    opacity: 0;
+    color: white;
+    font-size: 20px;
+    padding: 20px;
+    text-align: center;
+}
+
+.pic:hover .overlay {
+    opacity: 1;
+}
+
+.overlay.npc-crest{
+    padding: 7px;
 }
 
 /**************  NPC ****************/
@@ -205,14 +244,32 @@ p {
     margin-top: .5em;
 }
 
+#explictDead {
+    opacity: .1;
+    position: absolute;
+    font-size: 5em;
+    bottom: 0px;
+}
+
 #startTop-right {
     text-align: center;
     border: ridge rgba(245,222,179,.38);
-    border-right: none;
     background: rgba(245, 222, 179, .24);
     padding: 0; /* This is at clients preference of size during demo. As viewed on laptop screen. (using the Percy demo pic) */
     /*padding: 30px;*/
 }
+
+@media(min-width: 768px){
+    .special #startTop-right {
+        margin: 0;
+        border-right: none;
+    }
+}
+
+    .special #startTop-right #picture {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
 
 #picture {
     width: 100%;
@@ -227,8 +284,20 @@ p {
         width: 100%;
     }
 
+    .special #picture img {
+        /*height: 266px;*/ /* TODO - this is only good for display on the tv screen moniter. If time, media queries for this size*/
+        max-height: none;
+        border: 1px inset darkgray;
+        object-fit: cover;
+        width: 100%;
+    }
+
 .padder {
     padding: 10px;
+}
+
+.special .padder {
+    padding: 10px 0px;
 }
 
 #lastLo dt, #lastLo dd {
@@ -244,9 +313,13 @@ p {
     /*padding-right:2em;*/
 }
 
+@media(min-width: 768px){
+    #orgs {
+        direction: rtl;
+    }
+}
 #orgs {
     text-align: right;
-    direction: rtl;
     position: absolute;
     font-size: 1.5em;
     line-height: 1em;
@@ -259,9 +332,10 @@ p {
         margin-bottom: .2rem;
     }
 
-#crest {
-    box-shadow: inset 1px 1px 20px #f2d1b1;
-}
+    #startLower-right #orgs a:hover {
+        color: #751919;
+    }
+
 
 #startLower-right {
     box-shadow: inset 1px 1px 9px 0px #f2d0b0;
@@ -279,13 +353,22 @@ p {
     padding-right: .5em;
 }
 
+#startLower-right li {
+    margin-right:unset;
+}
 
 #lastLo {
-    position: absolute;
-    bottom: 0px;
     line-height: 1em;
     font-size: 1.3em;
-    /*margin-bottom: unset;*/
+    margin-top:.5em;
+}
+
+
+@media (min-width: 992px){
+    #lastLo {
+        text-align:left;
+        margin-top:0;
+    }
 }
 
     #lastLo dl {
@@ -468,7 +551,11 @@ h2.line {
 
 
 /**************  sidenav ****************/
-
+@media(max-width: 576px){
+    #mySidenav{
+        display:none;
+    }
+}
 #mySidenav {
     position: sticky;
     top: 30px;
@@ -599,6 +686,13 @@ h2.line {
     display: inline;
 }
 
+.tabcontent .tags a {
+    font-size: .7em;
+    padding: 4px 8px 4px;
+    margin-right: 9px;
+    margin-bottom: 7px;
+}
+
 /**************  Association Select  ****************/
 a[data-pub] {
     color: orangered;
@@ -717,23 +811,40 @@ main .rift {
     box-shadow: -1px 8px 20px 0px rgba(0,0,0, .28);
 }
 
-#rumor-list .col-12:nth-child(2n),
-#rumor-list .col-12:nth-child(2n) .col-sm-9{
-    justify-content: flex-start;
-}
+@media(min-width:576px){
+    #rumor-list .col-12:nth-child(2n),
+    #rumor-list .col-12:nth-child(2n) .col-sm-9 {
+        justify-content: flex-start;
+    }
 
-#rumor-list .col-12:nth-child(2n+1) h6 {
-    text-align:left;
-}
-
-#rumor-list .col-12:nth-child(2n+1),
-#rumor-list .col-12:nth-child(2n+1) .col-sm-9 {
-    justify-content: flex-end;
-}
+    #rumor-list .col-12:nth-child(2n+1),
+    #rumor-list .col-12:nth-child(2n+1) .col-sm-9 {
+        justify-content: flex-end;
+    }
 
     #rumor-list .col-12:nth-child(2n) h6 {
         text-align: right;
     }
+
+    #rumor-list .col-12:nth-child(2n+1) h6 {
+        text-align: left;
+    }
+
+}
+
+@media(max-width: 576px){
+    #rumor-list .col-12:nth-child(2n),
+    #rumor-list .col-12:nth-child(2n) .col-sm-9,
+    #rumor-list .col-12:nth-child(2n+1),
+    #rumor-list .col-12:nth-child(2n+1) .col-sm-9 {
+        justify-content: center;
+    }
+        #rumor-list .col-12:nth-child(2n) h6,
+        #rumor-list .col-12:nth-child(2n+1) h6 {
+            text-align: left;
+        }
+
+}
 
 #make-rumor {
     text-align: left;
@@ -751,7 +862,7 @@ main .rift {
     text-shadow: -1px 1px black;
 }
 
-    .ht-options .pls-style {
+    .pls-style {
         margin-left: 2.5em;
         margin-right: 2.5em;
     }
@@ -847,6 +958,29 @@ a {
         background-color: ghostwhite;
     }
 
+    .copyright-area p{
+        margin-bottom: 0;
+    }
+.copyright-area {
+    padding: 1em 0 1em;
+    margin-top: 20px;
+    text-shadow: -1px 1px black;
+    border:none;
+    font-size: 17px;
+    margin-left:2.5em;
+    margin-right: 2.5em;
+}
+.copyright-area a{
+    color:unset;
+}
+.copyright-area .ca-links{
+    text-align:unset;
+}
+
+.humberger-menu-wrapper {
+    background: rgba(95, 13, 214, 1);
+    box-shadow: 0px 0px 6px 2px ghostwhite;
+}
 /**************  Editing style  ****************/
 
 .btn-group-vertical.quick {

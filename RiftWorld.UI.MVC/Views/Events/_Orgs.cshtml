@@ -1,0 +1,16 @@
+﻿@model IEnumerable<RiftWorld.UI.MVC.Models._EventOrgsVM>
+
+<section id="eorgs" class="col-12" name="Involved Groups">
+    <h2 class="line">
+        Involved Groups
+    </h2>
+    <ul>
+        @foreach (var item in Model)
+        {
+            <li>
+                @Html.ActionLink(item.Name, "Details", "Orgs", new { id = item.Id}, null)
+            </li>
+        }
+    </ul>
+    <br />
+</section>

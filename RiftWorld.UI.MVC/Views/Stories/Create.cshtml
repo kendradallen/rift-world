@@ -53,7 +53,7 @@
             <div class="form-group">
                 <div class="form-check larger">
                     <div class="checkbox">
-                        @Html.EditorFor(model => model.IsCannon, new { htmlAttribute = new { @class = "form-check-input" } })
+                        @Html.CheckBoxFor(model => model.IsCannon, new { htmlAttribute = new { @class = "form-check-input" }, @checked = "checked"  })
                         @Html.LabelFor(model => model.IsCannon, htmlAttributes: new { @class = "form-check-label" })
                     </div>
                 </div>
@@ -101,7 +101,7 @@
         $('select#IsAboutId option:first-child').attr("data-placeholder", "true");
         new SlimSelect({
             select: '#IsAboutId',
-            placeholder: 'Whose this story about?'
+            placeholder: "What's this story about?"
         })
         new SlimSelect({
             select: '#tags'

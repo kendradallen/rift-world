@@ -14,8 +14,7 @@ using RiftWorld.UI.MVC.Models;
 
 namespace RiftWorld.UI.MVC.Controllers.Entities
 {
-    //todo - uncomment to lockdown controller
-    //[Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
     public class NPCsController : Controller
     {
         private RiftWorldEntities db = new RiftWorldEntities();
@@ -48,13 +47,44 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                 return HttpNotFound();
             }
 
-            //todo - uncomment below to prevent users from seeing un-published work
-            //if (!nPC.IsPublished && !User.IsInRole("Admin"))
-            //{
-            //    return View("Error");
-            //    //todo change redirect to a error 404 page
-            //}
+            //prevent users from seeing un-published work
+            if (!nPC.IsPublished && !User.IsInRole("Admin"))
+            {
+                return View("Error");
+                //todo change redirect to a error 404 page
+            }
 
+
+            //add the npc's classes
+            List<Class> classes = (from cn in db.ClassNPCs
+                                   where cn.NpcId == id
+                                   orderby cn.ClassOrder.HasValue descending, cn.ClassOrder, cn.Class.ClassName
+                                   select cn.Class)
+                           .ToList()
+                           ;
+
+            int classLength = classes.Count();
+            string holder = "";
+            switch (classLength)
+            {
+                case 0:
+                    holder = "Unknown";
+                    break;
+                case 1:
+                    holder = classes[0].ClassName;
+                    break;
+                default:
+                    for (int i = 0; i < classLength; i++)
+                    {
+                        holder += classes[i].ClassName;
+                        if (i != classLength -1)
+                        {
+                            holder += "/ ";
+                        }
+                    }
+                    break;
+            }
+            ViewBag.Classes = holder;
             return View(nPC);
         }
 
@@ -123,15 +153,16 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
         [OverrideAuthorization]
         public PartialViewResult _OrgsPartial(short id)
         {
-            List<_NpcOrgVM> orgs = (from no in db.NpcOrgs
-                                join o in db.Orgs on no.OrgId equals o.OrgId
-                                where no.NpcId == id && no.IsCurrent == true && o.IsPublished == true
-                                orderby no.OrgOrder.HasValue descending, no.OrgOrder, o.Name
-                                select new _NpcOrgVM
-                                {
-                                    Name = o.Name,
-                                    Blurb = no.BlurbNpcPage
-                                })
+            List<_NpcOrgsVM> orgs = (from no in db.NpcOrgs
+                                    join o in db.Orgs on no.OrgId equals o.OrgId
+                                    where no.NpcId == id && no.IsCurrent == true && o.IsPublished == true
+                                    orderby no.OrgOrder.HasValue descending, no.OrgOrder, o.Name
+                                    select new _NpcOrgsVM
+                                    {
+                                        Name = o.Name,
+                                        Blurb = no.BlurbNpcPage,
+                                        Id = o.OrgId
+                                    })
                        .ToList()
                         ;
 
@@ -147,8 +178,8 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
         // GET: NPCs/Create
         public ActionResult Create()
         {
-            ViewBag.LastLocationId = new SelectList(db.Locales, "LocaleId", "Name");
-            ViewBag.RaceId = new SelectList(db.Races, "RaceId", "RaceName");
+            ViewBag.LastLocationId = new SelectList(db.Locales.OrderBy(l=>l.Name), "LocaleId", "Name");
+            ViewBag.RaceId = new SelectList(db.Races.OrderBy(r=>r.RaceName), "RaceId", "RaceName");
             ViewBag.GenderId = new SelectList(db.Genders, "GenderId", "GenderName");
             ViewBag.Tags = new MultiSelectList(db.Tags, "TagId", "TagName");
             return View();
@@ -303,8 +334,8 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             }
 
             #region model invalid
-            ViewBag.LastLocationId = new SelectList(db.Locales, "LocaleId", "Name", npc.LastLocationId);
-            ViewBag.RaceId = new SelectList(db.Races, "RaceId", "RaceName", npc.RaceId);
+            ViewBag.LastLocationId = new SelectList(db.Locales.OrderBy(l => l.Name), "LocaleId", "Name");
+            ViewBag.RaceId = new SelectList(db.Races.OrderBy(r => r.RaceName), "RaceId", "RaceName");
             ViewBag.GenderId = new SelectList(db.Genders, "GenderId", "GenderName", npc.GenderId);
             ViewBag.Tags = new MultiSelectList(db.Tags, "TagId", "TagName", tags);
 
@@ -480,6 +511,37 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             return View(model);
         }
 
+        public ActionResult Skip(short infoId, short npcId, string submit)
+        {
+            var npc = db.NPCs.Where(i => i.NpcId == npcId).FirstOrDefault();
+            var info = db.Infos.Where(i => i.InfoId == infoId).FirstOrDefault();
+
+            #region Save or Publish?
+            switch (submit)
+            {
+                case "Save Progress":
+                case "Un-Publish":
+                case "Save and Continue":
+                    info.IsPublished = false;
+                    npc.IsPublished = false;
+                    break;
+                case "Publish":
+                case "Save":
+                    info.IsPublished = true;
+                    npc.IsPublished = true;
+                    break;
+                case "Save and associate":
+                    break;
+                default:
+                    break;
+            }
+            #endregion
+            db.Entry(npc).State = EntityState.Modified;
+            db.Entry(info).State = EntityState.Modified;
+            db.SaveChanges();
+            return RedirectToAction("Details", new { id = npcId });
+        }
+
         // GET: NPCs/Edit/5
         public ActionResult Edit(short? id)
         {
@@ -638,6 +700,18 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                         imgName = "npc-portrait-" + infoid.ToString() + ext;
                         portraitPic.SaveAs(Server.MapPath("~/Content/img/npc/" + imgName));
                     }
+                    //remove old picture if it had a different extension (and thus would not be overridden)
+                    string oldName = npc.PortraitFileName;
+                    string oldExt = oldName.Substring(oldName.LastIndexOf('.'));
+                    if (oldExt != ext)
+                    {
+                        string fullPath = Request.MapPath("~/Content/img/npc/" + oldName);
+                        if (System.IO.File.Exists(fullPath))
+                        {
+                            System.IO.File.Delete(fullPath);
+                        }
+                    }
+                    //assign new PortraitFileName
                     npc.PortraitFileName = imgName;
                 }
                 #endregion
@@ -655,6 +729,18 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
 
                         crestPic.SaveAs(Server.MapPath("~/Content/img/npc/" + imgName));
                     }
+                    //remove old picture if it had a different extension (and thus would not be overridden)
+                    string oldName = npc.CrestFileName;
+                    string oldExt = oldName.Substring(oldName.LastIndexOf('.'));
+                    if (oldExt != ext)
+                    {
+                        string fullPath = Request.MapPath("~/Content/img/npc/" + oldName);
+                        if (System.IO.File.Exists(fullPath))
+                        {
+                            System.IO.File.Delete(fullPath);
+                        }
+                    }
+                    //assign new CrestFileName
                     npc.CrestFileName = imgName;
                 }
                 #endregion

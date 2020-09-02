@@ -14,17 +14,32 @@ namespace RiftWorld.UI.MVC.Models
         #region Fields
         private string _apperanceText;
         private string _aboutText;
+        private string _alias;
         #endregion
 
         [Required]
         [StringLength(30, ErrorMessage = " ")]
         public string Name { get; set; }
 
-        [Required]
         [StringLength(500, ErrorMessage = " ")]
         [UIHint("MultilineText")]
         [Display(Name = "Known Aliases")]
-        public string Alias { get; set; }
+        public string Alias
+        {
+            get { return _alias; }
+            set
+            {
+                if (string.IsNullOrEmpty(value))
+                {
+                    _alias = "Nada";
+                }
+                else
+                {
+                    _alias = value;
+                }
+            }
+        }
+
 
         [Required]
         [StringLength(150, ErrorMessage = " ")]
@@ -82,10 +97,10 @@ namespace RiftWorld.UI.MVC.Models
 
         public bool IsPublished { get; set; }
 
-        [StringLength(40)]
+        [StringLength(40, ErrorMessage = " ")]
         public string PortraitArtist { get; set; }
 
-        [StringLength(40)]
+        [StringLength(40, ErrorMessage = " ")]
         public string CrestArtist { get; set; }
 
         public bool IsDead { get; set; }
@@ -107,17 +122,32 @@ namespace RiftWorld.UI.MVC.Models
         #region Fields
         private string _apperanceText;
         private string _aboutText;
+        private string _alias;
         #endregion
 
         [Required]
         [StringLength(30, ErrorMessage = " ")]
         public string Name { get; set; }
 
-        [Required]
         [StringLength(500, ErrorMessage = " ")]
         [UIHint("MultilineText")]
         [Display(Name = "Known Aliases")]
-        public string Alias { get; set; }
+        public string Alias
+        {
+            get { return _alias; }
+            set
+            {
+                if (string.IsNullOrEmpty(value))
+                {
+                    _alias = "Nada";
+                }
+                else
+                {
+                    _alias = value;
+                }
+            }
+        }
+
 
         [Required]
         [StringLength(150, ErrorMessage = " ")]
@@ -175,10 +205,10 @@ namespace RiftWorld.UI.MVC.Models
 
         public bool IsPublished { get; set; }
 
-        [StringLength(40)]
+        [StringLength(40, ErrorMessage = " ")]
         public string PortraitArtist { get; set; }
 
-        [StringLength(40)]
+        [StringLength(40, ErrorMessage = " ")]
         public string CrestArtist { get; set; }
 
         public bool IsDead { get; set; }
@@ -226,17 +256,42 @@ namespace RiftWorld.UI.MVC.Models
         #region Fields
         private string _apperanceText;
         private string _aboutText;
+        private string _alias;
         #endregion
 
         [Required]
         [StringLength(30, ErrorMessage = " ")]
         public string Name { get; set; }
 
-        [Required]
         [StringLength(500, ErrorMessage = " ")]
         [UIHint("MultilineText")]
         [Display(Name = "Known Aliases")]
-        public string Alias { get; set; }
+        public string Alias
+        {
+            get
+            {
+                if (_alias == "Nada")
+                {
+                    return "";
+                }
+                else
+                {
+                    return _alias;
+                }
+            }
+            set
+            {
+                if (string.IsNullOrEmpty(value))
+                {
+                    _alias = "Nada";
+                }
+                else
+                {
+                    _alias = value;
+                }
+            }
+        }
+
 
         [Required]
         [StringLength(150, ErrorMessage = " ")]
@@ -314,10 +369,10 @@ namespace RiftWorld.UI.MVC.Models
 
         public bool IsPublished { get; set; }
 
-        [StringLength(40)]
+        [StringLength(40, ErrorMessage = " ")]
         public string PortraitArtist { get; set; }
 
-        [StringLength(40)]
+        [StringLength(40, ErrorMessage = " ")]
         public string CrestArtist { get; set; }
 
         public bool IsDead { get; set; }
@@ -433,9 +488,10 @@ namespace RiftWorld.UI.MVC.Models
     }
 
     //now displaying models 
-    public class _NpcOrgVM
+    public class _NpcOrgsVM
     {
         public string Name { get; set; }
         public string Blurb { get; set; }
+        public short Id { get; set; }
     }
 }

@@ -25,11 +25,13 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
         [Authorize(Roles = "Mod, Admin")]
         public ActionResult Approvals()
         {
+            //todo - add a list for org join requests. 
+            //todo - add a retire request???
             var rumors = db.Rumors.Where(r => !r.IsApproved).ToList();
             var characters = db.Characters.Where(c => !c.IsApproved).ToList();
             var journals = db.Journals.Where(j => !j.IsApproved).ToList();
-            var characterEdits = db.Characters.Where(c => c.HasUnseenEdit).ToList();
-            var journalEdits = db.Journals.Where(j => j.HasUnseenEdit).ToList();
+            var characterEdits = db.Characters.Where(c => c.HasUnseenEdit && c.IsApproved).ToList();
+            var journalEdits = db.Journals.Where(j => j.HasUnseenEdit && j.IsApproved).ToList();
 
             ApprovalVM model = new ApprovalVM { Rumors = rumors, Characters = characters, Journals = journals, CharacterEdits = characterEdits, JournalEdits = journalEdits };
             if (User.IsInRole("Admin"))

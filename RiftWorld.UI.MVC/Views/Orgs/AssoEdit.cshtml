@@ -189,9 +189,9 @@
             </div>
         </div>
     }
-    <div style="text-align:left;">
-        @Html.ActionLink("Back to List", "Index")
-    </div>
+        <div style="text-align:left;">
+            @Html.ActionLink("Cancel", "Details", new { id = Model.OrgId })
+        </div>
 </div>
 
 @section Scripts{

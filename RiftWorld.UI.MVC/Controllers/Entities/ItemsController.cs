@@ -337,7 +337,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                     //remove old picture if it had a different extension (and thus would not be overridden)
                     string oldName = item.PictureFileName;
                     string oldExt = oldName.Substring(oldName.LastIndexOf('.'));
-                    if (oldExt != ext)
+                    if (oldName != "default.jpg" && oldExt != ext)
                     {
                         string fullPath = Request.MapPath("~/Content/img/item/" + oldName);
                         if (System.IO.File.Exists(fullPath))
@@ -416,10 +416,13 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             db.Items.Remove(item);
 
             #region Remove Picture
-            string fullPath = Request.MapPath("~/Content/img/item/" + picture);
-            if (System.IO.File.Exists(fullPath))
+            if (picture != "default.jpg")
             {
-                System.IO.File.Delete(fullPath);
+                string fullPath = Request.MapPath("~/Content/img/item/" + picture);
+                if (System.IO.File.Exists(fullPath))
+                {
+                    System.IO.File.Delete(fullPath);
+                }
             }
             #endregion
 

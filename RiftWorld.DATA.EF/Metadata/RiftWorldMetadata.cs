@@ -18,7 +18,7 @@ namespace RiftWorld.DATA.EF
 
         [Required]
         [Display(Name = "Name")]
-        [StringLength(25)]
+        [StringLength(25, ErrorMessage = " ")]
         public string CharacterName { get; set; }
 
         [Required]
@@ -33,12 +33,12 @@ namespace RiftWorld.DATA.EF
 
         [Required]
         [UIHint("MultilineText")]
-        [StringLength(2000)]
+        [StringLength(2000, ErrorMessage = " ")]
         public string Description { get; set; }
 
         [Required]
         [UIHint("MultilineText")]
-        [StringLength(8000)]
+        [StringLength(8000, ErrorMessage = " ")]
         public string About { get; set; }
 
         [Required] //may need to be removed due to weirdness during inital creation
@@ -56,7 +56,8 @@ namespace RiftWorld.DATA.EF
         [StringLength(40)]
         public string Artist { get; set; }
 
-        [StringLength(40)]
+        [Required]
+        [StringLength(40, ErrorMessage = " ")]
         [Display(Name = "Class")]
         public string ClassString { get; set; }
 
@@ -224,7 +225,6 @@ namespace RiftWorld.DATA.EF
         {
             get
             {
-                //note to self, when changing these remember to also change the ViewModels of _LocaleEventsVM and _OrgEventsVM
                 switch (DateMonth)
                 {
                     case 1:
@@ -251,6 +251,8 @@ namespace RiftWorld.DATA.EF
                         return "Uktar";
                     case 12:
                         return "Nightal";
+                    case null:
+                        return "";
                     default:
                         return "Uhhhhh, wait...";
                 }
@@ -271,6 +273,8 @@ namespace RiftWorld.DATA.EF
                         return "Fall";
                     case 4:
                         return "Winter";
+                    case null:
+                        return "";
                     default:
                         return "uhhhhhhhhhhhhh, HOW?!!";
                 }

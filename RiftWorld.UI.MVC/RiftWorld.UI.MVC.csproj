@@ -795,6 +795,7 @@
     <Content Include="Views\Locales\_Events.cshtml" />
     <Content Include="Views\Events\_Locales.cshtml" />
     <Content Include="Views\Characters\Confirmed.cshtml" />
+    <Content Include="Views\Characters\AdminCreate.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

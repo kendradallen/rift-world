@@ -86,6 +86,27 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             return PartialView(orgs);
         }
 
+        //public ActionResult TogglePub(short id, string submit)
+        //{
+        //    Event taevent = db.Events.Where(x => x.EventId == id).First();
+        //    Info info = taevent.Info;
+        //    if (submit == "Publish")
+        //    {
+        //        taevent.IsPublished = true;
+        //        info.IsPublished = true;
+        //    }
+        //    else
+        //    {
+        //        taevent.IsPublished = false;
+        //        info.IsPublished = false;
+        //    }
+        //    db.Entry(taevent).State = EntityState.Modified;
+        //    db.Entry(info).State = EntityState.Modified;
+        //    db.SaveChanges();
+
+        //    return RedirectToAction("Details", new { id = id});
+        //}
+
         // GET: Events/Create
         public ActionResult Create()
         {

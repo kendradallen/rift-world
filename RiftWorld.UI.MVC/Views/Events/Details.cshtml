@@ -63,6 +63,7 @@
                 <li class="nav-item">
                     @Html.ActionLink("Edit Complex", "AssoEdit", new { id = Model.EventId }, new { @class = "nav-link" })
                 </li>
+
                 <li class="nav-item">
                     @Html.ActionLink("Add Secret", "Create", "Secrets", new { infoId = Model.InfoId }, new { @class = "nav-link" })
                 </li>
@@ -72,9 +73,22 @@
                 <li class="nav-item">
                     @Html.ActionLink("Back to List", "Index", null, new { @class = "nav-link" })
                 </li>
+
             </ul>
         </div>
         <span class="navbar-text @Model.Pub.ToLower()">
+            @if (Model.IsPublished)
+            {
+                <span class="navbar-text">
+                    @Html.ActionLink("Un-Publish", "TogglePub", "Infos" ,new { id = Model.InfoId, submit = "Un-Publish" }, new { @class = "nav-link" })
+                </span>
+            }
+            else
+            {
+                <span class="navbar-text">
+                    @Html.ActionLink("Publish", "TogglePub","Infos", new { id = Model.InfoId, submit = "Publish" }, new { @class = "nav-link" })
+                </span>
+            }
             @Model.Pub
         </span>
     </nav>

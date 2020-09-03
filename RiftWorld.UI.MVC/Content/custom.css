@@ -20,16 +20,21 @@ body {
     box-shadow: inset -1px 1px 20px 20px #e8b182;
 }*/
 
-ul{
-    list-style-position:inside;
+.navbar-text a {
+    padding-top: unset;
+    padding-bottom: unset;
 }
 
-.col-md-6 h2.line{
+ul {
+    list-style-position: inside;
+}
+
+.col-md-6 h2.line {
     font-size: 2em;
 }
 
-.centered{
-    text-align:center;
+.centered {
+    text-align: center;
 }
 
 pre {
@@ -80,14 +85,14 @@ pre {
     padding-right: 10%;
 }
 
-    .form-check.larger {
-        font-size: 2em;
-        line-height: 1;
-        text-align:center;
-    }
+.form-check.larger {
+    font-size: 2em;
+    line-height: 1;
+    text-align: center;
+}
 
-    .form-check.larger input[type=checkbox]{
-        width:30px;
+    .form-check.larger input[type=checkbox] {
+        width: 30px;
         height: 30px;
     }
 
@@ -186,12 +191,14 @@ p {
     .padder .overlay.npc-por {
         bottom: 49px;
     }
-    .special .padder .overlay.npc-por {
-        bottom: 10px;
-    }
-    .padder .overlay.char {
-        bottom: 10px;
-    }
+
+.special .padder .overlay.npc-por {
+    bottom: 10px;
+}
+
+.padder .overlay.char {
+    bottom: 10px;
+}
 
 /* When you mouse over the container, fade in the overlay title */
 .padder:hover .overlay {
@@ -205,8 +212,8 @@ p {
     background: rgba(0, 0, 0, 0.5); /* Black see-through */
     color: #f1f1f1;
     /*width: 100%;*/
-    left:15px;
-    right:15px; /*<----- the 15s are the padding on the col, this means it will cover the full picture*/
+    left: 15px;
+    right: 15px; /*<----- the 15s are the padding on the col, this means it will cover the full picture*/
     transition: .5s ease;
     opacity: 0;
     color: white;
@@ -219,7 +226,7 @@ p {
     opacity: 1;
 }
 
-.overlay.npc-crest{
+.overlay.npc-crest {
     padding: 7px;
 }
 
@@ -260,17 +267,17 @@ p {
     /*padding: 30px;*/
 }
 
-@media(min-width: 768px){
+@media(min-width: 768px) {
     .special #startTop-right {
         margin: 0;
         border-right: none;
     }
 }
 
-    .special #startTop-right #picture {
-        padding-left: 10px;
-        padding-right: 10px;
-    }
+.special #startTop-right #picture {
+    padding-left: 10px;
+    padding-right: 10px;
+}
 
 #picture {
     width: 100%;
@@ -285,13 +292,13 @@ p {
         width: 100%;
     }
 
-    .special #picture img {
-        /*height: 266px;*/ /* TODO - this is only good for display on the tv screen moniter. If time, media queries for this size*/
-        max-height: none;
-        border: 1px inset darkgray;
-        object-fit: cover;
-        width: 100%;
-    }
+.special #picture img {
+    /*height: 266px;*/ /* TODO - this is only good for display on the tv screen moniter. If time, media queries for this size*/
+    max-height: none;
+    border: 1px inset darkgray;
+    object-fit: cover;
+    width: 100%;
+}
 
 .padder {
     padding: 10px;
@@ -314,11 +321,12 @@ p {
     /*padding-right:2em;*/
 }
 
-@media(min-width: 768px){
+@media(min-width: 768px) {
     #orgs {
         direction: rtl;
     }
 }
+
 #orgs {
     text-align: right;
     position: absolute;
@@ -333,9 +341,9 @@ p {
         margin-bottom: .2rem;
     }
 
-    #startLower-right #orgs a:hover {
-        color: #751919;
-    }
+#startLower-right #orgs a:hover {
+    color: #751919;
+}
 
 
 #startLower-right {
@@ -355,26 +363,26 @@ p {
 }
 
 #startLower-right li {
-    margin-right:unset;
+    margin-right: unset;
 }
 
 #lastLo {
     line-height: 1em;
     font-size: 1.3em;
-    margin-top:.5em;
+    margin-top: .5em;
 }
 
 
-@media (min-width: 992px){
+@media (min-width: 992px) {
     #lastLo {
-        text-align:left;
-        margin-top:0;
+        text-align: left;
+        margin-top: 0;
     }
 }
 
-    #lastLo dl {
-        margin-bottom: unset;
-    }
+#lastLo dl {
+    margin-bottom: unset;
+}
 
 /*#about, #apperance, #secret, #story, #rumors{
     margin-top: 2em;
@@ -552,11 +560,12 @@ h2.line {
 
 
 /**************  sidenav ****************/
-@media(max-width: 576px){
-    #mySidenav{
-        display:none;
+@media(max-width: 576px) {
+    #mySidenav {
+        display: none;
     }
 }
+
 #mySidenav {
     position: sticky;
     top: 30px;
@@ -604,18 +613,18 @@ h2.line {
     background: black;
     font-size: 1.5em; /*or 1.25em*/
     /*color: gray;*/
-    color:black;
+    color: black;
     padding: .5em 1em;
     border-radius: 2em 1em 4em / 0.5em 3em;
     margin-bottom: unset;
     text-transform: lowercase;
     transition: all 0.3s;
-    cursor:pointer;
+    cursor: pointer;
 }
 
     #secret p.revealed {
         color: gray;
-        cursor:default;
+        cursor: default;
     }
 
 /**************  Stories  ****************/
@@ -780,6 +789,60 @@ main .rift {
         text-shadow: 1px 1px black;
     }
 
+.rift #story .tab {
+    margin-left: 1em;
+    margin-right: 1em;
+    border-bottom: none;
+}
+
+    .rift #story .tab button {
+        border-top-left-radius: 23%;
+        background-color: rgb(204 88 218 / 72%);
+        color: seashell;
+    }
+
+        .rift #story .tab button:hover {
+            background-color: rgb(204 88 218);
+        }
+
+        .rift #story .tab button.active {
+            background-color: rgb(62 54 197 / 72%);
+        }
+
+.rift #story .tabcontent {
+    border: 1px groove rgb(224 190 40 / 46%);
+    border-radius: 25px;
+    border-top: none;
+}
+
+    .rift #story .tabcontent h3 {
+        text-shadow: none;
+        color: #86248299;
+        -webkit-text-stroke: 1px darkorchid;
+    }
+
+
+    .rift #story .tabcontent .tags {
+        text-shadow: none;
+    }
+
+.rift .tags a {
+    border: 1px solid #524475c2;
+    background-color: rgb(113 181 159 / 70%);
+    transition: .2s;
+    text-shadow: 1px 1px 3px black;
+}
+
+.rift #story .tags a:hover,
+.rift #story .tags a:focus {
+    box-shadow: 4px 2px #351552e0;
+}
+
+.rift .tags a:hover,
+.rift .tags a:focus {
+    box-shadow: 4px 2px #762b80e0;
+    text-shadow: 0px 1px black;
+}
 /**************  Rumors  ****************/
 #rumor-list, #make-rumor {
     padding-left: 15%;
@@ -812,7 +875,7 @@ main .rift {
     box-shadow: -1px 8px 20px 0px rgba(0,0,0, .28);
 }
 
-@media(min-width:576px){
+@media(min-width:576px) {
     #rumor-list .col-12:nth-child(2n),
     #rumor-list .col-12:nth-child(2n) .col-sm-9 {
         justify-content: flex-start;
@@ -830,31 +893,30 @@ main .rift {
     #rumor-list .col-12:nth-child(2n+1) h6 {
         text-align: left;
     }
-
 }
 
-@media(max-width: 576px){
+@media(max-width: 576px) {
     #rumor-list .col-12:nth-child(2n),
     #rumor-list .col-12:nth-child(2n) .col-sm-9,
     #rumor-list .col-12:nth-child(2n+1),
     #rumor-list .col-12:nth-child(2n+1) .col-sm-9 {
         justify-content: center;
     }
+
         #rumor-list .col-12:nth-child(2n) h6,
         #rumor-list .col-12:nth-child(2n+1) h6 {
             text-align: left;
         }
-
 }
 
 #make-rumor {
     text-align: left;
 }
 
-#make-rumor #daSubmit{
-    font-size:.8em;
-    border: 1px solid darkgoldenrod;
-}
+    #make-rumor #daSubmit {
+        font-size: .8em;
+        border: 1px solid darkgoldenrod;
+    }
 /**************  Making the template my own  ****************/
 .ht-options {
     padding: .4em 0 .3em 0;
@@ -863,14 +925,14 @@ main .rift {
     text-shadow: -1px 1px black;
 }
 
-    .pls-style {
-        margin-left: 2.5em;
-        margin-right: 2.5em;
-    }
+.pls-style {
+    margin-left: 2.5em;
+    margin-right: 2.5em;
+}
 
-    .ht-options .row {
-        margin-top: -.5em;
-    }
+.ht-options .row {
+    margin-top: -.5em;
+}
 
 .ht-widget {
     text-align: left;
@@ -899,7 +961,7 @@ main .rift {
     }
 
     .nav-options .nav-menu ul li:hover > a,
-    .nav-options .humberger-menu:hover, 
+    .nav-options .humberger-menu:hover,
     .nav-options .nav-search:hover {
         background: rgba(0, 212, 255, .84);
         text-shadow: 1px 0px 0px #ffffff;
@@ -943,7 +1005,7 @@ a {
 }
 
 .tags {
-    text-align:left;
+    text-align: left;
 }
 
     .tags a {
@@ -959,24 +1021,27 @@ a {
         background-color: ghostwhite;
     }
 
-    .copyright-area p{
-        margin-bottom: 0;
-    }
+.copyright-area p {
+    margin-bottom: 0;
+}
+
 .copyright-area {
     padding: 1em 0 1em;
     margin-top: 20px;
     text-shadow: -1px 1px black;
-    border:none;
+    border: none;
     font-size: 17px;
-    margin-left:2.5em;
+    margin-left: 2.5em;
     margin-right: 2.5em;
 }
-.copyright-area a{
-    color:unset;
-}
-.copyright-area .ca-links{
-    text-align:unset;
-}
+
+    .copyright-area a {
+        color: unset;
+    }
+
+    .copyright-area .ca-links {
+        text-align: unset;
+    }
 
 .humberger-menu-wrapper {
     background: rgba(95, 13, 214, 1);
@@ -1180,10 +1245,11 @@ textarea::-webkit-scrollbar-thumb,
     border-color: goldenrod;
 }
 /**************  Index  ****************/
-.info-box{
-    margin:.3em;
+.info-box {
+    margin: .3em;
 }
-.info-box .col-auto{
-    border:solid;
-    cursor:pointer;
-}
+
+    .info-box .col-auto {
+        border: solid;
+        cursor: pointer;
+    }

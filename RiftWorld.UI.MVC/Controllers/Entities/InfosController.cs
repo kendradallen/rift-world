@@ -15,6 +15,100 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
     {
         private RiftWorldEntities db = new RiftWorldEntities();
 
+        public ActionResult TogglePub(short id, string submit)
+        {
+            Info info = db.Infos.Where(i => i.InfoId == id).First();
+            if (submit == "Publish")
+            {
+                info.IsPublished = true;
+                switch (info.InfoTypeId)
+                {
+                    case 1: //lore
+                        Lore lore = db.Lores.Where(x => x.LoreId == info.IdWithinType).First();
+                        lore.IsPublished = true;
+                        db.Entry(lore).State = EntityState.Modified;
+                        break;
+                    case 2: //npc
+                        NPC npc = db.NPCs.Where(x => x.NpcId == info.IdWithinType).First();
+                        npc.IsPublished = true;
+                        db.Entry(npc).State = EntityState.Modified;
+                        break;
+                    case 3: //org
+                        Org org = db.Orgs.Where(x => x.OrgId == info.IdWithinType).First();
+                        org.IsPublished = true;
+                        db.Entry(org).State = EntityState.Modified;
+                        break;
+                    case 4: //locale
+                        Locale locale = db.Locales.Where(x => x.LocaleId == info.IdWithinType).First();
+                        locale.IsPublished = true;
+                        db.Entry(locale).State = EntityState.Modified;
+                        break;
+                    case 5: // rift
+                        Rift rift = db.Rifts.Where(x => x.RiftId == info.IdWithinType).First();
+                        rift.IsPublished = true;
+                        db.Entry(rift).State = EntityState.Modified;
+                        break;
+                    case 6: //event
+                        Event taevent = db.Events.Where(x => x.EventId == info.IdWithinType).First();
+                        taevent.IsPublished = true;
+                        db.Entry(taevent).State = EntityState.Modified;
+                        break;
+                    case 7: //item
+                        Item item = db.Items.Where(x => x.ItemId == info.IdWithinType).First();
+                        item.IsPublished = true;
+                        db.Entry(item).State = EntityState.Modified;
+                        break;
+                }
+            }
+            else
+            {
+                info.IsPublished = false;
+                switch (info.InfoTypeId)
+                {
+                    case 1: //lore
+                        Lore lore = db.Lores.Where(x => x.LoreId == info.IdWithinType).First();
+                        lore.IsPublished = false;
+                        db.Entry(lore).State = EntityState.Modified;
+                        break;
+                    case 2: //npc
+                        NPC npc = db.NPCs.Where(x => x.NpcId == info.IdWithinType).First();
+                        npc.IsPublished = false;
+                        db.Entry(npc).State = EntityState.Modified;
+                        break;
+                    case 3: //org
+                        Org org = db.Orgs.Where(x => x.OrgId == info.IdWithinType).First();
+                        org.IsPublished = false;
+                        db.Entry(org).State = EntityState.Modified;
+                        break;
+                    case 4: //locale
+                        Locale locale = db.Locales.Where(x => x.LocaleId == info.IdWithinType).First();
+                        locale.IsPublished = false;
+                        db.Entry(locale).State = EntityState.Modified;
+                        break;
+                    case 5: // rift
+                        Rift rift = db.Rifts.Where(x => x.RiftId == info.IdWithinType).First();
+                        rift.IsPublished = false;
+                        db.Entry(rift).State = EntityState.Modified;
+                        break;
+                    case 6: //event
+                        Event taevent = db.Events.Where(x => x.EventId == info.IdWithinType).First();
+                        taevent.IsPublished = false;
+                        db.Entry(taevent).State = EntityState.Modified;
+                        break;
+                    case 7: //item
+                        Item item = db.Items.Where(x => x.ItemId == info.IdWithinType).First();
+                        item.IsPublished = false;
+                        db.Entry(item).State = EntityState.Modified;
+                        break;
+                }
+            }
+            db.Entry(info).State = EntityState.Modified;
+            db.SaveChanges();
+
+            return RedirectToAction("Details", new { id = id });
+        }
+
+
         [Authorize(Roles ="Admin")]
         public ActionResult Todo()
         {

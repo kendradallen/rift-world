@@ -1,7 +1,7 @@
 ﻿@model RiftWorld.DATA.EF.Character
 
 @{
-    ViewBag.Title = "Edit" + Model.CharacterName;
+    ViewBag.Title = "Edit " + Model.CharacterName;
     int nameMax;
     int descripMax;
     int aboutMax;
@@ -30,6 +30,12 @@
 
 <div class="col-12 player">
     <h2>@ViewBag.Title</h2>
+    @if (User.IsInRole("Player"))
+    {
+        <div class="alert alert-danger" role="alert">
+            As a reminder: do not update your character without notifying either Katherine or a designated mod before hand. We will know when you update the character.
+        </div>
+    }
 
     @using (Html.BeginForm("Edit", "Characters", FormMethod.Post, new { @enctype = "multipart/form-data" }))
     {
@@ -97,11 +103,11 @@
                 @Html.LabelFor(model => model.PortraitFileName, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10 row">
                     @*@Html.EditorFor(model => model.PortraitFileName, new { htmlAttributes = new { @class = "form-control" } })
-        @Html.ValidationMessageFor(model => model.PortraitFileName, "", new { @class = "text-danger" })*@
+                        @Html.ValidationMessageFor(model => model.PortraitFileName, "", new { @class = "text-danger" })*@
                     @Html.HiddenFor(model => model.PortraitFileName)
                     <div class="col-12">
-                        <input type="file" name="picture" id="imgInp"/>
-                        <img class="img-fluid img-thumbnail border-00" src="~/Content/img/character/@Model.PortraitFileName" id="imgPre"/>
+                        <input type="file" name="picture" id="imgInp" />
+                        <img class="img-fluid img-thumbnail border-00" src="~/Content/img/character/@Model.PortraitFileName" id="imgPre" />
                     </div>
                     <div class="col-12">
                         @Html.ValidationMessageFor(model => model.PortraitFileName, "", new { @class = "text-danger" })
@@ -133,7 +139,7 @@
                 @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
                     <div class="da-focus">
-                        @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control count", data_max = descripMax, style = "height: 7em" } })
+                        @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control count", data_max = descripMax, style = "height: 7em;font-size:1em;" } })
                     </div>
                     @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
                     <div id="tcp-Description" class="col-md-offset-2 col-12 @(startDescription <0 ? "invalid":"")"><span id="tc-Description">@startDescription</span> character(s) left.</div>
@@ -145,7 +151,7 @@
                 @Html.LabelFor(model => model.About, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
                     <div class="da-focus">
-                        @Html.EditorFor(model => model.About, new { htmlAttributes = new { @class = "form-control count", data_max = aboutMax, style = "height: 10em" } })
+                        @Html.EditorFor(model => model.About, new { htmlAttributes = new { @class = "form-control count", data_max = aboutMax, style = "height: 10em;font-size:1em;" } })
                     </div>
                     @Html.ValidationMessageFor(model => model.About, "", new { @class = "text-danger" })
                     <div id="tcp-About" class="col-md-offset-2 col-12 @(startAbout <0 ? "invalid":"")"><span id="tc-About">@startAbout</span> character(s) left.</div>

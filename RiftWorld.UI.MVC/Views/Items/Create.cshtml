@@ -34,108 +34,109 @@
     {
         @Html.AntiForgeryToken()
 
-    <div class="form-horizontal">
-        <hr />
-        <div class="col-auto oops-summary">
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        </div>
-        @Html.HiddenFor(model => model.IsPublished)
-        <div class="form-group">
-            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label" })
-            <div class="col-12">
-                <div class="da-focus">
-                    @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control count", data_max = nameMax } })
-                </div>
-                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
-                <div id="tcp-Name" class="col-md-offset-2 col-12 @(startName <0 ? "invalid":"")"><span id="tc-Name">@startName</span> character(s) left.</div>
+        <div class="form-horizontal">
+            <hr />
+            <div class="col-auto oops-summary">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
             </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Blurb, htmlAttributes: new { @class = "control-label" })
-            <div class="col-12">
-                <div class="da-focus">
-                    @Html.EditorFor(model => model.Blurb, new { htmlAttributes = new { @class = "form-control count", data_max = blurbMax, style = "height:4em;" } })
-                </div>
-                @Html.ValidationMessageFor(model => model.Blurb, "", new { @class = "text-danger" })
-                <div id="tcp-Blurb" class="col-md-offset-2 col-12 @(startBlurb <0 ? "invalid":"")"><span id="tc-Blurb">@startBlurb</span> character(s) left.</div>
-            </div>
-        </div>
-
-        <div class="form-group row align-items-center">
-            @Html.LabelFor(model => model.PictureFileName, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10 row">
-                @Html.HiddenFor(model => model.PictureFileName)
+            @Html.HiddenFor(model => model.IsPublished)
+            <div class="form-group">
+                @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label" })
                 <div class="col-12">
-                    <input type="file" name="picture" id="imgInp" />
-                    <img class="img-fluid img-thumbnail border-00" src="~/Content/img/item/default.jpg" id="imgPre" />
+                    <div class="da-focus">
+                        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control count", data_max = nameMax } })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                    <div id="tcp-Name" class="col-md-offset-2 col-12 @(startName <0 ? "invalid":"")"><span id="tc-Name">@startName</span> character(s) left.</div>
                 </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Blurb, htmlAttributes: new { @class = "control-label" })
                 <div class="col-12">
-                    @Html.ValidationMessageFor(model => model.PictureFileName, "", new { @class = "text-danger" })
-                </div>
-
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Artist, htmlAttributes: new { @class = "control-label" })
-            <div class="col-12">
-                <div class="da-focus">
-                    @Html.EditorFor(model => model.Artist, new { htmlAttributes = new { @class = "form-control count", data_max = artistMax } })
-                </div>
-                @Html.ValidationMessageFor(model => model.Artist, "", new { @class = "text-danger" })
-                <div id="tcp-Artist" class="col-md-offset-2 col-12 @(startArtist <0 ? "invalid":"")"><span id="tc-Artist">@startArtist</span> character(s) left.</div>
-
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.DescriptionText, htmlAttributes: new { @class = "control-label" })
-            <div class="col-12">
-                @Html.EditorFor(model => model.DescriptionText, new { htmlAttributes = new { @class = "form-control rich", style = "height:20em;" } })
-                @Html.ValidationMessageFor(model => model.DescriptionText, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.PropertyText, htmlAttributes: new { @class = "control-label" })
-            <div class="col-12">
-                @Html.EditorFor(model => model.PropertyText, new { htmlAttributes = new { @class = "form-control rich", style = "height:20em;" } })
-                @Html.ValidationMessageFor(model => model.PropertyText, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.HistoryText, htmlAttributes: new { @class = "control-label" })
-            <div class="col-12">
-                @Html.EditorFor(model => model.HistoryText, new { htmlAttributes = new { @class = "form-control rich", style = "height:20em;" } })
-                @Html.ValidationMessageFor(model => model.HistoryText, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label for="tags">Tags</label>
-            @Html.ListBox("tags", (MultiSelectList)ViewBag.Tags)
-        </div>
-
-        <div class="form-group">
-            <div class="form-check larger">
-                <div class="checkbox">
-                    @Html.EditorFor(model => model.IsSecret, new { htmlAttribute = new { @class = "form-check-input" } })
-                    @Html.LabelFor(model => model.IsSecret, htmlAttributes: new { @class = "form-check-label" })
+                    <div class="da-focus">
+                        @Html.EditorFor(model => model.Blurb, new { htmlAttributes = new { @class = "form-control count", data_max = blurbMax, style = "height:4em;" } })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.Blurb, "", new { @class = "text-danger" })
+                    <div id="tcp-Blurb" class="col-md-offset-2 col-12 @(startBlurb <0 ? "invalid":"")"><span id="tc-Blurb">@startBlurb</span> character(s) left.</div>
                 </div>
             </div>
-        </div>
 
-        <div class="form-group">
-            <div class="col-12 btn-group">
-                <input type="submit" name="submit" value="Save Progress" class="btn btn-warning" />
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#confirmModal">
-                    Publish
-                </button>
+            <div class="form-group row align-items-center">
+                @Html.LabelFor(model => model.PictureFileName, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10 row">
+                    @Html.HiddenFor(model => model.PictureFileName)
+                    <div class="col-12">
+                        <input type="file" name="picture" id="imgInp" />
+                        <img class="img-fluid img-thumbnail border-00" src="~/Content/img/item/default.jpg" id="imgPre" />
+                    </div>
+                    <div class="col-12">
+                        @Html.ValidationMessageFor(model => model.PictureFileName, "", new { @class = "text-danger" })
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Artist, htmlAttributes: new { @class = "control-label" })
+                <div class="col-12">
+                    <div class="da-focus">
+                        @Html.EditorFor(model => model.Artist, new { htmlAttributes = new { @class = "form-control count", data_max = artistMax } })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.Artist, "", new { @class = "text-danger" })
+                    <div id="tcp-Artist" class="col-md-offset-2 col-12 @(startArtist <0 ? "invalid":"")"><span id="tc-Artist">@startArtist</span> character(s) left.</div>
+
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.DescriptionText, htmlAttributes: new { @class = "control-label" })
+                <div class="col-12">
+                    @Html.EditorFor(model => model.DescriptionText, new { htmlAttributes = new { @class = "form-control rich", style = "height:20em;" } })
+                    @Html.ValidationMessageFor(model => model.DescriptionText, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.PropertyText, htmlAttributes: new { @class = "control-label" })
+                <div class="col-12">
+                    @Html.EditorFor(model => model.PropertyText, new { htmlAttributes = new { @class = "form-control rich", style = "height:20em;" } })
+                    @Html.ValidationMessageFor(model => model.PropertyText, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.HistoryText, htmlAttributes: new { @class = "control-label" })
+                <div class="col-12">
+                    @Html.EditorFor(model => model.HistoryText, new { htmlAttributes = new { @class = "form-control rich", style = "height:20em;" } })
+                    @Html.ValidationMessageFor(model => model.HistoryText, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="tags">Tags</label>
+                @Html.ListBox("tags", (MultiSelectList)ViewBag.Tags)
+            </div>
+
+            <!--todo remove display:none  and class disabled once logic for info being secret done-->
+            <div class="form-group disabled" style="display:none;">
+                <div class="form-check larger">
+                    <div class="checkbox">
+                        @Html.EditorFor(model => model.IsSecret, new { htmlAttribute = new { @class = "form-check-input" } })
+                        @Html.LabelFor(model => model.IsSecret, htmlAttributes: new { @class = "form-check-label" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-12 btn-group">
+                    <input type="submit" name="submit" value="Save Progress" class="btn btn-warning" />
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#confirmModal">
+                        Publish
+                    </button>
+                </div>
             </div>
         </div>
-    </div>
 
         <!-- Modal -->
         <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel" aria-hidden="true">

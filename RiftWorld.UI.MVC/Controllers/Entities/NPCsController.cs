@@ -520,21 +520,6 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             HttpPostedFileBase crestPic,
             string submit)
         {
-            #region Save or Publish?
-            switch (submit)
-            {
-                case "Save Progress":
-                case "Un-Publish":
-                    npc.IsPublished = false;
-                    break;
-                case "Publish":
-                case "Save":
-                    npc.IsPublished = true;
-                    break;
-                case "Save and go to complex edit":
-                    break;
-            }
-            #endregion
 
             #region Pre-model picture check
             if (portraitPic != null)
@@ -584,6 +569,22 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
 
             if (ModelState.IsValid)
             {
+                #region Save or Publish?
+                switch (submit)
+                {
+                    case "Save Progress":
+                    case "Un-Publish":
+                        npc.IsPublished = false;
+                        break;
+                    case "Publish":
+                    case "Save":
+                        npc.IsPublished = true;
+                        break;
+                    case "Save and go to complex edit":
+                        break;
+                }
+                #endregion
+
                 var infoid = npc.InfoId;
                 #region Info Update
                 //Info info = db.Infos.Find(infoid);
@@ -644,7 +645,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                     //remove old picture if it had a different extension (and thus would not be overridden)
                     string oldName = npc.PortraitFileName;
                     string oldExt = oldName.Substring(oldName.LastIndexOf('.'));
-                    if (oldExt != ext)
+                    if (oldName != "default.jpg" && oldExt != ext)
                     {
                         string fullPath = Request.MapPath("~/Content/img/npc/" + oldName);
                         if (System.IO.File.Exists(fullPath))
@@ -673,7 +674,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                     //remove old picture if it had a different extension (and thus would not be overridden)
                     string oldName = npc.CrestFileName;
                     string oldExt = oldName.Substring(oldName.LastIndexOf('.'));
-                    if (oldExt != ext)
+                    if (oldName != "org_default.jpg" && oldExt != ext)
                     {
                         string fullPath = Request.MapPath("~/Content/img/npc/" + oldName);
                         if (System.IO.File.Exists(fullPath))
@@ -932,17 +933,22 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
 
             #region Remove Pictures
             //portrait
-            string fullPath = Request.MapPath("~/Content/img/npc/" + picture1);
-            if (System.IO.File.Exists(fullPath))
+            if (picture1 != "default.jpg")
             {
-                System.IO.File.Delete(fullPath);
+                string fullPath = Request.MapPath("~/Content/img/npc/" + picture1);
+                if (System.IO.File.Exists(fullPath))
+                {
+                    System.IO.File.Delete(fullPath);
+                }
             }
-
             //crest
-            string fullPath2 = Request.MapPath("~/Content/img/npc/" + picture2);
-            if (System.IO.File.Exists(fullPath2))
+            if (picture2 != "org_default.jpg")
             {
-                System.IO.File.Delete(fullPath2);
+                string fullPath2 = Request.MapPath("~/Content/img/npc/" + picture2);
+                if (System.IO.File.Exists(fullPath2))
+                {
+                    System.IO.File.Delete(fullPath2);
+                }
             }
             #endregion
 

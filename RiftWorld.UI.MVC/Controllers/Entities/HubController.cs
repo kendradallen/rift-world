@@ -103,5 +103,65 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             var orgs = db.CharOrgs.Where(x => x.CharId == character.CharacterId && x.KatherineApproved);
             return PartialView(orgs.ToList());
         }
+
+        public ActionResult RequestRetire()
+        {
+            var userId = User.Identity.GetUserId();
+
+            UserDetail user = db.UserDetails.Where(u => u.UserId == userId).First();
+
+            Character character = db.Characters.Where(c => c.CharacterId == user.CurrentCharacterId).First();
+
+            character.IsRequestingRetire = true;
+            db.Entry(character).State = EntityState.Modified;
+            db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+        public ActionResult CancelRetireRequest()
+        {
+            var userId = User.Identity.GetUserId();
+
+            UserDetail user = db.UserDetails.Where(u => u.UserId == userId).First();
+
+            Character character = db.Characters.Where(c => c.CharacterId == user.CurrentCharacterId).First();
+
+            character.IsRequestingRetire = false;
+            db.Entry(character).State = EntityState.Modified;
+            db.SaveChanges();
+            return RedirectToAction("Index");
+
+        }
+
+        public ActionResult ChangeLocation()
+        {
+            var userId = User.Identity.GetUserId();
+
+            UserDetail user = db.UserDetails.Where(u => u.UserId == userId).First();
+
+            Character character = db.Characters.Where(c => c.CharacterId == user.CurrentCharacterId).First();
+
+            ViewBag.CurrentLocationId = new SelectList(db.Locales.OrderBy(l => l.Name), "LocaleId", "Name", character.CurrentLocationId);
+
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ChangeLocation(short id)
+        {
+            var userId = User.Identity.GetUserId();
+
+            UserDetail user = db.UserDetails.Where(u => u.UserId == userId).First();
+
+            Character character = db.Characters.Where(c => c.CharacterId == user.CurrentCharacterId).First();
+
+            character.CurrentLocationId = id;
+            character.HasUnseenEdit = true;
+
+            db.Entry(character).State = EntityState.Modified;
+            db.SaveChanges();
+            return RedirectToAction("Index");
+        }
     }
 }

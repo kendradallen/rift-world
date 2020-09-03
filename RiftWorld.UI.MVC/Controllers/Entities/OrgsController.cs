@@ -222,6 +222,14 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             return PartialView(events);
         }
 
+        [OverrideAuthorization]
+        [Authorize(Roles = "Character")]
+        public ActionResult JoinOrg(short id)
+        {
+
+            return RedirectToAction("Details", new { id = id });
+        }
+
         // GET: Orgs/Create
         public ActionResult Create()
         {
@@ -735,7 +743,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                     //remove old picture if it had a different extension (and thus would not be overridden)
                     string oldName = org.SymbolFileName;
                     string oldExt = oldName.Substring(oldName.LastIndexOf('.'));
-                    if (oldExt != ext)
+                    if (oldName != "default.jpg" && oldExt != ext)
                     {
                         string fullPath = Request.MapPath("~/Content/img/org/" + oldName);
                         if (System.IO.File.Exists(fullPath))
@@ -1046,10 +1054,13 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             db.Orgs.Remove(org);
 
             #region Remove Picture
-            string fullPath = Request.MapPath("~/Content/img/org/" + picture);
-            if (System.IO.File.Exists(fullPath))
+            if (picture != "default.jpg")
             {
-                System.IO.File.Delete(fullPath);
+                string fullPath = Request.MapPath("~/Content/img/org/" + picture);
+                if (System.IO.File.Exists(fullPath))
+                {
+                    System.IO.File.Delete(fullPath);
+                }
             }
             #endregion
 

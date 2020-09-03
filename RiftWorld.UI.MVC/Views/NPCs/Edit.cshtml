@@ -107,7 +107,7 @@
                 @Html.LabelFor(model => model.Alias, htmlAttributes: new { @class = "control-label" })
                 <div class="col-12">
                     <div class="da-focus">
-                        @Html.EditorFor(model => model.Alias, new { htmlAttributes = new { @class = "form-control count", data_max = aliasMax, style = "height:4em;" } })
+                        @Html.EditorFor(model => model.Alias, new { htmlAttributes = new { @class = "form-control count", data_max = aliasMax, style = "height:4em;", placeholder = "(optional)" } })
                     </div>
                     @Html.ValidationMessageFor(model => model.Alias, "", new { @class = "text-danger" })
                     <div id="tcp-Alias" class="col-md-offset-2 col-12 @(startAlias <0 ? "invalid":"")"><span id="tc-Alias">@startAlias</span> character(s) left.</div>
@@ -238,7 +238,8 @@
                 </div>
             </div>
 
-            <div class="form-group" id="qSecret">
+            <!--todo remove display:none  and class disabled once logic for info being secret done-->
+            <div class="form-group disabled" id="qSecret" style="display:none;">
                 <div class="form-check larger">
                     <div class="checkbox">
                         @Html.EditorFor(model => model.IsSecret, new { htmlAttribute = new { @class = "form-check-input" } })

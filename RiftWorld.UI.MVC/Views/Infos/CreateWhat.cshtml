@@ -1,29 +1,29 @@
 ﻿
 @{
-    ViewBag.Title = "CreateNew";
+    ViewBag.Title = "Create New";
 }
 <div class="col-12">
     <h2>Info</h2>
     <a class="btn btn-info" href="@Url.Action("Create", "NPCs")">NPC</a>
+    <a class="btn btn-info" href="@Url.Action("Create", "Locales")">Locale</a>
     <a class="btn btn-info" href="@Url.Action("Create", "Rifts")">Rift</a>
     <a class="btn btn-info" href="@Url.Action("Create", "Items")">Item</a>
     <a class="btn btn-info" href="@Url.Action("Create", "Orgs")">Organization</a>
     <a class="btn btn-info" href="@Url.Action("Create", "Events")">Event</a>
     <a class="btn btn-info" href="@Url.Action("Create", "Lores")">Lore</a>
-    <a class="btn btn-info" href="@Url.Action("Create", "Locales")">Locale</a>
 
-    <h2>Other</h2>
+    <h2 class="mt-3">Other</h2>
     <a class="btn btn-info" href="@Url.Action("Create", "Secrets")">Secret</a>
     <a class="btn btn-info" href="@Url.Action("Create", "Stories")">Story</a>
 
-    <h2>Options</h2>
+    <h2 class="mt-3">Options</h2>
     <a class="btn btn-info" href="@Url.Action("Create", "Species")">Species</a>
     <a class="btn btn-info" href="@Url.Action("Create", "Classes")">Class</a>
     <a class="btn btn-info" href="@Url.Action("Create", "Genders")">Gender</a>
     <a class="btn btn-info" href="@Url.Action("Create", "Tags")">Tag</a>
     <a class="btn btn-info" href="@Url.Action("Create", "SecretTags")">Secret Tag</a>
 
-    <h2>Give out the secrets</h2>
+    <h2 class="mt-3">Give out the secrets</h2>
     <a class="btn btn-info" href="@Url.Action("GiveSecretSingle", "Secrets")">Give character a secret tag</a>
 
 </div>

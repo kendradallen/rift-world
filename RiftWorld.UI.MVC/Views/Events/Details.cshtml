@@ -11,11 +11,7 @@
         <div class="col-auto align-self-end" id="date">
             <p style="margin-bottom:unset;">
                 @Model.Month
-                @Html.DisplayFor(model => model.DateDay)@(Model.IsHistory ? "," : "")
-                @if (Model.IsHistory)
-                {
-                    <span> @Html.DisplayFor(model => model.DateYear) @(Model.DateEra.IsEmpty() ? "" : "of the " + Html.DisplayFor(model => model.DateEra) + " era")</span>
-                }
+                @Model.Season
             </p>
         </div>
     </div>
@@ -88,92 +84,3 @@
     <script src="~/Scripts/MyJS/rumor.js"></script>
     <script src="~/Scripts/MyJS/secret.js"></script>
 }
-@*<div>
-        <h4>Event</h4>
-        <hr />
-        <dl class="dl-horizontal">
-            <dt>
-                @Html.DisplayNameFor(model => model.Name)
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.Name)
-            </dd>
-
-            <dt>
-                @Html.DisplayNameFor(model => model.IsHistory)
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.IsHistory)
-            </dd>
-
-            <dt>
-                @Html.DisplayNameFor(model => model.AboutText)
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.AboutText)
-            </dd>
-
-            <dt>
-                @Html.DisplayNameFor(model => model.NormalParticipants)
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.NormalParticipants)
-            </dd>
-
-            <dt>
-                @Html.DisplayNameFor(model => model.IsPublished)
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.IsPublished)
-            </dd>
-
-            <dt>
-                @Html.DisplayNameFor(model => model.DateDay)
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.DateDay)
-            </dd>
-
-            <dt>
-                @Html.DisplayNameFor(model => model.DateMonth)
-            </dt>
-
-            <dd>
-            </dd>
-
-            <dt>
-                @Html.DisplayNameFor(model => model.DateYear)
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.DateYear)
-            </dd>
-
-            <dt>
-                @Html.DisplayNameFor(model => model.DateEra)
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.DateEra)
-            </dd>
-
-            <dt>
-                @Html.DisplayNameFor(model => model.Info.Blurb)
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.Info.Blurb)
-            </dd>
-
-        </dl>
-    </div>
-    <p>
-        @Html.ActionLink("Edit", "Edit", new { id = Model.EventId }) |
-        @Html.ActionLink("Back to List", "Index")
-    </p>*@

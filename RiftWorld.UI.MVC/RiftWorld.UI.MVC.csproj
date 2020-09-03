@@ -665,7 +665,6 @@
     <Content Include="_Archive\fonts\fontawesome-webfont.woff2" />
     <Content Include="_Archive\fonts\FontAwesome.otf" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\NPCs\DetailsV2.cshtml" />
     <Content Include="Views\NPCs\_OrgsPartial.cshtml" />
     <Content Include="Views\Secrets\_Details.cshtml" />
     <Content Include="Views\Stories\_Stories.cshtml" />
@@ -795,6 +794,7 @@
     <Content Include="Views\Secrets\RemoveSecret.cshtml" />
     <Content Include="Views\Locales\_Events.cshtml" />
     <Content Include="Views\Events\_Locales.cshtml" />
+    <Content Include="Views\Characters\Confirmed.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -20,7 +20,7 @@ namespace RiftWorld.UI.MVC.Models
         public string Name { get; set; }
 
         [Required]
-        [StringLength(100, ErrorMessage = " ")]
+        [StringLength(350, ErrorMessage = " ")]
         [UIHint("MultilineText")]
         public string Blurb { get; set; }
 
@@ -56,25 +56,27 @@ namespace RiftWorld.UI.MVC.Models
         [StringLength(40, ErrorMessage = " ")]
         public string Artist { get; set; }
 
+        [Display(Name = "Secret?")]
+        public bool IsSecret { get; set; }
+
     }
 
     public class OrgEditPostVM
     {
-        #region prop
-        public short InfoId { get; set; }
-        public short OrgId { get; set; }
-
-        #region OrgCreate
         #region Fields
         private string _aboutText;
         #endregion
+
+        #region prop
+        public short InfoId { get; set; }
+        public short OrgId { get; set; }
 
         [Required]
         [StringLength(50, ErrorMessage = " ")]
         public string Name { get; set; }
 
         [Required]
-        [StringLength(100, ErrorMessage = " ")]
+        [StringLength(350, ErrorMessage = " ")]
         [UIHint("MultilineText")]
         public string Blurb { get; set; }
 
@@ -110,12 +112,14 @@ namespace RiftWorld.UI.MVC.Models
         [StringLength(40, ErrorMessage = " ")]
         public string Artist { get; set; }
 
-        #endregion
+        [Display(Name = "Secret?")]
+        public bool IsSecret { get; set; }
+
         #endregion
 
         #region ctor
         public OrgEditPostVM() { }
-        public OrgEditPostVM(Org org, string blurb)
+        public OrgEditPostVM(Org org, Info info)
         {
             InfoId = org.InfoId;
             OrgId = org.OrgId;
@@ -126,28 +130,28 @@ namespace RiftWorld.UI.MVC.Models
             AboutText = org.AboutText;
             IsPublished = org.IsPublished;
             Artist = org.Artist;
-            Blurb = blurb;
+            Blurb = info.Blurb;
+            IsSecret = info.IsSecret;
         }
         #endregion
     }
 
     public class OrgEditVM
     {
-        #region prop
-        public short InfoId { get; set; }
-        public short OrgId { get; set; }
-
-        #region OrgCreate
         #region Fields
         private string _aboutText;
         #endregion
+
+        #region prop
+        public short InfoId { get; set; }
+        public short OrgId { get; set; }
 
         [Required]
         [StringLength(50, ErrorMessage = " ")]
         public string Name { get; set; }
 
         [Required]
-        [StringLength(100, ErrorMessage = " ")]
+        [StringLength(350, ErrorMessage = " ")]
         [UIHint("MultilineText")]
         public string Blurb { get; set; }
 
@@ -193,12 +197,14 @@ namespace RiftWorld.UI.MVC.Models
         [StringLength(40, ErrorMessage = " ")]
         public string Artist { get; set; }
 
-        #endregion
+        [Display(Name = "Secret?")]
+        public bool IsSecret { get; set; }
+
         #endregion
 
         #region ctor
         public OrgEditVM() { }
-        public OrgEditVM(Org org, string blurb)
+        public OrgEditVM(Org org, Info info)
         {
             InfoId = org.InfoId;
             OrgId = org.OrgId;
@@ -209,7 +215,8 @@ namespace RiftWorld.UI.MVC.Models
             AboutText = org.AboutText;
             IsPublished = org.IsPublished;
             Artist = org.Artist;
-            Blurb = blurb;
+            Blurb = info.Blurb;
+            IsSecret = info.IsSecret;
         }
         public OrgEditVM(OrgEditPostVM org)
         {
@@ -223,6 +230,7 @@ namespace RiftWorld.UI.MVC.Models
             IsPublished = org.IsPublished;
             Artist = org.Artist;
             Blurb = org.Blurb;
+            IsSecret = org.IsSecret;
         }
         #endregion
     }
@@ -354,45 +362,5 @@ namespace RiftWorld.UI.MVC.Models
         public string Name { get; set; }
         public short Id { get; set; }
         public string Blurb { get; set; }
-
-        public byte Day { get; set; }
-        public byte DateMonth { get; set; }
-        public Nullable<short> Year { get; set; }
-        public string Era { get; set; }
-        public string Month
-        {
-            get
-            {
-                switch (DateMonth)
-                {
-                    case 1:
-                        return "Hammer";
-                    case 2:
-                        return "Alturiak";
-                    case 3:
-                        return "Ches";
-                    case 4:
-                        return "Tarsakh";
-                    case 5:
-                        return "Mirthul";
-                    case 6:
-                        return "Kythorn";
-                    case 7:
-                        return "Flamerule";
-                    case 8:
-                        return "Eleasias";
-                    case 9:
-                        return "Elient";
-                    case 10:
-                        return "Marpenoth";
-                    case 11:
-                        return "Uktar";
-                    case 12:
-                        return "Nightal";
-                    default:
-                        return "Uhhhhh, wait...";
-                }
-            }
-        }
     }
 }

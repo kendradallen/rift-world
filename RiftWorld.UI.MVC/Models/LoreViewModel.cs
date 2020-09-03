@@ -26,9 +26,12 @@ namespace RiftWorld.UI.MVC.Models
         public bool IsPublished { get; set; }
 
         [Required]
-        [StringLength(100, ErrorMessage = " ")]
+        [StringLength(350, ErrorMessage = " ")]
         [UIHint("MultilineText")]
         public string Blurb { get; set; }
+
+        [Display(Name = "Secret?")]
+        public bool IsSecret { get; set; }
 
     }
 
@@ -50,20 +53,24 @@ namespace RiftWorld.UI.MVC.Models
         public bool IsPublished { get; set; }
 
         [Required]
-        [StringLength(100, ErrorMessage = " ")]
+        [StringLength(350, ErrorMessage = " ")]
         [UIHint("MultilineText")]
         public string Blurb { get; set; }
 
+        [Display(Name = "Secret?")]
+        public bool IsSecret { get; set; }
+
         #region ctor
         public LoreEditVM(){ }
-        public LoreEditVM(Lore lore, string blurb)
+        public LoreEditVM(Lore lore, Info info)
         {
             InfoId = lore.InfoId;
             LoreId = lore.LoreId;
             Name = lore.Name;
-            Blurb = blurb;
+            Blurb = info.Blurb;
             TheContent = lore.TheContent;
             IsPublished = lore.IsPublished;
+            IsSecret = info.IsSecret;
         }
         #endregion
     }

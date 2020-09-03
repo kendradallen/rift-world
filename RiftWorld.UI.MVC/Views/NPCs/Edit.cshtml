@@ -10,7 +10,7 @@
     int aliasMax;
     int quoteMax;
     int startName = nameMax = 30;
-    int startBlurb = blurbMax = 100;
+    int startBlurb = blurbMax = 350;
     int startPortraitArtist = portraitMax = 40;
     int startCrestArtist = crestMax = 40;
     int startAlias = aliasMax = 500;
@@ -62,6 +62,7 @@
         <a class="btn btn-secondary" href="#qApperance">Apperance</a>
         <a class="btn btn-secondary" href="#qAbout">About</a>
         <a class="btn btn-secondary" href="#qTags">Tags</a>
+        <a class="btn btn-secondary" href="#qSecret">Secret</a>
     </div>
 
     <!-- Edit form -->
@@ -129,8 +130,8 @@
                 <div class="col-md-10 row">
                     @Html.HiddenFor(model => model.PortraitFileName)
                     <div class="col-12">
-                        <input type="file" name="portraitPic" id="imgInp"/>
-                        <img class="img-fluid img-thumbnail border-00" src="~/Content/img/npc/@Model.PortraitFileName" id="imgPre"/>
+                        <input type="file" name="portraitPic" id="imgInp" />
+                        <img class="img-fluid img-thumbnail border-00" src="~/Content/img/npc/@Model.PortraitFileName" id="imgPre" />
                     </div>
                     <div class="col-12">
                         @Html.ValidationMessageFor(model => model.PortraitFileName, "", new { @class = "text-danger" })
@@ -153,7 +154,7 @@
             <div class="form-group" id="qRace">
                 @Html.LabelFor(model => model.RaceId, htmlAttributes: new { @class = "control-label" })
                 <div class="col-md-8">
-                    @Html.DropDownList("RaceId", null, "-- Unknown --",  htmlAttributes: new { @class = "" })
+                    @Html.DropDownList("RaceId", null, "-- Unknown --", htmlAttributes: new { @class = "" })
                     @Html.ValidationMessageFor(model => model.RaceId, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -178,7 +179,7 @@
             <div class="form-group" id="qLastLo">
                 @Html.LabelFor(model => model.LastLocationId, htmlAttributes: new { @class = "control-label" })
                 <div class="col-md-8">
-                    @Html.DropDownList("LastLocationId", null , "-- Unknown --", new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.DropDownList("LastLocationId", null, "-- Unknown --", new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.LastLocationId, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -188,8 +189,8 @@
                 <div class="col-md-10 row">
                     @Html.HiddenFor(model => model.CrestFileName)
                     <div class="col-12">
-                        <input type="file" name="crestPic" id="imgInp2"/>
-                        <img class="img-fluid img-thumbnail border-00" src="~/Content/img/npc/@Model.CrestFileName" id="imgPre2"/>
+                        <input type="file" name="crestPic" id="imgInp2" />
+                        <img class="img-fluid img-thumbnail border-00" src="~/Content/img/npc/@Model.CrestFileName" id="imgPre2" />
                     </div>
                     <div class="col-12">
                         @Html.ValidationMessageFor(model => model.PortraitFileName, "", new { @class = "text-danger" })
@@ -234,6 +235,15 @@
                             <option value="@x.TagId" @(theSelected.Contains(x.TagId) ? "selected" : "")>@x.TagName</option>
                         }
                     </select>
+                </div>
+            </div>
+
+            <div class="form-group" id="qSecret">
+                <div class="form-check larger">
+                    <div class="checkbox">
+                        @Html.EditorFor(model => model.IsSecret, new { htmlAttribute = new { @class = "form-check-input" } })
+                        @Html.LabelFor(model => model.IsSecret, htmlAttributes: new { @class = "form-check-label" })
+                    </div>
                 </div>
             </div>
 
@@ -285,9 +295,9 @@
 
     }
 
-        <div style="text-align:left;">
-            @Html.ActionLink("Cancel", "Details", new { id = Model.NpcId })
-        </div>
+    <div style="text-align:left;">
+        @Html.ActionLink("Cancel", "Details", new { id = Model.NpcId })
+    </div>
 </div>
 
 @section Scripts{

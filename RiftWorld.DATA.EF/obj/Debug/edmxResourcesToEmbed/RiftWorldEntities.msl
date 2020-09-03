@@ -59,6 +59,9 @@
     <EntitySetMapping Name="Characters">
       <EntityTypeMapping TypeName="RiftWorldModel.Character">
         <MappingFragment StoreEntitySet="Characters">
+          <ScalarProperty Name="IsRequestingRetire" ColumnName="IsRequestingRetire" />
+          <ScalarProperty Name="IsPlayerDemo" ColumnName="IsPlayerDemo" />
+          <ScalarProperty Name="BackupPortrayerName" ColumnName="BackupPortrayerName" />
           <ScalarProperty Name="IsDead" ColumnName="IsDead" />
           <ScalarProperty Name="HasUnseenEdit" ColumnName="HasUnseenEdit" />
           <ScalarProperty Name="ClassString" ColumnName="ClassString" />
@@ -132,10 +135,8 @@
     <EntitySetMapping Name="Events">
       <EntityTypeMapping TypeName="RiftWorldModel.Event">
         <MappingFragment StoreEntitySet="Events">
-          <ScalarProperty Name="DateEra" ColumnName="DateEra" />
-          <ScalarProperty Name="DateYear" ColumnName="DateYear" />
+          <ScalarProperty Name="DateSeason" ColumnName="DateSeason" />
           <ScalarProperty Name="DateMonth" ColumnName="DateMonth" />
-          <ScalarProperty Name="DateDay" ColumnName="DateDay" />
           <ScalarProperty Name="EventId" ColumnName="EventId" />
           <ScalarProperty Name="InfoId" ColumnName="InfoId" />
           <ScalarProperty Name="Name" ColumnName="Name" />
@@ -158,6 +159,7 @@
     <EntitySetMapping Name="Infos">
       <EntityTypeMapping TypeName="RiftWorldModel.Info">
         <MappingFragment StoreEntitySet="Infos">
+          <ScalarProperty Name="IsSecret" ColumnName="IsSecret" />
           <ScalarProperty Name="InfoId" ColumnName="InfoId" />
           <ScalarProperty Name="InfoTypeId" ColumnName="InfoTypeId" />
           <ScalarProperty Name="IdWithinType" ColumnName="IdWithinType" />
@@ -192,7 +194,6 @@
           <ScalarProperty Name="ItemId" ColumnName="ItemId" />
           <ScalarProperty Name="InfoId" ColumnName="InfoId" />
           <ScalarProperty Name="Name" ColumnName="Name" />
-          <ScalarProperty Name="Blurb" ColumnName="Blurb" />
           <ScalarProperty Name="PictureFileName" ColumnName="PictureFileName" />
           <ScalarProperty Name="DescriptionText" ColumnName="DescriptionText" />
           <ScalarProperty Name="PropertyText" ColumnName="PropertyText" />

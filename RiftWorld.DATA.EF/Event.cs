@@ -28,10 +28,8 @@ namespace RiftWorld.DATA.EF
         public string AboutText { get; set; }
         public string NormalParticipants { get; set; }
         public bool IsPublished { get; set; }
-        public byte DateDay { get; set; }
-        public byte DateMonth { get; set; }
-        public Nullable<short> DateYear { get; set; }
-        public string DateEra { get; set; }
+        public Nullable<byte> DateMonth { get; set; }
+        public Nullable<byte> DateSeason { get; set; }
     
         public virtual Info Info { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

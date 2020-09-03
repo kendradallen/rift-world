@@ -90,6 +90,9 @@
     <Property Name="ClassString" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
     <Property Name="HasUnseenEdit" Type="Boolean" Nullable="false" />
     <Property Name="IsDead" Type="Boolean" Nullable="false" />
+    <Property Name="BackupPortrayerName" Type="String" MaxLength="32" FixedLength="false" Unicode="false" />
+    <Property Name="IsPlayerDemo" Type="Boolean" Nullable="false" />
+    <Property Name="IsRequestingRetire" Type="Boolean" Nullable="false" />
   </EntityType>
   <EntityType Name="CharOrg">
     <Key>
@@ -161,10 +164,8 @@
     <NavigationProperty Name="Info" Relationship="Self.FK_Events_Infos" FromRole="Events" ToRole="Infos" />
     <NavigationProperty Name="LocaleEvents" Relationship="Self.FK_LocaleEvents_Events" FromRole="Events" ToRole="LocaleEvents" />
     <NavigationProperty Name="OrgEvents" Relationship="Self.FK_OrgEvents_Events" FromRole="Events" ToRole="OrgEvents" />
-    <Property Name="DateDay" Type="Byte" Nullable="false" />
-    <Property Name="DateMonth" Type="Byte" Nullable="false" />
-    <Property Name="DateYear" Type="Int16" />
-    <Property Name="DateEra" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+    <Property Name="DateMonth" Type="Byte" />
+    <Property Name="DateSeason" Type="Byte" />
   </EntityType>
   <EntityType Name="Gender">
     <Key>
@@ -183,7 +184,7 @@
     <Property Name="InfoId" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="InfoTypeId" Type="Byte" Nullable="false" />
     <Property Name="IdWithinType" Type="Int16" />
-    <Property Name="Blurb" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Blurb" Type="String" MaxLength="350" FixedLength="false" Unicode="false" Nullable="false" />
     <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
     <Property Name="IsPublished" Type="Boolean" Nullable="false" />
     <NavigationProperty Name="Events" Relationship="Self.FK_Events_Infos" FromRole="Infos" ToRole="Events" />
@@ -198,6 +199,7 @@
     <NavigationProperty Name="Rumors" Relationship="Self.FK_Rumors_Infos" FromRole="Infos" ToRole="Rumors" />
     <NavigationProperty Name="Secrets" Relationship="Self.FK_Secrets_Infos" FromRole="Infos" ToRole="Secrets" />
     <NavigationProperty Name="Stories" Relationship="Self.FK_Stories_Infos" FromRole="Infos" ToRole="Stories" />
+    <Property Name="IsSecret" Type="Boolean" Nullable="false" />
   </EntityType>
   <EntityType Name="InfoTag">
     <Key>
@@ -224,7 +226,6 @@
     <Property Name="ItemId" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="InfoId" Type="Int16" Nullable="false" />
     <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-    <Property Name="Blurb" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
     <Property Name="PictureFileName" Type="String" MaxLength="75" FixedLength="false" Unicode="false" />
     <Property Name="DescriptionText" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
     <Property Name="PropertyText" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
@@ -1419,8 +1420,8 @@
       <End Role="AspNetUsers" EntitySet="AspNetUsers" />
     </AssociationSet>
     <FunctionImport Name="getSecrets" EntitySet="Secrets" ReturnType="Collection(RiftWorldModel.Secret)">
-      <Parameter Name="PlayerId" Type="String" Mode="In" />
-      <Parameter Name="InfoId" Type="Int16" Mode="In" />
+      <Parameter Name="PlayerId" Mode="In" Type="String" />
+      <Parameter Name="InfoId" Mode="In" Type="Int16" />
     </FunctionImport>
     <AssociationSet Name="FK_NPCs_Gender" Association="RiftWorldModel.FK_NPCs_Gender">
       <End Role="Gender" EntitySet="Genders" />

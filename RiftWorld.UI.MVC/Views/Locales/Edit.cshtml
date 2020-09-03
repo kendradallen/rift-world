@@ -9,7 +9,7 @@
     int appointedMax;
     int avgMax;
     int startName = nameMax = 50;
-    int startBlurb = blurbMax = 100;
+    int startBlurb = blurbMax = 350;
     int startAppointed = appointedMax = 8000;
     int startAvg = avgMax = 3000;
     if (Model.Name != null)
@@ -50,6 +50,7 @@
         <a class="btn btn-secondary" href="#qAvgLifestyle">Average Lifestyle</a>
         <a class="btn btn-secondary" href="#qAbout">About</a>
         <a class="btn btn-secondary" href="#qTags">Tags</a>
+        <a class="btn btn-secondary" href="#qSecret">Secret</a>
     </div>
 
     <!-- Edit form -->
@@ -57,137 +58,146 @@
     {
         @Html.AntiForgeryToken()
 
-    <div class="form-horizontal">
-        <hr />
-        <div class="col-auto oops-summary">
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        </div>
-        @Html.HiddenFor(model => model.LocaleId)
-        @Html.HiddenFor(model => model.InfoId)
-        @Html.HiddenFor(model => model.IsPublished)
+        <div class="form-horizontal">
+            <hr />
+            <div class="col-auto oops-summary">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            </div>
+            @Html.HiddenFor(model => model.LocaleId)
+            @Html.HiddenFor(model => model.InfoId)
+            @Html.HiddenFor(model => model.IsPublished)
 
-        <div class="form-group" id="qName">
-            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label" })
-            <div class="col-12">
-                <div class="da-focus">
-                    @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control count", data_max = nameMax } })
+            <div class="form-group" id="qName">
+                @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label" })
+                <div class="col-12">
+                    <div class="da-focus">
+                        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control count", data_max = nameMax } })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                    <div id="tcp-Name" class="col-md-offset-2 col-12 @(startName <0 ? "invalid":"")"><span id="tc-Name">@startName</span> character(s) left.</div>
                 </div>
-                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
-                <div id="tcp-Name" class="col-md-offset-2 col-12 @(startName <0 ? "invalid":"")"><span id="tc-Name">@startName</span> character(s) left.</div>
             </div>
-        </div>
 
-        <div class="form-group" id="qBlurb">
-            @Html.LabelFor(model => model.Blurb, htmlAttributes: new { @class = "control-label " })
-            <div class="col-12">
-                <div class="da-focus">
-                    @Html.EditorFor(model => model.Blurb, new { htmlAttributes = new { @class = "form-control count", data_max = blurbMax, style = "height:4em;" } })
+            <div class="form-group" id="qBlurb">
+                @Html.LabelFor(model => model.Blurb, htmlAttributes: new { @class = "control-label " })
+                <div class="col-12">
+                    <div class="da-focus">
+                        @Html.EditorFor(model => model.Blurb, new { htmlAttributes = new { @class = "form-control count", data_max = blurbMax, style = "height:4em;" } })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.Blurb, "", new { @class = "text-danger" })
+                    <div id="tcp-Blurb" class="col-md-offset-2 col-12 @(startBlurb <0 ? "invalid":"")"><span id="tc-Blurb">@startBlurb</span> character(s) left.</div>
                 </div>
-                @Html.ValidationMessageFor(model => model.Blurb, "", new { @class = "text-danger" })
-                <div id="tcp-Blurb" class="col-md-offset-2 col-12 @(startBlurb <0 ? "invalid":"")"><span id="tc-Blurb">@startBlurb</span> character(s) left.</div>
             </div>
-        </div>
 
-        <div class="form-group" id="qLevelOfLocale">
-            @Html.LabelFor(model => model.LevelOfLocaleId, "LevelOfLocaleId", htmlAttributes: new { @class = "control-label" })
-            <div class="col-md-8">
-                @Html.DropDownList("LevelOfLocaleId", null, htmlAttributes: new { @class = "" })
-                @Html.ValidationMessageFor(model => model.LevelOfLocaleId, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group" id="qRegion">
-            @Html.LabelFor(model => model.RegionId, "RegionId", htmlAttributes: new { @class = "control-label " })
-            <div class="col-md-8">
-                @Html.DropDownList("RegionId", null , "--- N/A ---", htmlAttributes: new { @class = "" })
-                @Html.ValidationMessageFor(model => model.RegionId, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group" id="qClosestCity">
-            @Html.LabelFor(model => model.ClosestCityId, "ClosestCityId", htmlAttributes: new { @class = "control-label " })
-            <div class="col-md-8">
-                @Html.DropDownList("ClosestCityId", null, "--- N/A ---", htmlAttributes: new { @class = "" })
-                @Html.ValidationMessageFor(model => model.ClosestCityId, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group" id="qCouncilDelegate">
-            @Html.LabelFor(model => model.CouncilDelegateId, "CouncilDelegateId", htmlAttributes: new { @class = "control-label" })
-            <div class="col-md-8">
-                @Html.DropDownList("CouncilDelegateId", null, "None", htmlAttributes: new { @class = "" })
-                @Html.ValidationMessageFor(model => model.CouncilDelegateId, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group" id="qAppointed">
-            @Html.LabelFor(model => model.Appointed, htmlAttributes: new { @class = "control-label " })
-            <div class="col-12">
-                @Html.EditorFor(model => model.Appointed, new { htmlAttributes = new { @class = "form-control rich count", data_max = appointedMax, style = "height:20em;" } })
-                @Html.ValidationMessageFor(model => model.Appointed, "", new { @class = "text-danger" })
-                @*<div id="tcp-Appointed" class="col-md-offset-2 col-12 @(startAppointed <0 ? "invalid":"")"><span id="tc-Appointed">@startAppointed</span> character(s) left.</div>*@
-            </div>
-        </div>
-
-        <div class="form-group" id="qEnvironment">
-            @Html.LabelFor(model => model.Environment, htmlAttributes: new { @class = "control-label" })
-            <div class="col-12">
-                @Html.EditorFor(model => model.Environment, new { htmlAttributes = new { @class = "form-control rich", style = "height:20em;" } })
-                @Html.ValidationMessageFor(model => model.Environment, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group" id="qAvgLifestyle">
-            @Html.LabelFor(model => model.AvgLifestyle, htmlAttributes: new { @class = "control-label " })
-            <div class="col-12">
-                @Html.EditorFor(model => model.AvgLifestyle, new { htmlAttributes = new { @class = "form-control rich count", data_max = avgMax, style = "height:20em;" } })
-                @Html.ValidationMessageFor(model => model.AvgLifestyle, "", new { @class = "text-danger" })
-                @*<div id="tcp-Avg" class="col-md-offset-2 col-12 @(startAvg <0 ? "invalid":"")"><span id="tc-Avg">@startAvg</span> character(s) left.</div>*@
-            </div>
-        </div>
-
-        <div class="form-group" id="qAbout">
-            @Html.LabelFor(model => model.About, htmlAttributes: new { @class = "control-label " })
-            <div class="col-12">
-                @Html.EditorFor(model => model.About, new { htmlAttributes = new { @class = "form-control rich", style = "height:20em;" } })
-                @Html.ValidationMessageFor(model => model.About, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group" id="qTags">
-            <label for="tags">Tags</label>
-            <div class="col-12">
-                <select multiple="multiple" name="tags" id="tags">
-                    @foreach (var x in ViewBag.Tags)
-                    {
-                        <option value="@x.TagId" @(theSelected.Contains(x.TagId) ? "selected" : "")>@x.TagName</option>
-                    }
-                </select>
-            </div>
-        </div>
-
-        <div class="form-group" id="qFinish">
-            @if (!Model.IsPublished)
-            {
-                <div class="col-md-offset-2 col-12 btn-group">
-                    <input type="submit" name="submit" value="Save Progress" class="btn btn-warning" />
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#confirmModal">Publish</button>
+            <div class="form-group" id="qLevelOfLocale">
+                @Html.LabelFor(model => model.LevelOfLocaleId, "LevelOfLocaleId", htmlAttributes: new { @class = "control-label" })
+                <div class="col-md-8">
+                    @Html.DropDownList("LevelOfLocaleId", null, htmlAttributes: new { @class = "" })
+                    @Html.ValidationMessageFor(model => model.LevelOfLocaleId, "", new { @class = "text-danger" })
                 </div>
-            }
-            else
-            {
-                <p>This item has been made public</p>
-                <div class="col-md-offset-2 col-12 btn-group">
-                    <input type="submit" name="submit" value="Un-Publish" class="btn btn-danger" />
-                    <input type="submit" name="submit" value="Save" class="btn btn-success" />
-                </div>
-            }
-            <div class="col-12 col-md-offset-2 btn-group" style="margin-top: 1em;">
-                <input type="submit" name="submit" value="Save and go to complex edit" class="btn btn-info" />
             </div>
 
+            <div class="form-group" id="qRegion">
+                @Html.LabelFor(model => model.RegionId, "RegionId", htmlAttributes: new { @class = "control-label " })
+                <div class="col-md-8">
+                    @Html.DropDownList("RegionId", null, "--- N/A ---", htmlAttributes: new { @class = "" })
+                    @Html.ValidationMessageFor(model => model.RegionId, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group" id="qClosestCity">
+                @Html.LabelFor(model => model.ClosestCityId, "ClosestCityId", htmlAttributes: new { @class = "control-label " })
+                <div class="col-md-8">
+                    @Html.DropDownList("ClosestCityId", null, "--- N/A ---", htmlAttributes: new { @class = "" })
+                    @Html.ValidationMessageFor(model => model.ClosestCityId, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group" id="qCouncilDelegate">
+                @Html.LabelFor(model => model.CouncilDelegateId, "CouncilDelegateId", htmlAttributes: new { @class = "control-label" })
+                <div class="col-md-8">
+                    @Html.DropDownList("CouncilDelegateId", null, "None", htmlAttributes: new { @class = "" })
+                    @Html.ValidationMessageFor(model => model.CouncilDelegateId, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group" id="qAppointed">
+                @Html.LabelFor(model => model.Appointed, htmlAttributes: new { @class = "control-label " })
+                <div class="col-12">
+                    @Html.EditorFor(model => model.Appointed, new { htmlAttributes = new { @class = "form-control rich count", data_max = appointedMax, style = "height:20em;" } })
+                    @Html.ValidationMessageFor(model => model.Appointed, "", new { @class = "text-danger" })
+                    @*<div id="tcp-Appointed" class="col-md-offset-2 col-12 @(startAppointed <0 ? "invalid":"")"><span id="tc-Appointed">@startAppointed</span> character(s) left.</div>*@
+                </div>
+            </div>
+
+            <div class="form-group" id="qEnvironment">
+                @Html.LabelFor(model => model.Environment, htmlAttributes: new { @class = "control-label" })
+                <div class="col-12">
+                    @Html.EditorFor(model => model.Environment, new { htmlAttributes = new { @class = "form-control rich", style = "height:20em;" } })
+                    @Html.ValidationMessageFor(model => model.Environment, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group" id="qAvgLifestyle">
+                @Html.LabelFor(model => model.AvgLifestyle, htmlAttributes: new { @class = "control-label " })
+                <div class="col-12">
+                    @Html.EditorFor(model => model.AvgLifestyle, new { htmlAttributes = new { @class = "form-control rich count", data_max = avgMax, style = "height:20em;" } })
+                    @Html.ValidationMessageFor(model => model.AvgLifestyle, "", new { @class = "text-danger" })
+                    @*<div id="tcp-Avg" class="col-md-offset-2 col-12 @(startAvg <0 ? "invalid":"")"><span id="tc-Avg">@startAvg</span> character(s) left.</div>*@
+                </div>
+            </div>
+
+            <div class="form-group" id="qAbout">
+                @Html.LabelFor(model => model.About, htmlAttributes: new { @class = "control-label " })
+                <div class="col-12">
+                    @Html.EditorFor(model => model.About, new { htmlAttributes = new { @class = "form-control rich", style = "height:20em;" } })
+                    @Html.ValidationMessageFor(model => model.About, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group" id="qTags">
+                <label for="tags">Tags</label>
+                <div class="col-12">
+                    <select multiple="multiple" name="tags" id="tags">
+                        @foreach (var x in ViewBag.Tags)
+                        {
+                            <option value="@x.TagId" @(theSelected.Contains(x.TagId) ? "selected" : "")>@x.TagName</option>
+                        }
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group" id="qSecret">
+                <div class="form-check larger">
+                    <div class="checkbox">
+                        @Html.EditorFor(model => model.IsSecret, new { htmlAttribute = new { @class = "form-check-input" } })
+                        @Html.LabelFor(model => model.IsSecret, htmlAttributes: new { @class = "form-check-label" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group" id="qFinish">
+                @if (!Model.IsPublished)
+                {
+                    <div class="col-md-offset-2 col-12 btn-group">
+                        <input type="submit" name="submit" value="Save Progress" class="btn btn-warning" />
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#confirmModal">Publish</button>
+                    </div>
+                }
+                else
+                {
+                    <p>This item has been made public</p>
+                    <div class="col-md-offset-2 col-12 btn-group">
+                        <input type="submit" name="submit" value="Un-Publish" class="btn btn-danger" />
+                        <input type="submit" name="submit" value="Save" class="btn btn-success" />
+                    </div>
+                }
+                <div class="col-12 col-md-offset-2 btn-group" style="margin-top: 1em;">
+                    <input type="submit" name="submit" value="Save and go to complex edit" class="btn btn-info" />
+                </div>
+
+            </div>
         </div>
-    </div>
 
         <!-- Modal -->
         <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel" aria-hidden="true">

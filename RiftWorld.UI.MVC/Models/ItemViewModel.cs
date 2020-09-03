@@ -21,7 +21,7 @@ namespace RiftWorld.UI.MVC.Models
         public string Name { get; set; }
 
         [Required]
-        [StringLength(100, ErrorMessage = " ")]
+        [StringLength(350, ErrorMessage = " ")]
         [UIHint("MultilineText")]
         public string Blurb { get; set; }
 
@@ -91,6 +91,10 @@ namespace RiftWorld.UI.MVC.Models
 
 
         public bool IsPublished { get; set; }
+
+        [Display(Name = "Secret?")]
+        public bool IsSecret { get; set; }
+
     }
 
     public class ItemEditPostVM
@@ -112,11 +116,14 @@ namespace RiftWorld.UI.MVC.Models
         public string Name { get; set; }
 
         [Required]
-        [StringLength(100, ErrorMessage = " ")]
+        [StringLength(350, ErrorMessage = " ")]
         [UIHint("MultilineText")]
         public string Blurb { get; set; }
 
         public string PictureFileName { get; set; }
+
+        [StringLength(40, ErrorMessage = "If you are reading this Katherine, you may need to actually get me. Because I set the limit on characters for artist to 40. You just went over it.")]
+        public string Artist { get; set; }
 
         [Display(Name = "Description")]
         [UIHint("MultilineText")]
@@ -179,8 +186,9 @@ namespace RiftWorld.UI.MVC.Models
 
         public bool IsPublished { get; set; }
 
-        [StringLength(40, ErrorMessage = "If you are reading this Katherine, you may need to actually get me. Because I set the limit on characters for artist to 40. You just went over it.")]
-        public string Artist { get; set; }
+        [Display(Name = "Secret?")]
+        public bool IsSecret { get; set; }
+
         #endregion
 
 
@@ -189,18 +197,19 @@ namespace RiftWorld.UI.MVC.Models
         //public List<Tag> Tags { get; set; }
 
         public ItemEditPostVM() { }
-        public ItemEditPostVM(Item item) //after item would be blurb (normally)
+        public ItemEditPostVM(Item item, Info info) 
         {
             InfoId = item.InfoId;
             ItemId = item.ItemId;
             Name = item.Name;
-            Blurb = item.Blurb;
             PictureFileName = item.PictureFileName;
             DescriptionText = item.DescriptionText;
             PropertyText = item.PropertyText;
             HistoryText = item.HistoryText;
             IsPublished = item.IsPublished;
             Artist = item.Artist;
+            Blurb = info.Blurb;
+            IsSecret = info.IsSecret;
         }
     }
 
@@ -223,11 +232,14 @@ namespace RiftWorld.UI.MVC.Models
         public string Name { get; set; }
 
         [Required]
-        [StringLength(100, ErrorMessage = " ")]
+        [StringLength(350, ErrorMessage = " ")]
         [UIHint("MultilineText")]
         public string Blurb { get; set; }
 
         public string PictureFileName { get; set; }
+
+        [StringLength(40, ErrorMessage = "If you are reading this Katherine, you may need to actually get me. Because I set the limit on characters for artist to 40. You just went over it.")]
+        public string Artist { get; set; }
 
         [Display(Name = "Description")]
         [UIHint("MultilineText")]
@@ -320,8 +332,9 @@ namespace RiftWorld.UI.MVC.Models
 
         public bool IsPublished { get; set; }
 
-        [StringLength(40, ErrorMessage = "If you are reading this Katherine, you may need to actually get me. Because I set the limit on characters for artist to 40. You just went over it.")]
-        public string Artist { get; set; }
+        [Display(Name = "Secret?")]
+        public bool IsSecret { get; set; }
+
         #endregion
 
 
@@ -330,18 +343,19 @@ namespace RiftWorld.UI.MVC.Models
         //public List<Tag> Tags { get; set; }
 
         public ItemEditVM() { }
-        public ItemEditVM(Item item) //after item would be blurb (normally)
+        public ItemEditVM(Item item, Info info)
         {
             InfoId = item.InfoId;
             ItemId = item.ItemId;
             Name = item.Name;
-            Blurb = item.Blurb;
             PictureFileName = item.PictureFileName;
             DescriptionText = item.DescriptionText;
             PropertyText = item.PropertyText;
             HistoryText = item.HistoryText;
             IsPublished = item.IsPublished;
             Artist = item.Artist;
+            Blurb = info.Blurb;
+            IsSecret = info.IsSecret;
         }
         public ItemEditVM(ItemEditPostVM item)
         {
@@ -355,6 +369,7 @@ namespace RiftWorld.UI.MVC.Models
             HistoryText = item.HistoryText;
             IsPublished = item.IsPublished;
             Artist = item.Artist;
+            IsSecret = item.IsSecret;
         }
     }
 

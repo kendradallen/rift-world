@@ -41,12 +41,6 @@ namespace RiftWorld.UI.MVC.Models
 
     public class UnderApprovalVM
     {
-        //public string Type { get; set; }
-        //public int Id { get; set; }
-        //public string OrgName { get; set; }
-        //public Nullable<short> InfoId { get; set; }
-        //public string RumorContent { get; set; }
-        //public Nullable<DateTime> WrittenDate { get; set; }
         public List<Rumor> Rumors { get; set; }
         public List<Journal> Journals { get; set; }
         public List<CharOrg> Orgs { get; set; }

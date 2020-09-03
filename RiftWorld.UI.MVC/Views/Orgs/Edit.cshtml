@@ -7,7 +7,7 @@
     int blurbMax;
     int artistMax;
     int startName = nameMax = 50;
-    int startBlurb = blurbMax = 100;
+    int startBlurb = blurbMax = 350;
     int startArtist = artistMax = 40;
     if (Model.Name != null)
     {
@@ -40,6 +40,7 @@
         <a class="btn btn-secondary" href="#qPlayerEnabled">Player Enabled</a>
         <a class="btn btn-secondary" href="#qAbout">About</a>
         <a class="btn btn-secondary" href="#qTags">Tags</a>
+        <a class="btn btn-secondary" href="#qSecret">Secret</a>
     </div>
 
     <!-- Edit form -->
@@ -84,8 +85,8 @@
                 <div class="col-md-10 row">
                     @Html.HiddenFor(model => model.SymbolFileName)
                     <div class="col-12">
-                        <input type="file" name="picture" id="imgInp"/>
-                        <img class="img-fluid img-thumbnail border-00" src="~/Content/img/org/@Model.SymbolFileName" id="imgPre"/>
+                        <input type="file" name="picture" id="imgInp" />
+                        <img class="img-fluid img-thumbnail border-00" src="~/Content/img/org/@Model.SymbolFileName" id="imgPre" />
                     </div>
                     <div class="col-12">
                         @Html.ValidationMessageFor(model => model.SymbolFileName, "", new { @class = "text-danger" })
@@ -109,7 +110,7 @@
             <div class="form-group" id="qBaseLocation">
                 @Html.LabelFor(model => model.BaseLocationId, htmlAttributes: new { @class = "control-label" })
                 <div class="col-md-8">
-                    @Html.DropDownList("BaseLocationId",null, "-- Unknown --", htmlAttributes: new { @class = "" })
+                    @Html.DropDownList("BaseLocationId", null, "-- Unknown --", htmlAttributes: new { @class = "" })
                     @Html.ValidationMessageFor(model => model.BaseLocationId, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -138,6 +139,15 @@
                             <option value="@x.TagId" @(theSelected.Contains(x.TagId) ? "selected" : "")>@x.TagName</option>
                         }
                     </select>
+                </div>
+            </div>
+
+            <div class="form-group" id="qSecret">
+                <div class="form-check larger">
+                    <div class="checkbox">
+                        @Html.EditorFor(model => model.IsSecret, new { htmlAttribute = new { @class = "form-check-input" } })
+                        @Html.LabelFor(model => model.IsSecret, htmlAttributes: new { @class = "form-check-label" })
+                    </div>
                 </div>
             </div>
 
@@ -189,9 +199,9 @@
 
     }
 
-        <div style="text-align:left;">
-            @Html.ActionLink("Cancel", "Details", new { id = Model.OrgId })
-        </div>
+    <div style="text-align:left;">
+        @Html.ActionLink("Cancel", "Details", new { id = Model.OrgId })
+    </div>
 </div>
 @section Scripts{
     <script src="~/Scripts/MyJS/edit.js"></script>

@@ -7,7 +7,7 @@
     int blurbMax;
     int startNickname = nicknameMax = 50;
     int startLocation = locationMax = 300;
-    int startBlurb = blurbMax = 100;
+    int startBlurb = blurbMax = 350;
     if (Model != null)
     {
         if (Model.Nickname != null)
@@ -88,12 +88,19 @@
                 </div>
             </div>
 
-
             <div class="form-group">
                 <label for="tags">Tags</label>
                 @Html.ListBox("tags", (MultiSelectList)ViewBag.Tags)
             </div>
 
+            <div class="form-group">
+                <div class="form-check larger">
+                    <div class="checkbox">
+                        @Html.EditorFor(model => model.IsSecret, new { htmlAttribute = new { @class = "form-check-input" } })
+                        @Html.LabelFor(model => model.IsSecret, htmlAttributes: new { @class = "form-check-label" })
+                    </div>
+                </div>
+            </div>
 
             <!-- Modal -->
             <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel" aria-hidden="true">
@@ -129,9 +136,9 @@
         </div>
     }
 
-        <div style="text-align:left;">
-            @Html.ActionLink("Cancel", "CreateWhat", "Infos", null, null)
-        </div>
+    <div style="text-align:left;">
+        @Html.ActionLink("Cancel", "CreateWhat", "Infos", null, null)
+    </div>
 </div>
 
 @section Scripts{

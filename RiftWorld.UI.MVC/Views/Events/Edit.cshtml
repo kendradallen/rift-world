@@ -5,10 +5,8 @@
     List<short> theSelected = ViewBag.Selected;
     int nameMax;
     int blurbMax;
-    int eraMax;
     int startName = nameMax = 50;
-    int startBlurb = blurbMax = 100;
-    int startDateEra = eraMax = 15;
+    int startBlurb = blurbMax = 350;
     if (Model.Name != null)
     {
         startName -= Model.Name.Length;
@@ -16,10 +14,6 @@
     if (Model.Blurb != null)
     {
         startBlurb -= Model.Blurb.Length;
-    }
-    if (Model.DateEra != null)
-    {
-        startDateEra -= Model.DateEra.Length;
     }
 }
 
@@ -40,6 +34,7 @@
         <a class="btn btn-secondary" href="#qNormal">Normal Participants</a>
         <a class="btn btn-secondary" href="#qAbout">About</a>
         <a class="btn btn-secondary" href="#qTags">Tags</a>
+        <a class="btn btn-secondary" href="#qSecret">Secret</a>
     </div>
 
     <!-- Edit form -->
@@ -88,30 +83,17 @@
             <div class="form-group" id="qDate">
                 <label>Date</label>
                 <div class="form-row col-12">
-                    <div class="col-3">
+                    <div class="col-6">
                         <div class="da-focus">
-                            @Html.EditorFor(model => model.DateDay, new { htmlAttributes = new { @class = "form-control", placeholder = "Day" } })
-                        </div>
-                        @Html.ValidationMessageFor(model => model.DateDay, "", new { @class = "text-danger" })
-                    </div>
-                    <div class="col-3">
-                        <div class="da-focus">
-                            @Html.EditorFor(model => model.DateMonth, new { htmlAttributes = new { @class = "form-control", placeholder = "Month" } })
+                            @Html.EditorFor(model => model.DateMonth, new { htmlAttributes = new { @class = "form-control", placeholder = "Month (optional)" } })
                         </div>
                         @Html.ValidationMessageFor(model => model.DateMonth, "", new { @class = "text-danger" })
                     </div>
-                    <div class="col-3">
+                    <div class="col-6">
                         <div class="da-focus">
-                            @Html.EditorFor(model => model.DateYear, new { htmlAttributes = new { @class = "form-control", placeholder = "Year (optional)" } })
+                            @Html.EditorFor(model => model.DateSeason, new { htmlAttributes = new { @class = "form-control", placeholder = "Season (optional)" } })
                         </div>
-                        @Html.ValidationMessageFor(model => model.DateYear, "", new { @class = "text-danger" })
-                    </div>
-                    <div class="col-3">
-                        <div class="da-focus">
-                            @Html.EditorFor(model => model.DateEra, new { htmlAttributes = new { @class = "form-control count", data_max = eraMax, placeholder = "Era (optional)" } })
-                        </div>
-                        @Html.ValidationMessageFor(model => model.DateEra, "", new { @class = "text-danger" })
-                        <div id="tcp-DateEra" class="col-md-offset-2 col-12 @(startDateEra <0 ? "invalid":"")"><span id="tc-DateEra">@startDateEra</span> character(s) left.</div>
+                        @Html.ValidationMessageFor(model => model.DateSeason, "", new { @class = "text-danger" })
                     </div>
                 </div>
 
@@ -144,6 +126,16 @@
                     </select>
                 </div>
             </div>
+
+            <div class="form-group" id="qSecret">
+                <div class="form-check larger">
+                    <div class="checkbox">
+                        @Html.EditorFor(model => model.IsSecret, new { htmlAttribute = new { @class = "form-check-input" } })
+                        @Html.LabelFor(model => model.IsSecret, htmlAttributes: new { @class = "form-check-label" })
+                    </div>
+                </div>
+            </div>
+
 
             <div class="form-group" id="qFinish">
                 @if (!Model.IsPublished)
@@ -192,9 +184,9 @@
 
     }
 
-        <div style="text-align:left;">
-            @Html.ActionLink("Cancel", "Details", new { id = Model.EventId })
-        </div>
+    <div style="text-align:left;">
+        @Html.ActionLink("Cancel", "Details", new { id = Model.EventId })
+    </div>
 </div>
 @section Scripts{
     <script src="~/Scripts/MyJS/edit.js"></script>

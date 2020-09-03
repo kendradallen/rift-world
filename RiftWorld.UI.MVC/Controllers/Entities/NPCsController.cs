@@ -88,67 +88,6 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             return View(nPC);
         }
 
-        // GET: NPCs/Details/5
-        public ActionResult DetailsV2(short? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            NPC nPC = db.NPCs.Find(id);
-            if (nPC == null)
-            {
-                return HttpNotFound();
-            }
-            var npcAndClass = from n in db.NPCs
-                              join cn in db.ClassNPCs on n.NpcId equals cn.NpcId
-                              join c in db.Classes on cn.ClassId equals c.ClassId
-                              select new
-                              {
-                                  NpcId = n.NpcId,
-                                  ClassId = c.ClassId
-                                  //other assignments
-                              }
-                    ;
-            //add the npc's classes
-            //var classes = db.ClassNPCs.Where(c => c.NpcId == id).OrderBy(c => c.ClassOrder.HasValue ).Select(c => c.Class).ToList();
-            List<Class> classes = (from cn in db.ClassNPCs
-                                   where cn.NpcId == id
-                                   orderby cn.ClassOrder.HasValue descending, cn.ClassOrder, cn.Class.ClassName
-                                   select cn.Class)
-                           .ToList()
-                           ;
-
-            int classLength = classes.Count();
-            string holder;
-            switch (classLength)
-            {
-                case 0:
-                    holder = "Unknown";
-                    break;
-                case 1:
-                    holder = classes[0].ClassName;
-                    break;
-                case 2:
-                    holder = classes[0].ClassName + "/" + classes[1].ClassName;
-                    break;
-                default:
-                    holder = "Lots";
-                    break;
-            }
-            ViewBag.Classes = holder;
-            //rumors section
-            ViewBag.HasChar = null;
-            if (User.IsInRole("Player") || User.IsInRole("Mod"))
-            {
-                var userId = User.Identity.GetUserId();
-                var character = db.UserDetails.Where(u => u.UserId == userId).Select(u => u.CurrentCharacterId).FirstOrDefault();
-                ViewBag.HasChar = character;
-                ViewBag.Approved = db.Characters.Where(c => c.CharacterId == character).Select(c => c.IsApproved);
-            }
-            return View(nPC);
-        }
-
         [HttpGet]
         [OverrideAuthorization]
         public PartialViewResult _OrgsPartial(short id)
@@ -187,7 +126,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Name,Alias,Quote,PortraitFileName,RaceId,CrestFileName,ApperanceText,AboutText,LastLocationId,PortraitArtist,CrestArtist,IsDead,GenderId, Blurb")] NpcCreateVM npc,
+        public ActionResult Create([Bind(Include = "Name,Alias,Quote,PortraitFileName,RaceId,CrestFileName,ApperanceText,AboutText,LastLocationId,PortraitArtist,CrestArtist,IsDead,GenderId, Blurb, IsSecret")] NpcCreateVM npc,
             List<short> tags,
             HttpPostedFileBase portraitPic,
             HttpPostedFileBase crestPic,
@@ -242,7 +181,8 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                     IdWithinType = null,
                     Blurb = npc.Blurb,
                     Name = npc.Name,
-                    IsPublished = npc.IsPublished
+                    IsPublished = npc.IsPublished,
+                    IsSecret = npc.IsSecret
                 };
                 db.Infos.Add(info);
                 db.SaveChanges(); //this has to go here in order to ensure that the infoId short below is accurate. Also at this point I am doing no further gets on validity so there is no point to not saving 
@@ -559,8 +499,8 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             ViewBag.GenderId = new SelectList(db.Genders, "GenderId", "GenderName", npc.GenderId);
 
             short infoid = npc.InfoId;
-            string blurb = db.Infos.Where(i => i.InfoId == infoid).Select(i => i.Blurb).First();
-            NpcEditVM model = new NpcEditVM(npc, blurb);
+            Info info = db.Infos.Find(infoid);
+            NpcEditVM model = new NpcEditVM(npc, info);
 
             List<short> selectedTags = db.InfoTags.Where(t => t.InfoId == infoid).Select(t => t.TagId).ToList();
             ViewBag.Selected = selectedTags;
@@ -574,7 +514,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "NpcId,InfoId,Name,Alias,Quote,PortraitFileName,RaceId,CrestFileName,ApperanceText,AboutText,LastLocationId,PortraitArtist,CrestArtist,IsDead,GenderId, Blurb")] NpcEditPostVM npc,
+        public ActionResult Edit([Bind(Include = "NpcId,InfoId,Name,Alias,Quote,PortraitFileName,RaceId,CrestFileName,ApperanceText,AboutText,LastLocationId,PortraitArtist,CrestArtist,IsDead,GenderId, Blurb, IsSecret")] NpcEditPostVM npc,
             List<short> tags,
             HttpPostedFileBase portraitPic,
             HttpPostedFileBase crestPic,
@@ -651,6 +591,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                 info.Name = npc.Name;
                 info.Blurb = npc.Blurb;
                 info.IsPublished = npc.IsPublished;
+                info.IsSecret = npc.IsSecret;
                 #endregion
 
                 #region Update tags
@@ -967,23 +908,6 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             short infoId = nPC.InfoId;
             string picture1 = nPC.PortraitFileName;
             string picture2 = nPC.CrestFileName;
-            db.NPCs.Remove(nPC);
-
-            #region Remove Pictures
-            //portrait
-            string fullPath = Request.MapPath("~/Content/img/npc/" + picture1);
-            if (System.IO.File.Exists(fullPath))
-            {
-                System.IO.File.Delete(fullPath);
-            }
-
-            //crest
-            string fullPath2 = Request.MapPath("~/Content/img/npc/" + picture2);
-            if (System.IO.File.Exists(fullPath2))
-            {
-                System.IO.File.Delete(fullPath2);
-            }
-            #endregion
 
             #region Remove Associations
 
@@ -1002,6 +926,24 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                 db.NpcOrgs.Remove(gone);
             }
             #endregion
+            #endregion
+
+            db.NPCs.Remove(nPC);
+
+            #region Remove Pictures
+            //portrait
+            string fullPath = Request.MapPath("~/Content/img/npc/" + picture1);
+            if (System.IO.File.Exists(fullPath))
+            {
+                System.IO.File.Delete(fullPath);
+            }
+
+            //crest
+            string fullPath2 = Request.MapPath("~/Content/img/npc/" + picture2);
+            if (System.IO.File.Exists(fullPath2))
+            {
+                System.IO.File.Delete(fullPath2);
+            }
             #endregion
 
             #region Remove Rumors

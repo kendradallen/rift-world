@@ -41,6 +41,9 @@ namespace RiftWorld.DATA.EF
         public string ClassString { get; set; }
         public bool HasUnseenEdit { get; set; }
         public bool IsDead { get; set; }
+        public string BackupPortrayerName { get; set; }
+        public bool IsPlayerDemo { get; set; }
+        public bool IsRequestingRetire { get; set; }
     
         public virtual Gender Gender { get; set; }
         public virtual Locale Locale { get; set; }

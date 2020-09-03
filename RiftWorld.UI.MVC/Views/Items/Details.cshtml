@@ -11,7 +11,7 @@
                 @Html.DisplayFor(model => model.Name)
             </div>
             <div id="blurb" style="text-align:left;">
-                @Html.DisplayFor(model => model.Blurb)
+                @Html.DisplayFor(model => model.Info.Blurb)
             </div>
         </div>
         <div id="pic" class="col-md-3 pic align-self-center" style="padding-right:28px;">
@@ -110,82 +110,3 @@
     <script src="~/Scripts/MyJS/rumor.js"></script>
     <script src="~/Scripts/MyJS/secret.js"></script>
 }
-
-@*<div class="col-12">
-        <h2>Details</h2>
-
-        <div>
-            <h4>Item</h4>
-            <hr />
-            <dl class="dl-horizontal">
-                <dt>
-                    @Html.DisplayNameFor(model => model.Name)
-                </dt>
-
-                <dd>
-                    @Html.DisplayFor(model => model.Name)
-                </dd>
-
-                <dt>
-                    @Html.DisplayNameFor(model => model.Blurb)
-                </dt>
-
-                <dd>
-                    @Html.DisplayFor(model => model.Blurb)
-                </dd>
-
-                <dt>
-                    @Html.DisplayNameFor(model => model.PictureFileName)
-                </dt>
-
-                <dd>
-                    @Html.DisplayFor(model => model.PictureFileName)
-                </dd>
-
-                <dt>
-                    @Html.DisplayNameFor(model => model.DescriptionText)
-                </dt>
-
-                <dd>
-                    @Html.Raw(Model.DescriptionText)
-                </dd>
-
-                <dt>
-                    @Html.DisplayNameFor(model => model.PropertyText)
-                </dt>
-
-                <dd>
-                    @Html.Raw(Model.PropertyText)
-                </dd>
-
-                <dt>
-                    @Html.DisplayNameFor(model => model.HistoryText)
-                </dt>
-
-                <dd>
-                    @Html.Raw(Model.HistoryText)
-                </dd>
-
-                <dt>
-                    @Html.DisplayNameFor(model => model.IsPublished)
-                </dt>
-
-                <dd>
-                    @Html.DisplayFor(model => model.IsPublished)
-                </dd>
-
-                <dt>
-                    @Html.DisplayNameFor(model => model.Info.Blurb)
-                </dt>
-
-                <dd>
-                    @Html.DisplayFor(model => model.Info.Blurb)
-                </dd>
-
-            </dl>
-        </div>
-        <p>
-            @Html.ActionLink("Edit", "Edit", new { id = Model.ItemId }) |
-            @Html.ActionLink("Back to List", "Index")
-        </p>
-    </div>*@

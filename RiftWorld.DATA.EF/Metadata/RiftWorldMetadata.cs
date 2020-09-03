@@ -55,12 +55,19 @@ namespace RiftWorld.DATA.EF
 
         [StringLength(40)]
         public string Artist { get; set; }
+
         [StringLength(40)]
         [Display(Name = "Class")]
         public string ClassString { get; set; }
 
         public bool HasUnseenEdit { get; set; }
         public bool IsDead { get; set; }
+
+        [StringLength(32)]
+        public string BackupPortrayerName { get; set; }
+
+        public bool IsPlayerDemo { get; set; }
+        public bool IsRequestingRetire { get; set; }
     }
 
     [MetadataType(typeof(CharacterMetaData))]
@@ -188,19 +195,11 @@ namespace RiftWorld.DATA.EF
 
         public bool IsPublished { get; set; }
 
-        [Required]
-        [Range(1, 40)]
-        public byte DateDay { get; set; }
+        [Range(1, 12)]
+        public Nullable<byte> DateMonth { get; set; }
 
-        [Required]
-        [Range(1, 15)]
-        public byte DateMonth { get; set; }
-
-        [Range(0, 9999)]
-        public Nullable<short> DateYear { get; set; }
-
-        [StringLength(15)]
-        public string DateEra { get; set; }
+        [Range(1,4)]
+        public Nullable<byte> DateSeason { get; set; }
 
     }
 
@@ -257,6 +256,26 @@ namespace RiftWorld.DATA.EF
                 }
             }
         }
+
+        public string Season
+        {
+            get
+            {
+                switch (DateSeason)
+                {
+                    case 1:
+                        return "Spring";
+                    case 2:
+                        return "Summer";
+                    case 3:
+                        return "Fall";
+                    case 4:
+                        return "Winter";
+                    default:
+                        return "uhhhhhhhhhhhhh, HOW?!!";
+                }
+            }
+        }
     }
 
     #endregion
@@ -294,7 +313,7 @@ namespace RiftWorld.DATA.EF
 
         [UIHint("MultilineText")]
         [Required]
-        [StringLength(100)]
+        [StringLength(350)]
         public string Blurb { get; set; }
 
         [Required]
@@ -302,6 +321,7 @@ namespace RiftWorld.DATA.EF
         public string Name { get; set; }
 
         public bool IsPublished { get; set; }
+        public bool IsSecret { get; set; }
 
     }
 
@@ -387,11 +407,6 @@ namespace RiftWorld.DATA.EF
         [Required]
         [StringLength(50)]
         public string Name { get; set; }
-
-        [Required]
-        [StringLength(100)]
-        [UIHint("MultilineText")]
-        public string Blurb { get; set; }
 
         public string PictureFileName { get; set; }
 

@@ -25,7 +25,6 @@
                     @foreach (var item in Model.Holidays)
                     {
                         <li>
-                            @Html.DisplayFor(modelItem => item.Month) @Html.DisplayFor(modelItem => item.Day) -
                             @Html.ActionLink(item.Name, "Details", "Events", new { id = item.Id }, null)
                         </li>
                     }
@@ -40,7 +39,6 @@
                     @foreach (var item in Model.PastEvents)
                     {
                         <li>
-                            @Html.DisplayFor(modelItem => item.Month) @Html.DisplayFor(modelItem => item.Day), @Html.DisplayFor(modelItem => item.Year) @(item.Era.IsEmpty() ? "" : "of the " + Html.DisplayFor(modelItem => item.Era) + " era") -
                             @Html.ActionLink(item.Name, "Details", "Events", new { id = item.Id }, null)
                         </li>
                     }

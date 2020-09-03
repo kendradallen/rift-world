@@ -90,15 +90,10 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                     le.LocaleId == id &&
                     e.IsPublished &&
                     e.IsHistory
-                 orderby e.DateYear, e.DateMonth, e.DateDay
                  select new _LocaleEventsVM()
                  {
                      Name = e.Name,
-                     Id = e.EventId,
-                     Day = e.DateDay,
-                     DateMonth = e.DateMonth,
-                     Year = e.DateYear,
-                     Era = e.DateEra
+                     Id = e.EventId
                  }
                 )
                 .Distinct()
@@ -114,15 +109,11 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                     le.LocaleId == id &&
                     e.IsPublished &&
                     !e.IsHistory
-                orderby e.DateMonth, e.DateDay
+                orderby e.DateMonth
                  select new _LocaleEventsVM()
                  {
                      Name = e.Name,
-                     Id = e.EventId,
-                     Day = e.DateDay,
-                     DateMonth = e.DateMonth,
-                     Year = e.DateYear,
-                     Era = e.DateEra
+                     Id = e.EventId
                  }
                 )
                 .Distinct()
@@ -151,7 +142,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Name,LevelOfLocaleId,RegionId,ClosestCityId,CouncilDelegateId,Appointed,Environment,About, AvgLifestyle, Blurb")] LocaleCreateVM locale,
+        public ActionResult Create([Bind(Include = "Name,LevelOfLocaleId,RegionId,ClosestCityId,CouncilDelegateId,Appointed,Environment,About, AvgLifestyle, Blurb, IsSecret")] LocaleCreateVM locale,
             List<short> tags,
             string submit)
         {
@@ -169,7 +160,8 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                     IdWithinType = null,
                     Blurb = locale.Blurb,
                     Name = locale.Name,
-                    IsPublished = locale.IsPublished
+                    IsPublished = locale.IsPublished,
+                    IsSecret = locale.IsSecret
                 };
                 db.Infos.Add(info);
                 db.SaveChanges(); //this has to go here in order to ensure that the infoId short below is accurate. Also at this point I am doing no further gets on validity so there is no point to not saving 
@@ -432,8 +424,8 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             ViewBag.CouncilDelegateId = new SelectList(db.NPCs.OrderBy(r=>r.Name), "NpcId", "Name", locale.CouncilDelegateId);
 
             short infoid = locale.InfoId;
-            string blurb = db.Infos.Where(i => i.InfoId == infoid).Select(i => i.Blurb).First();
-            LocaleEditVM model = new LocaleEditVM(locale, blurb);
+            Info info = db.Infos.Find(infoid);
+            LocaleEditVM model = new LocaleEditVM(locale, info);
 
             List<short> selectedTags = db.InfoTags.Where(t => t.InfoId == infoid).Select(t => t.TagId).ToList();
             ViewBag.Selected = selectedTags;
@@ -447,7 +439,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "LocaleId,InfoId,Name,LevelOfLocaleId,RegionId,ClosestCityId,CouncilDelegateId,Appointed,Environment,About,AvgLifestyle, Blurb, IsPublished")] LocaleEditPostVM locale,
+        public ActionResult Edit([Bind(Include = "LocaleId,InfoId,Name,LevelOfLocaleId,RegionId,ClosestCityId,CouncilDelegateId,Appointed,Environment,About,AvgLifestyle, Blurb, IsPublished, IsSecret")] LocaleEditPostVM locale,
             List<short> tags,
             string submit)
         {
@@ -476,6 +468,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                 info.Name = locale.Name;
                 info.Blurb = locale.Blurb;
                 info.IsPublished = locale.IsPublished;
+                info.IsSecret = locale.IsSecret;
                 #endregion
 
                 #region Update tags
@@ -708,7 +701,6 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
         {
             Locale locale = db.Locales.Find(id);
             short infoId = locale.InfoId;
-            db.Locales.Remove(locale);
 
             #region Remove Associations
 
@@ -728,6 +720,8 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             }
             #endregion
             #endregion
+
+            db.Locales.Remove(locale);
 
             #region Remove Rumors
             var rumors = db.Rumors.Where(r => r.RumorOfId == infoId);

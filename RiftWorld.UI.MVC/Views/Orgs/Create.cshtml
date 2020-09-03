@@ -7,7 +7,7 @@
     int blurbMax;
     int artistMax;
     int startName = nameMax = 50;
-    int startBlurb = blurbMax = 100;
+    int startBlurb = blurbMax = 350;
     int startArtist = artistMax = 40;
     if (Model != null)
     {
@@ -68,8 +68,8 @@
                 <div class="col-md-10 row">
                     @Html.HiddenFor(model => model.SymbolFileName)
                     <div class="col-12">
-                        <input type="file" name="picture" id="imgInp"/>
-                        <img class="img-fluid img-thumbnail border-00" src="~/Content/img/org/default.jpg" id="imgPre"/>
+                        <input type="file" name="picture" id="imgInp" />
+                        <img class="img-fluid img-thumbnail border-00" src="~/Content/img/org/default.jpg" id="imgPre" />
                     </div>
                     <div class="col-12">
                         @Html.ValidationMessageFor(model => model.SymbolFileName, "", new { @class = "text-danger" })
@@ -116,6 +116,15 @@
             <div class="form-group">
                 <label for="tags">Tags</label>
                 @Html.ListBox("tags", (MultiSelectList)ViewBag.Tags)
+            </div>
+
+            <div class="form-group">
+                <div class="form-check larger">
+                    <div class="checkbox">
+                        @Html.EditorFor(model => model.IsSecret, new { htmlAttribute = new { @class = "form-check-input" } })
+                        @Html.LabelFor(model => model.IsSecret, htmlAttributes: new { @class = "form-check-label" })
+                    </div>
+                </div>
             </div>
 
             <div class="form-group">

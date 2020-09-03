@@ -6,7 +6,7 @@
     int nameMax;
     int blurbMax;
     int startName = nameMax = 50;
-    int startBlurb = blurbMax = 100;
+    int startBlurb = blurbMax = 350;
     if (Model.Name != null)
     {
         startName -= Model.Name.Length;
@@ -30,6 +30,7 @@
         <a class="btn btn-secondary" href="#qBlurb">Blurb</a>
         <a class="btn btn-secondary" href="#qMain">Main</a>
         <a class="btn btn-secondary" href="#qTags">Tags</a>
+        <a class="btn btn-secondary" href="#qSecret">Secret</a>
     </div>
 
     <!-- Edit form -->
@@ -90,6 +91,15 @@
                 </div>
             </div>
 
+            <div class="form-group" id="qSecret">
+                <div class="form-check larger">
+                    <div class="checkbox">
+                        @Html.EditorFor(model => model.IsSecret, new { htmlAttribute = new { @class = "form-check-input" } })
+                        @Html.LabelFor(model => model.IsSecret, htmlAttributes: new { @class = "form-check-label" })
+                    </div>
+                </div>
+            </div>
+
             <div class="form-group" id="qFinish">
                 @if (!Model.IsPublished)
                 {
@@ -134,7 +144,7 @@
     }
 
     <div style="text-align:left;">
-        @Html.ActionLink("Cancel", "Details", new { id = Model.LoreId})
+        @Html.ActionLink("Cancel", "Details", new { id = Model.LoreId })
     </div>
 </div>
 

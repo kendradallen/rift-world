@@ -84,23 +84,6 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             return View(rift);
         }
 
-        //CreateCombo is a work in progress and should not be actually used.
-        //public ActionResult CreateCombo()
-        //{
-        //    ViewBag.Tags = new MultiSelectList(db.Tags, "TagId", "TagName");
-        //    ViewBag.startNickname = 50;
-        //    ViewBag.startLocation = 300;
-        //    ViewBag.startBlurb = 100;
-
-        //    ViewBag.Races = db.Races.ToList();
-        //    List<byte> selected = db.VarietyOfInhabitants.Where(v => v.RiftId == rift.RiftId).Select(v => v.RaceId).ToList();
-        //    ViewBag.Selected = selected;
-
-
-        //    return View();
-        //}
-
-
         // GET: Rifts/Create
         public ActionResult Create()
         {
@@ -113,7 +96,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Nickname,Location,Environment,Hazards,Blurb")] RiftCreateVM rift,
+        public ActionResult Create([Bind(Include = "Nickname,Location,Environment,Hazards,Blurb, IsSecret")] RiftCreateVM rift,
             List<short> tags,
             string submit)
         {
@@ -128,7 +111,8 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                     IdWithinType = null,
                     Blurb = rift.Blurb,
                     Name = rift.Nickname,
-                    IsPublished = rift.IsPublished
+                    IsPublished = rift.IsPublished,
+                    IsSecret = rift.IsSecret
                 };
                 db.Infos.Add(info);
                 db.SaveChanges(); //this has to go here in order to ensure that the infoId short below is accurate. Also at this point I am doing no further gets on validity so there is no point to not saving 
@@ -328,8 +312,8 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             }
 
             short infoid = rift.InfoId;
-            string blurb = db.Infos.Where(i => i.InfoId == infoid).Select(i => i.Blurb).First();
-            RiftEditVM model = new RiftEditVM(rift, blurb);
+            Info info = db.Infos.Find(infoid);
+            RiftEditVM model = new RiftEditVM(rift, info);
 
             List<short> selectedTags = db.InfoTags.Where(t => t.InfoId == infoid).Select(t => t.TagId).ToList();
             ViewBag.Selected = selectedTags;
@@ -343,28 +327,27 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "RiftId,InfoId,Nickname,Location,Environment,Hazards,Blurb, IsPublished")] RiftEditPostVM rift,
+        public ActionResult Edit([Bind(Include = "RiftId,InfoId,Nickname,Location,Environment,Hazards,Blurb, IsPublished, IsSecret")] RiftEditPostVM rift,
             List<short> tags,
             string submit)
         {
-            #region Save or Publish?
-            switch (submit)
-            {
-                case "Save Progress":
-                case "Un-Publish":
-                    rift.IsPublished = false;
-                    break;
-                case "Publish":
-                case "Save":
-                    rift.IsPublished = true;
-                    break;
-                case "Save and go to complex edit":
-                    break;
-            }
-            #endregion
-
             if (ModelState.IsValid)
             {
+                #region Save or Publish?
+                switch (submit)
+                {
+                    case "Save Progress":
+                    case "Un-Publish":
+                        rift.IsPublished = false;
+                        break;
+                    case "Publish":
+                    case "Save":
+                        rift.IsPublished = true;
+                        break;
+                    case "Save and go to complex edit":
+                        break;
+                }
+                #endregion
 
                 var infoid = rift.InfoId;
                 #region Info Update
@@ -373,6 +356,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                 info.Name = rift.Nickname;
                 info.Blurb = rift.Blurb;
                 info.IsPublished = rift.IsPublished;
+                info.IsSecret = rift.IsSecret;
                 #endregion
 
                 #region Update tags
@@ -546,7 +530,6 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
         {
             Rift rift = db.Rifts.Find(id);
             short infoId = rift.InfoId;
-            db.Rifts.Remove(rift);
 
             #region Remove Associations
 
@@ -558,6 +541,8 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             }
             #endregion
             #endregion
+
+            db.Rifts.Remove(rift);
 
             #region Remove Rumors
             var rumors = db.Rumors.Where(r => r.RumorOfId == infoId);

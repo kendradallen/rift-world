@@ -66,7 +66,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Name,Blurb,PictureFileName,DescriptionText,PropertyText,HistoryText, Artist")] ItemCreateVM item,
+        public ActionResult Create([Bind(Include = "Name,Blurb,PictureFileName,DescriptionText,PropertyText,HistoryText, Artist, IsSecret")] ItemCreateVM item,
             HttpPostedFileBase picture,
             List<short> tags,
             string submit)
@@ -120,7 +120,8 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                     IdWithinType = null,
                     Blurb = item.Blurb,
                     Name = item.Name,
-                    IsPublished = item.IsPublished
+                    IsPublished = item.IsPublished,
+                    IsSecret = item.IsSecret
                 };
                 db.Infos.Add(info);
                 db.SaveChanges(); //this has to go here in order to ensure that the infoId short below is accurate. Also at this point I am doing no further gets on validity so there is no point to not saving 
@@ -164,7 +165,6 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                 {
                     InfoId = infoId,
                     Name = item.Name,
-                    Blurb = item.Blurb,
                     PictureFileName = item.PictureFileName,
                     DescriptionText = item.DescriptionText,
                     PropertyText = item.PropertyText,
@@ -212,10 +212,11 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             }
 
             short infoid = item.InfoId;
-            List<short> selectedTags = db.InfoTags.Where(t => t.InfoId == infoid).Select(t => t.TagId).ToList();
+            Info info = db.Infos.Find(infoid);
             //make editVM
-            ItemEditVM model = new ItemEditVM(item);
+            ItemEditVM model = new ItemEditVM(item, info);
 
+            List<short> selectedTags = db.InfoTags.Where(t => t.InfoId == infoid).Select(t => t.TagId).ToList();
             ViewBag.Selected = selectedTags;
             ViewBag.Tags = db.Tags.ToList();
 
@@ -227,7 +228,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ItemId,InfoId,Name,Blurb,PictureFileName,DescriptionText,PropertyText,HistoryText, Artist, IsPublished")] ItemEditPostVM item,
+        public ActionResult Edit([Bind(Include = "ItemId,InfoId,Name,Blurb,PictureFileName,DescriptionText,PropertyText,HistoryText, Artist, IsPublished, IsSecret")] ItemEditPostVM item,
             HttpPostedFileBase picture,
             List<short> tags, string submit)
         {
@@ -281,6 +282,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                 info.Name = item.Name;
                 info.Blurb = item.Blurb;
                 info.IsPublished = item.IsPublished;
+                info.IsSecret = item.IsSecret;
                 #endregion
 
                 #region Update tags
@@ -355,7 +357,6 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                     ItemId = item.ItemId,
                     InfoId = item.InfoId,
                     Name = item.Name,
-                    Blurb = item.Blurb,
                     PictureFileName = item.PictureFileName,
                     DescriptionText = item.DescriptionText,
                     PropertyText = item.PropertyText,

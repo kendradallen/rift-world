@@ -9,7 +9,7 @@
     int aliasMax;
     int quoteMax;
     int startName = nameMax = 30;
-    int startBlurb = blurbMax = 100;
+    int startBlurb = blurbMax = 350;
     int startPortraitArtist = portraitMax = 40;
     int startCrestArtist = crestMax = 40;
     int startAlias = aliasMax = 500;
@@ -108,8 +108,8 @@
                 <div class="col-md-10 row">
                     @Html.HiddenFor(model => model.PortraitFileName)
                     <div class="col-12">
-                        <input type="file" name="portraitPic" id="imgInp"/>
-                        <img class="img-fluid img-thumbnail border-00" src="~/Content/img/npc/default.jpg" id="imgPre"/>
+                        <input type="file" name="portraitPic" id="imgInp" />
+                        <img class="img-fluid img-thumbnail border-00" src="~/Content/img/npc/default.jpg" id="imgPre" />
                     </div>
                     <div class="col-12">
                         @Html.ValidationMessageFor(model => model.PortraitFileName, "", new { @class = "text-danger" })
@@ -167,8 +167,8 @@
                 <div class="col-md-10 row">
                     @Html.HiddenFor(model => model.CrestFileName)
                     <div class="col-12">
-                        <input type="file" name="crestPic" id="imgInp2"/>
-                        <img class="img-fluid img-thumbnail border-00" src="~/Content/img/npc/org_default.jpg" id="imgPre2"/>
+                        <input type="file" name="crestPic" id="imgInp2" />
+                        <img class="img-fluid img-thumbnail border-00" src="~/Content/img/npc/org_default.jpg" id="imgPre2" />
                     </div>
                     <div class="col-12">
                         @Html.ValidationMessageFor(model => model.PortraitFileName, "", new { @class = "text-danger" })
@@ -210,6 +210,15 @@
             </div>
 
             <div class="form-group">
+                <div class="form-check larger">
+                    <div class="checkbox">
+                        @Html.EditorFor(model => model.IsSecret, new { htmlAttribute = new { @class = "form-check-input" } })
+                        @Html.LabelFor(model => model.IsSecret, htmlAttributes: new { @class = "form-check-label" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
                 <div class="col-12 btn-group">
                     <input type="submit" name="submit" value="Save Progress" class="btn btn-warning" />
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#confirmModal">
@@ -244,9 +253,9 @@
 
     }
 
-        <div style="text-align:left;">
-            @Html.ActionLink("Cancel", "CreateWhat", "Infos", null, null)
-        </div>
+    <div style="text-align:left;">
+        @Html.ActionLink("Cancel", "CreateWhat", "Infos", null, null)
+    </div>
 </div>
 
 @section Scripts{

@@ -17,7 +17,6 @@ namespace RiftWorld.DATA.EF
         public short ItemId { get; set; }
         public short InfoId { get; set; }
         public string Name { get; set; }
-        public string Blurb { get; set; }
         public string PictureFileName { get; set; }
         public string DescriptionText { get; set; }
         public string PropertyText { get; set; }

@@ -66,23 +66,24 @@ namespace RiftWorld.UI.MVC.Models
         public bool IsPublished { get; set; }
 
         [Required]
-        [StringLength(100, ErrorMessage =" ")]
+        [StringLength(350, ErrorMessage =" ")]
         [UIHint("MultilineText")]
         public string Blurb { get; set; }
 
+        [Display(Name = "Secret?")]
+        public bool IsSecret { get; set; }
     }
 
     public class RiftEditPostVM
     {
-        #region prop
-        public short InfoId { get; set; }
-        public short RiftId { get; set; }
-
-        #region RiftCreate
         #region Fields
         private string _environment;
         private string _hazards;
         #endregion
+
+        #region prop
+        public short InfoId { get; set; }
+        public short RiftId { get; set; }
 
         [Required]
         [StringLength(50, ErrorMessage =" ")]
@@ -135,15 +136,18 @@ namespace RiftWorld.UI.MVC.Models
         public bool IsPublished { get; set; }
 
         [Required]
-        [StringLength(100, ErrorMessage =" ")]
+        [StringLength(350, ErrorMessage =" ")]
         [UIHint("MultilineText")]
         public string Blurb { get; set; }
-        #endregion
+
+        [Display(Name = "Secret?")]
+        public bool IsSecret { get; set; }
+
         #endregion
 
         #region ctors
         public RiftEditPostVM() { }
-        public RiftEditPostVM(Rift rift, string blurb)
+        public RiftEditPostVM(Rift rift, Info info)
         {
             InfoId = rift.InfoId;
             RiftId = rift.RiftId;
@@ -152,22 +156,22 @@ namespace RiftWorld.UI.MVC.Models
             Environment = rift.Environment;
             Hazards = rift.Hazards;
             IsPublished = rift.IsPublished;
-            Blurb = blurb;
+            Blurb = info.Blurb;
+            IsSecret = info.IsSecret;
         }
         #endregion
     }
 
     public class RiftEditVM
     {
-        #region prop
-        public short InfoId { get; set; }
-        public short RiftId { get; set; }
-
-        #region RiftCreate
         #region Fields
         private string _environment;
         private string _hazards;
         #endregion
+
+        #region prop
+        public short InfoId { get; set; }
+        public short RiftId { get; set; }
 
         [Required]
         [StringLength(50, ErrorMessage = " ")]
@@ -240,15 +244,18 @@ namespace RiftWorld.UI.MVC.Models
         public bool IsPublished { get; set; }
 
         [Required]
-        [StringLength(100, ErrorMessage = " ")]
+        [StringLength(350, ErrorMessage = " ")]
         [UIHint("MultilineText")]
         public string Blurb { get; set; }
-        #endregion
+
+        [Display(Name = "Secret?")]
+        public bool IsSecret { get; set; }
+
         #endregion
 
         #region ctors
         public RiftEditVM() { }
-        public RiftEditVM(Rift rift, string blurb)
+        public RiftEditVM(Rift rift, Info info)
         {
             InfoId = rift.InfoId;
             RiftId = rift.RiftId;
@@ -257,7 +264,8 @@ namespace RiftWorld.UI.MVC.Models
             Environment = rift.Environment;
             Hazards = rift.Hazards;
             IsPublished = rift.IsPublished;
-            Blurb = blurb;
+            Blurb = info.Blurb;
+            IsSecret = info.IsSecret;
         }
         public RiftEditVM(RiftEditPostVM rift)
         {
@@ -269,6 +277,7 @@ namespace RiftWorld.UI.MVC.Models
             Hazards = rift.Hazards;
             IsPublished = rift.IsPublished;
             Blurb = rift.Blurb;
+            IsSecret = rift.IsSecret;
         }
         #endregion
     }
@@ -293,36 +302,5 @@ namespace RiftWorld.UI.MVC.Models
             RaceId = variety.RaceId;
             RaceOrder = variety.RaceOrder;
         }
-    }
-    public class ComboCreate
-    {
-        #region RiftCreate
-        [StringLength(50, ErrorMessage = " ")]
-        public string Nickname { get; set; }
-
-        [Required]
-        [StringLength(300, ErrorMessage = " ")]
-        [UIHint("MultilineText")]
-        public string Location { get; set; }
-
-        [Required]
-        [UIHint("MultilineText")]
-        [AllowHtml]
-        public string Environment { get; set; }
-
-        [Required]
-        [UIHint("MultilineText")]
-        [AllowHtml]
-        public string Hazards { get; set; }
-
-        public bool IsPublished { get; set; }
-
-        [Required]
-        [StringLength(100, ErrorMessage = " ")]
-        [UIHint("MultilineText")]
-        public string Blurb { get; set; }
-        #endregion
-
-        public List<AssoVar> Assos { get; set; }
     }
 }

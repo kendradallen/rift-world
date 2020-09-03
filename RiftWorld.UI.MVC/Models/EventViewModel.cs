@@ -21,26 +21,18 @@ namespace RiftWorld.UI.MVC.Models
         public string Name { get; set; }
 
         [Required]
-        [StringLength(100, ErrorMessage = " ")]
+        [StringLength(350, ErrorMessage = " ")]
         [UIHint("MultilineText")]
         public string Blurb { get; set; }
 
         [Display(Name ="Historical")]
         public bool IsHistory { get; set; }
 
-        [Required(ErrorMessage ="You need a day")]
-        [Range(1, 40, ErrorMessage = "Between {1} & {2} please")]
-        public byte DateDay { get; set; }
+        [Range(1, 12, ErrorMessage = "Between {1} & {2} please")]
+        public Nullable<byte> DateMonth { get; set; }
 
-        [Required(ErrorMessage = "You need a month")]
-        [Range(1, 15, ErrorMessage = "Between {1} & {2} please")]
-        public byte DateMonth { get; set; }
-
-        [Range(0, 9999, ErrorMessage = "Between {1} & {2:n0} please")]
-        public Nullable<short> DateYear { get; set; }
-
-        [StringLength(15, ErrorMessage = " ")]
-        public string DateEra { get; set; }
+        [Range(1, 4, ErrorMessage = "Between {1} & {2} please")]
+        public Nullable<byte> DateSeason { get; set; }
 
         [UIHint("MultilineText")]
         [Display(Name = "Normal Participants")]
@@ -81,6 +73,9 @@ namespace RiftWorld.UI.MVC.Models
         }
 
         public bool IsPublished { get; set; }
+
+        [Display(Name = "Secret?")]
+        public bool IsSecret { get; set; }
 
     }
 
@@ -99,26 +94,18 @@ namespace RiftWorld.UI.MVC.Models
         public string Name { get; set; }
 
         [Required]
-        [StringLength(100, ErrorMessage = " ")]
+        [StringLength(350, ErrorMessage = " ")]
         [UIHint("MultilineText")]
         public string Blurb { get; set; }
 
         [Display(Name = "Historical")]
         public bool IsHistory { get; set; }
 
-        [Required(ErrorMessage = "You need a day")]
-        [Range(1, 40, ErrorMessage = "Between {1} & {2} please")]
-        public byte DateDay { get; set; }
+        [Range(1, 12, ErrorMessage = "Between {1} & {2} please")]
+        public Nullable<byte> DateMonth { get; set; }
 
-        [Required(ErrorMessage = "You need a month")]
-        [Range(1, 15, ErrorMessage = "Between {1} & {2} please")]
-        public byte DateMonth { get; set; }
-
-        [Range(0, 9999, ErrorMessage = "Between {1} & {2:n0} please")]
-        public Nullable<short> DateYear { get; set; }
-
-        [StringLength(15, ErrorMessage = " ")]
-        public string DateEra { get; set; }
+        [Range(1, 4, ErrorMessage = "Between {1} & {2} please")]
+        public Nullable<byte> DateSeason { get; set; }
 
         [UIHint("MultilineText")]
         [Display(Name = "Normal Participants")]
@@ -160,9 +147,12 @@ namespace RiftWorld.UI.MVC.Models
 
         public bool IsPublished { get; set; }
 
+        [Display(Name ="Secret?")]
+        public bool IsSecret { get; set; }
+
         #region ctors
         public EventEditPostVM() { }
-        public EventEditPostVM(Event taevent, string blurb)
+        public EventEditPostVM(Event taevent, Info info)
         {
             InfoId = taevent.InfoId;
             EventId = taevent.EventId;
@@ -171,11 +161,10 @@ namespace RiftWorld.UI.MVC.Models
             AboutText = taevent.AboutText;
             NormalParticipants = taevent.NormalParticipants;
             IsPublished = taevent.IsPublished;
-            DateDay = taevent.DateDay;
             DateMonth = taevent.DateMonth;
-            DateYear = taevent.DateYear;
-            DateEra = taevent.DateEra;
-            Blurb = blurb;
+            DateSeason = taevent.DateSeason;
+            Blurb = info.Blurb;
+            IsSecret = info.IsSecret;
         }
         #endregion
     }
@@ -195,26 +184,18 @@ namespace RiftWorld.UI.MVC.Models
         public string Name { get; set; }
 
         [Required]
-        [StringLength(100, ErrorMessage = " ")]
+        [StringLength(350, ErrorMessage = " ")]
         [UIHint("MultilineText")]
         public string Blurb { get; set; }
 
         [Display(Name = "Historical")]
         public bool IsHistory { get; set; }
 
-        [Required(ErrorMessage = "You need a day")]
-        [Range(1, 40, ErrorMessage = "Between {1} & {2} please")]
-        public byte DateDay { get; set; }
+        [Range(1, 12, ErrorMessage = "Between {1} & {2} please")]
+        public Nullable<byte> DateMonth { get; set; }
 
-        [Required(ErrorMessage = "You need a month")]
-        [Range(1, 15, ErrorMessage = "Between {1} & {2} please")]
-        public byte DateMonth { get; set; }
-
-        [Range(0, 9999, ErrorMessage = "Between {1} & {2:n0} please")]
-        public Nullable<short> DateYear { get; set; }
-
-        [StringLength(15, ErrorMessage = " ")]
-        public string DateEra { get; set; }
+        [Range(1, 4, ErrorMessage = "Between {1} & {2} please")]
+        public Nullable<byte> DateSeason { get; set; }
 
         [UIHint("MultilineText")]
         [Display(Name = "Normal Participants")]
@@ -276,9 +257,13 @@ namespace RiftWorld.UI.MVC.Models
 
         public bool IsPublished { get; set; }
 
+        [Display(Name = "Secret?")]
+        public bool IsSecret { get; set; }
+
+
         #region ctors
         public EventEditVM() { }
-        public EventEditVM(Event taevent, string blurb)
+        public EventEditVM(Event taevent, Info info)
         {
             InfoId = taevent.InfoId;
             EventId = taevent.EventId;
@@ -287,11 +272,10 @@ namespace RiftWorld.UI.MVC.Models
             AboutText = taevent.AboutText;
             NormalParticipants = taevent.NormalParticipants;
             IsPublished = taevent.IsPublished;
-            DateDay = taevent.DateDay;
             DateMonth = taevent.DateMonth;
-            DateYear = taevent.DateYear;
-            DateEra = taevent.DateEra;
-            Blurb = blurb;
+            DateSeason = taevent.DateSeason;
+            Blurb = info.Blurb;
+            IsSecret = info.IsSecret;
         }
         public EventEditVM(EventEditPostVM taevent)
         {
@@ -302,11 +286,10 @@ namespace RiftWorld.UI.MVC.Models
             AboutText = taevent.AboutText;
             NormalParticipants = taevent.NormalParticipants;
             IsPublished = taevent.IsPublished;
-            DateDay = taevent.DateDay;
             DateMonth = taevent.DateMonth;
-            DateYear = taevent.DateYear;
-            DateEra = taevent.DateEra;
+            DateSeason = taevent.DateSeason;
             Blurb = taevent.Blurb;
+            IsSecret = taevent.IsSecret;
         }
         #endregion
     }

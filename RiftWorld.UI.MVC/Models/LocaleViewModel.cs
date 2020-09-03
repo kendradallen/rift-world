@@ -116,10 +116,12 @@ namespace RiftWorld.UI.MVC.Models
 
 
         [Required]
-        [StringLength(100, ErrorMessage = " ")]
+        [StringLength(350, ErrorMessage = " ")]
         [UIHint("MultilineText")]
         public string Blurb { get; set; }
 
+        [Display(Name = "Secret?")]
+        public bool IsSecret { get; set; }
     }
 
 
@@ -231,13 +233,17 @@ namespace RiftWorld.UI.MVC.Models
         }
 
         [Required]
-        [StringLength(100, ErrorMessage = " ")]
+        [StringLength(350, ErrorMessage = " ")]
         [UIHint("MultilineText")]
         public string Blurb { get; set; }
 
+        [Display(Name = "Secret?")]
+        public bool IsSecret { get; set; }
+
+
         #region ctors
         public LocaleEditPostVM() { }
-        public LocaleEditPostVM(Locale locale, string blurb)
+        public LocaleEditPostVM(Locale locale, Info info)
         {
             InfoId = locale.InfoId;
             LocaleId = locale.LocaleId;
@@ -251,7 +257,8 @@ namespace RiftWorld.UI.MVC.Models
             About = locale.About;
             IsPublished = locale.IsPublished;
             AvgLifestyle = locale.AvgLifestyle;
-            Blurb = blurb;
+            Blurb = info.Blurb;
+            IsSecret = info.IsSecret;
         }
         #endregion
     }
@@ -404,13 +411,17 @@ namespace RiftWorld.UI.MVC.Models
         }
 
         [Required]
-        [StringLength(100, ErrorMessage = " ")]
+        [StringLength(350, ErrorMessage = " ")]
         [UIHint("MultilineText")]
         public string Blurb { get; set; }
 
+        [Display(Name = "Secret?")]
+        public bool IsSecret { get; set; }
+
+
         #region ctors
         public LocaleEditVM() { }
-        public LocaleEditVM(Locale locale, string blurb)
+        public LocaleEditVM(Locale locale, Info info)
         {
             InfoId = locale.InfoId;
             LocaleId = locale.LocaleId;
@@ -424,7 +435,8 @@ namespace RiftWorld.UI.MVC.Models
             About = locale.About;
             IsPublished = locale.IsPublished;
             AvgLifestyle = locale.AvgLifestyle;
-            Blurb = blurb;
+            Blurb = info.Blurb;
+            IsSecret = info.IsSecret;
         }
         public LocaleEditVM(LocaleEditPostVM locale)
         {
@@ -441,6 +453,7 @@ namespace RiftWorld.UI.MVC.Models
             IsPublished = locale.IsPublished;
             AvgLifestyle = locale.AvgLifestyle;
             Blurb = locale.Blurb;
+            IsSecret = locale.IsSecret;
         }
         #endregion
     }
@@ -491,45 +504,5 @@ namespace RiftWorld.UI.MVC.Models
     {
         public string Name { get; set; }
         public short Id { get; set; }
-
-        public byte Day { get; set; }
-        public byte DateMonth { get; set; }
-        public Nullable<short> Year { get; set; }
-        public string Era { get; set; }
-        public string Month
-        {
-            get
-            {
-                switch (DateMonth)
-                {
-                    case 1:
-                        return "Hammer";
-                    case 2:
-                        return "Alturiak";
-                    case 3:
-                        return "Ches";
-                    case 4:
-                        return "Tarsakh";
-                    case 5:
-                        return "Mirthul";
-                    case 6:
-                        return "Kythorn";
-                    case 7:
-                        return "Flamerule";
-                    case 8:
-                        return "Eleasias";
-                    case 9:
-                        return "Elient";
-                    case 10:
-                        return "Marpenoth";
-                    case 11:
-                        return "Uktar";
-                    case 12:
-                        return "Nightal";
-                    default:
-                        return "Uhhhhh, wait...";
-                }
-            }
-        }
     }
 }

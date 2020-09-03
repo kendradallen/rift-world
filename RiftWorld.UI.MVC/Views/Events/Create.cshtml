@@ -4,10 +4,8 @@
     ViewBag.Title = "Event Create";
     int nameMax;
     int blurbMax;
-    int eraMax;
     int startName = nameMax = 50;
-    int startBlurb = blurbMax = 100;
-    int startDateEra = eraMax = 15;
+    int startBlurb = blurbMax = 350;
     if (Model != null)
     {
         if (Model.Name != null)
@@ -17,10 +15,6 @@
         if (Model.Blurb != null)
         {
             startBlurb -= Model.Blurb.Length;
-        }
-        if (Model.DateEra != null)
-        {
-            startDateEra -= Model.DateEra.Length;
         }
     }
 }
@@ -33,104 +27,100 @@
     {
         @Html.AntiForgeryToken()
 
-        <div class="form-horizontal">
-            <hr />
-            <div class="col-auto oops-summary">
-                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-            </div>
-            @Html.HiddenFor(model => model.IsPublished)
-            <div class="form-group">
-                @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label" })
-                <div class="col-12">
-                    <div class="da-focus">
-                        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control count", data_max = nameMax, placeholder ="Name" } })
-                    </div>
-                    @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
-                    <div id="tcp-Name" class="col-md-offset-2 col-12 @(startName <0 ? "invalid":"")"><span id="tc-Name">@startName</span> character(s) left.</div>
+    <div class="form-horizontal">
+        <hr />
+        <div class="col-auto oops-summary">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        </div>
+        @Html.HiddenFor(model => model.IsPublished)
+        <div class="form-group">
+            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label" })
+            <div class="col-12">
+                <div class="da-focus">
+                    @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control count", data_max = nameMax, placeholder = "Name" } })
                 </div>
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                <div id="tcp-Name" class="col-md-offset-2 col-12 @(startName <0 ? "invalid":"")"><span id="tc-Name">@startName</span> character(s) left.</div>
             </div>
+        </div>
 
-            <div class="form-group">
-                @Html.LabelFor(model => model.Blurb, htmlAttributes: new { @class = "control-label" })
-                <div class="col-12">
-                    <div class="da-focus">
-                        @Html.EditorFor(model => model.Blurb, new { htmlAttributes = new { @class = "form-control count", data_max = blurbMax, style = "height:4em;" } })
-                    </div>
-                    @Html.ValidationMessageFor(model => model.Blurb, "", new { @class = "text-danger" })
-                    <div id="tcp-Blurb" class="col-md-offset-2 col-12 @(startBlurb <0 ? "invalid":"")"><span id="tc-Blurb">@startBlurb</span> character(s) left.</div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Blurb, htmlAttributes: new { @class = "control-label" })
+            <div class="col-12">
+                <div class="da-focus">
+                    @Html.EditorFor(model => model.Blurb, new { htmlAttributes = new { @class = "form-control count", data_max = blurbMax, style = "height:4em;" } })
                 </div>
+                @Html.ValidationMessageFor(model => model.Blurb, "", new { @class = "text-danger" })
+                <div id="tcp-Blurb" class="col-md-offset-2 col-12 @(startBlurb <0 ? "invalid":"")"><span id="tc-Blurb">@startBlurb</span> character(s) left.</div>
             </div>
+        </div>
 
-            <div class="form-group">
-                <div class="form-check larger">
-                    <div class="checkbox">
-                        @Html.EditorFor(model => model.IsHistory, new { htmlAttribute = new { @class = "form-check-input" } })
-                        @Html.LabelFor(model => model.IsHistory, htmlAttributes: new { @class = "form-check-label" })
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <label>Date</label>
-                <div class="form-row col-12">
-                    <div class="col-3">
-                        <div class="da-focus">
-                            @Html.EditorFor(model => model.DateDay, new { htmlAttributes = new { @class = "form-control", placeholder = "Day" } })
-                        </div>
-                        @Html.ValidationMessageFor(model => model.DateDay, "", new { @class = "text-danger" })
-                    </div>
-                    <div class="col-3">
-                        <div class="da-focus">
-                            @Html.EditorFor(model => model.DateMonth, new { htmlAttributes = new { @class = "form-control", placeholder = "Month" } })
-                        </div>
-                        @Html.ValidationMessageFor(model => model.DateMonth, "", new { @class = "text-danger" })
-                    </div>
-                    <div class="col-3">
-                        <div class="da-focus">
-                            @Html.EditorFor(model => model.DateYear, new { htmlAttributes = new { @class = "form-control", placeholder = "Year (optional)" } })
-                        </div>
-                        @Html.ValidationMessageFor(model => model.DateYear, "", new { @class = "text-danger" })
-                    </div>
-                    <div class="col-3">
-                        <div class="da-focus">
-                            @Html.EditorFor(model => model.DateEra, new { htmlAttributes = new { @class = "form-control count", data_max = eraMax, placeholder = "Era (optional)" } })
-                        </div>
-                        @Html.ValidationMessageFor(model => model.DateEra, "", new { @class = "text-danger" })
-                        <div id="tcp-DateEra" class="col-md-offset-2 col-12 @(startDateEra <0 ? "invalid":"")"><span id="tc-DateEra">@startDateEra</span> character(s) left.</div>
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.NormalParticipants, htmlAttributes: new { @class = "control-label" })
-                <div class="col-12">
-                    @Html.EditorFor(model => model.NormalParticipants, new { htmlAttributes = new { @class = "form-control rich", style = "height:20em;" } })
-                    @Html.ValidationMessageFor(model => model.NormalParticipants, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.AboutText, htmlAttributes: new { @class = "control-label" })
-                <div class="col-12">
-                    @Html.EditorFor(model => model.AboutText, new { htmlAttributes = new { @class = "form-control rich", style = "height:20em;" } })
-                    @Html.ValidationMessageFor(model => model.AboutText, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="col-md-2" for="tags">Tags</label>
-                @Html.ListBox("tags", (MultiSelectList)ViewBag.Tags)
-            </div>
-
-            <div class="form-group">
-                <div class="col-12 btn-group">
-                    <input type="submit" name="submit" value="Save Progress" class="btn btn-warning" />
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#confirmModal">
-                        Publish
-                    </button>
+        <div class="form-group">
+            <div class="form-check larger">
+                <div class="checkbox">
+                    @Html.EditorFor(model => model.IsHistory, new { htmlAttribute = new { @class = "form-check-input" } })
+                    @Html.LabelFor(model => model.IsHistory, htmlAttributes: new { @class = "form-check-label" })
                 </div>
             </div>
         </div>
+        <div class="form-group">
+            <label>Date</label>
+            <div class="form-row col-12">
+                <div class="col-6">
+                    <div class="da-focus">
+                        @Html.EditorFor(model => model.DateMonth, new { htmlAttributes = new { @class = "form-control", placeholder = "Month (optional)" } })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.DateMonth, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-6">
+                    <div class="da-focus">
+                        @Html.EditorFor(model => model.DateSeason, new { htmlAttributes = new { @class = "form-control", placeholder = "Season (optional)" } })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.DateSeason, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.NormalParticipants, htmlAttributes: new { @class = "control-label" })
+            <div class="col-12">
+                @Html.EditorFor(model => model.NormalParticipants, new { htmlAttributes = new { @class = "form-control rich", style = "height:20em;" } })
+                @Html.ValidationMessageFor(model => model.NormalParticipants, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.AboutText, htmlAttributes: new { @class = "control-label" })
+            <div class="col-12">
+                @Html.EditorFor(model => model.AboutText, new { htmlAttributes = new { @class = "form-control rich", style = "height:20em;" } })
+                @Html.ValidationMessageFor(model => model.AboutText, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-2" for="tags">Tags</label>
+            @Html.ListBox("tags", (MultiSelectList)ViewBag.Tags)
+        </div>
+
+        <div class="form-group">
+            <div class="form-check larger">
+                <div class="checkbox">
+                    @Html.EditorFor(model => model.IsSecret, new { htmlAttribute = new { @class = "form-check-input" } })
+                    @Html.LabelFor(model => model.IsSecret, htmlAttributes: new { @class = "form-check-label" })
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-12 btn-group">
+                <input type="submit" name="submit" value="Save Progress" class="btn btn-warning" />
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#confirmModal">
+                    Publish
+                </button>
+            </div>
+        </div>
+    </div>
         <!-- Modal -->
         <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">

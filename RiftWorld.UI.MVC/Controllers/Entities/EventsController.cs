@@ -98,7 +98,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Name,IsHistory,AboutText,NormalParticipants,DateDay,DateMonth,DateYear,DateEra, Blurb")] EventCreateVM taevent,
+        public ActionResult Create([Bind(Include = "Name,IsHistory,AboutText,NormalParticipants,DateMonth,DateSeason, Blurb, IsSecret")] EventCreateVM taevent,
             List<short> tags,
             string submit)
         {
@@ -113,7 +113,8 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                     IdWithinType = null,
                     Blurb = taevent.Blurb,
                     Name = taevent.Name,
-                    IsPublished = taevent.IsPublished
+                    IsPublished = taevent.IsPublished,
+                    IsSecret = taevent.IsSecret
                 };
                 db.Infos.Add(info);
                 db.SaveChanges(); //this has to go here in order to ensure that the infoId short below is accurate. Also at this point I am doing no further gets on validity so there is no point to not saving 
@@ -140,10 +141,8 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                     AboutText = taevent.AboutText,
                     NormalParticipants = taevent.NormalParticipants,
                     IsPublished = taevent.IsPublished,
-                    DateDay = taevent.DateDay,
                     DateMonth = taevent.DateMonth,
-                    DateYear = taevent.DateYear,
-                    DateEra = taevent.DateEra
+                    DateSeason = taevent.DateSeason
                 };
                 db.Events.Add(daEvent);
                 db.SaveChanges();
@@ -364,8 +363,8 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             }
 
             short infoid = taevent.InfoId;
-            string blurb = db.Infos.Where(i => i.InfoId == infoid).Select(i => i.Blurb).First();
-            EventEditVM model = new EventEditVM(taevent, blurb);
+            Info info = db.Infos.Find(infoid);
+            EventEditVM model = new EventEditVM(taevent, info);
 
             List<short> selectedTags = db.InfoTags.Where(t => t.InfoId == infoid).Select(t => t.TagId).ToList();
             ViewBag.Selected = selectedTags;
@@ -379,7 +378,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "EventId,InfoId,Name,IsHistory,AboutText,NormalParticipants,IsPublished,DateDay,DateMonth,DateYear,DateEra, Blurb")] EventEditPostVM taevent,
+        public ActionResult Edit([Bind(Include = "EventId,InfoId,Name,IsHistory,AboutText,NormalParticipants,IsPublished,DateMonth,DateSeason, Blurb, IsSecret")] EventEditPostVM taevent,
             List<short> tags,
             string submit)
         {
@@ -408,6 +407,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                 info.Name = taevent.Name;
                 info.Blurb = taevent.Blurb;
                 info.IsPublished = taevent.IsPublished;
+                info.IsSecret = taevent.IsSecret;
                 #endregion
 
                 #region Update tags
@@ -452,10 +452,8 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                     AboutText = taevent.AboutText,
                     NormalParticipants = taevent.NormalParticipants,
                     IsPublished = taevent.IsPublished,
-                    DateDay = taevent.DateDay,
                     DateMonth = taevent.DateMonth,
-                    DateYear = taevent.DateYear,
-                    DateEra = taevent.DateEra
+                    DateSeason = taevent.DateSeason
                 };
                 db.Entry(daEvent).State = EntityState.Modified;
                 db.Entry(info).State = EntityState.Modified;
@@ -634,7 +632,6 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
         {
             Event taevent = db.Events.Find(id);
             short infoId = taevent.InfoId;
-            db.Events.Remove(taevent);
 
             #region Remove Associations
 
@@ -654,6 +651,8 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             }
             #endregion
             #endregion
+
+            db.Events.Remove(taevent);
 
             #region Remove Rumors
             var rumors = db.Rumors.Where(r => r.RumorOfId == infoId);

@@ -64,7 +64,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Name,TheContent, Blurb")] LoreCreateVM lore,
+        public ActionResult Create([Bind(Include = "Name,TheContent, Blurb, IsSecret")] LoreCreateVM lore,
             List<short> tags,
             string submit)
         {
@@ -91,7 +91,8 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                     IdWithinType = null,
                     Blurb = lore.Blurb,
                     Name = lore.Name,
-                    IsPublished = lore.IsPublished
+                    IsPublished = lore.IsPublished,
+                    IsSecret = lore.IsSecret
                 };
                 db.Infos.Add(info);
                 db.SaveChanges(); //this has to go here in order to ensure that the infoId short below is accurate. Also at this point I am doing no further gets on validity so there is no point to not saving 
@@ -152,8 +153,8 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                 return HttpNotFound();
             }
             short infoid = lore.InfoId;
-            string blurb = db.Infos.Where(i => i.InfoId == infoid).Select(i => i.Blurb).FirstOrDefault();
-            LoreEditVM model = new LoreEditVM(lore, blurb);
+            Info info = db.Infos.Find(infoid);
+            LoreEditVM model = new LoreEditVM(lore, info);
 
             List<short> selectedTags = db.InfoTags.Where(t => t.InfoId == infoid).Select(t => t.TagId).ToList();
             ViewBag.Selected = selectedTags;
@@ -167,7 +168,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "LoreId,InfoId,Name,TheContent,Blurb,IsPublished")] LoreEditVM lore,
+        public ActionResult Edit([Bind(Include = "LoreId,InfoId,Name,TheContent,Blurb,IsPublished, IsSecret")] LoreEditVM lore,
             List<short> tags, string submit)
         {
 
@@ -194,6 +195,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                 info.Name = lore.Name;
                 info.Blurb = lore.Blurb;
                 info.IsPublished = lore.IsPublished;
+                info.IsSecret = lore.IsSecret;
                 #endregion
 
                 #region Update tags

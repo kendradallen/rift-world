@@ -107,23 +107,26 @@ namespace RiftWorld.UI.MVC.Models
         public byte GenderId { get; set; }
 
         [Required]
-        [StringLength(100, ErrorMessage = " ")]
+        [StringLength(350, ErrorMessage = " ")]
         [UIHint("MultilineText")]
         public string Blurb { get; set; }
+
+        [Display(Name = "Secret?")]
+        public bool IsSecret { get; set; }
+
     }
 
     public class NpcEditPostVM
     {
-        #region prop
-        public short InfoId { get; set; }
-        public short NpcId { get; set; }
-
-        #region npcCreate
         #region Fields
         private string _apperanceText;
         private string _aboutText;
         private string _alias;
         #endregion
+
+        #region Props
+        public short InfoId { get; set; }
+        public short NpcId { get; set; }
 
         [Required]
         [StringLength(30, ErrorMessage = " ")]
@@ -215,15 +218,17 @@ namespace RiftWorld.UI.MVC.Models
         public byte GenderId { get; set; }
 
         [Required]
-        [StringLength(100, ErrorMessage = " ")]
+        [StringLength(350, ErrorMessage = " ")]
         [UIHint("MultilineText")]
         public string Blurb { get; set; }
-        #endregion
+
+        [Display(Name = "Secret?")]
+        public bool IsSecret { get; set; }
         #endregion
 
         #region ctor
         public NpcEditPostVM() { }
-        public NpcEditPostVM(NPC npc, string blurb)
+        public NpcEditPostVM(NPC npc, Info info)
         {
             InfoId = npc.InfoId;
             NpcId = npc.NpcId;
@@ -241,23 +246,23 @@ namespace RiftWorld.UI.MVC.Models
             CrestArtist = npc.CrestArtist;
             IsDead = npc.IsDead;
             GenderId = npc.GenderId;
-            Blurb = blurb; 
+            Blurb = info.Blurb;
+            IsSecret = info.IsSecret;
         }
         #endregion
     }
 
     public class NpcEditVM
     {
-        #region prop
-        public short InfoId { get; set; }
-        public short NpcId { get; set; }
-
-        #region npcCreate
         #region Fields
         private string _apperanceText;
         private string _aboutText;
         private string _alias;
         #endregion
+
+        #region prop
+        public short InfoId { get; set; }
+        public short NpcId { get; set; }
 
         [Required]
         [StringLength(30, ErrorMessage = " ")]
@@ -379,15 +384,18 @@ namespace RiftWorld.UI.MVC.Models
         public byte GenderId { get; set; }
 
         [Required]
-        [StringLength(100, ErrorMessage = " ")]
+        [StringLength(350, ErrorMessage = " ")]
         [UIHint("MultilineText")]
         public string Blurb { get; set; }
-        #endregion
+
+        [Display(Name = "Secret?")]
+        public bool IsSecret { get; set; }
+
         #endregion
 
         #region ctor
         public NpcEditVM() { }
-        public NpcEditVM(NPC npc, string blurb)
+        public NpcEditVM(NPC npc, Info info)
         {
             InfoId = npc.InfoId;
             NpcId = npc.NpcId;
@@ -405,7 +413,8 @@ namespace RiftWorld.UI.MVC.Models
             CrestArtist = npc.CrestArtist;
             IsDead = npc.IsDead;
             GenderId = npc.GenderId;
-            Blurb = blurb;
+            Blurb = info.Blurb;
+            IsSecret = info.IsSecret;
         }
         public NpcEditVM(NpcEditPostVM npc)
         {
@@ -426,6 +435,7 @@ namespace RiftWorld.UI.MVC.Models
             IsDead = npc.IsDead;
             GenderId = npc.GenderId;
             Blurb = npc.Blurb;
+            IsSecret = npc.IsSecret;
         }
         #endregion
     }

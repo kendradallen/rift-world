@@ -15,6 +15,7 @@ namespace RiftWorld.UI.MVC.Controllers
 {
     public class CharactersController : Controller
     {
+        //todo change delete to use the backup name instead
         private RiftWorldEntities db = new RiftWorldEntities();
 
         // GET: Characters
@@ -143,8 +144,8 @@ namespace RiftWorld.UI.MVC.Controllers
             }
 
             ViewBag.GenderId = new SelectList(db.Genders, "GenderId", "GenderName");
-            ViewBag.CurrentLocationId = new SelectList(db.Locales, "LocaleId", "Name");
-            ViewBag.RaceId = new SelectList(db.Races, "RaceId", "RaceName");
+            ViewBag.CurrentLocationId = new SelectList(db.Locales.OrderBy(l => l.Name), "LocaleId", "Name");
+            ViewBag.RaceId = new SelectList(db.Races.Where(r => r.IsPlayerEnabled), "RaceId", "RaceName");
             ViewBag.TierId = new SelectList(db.Tiers, "TierId", "TierName");
 
             return View();
@@ -178,6 +179,8 @@ namespace RiftWorld.UI.MVC.Controllers
             character.IsRetired = false;
             character.IsDead = false;
             character.HasUnseenEdit = false;
+            character.IsPlayerDemo = false;
+            character.IsRequestingRetire = false;
             if (picture != null)
             {
                 string[] goodExts = { ".jpg", ".jpeg", ".gif", ".png" };
@@ -224,18 +227,23 @@ namespace RiftWorld.UI.MVC.Controllers
                 }
                 #endregion
                 //todo - change to a confirmation screen awaiting approval
-                return RedirectToAction("Index");
+                return View("Confirmed");
             }
 
             ViewBag.GenderId = new SelectList(db.Genders, "GenderId", "GenderName", character.GenderId);
-            ViewBag.CurrentLocationId = new SelectList(db.Locales, "LocaleId", "Name", character.CurrentLocationId);
-            ViewBag.RaceId = new SelectList(db.Races, "RaceId", "RaceName", character.RaceId);
+            ViewBag.CurrentLocationId = new SelectList(db.Locales.OrderBy(l=>l.Name), "LocaleId", "Name", character.CurrentLocationId);
+            ViewBag.RaceId = new SelectList(db.Races.Where(r=>r.IsPlayerEnabled).OrderBy(r=>r.RaceName), "RaceId", "RaceName", character.RaceId);
             ViewBag.TierId = new SelectList(db.Tiers, "TierId", "TierName", character.TierId);
             if (picture != null)
             {
                 ModelState.AddModelError("PortraitFileName", "Hey, there was some error, so you have to re-upload the picture");
             }
             return View(character);
+        }
+
+        public ActionResult Confirmed()
+        {
+            return View();
         }
 
         [Authorize(Roles = "Mod, Admin")]
@@ -373,8 +381,8 @@ namespace RiftWorld.UI.MVC.Controllers
             }
 
             ViewBag.GenderId = new SelectList(db.Genders, "GenderId", "GenderName", character.GenderId);
-            ViewBag.CurrentLocationId = new SelectList(db.Locales, "LocaleId", "Name", character.CurrentLocationId);
-            ViewBag.RaceId = new SelectList(db.Races, "RaceId", "RaceName", character.RaceId);
+            ViewBag.CurrentLocationId = new SelectList(db.Locales.OrderBy(l=>l.Name), "LocaleId", "Name", character.CurrentLocationId);
+            ViewBag.RaceId = new SelectList(db.Races.Where(r=>r.IsPlayerEnabled).OrderBy(r=>r.RaceName), "RaceId", "RaceName", character.RaceId);
             ViewBag.TierId = new SelectList(db.Tiers, "TierId", "TierName", character.TierId);
 
             return View(character);
@@ -481,8 +489,8 @@ namespace RiftWorld.UI.MVC.Controllers
             }
 
             ViewBag.GenderId = new SelectList(db.Genders, "GenderId", "GenderName", character.GenderId);
-            ViewBag.CurrentLocationId = new SelectList(db.Locales, "LocaleId", "Name", character.CurrentLocationId);
-            ViewBag.RaceId = new SelectList(db.Races, "RaceId", "RaceName", character.RaceId);
+            ViewBag.CurrentLocationId = new SelectList(db.Locales.OrderBy(l=>l.Name), "LocaleId", "Name", character.CurrentLocationId);
+            ViewBag.RaceId = new SelectList(db.Races.Where(r=>r.IsPlayerEnabled).OrderBy(r=>r.RaceName), "RaceId", "RaceName", character.RaceId);
             ViewBag.TierId = new SelectList(db.Tiers, "TierId", "TierName", character.TierId);
 
             if (picture != null)

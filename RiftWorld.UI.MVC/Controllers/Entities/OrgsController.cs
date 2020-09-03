@@ -187,16 +187,12 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                         eo.OrgId == id &&
                         e.IsPublished &&
                         !e.IsHistory
-                    orderby e.DateMonth, e.DateDay
+                    orderby e.DateMonth
                     select new _OrgEventsVM()
                     {
                         Name = e.Name,
                         Id = eo.EventId,
-                        Blurb = eo.Blurb,
-                        Day = e.DateDay,
-                        DateMonth = e.DateMonth,
-                        Year = e.DateYear,
-                        Era = e.DateEra
+                        Blurb = eo.Blurb
                     }
                 )
                 .Distinct()
@@ -210,16 +206,12 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                         eo.OrgId == id &&
                         e.IsPublished &&
                         e.IsHistory
-                    orderby e.DateYear, e.DateMonth, e.DateDay
+                    orderby  e.DateMonth
                     select new _OrgEventsVM()
                     {
                         Name = e.Name,
                         Id = eo.EventId,
-                        Blurb = eo.Blurb,
-                        Day = e.DateDay,
-                        DateMonth = e.DateMonth,
-                        Year = e.DateYear,
-                        Era = e.DateEra
+                        Blurb = eo.Blurb
                     }
                 )
                 .Distinct()
@@ -243,7 +235,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Name,IsPlayerEnabled,SymbolFileName,BaseLocationId,AboutText,Blurb,Artist")] OrgCreateVM org,
+        public ActionResult Create([Bind(Include = "Name,IsPlayerEnabled,SymbolFileName,BaseLocationId,AboutText,Blurb,Artist, IsSecret")] OrgCreateVM org,
             List<short> tags,
             HttpPostedFileBase picture,
             string submit)
@@ -279,7 +271,8 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                     IdWithinType = null,
                     Blurb = org.Blurb,
                     Name = org.Name,
-                    IsPublished = org.IsPublished
+                    IsPublished = org.IsPublished,
+                    IsSecret = org.IsSecret
                 };
                 db.Infos.Add(info);
                 db.SaveChanges(); //this has to go here in order to ensure that the infoId short below is accurate. Also at this point I am doing no further gets on validity so there is no point to not saving 
@@ -615,8 +608,8 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             ViewBag.BaseLocationId = new SelectList(db.Locales.OrderBy(l =>l.Name), "LocaleId", "Name", org.BaseLocationId);
 
             short infoid = org.InfoId;
-            string blurb = db.Infos.Where(i => i.InfoId == infoid).Select(i => i.Blurb).First();
-            OrgEditVM model = new OrgEditVM(org, blurb);
+            Info info = db.Infos.Find(infoid);
+            OrgEditVM model = new OrgEditVM(org, info);
 
             List<short> selectedTags = db.InfoTags.Where(t => t.InfoId == infoid).Select(t => t.TagId).ToList();
             ViewBag.Selected = selectedTags;
@@ -630,7 +623,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "OrgId,InfoId,Name,IsPlayerEnabled,SymbolFileName,BaseLocationId,AboutText,IsPublished, Blurb, Artist")] OrgEditPostVM org,
+        public ActionResult Edit([Bind(Include = "OrgId,InfoId,Name,IsPlayerEnabled,SymbolFileName,BaseLocationId,AboutText,IsPublished, Blurb, Artist, IsSecret")] OrgEditPostVM org,
             List<short> tags,
             HttpPostedFileBase picture,
             string submit
@@ -688,6 +681,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                 info.Name = org.Name;
                 info.Blurb = org.Blurb;
                 info.IsPublished = org.IsPublished;
+                info.IsSecret = org.IsSecret;
                 #endregion
 
                 #region Update tags
@@ -1020,15 +1014,6 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             Org org = db.Orgs.Find(id);
             short infoId = org.InfoId;
             string picture = org.SymbolFileName;
-            db.Orgs.Remove(org);
-
-            #region Remove Picture
-            string fullPath = Request.MapPath("~/Content/img/org/" + picture);
-            if (System.IO.File.Exists(fullPath))
-            {
-                System.IO.File.Delete(fullPath);
-            }
-            #endregion
 
             #region Remove Associations
 
@@ -1056,6 +1041,16 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             }
             #endregion
 
+            #endregion
+
+            db.Orgs.Remove(org);
+
+            #region Remove Picture
+            string fullPath = Request.MapPath("~/Content/img/org/" + picture);
+            if (System.IO.File.Exists(fullPath))
+            {
+                System.IO.File.Delete(fullPath);
+            }
             #endregion
 
             #region Remove Rumors

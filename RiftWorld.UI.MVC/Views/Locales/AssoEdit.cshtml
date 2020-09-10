@@ -24,7 +24,7 @@
             @Html.HiddenFor(model => model.LocaleId)
             @Html.HiddenFor(model => model.Submit)
             <div class="form-group">
-                <label  for="maj">Majorities</label>
+                <label for="maj">Majorities</label>
                 <select multiple="multiple" name="maj" id="maj">
                     @foreach (var x in ViewBag.Majs)
                     {
@@ -38,7 +38,7 @@
                             <h5>@x.RaceName</h5>
                             <div class="input-group">
                                 <div class="form-check">
-                                    <input class="form-check-input" data-value="@x.RaceId" type="checkbox" value="" id="@x.RaceName" data-name="isFirst" @(x.RaceId == first ? "checked" : "")/>
+                                    <input class="form-check-input" data-value="@x.RaceId" type="checkbox" value="" id="@x.RaceName" data-name="isFirst" @(x.RaceId == first ? "checked" : "") />
 
                                     <label class="form-check-label" for="@x.RaceName">Display ifrst</label>
                                 </div>
@@ -81,13 +81,13 @@
         </div>
     }
 
-        <div style="text-align:left;">
-            @Html.ActionLink("Cancel", "Details", new { id = Model.LocaleId })
-        </div>
+    <div style="text-align:left;">
+        @Html.ActionLink("Cancel", "Details", new { id = Model.LocaleId })
+    </div>
 </div>
 @section Scripts{
-    <script src="~/Scripts/SelectBoxes/multi.js"></script>
-    <script src="~/Scripts/MyJS/assoedit.js"></script>
+    <script src="~/Scripts/SelectBoxes/multi.min.js"></script>
+    <script src="~/Scripts/MyJS/assoedit.min.js"></script>
 
     <script>
         class AssoMaj {

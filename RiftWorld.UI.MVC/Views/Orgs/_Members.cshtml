@@ -1,13 +1,13 @@
 ﻿@model RiftWorld.UI.MVC.Models._MemberFullVM
 @using RiftWorld.UI.MVC.Models
 
+<h2 class="line">Known Members</h2>
 @if (Model.CurrentMembers.Count == 0)
 {
     <p>No one important</p>
 }
 else
 {
-    <h2 class="line">Known Members</h2>
     <ul>
         @foreach (var item in Model.CurrentMembers)
         {

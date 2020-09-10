@@ -1,112 +1,123 @@
 ﻿@model RiftWorld.DATA.EF.Character
 
 @{
-    ViewBag.Title = "Delete";
+    ViewBag.Title = "Delete " + Model.CharacterName;
+    string status = "";
+    if (Model.IsDead)
+    {
+        status = "dead";
+    }
+    else if (Model.IsRetired)
+    {
+        status = "retired";
+    }
 }
 
-<h2>Delete</h2>
+<section id="start" class="col-12" name="The Basics">
+    <div id="startTop" class="row">
+        @if (Model.PortraitFileName != null)
+        {
+            <div id="startTop-left_character" class="col-md-3 align-self-center">
+                <div id="picture" class="@status">
+                    <div class="padder">
+                        <img src="~/Content/img/character/@Model.PortraitFileName" />
+                        <div class="overlay char">Art by @Model.Artist</div>
+                    </div>
+                </div>
+            </div>
+        }
+        <div id="startTop-right_character" class="@(Model.PortraitFileName != null ? "col-md-9" : "col-12")">
+            <div class="row">
+                <div id="name_character" class="col-md-12">
+                    @Html.DisplayFor(model => model.CharacterName)
+                </div>
+            </div>
+            <div class="col-12 begin">
+                <div class="row chara-space topper">
+                    <div class="col-auto">
+                        <span class="dt">@Html.DisplayNameFor(model => model.RaceId):</span> @Html.DisplayFor(model => model.Race.RaceName)
+                    </div>
+                    <div class="col-auto divider">
+                        |
+                    </div>
+                    <div class="col-auto end">
+                        <span class="dt">@Html.DisplayNameFor(model => model.GenderId):</span>
+                        @if (Model.Gender.GenderName == "Wildmagic Incarnate")
+                        {
+                            <span style="color: red;">W</span>
+                            <span style="color: orange;">i</span>
+                            <span style="color: gold;">l</span>
+                            <span style="color: green;">d</span>
+                            <span style="color: blue;">m</span>
+                            <span style="color: indigo;">a</span>
+                            <span style="color: purple;">g</span>
+                            <span style="color: red;">i</span>
+                            <span style="color: orange;">c &nbsp;</span>
+                            <span style="color: gold;">I</span>
+                            <span style="color: green;">n</span>
+                            <span style="color: blue;">c</span>
+                            <span style="color: indigo;">a</span>
+                            <span style="color: purple;">r</span>
+                            <span style="color: red;">n</span>
+                            <span style="color: orange;">a</span>
+                            <span style="color: gold;">t</span>
+                            <span style="color: green;">e</span>
+                        }
+                        else
+                        {
+                            @Model.Gender.GenderName
+                        }
+                    </div>
+                </div>
+                <div class=" row chara-space">
+                    <div class="col-auto">
+                        <span class="dt">@Html.DisplayNameFor(model => model.ClassString):</span> @Html.DisplayFor(model => model.ClassString)
+                    </div>
+                    <div class="col-auto divider">
+                        |
+                    </div>
+                    <div class="col-auto end">
+                        <span class="dt">@Html.DisplayNameFor(model => model.TierId):</span> @Html.DisplayFor(model => model.Tier.TierName)
+                    </div>
+                </div>
+                <div class="row chara-space">
+                    <div class="col-auto" style="font-size:1.4em;">
+                        <span class="dt">@Html.DisplayNameFor(model => model.CurrentLocationId):</span> @Html.DisplayFor(model => model.Locale.Name)
+                    </div>
+                </div>
+                <footer class="row chara-space ooc">
+                    <div class="col-auto">
+                        <span class="dt">Portrayed by:</span> @(Model.IsPlayerDemo ? Html.DisplayFor(model => model.BackupPortrayerName) : Html.DisplayFor(model => model.UserDetail.DiscordFull))
+                    </div>
+                    <div class="col-auto">
+                        <span class="dt">Status:</span> @Html.DisplayFor(model => model.Status)
+                    </div>
+                </footer>
 
-<h3>Are you sure you want to delete this?</h3>
-<div>
-    <h4>Character</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.CharacterName)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.CharacterName)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.PortraitFileName)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.PortraitFileName)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.About)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.About)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.IsRetired)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.IsRetired)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.IsApproved)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.IsApproved)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Gender.GenderName)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Gender.GenderName)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Locale.Name)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Locale.Name)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Race.RaceName)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Race.RaceName)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Tier.TierName)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Tier.TierName)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.UserDetail.DiscordName)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.UserDetail.DiscordName)
-        </dd>
-
-    </dl>
-
-    @using (Html.BeginForm()) {
-        @Html.AntiForgeryToken()
-
-        <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-default" /> |
-            @Html.ActionLink("Back to List", "Index")
+            </div>
         </div>
-    }
-</div>
+    </div>
+</section>
+<section id="description" class="col-12" name="Description">
+    <h2 class="line chara">
+        @Html.DisplayNameFor(model => model.Description)
+    </h2>
+    <pre>@Html.DisplayFor(model => model.Description)</pre>
+</section>
+<section id="about" class="col-12" name="About">
+    <h2 class="line chara">
+        @Html.DisplayNameFor(model => model.About)
+    </h2>
+    <pre>@Html.DisplayFor(model => model.About)</pre>
+</section>
+@Html.Action("_Journals", "Characters", new { id = Model.CharacterId })
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-actions no-color col-12 btn-group fixed-bottom" style="bottom:0;">
+        @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-warning btn-lg" })
+        <input type="submit" value="Delete" class="btn btn-danger btn-lg" />
+
+    </div>
+}

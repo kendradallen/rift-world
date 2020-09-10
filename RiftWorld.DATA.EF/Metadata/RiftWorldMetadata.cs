@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -138,26 +137,15 @@ namespace RiftWorld.DATA.EF
         //public byte ClassId { get; set; }
         [Required(ErrorMessage = "Katherine, seriously. If you're going to make a new class you need to actually name it.")]
         [StringLength(15, ErrorMessage = "Too long. You have 15 characters; try again.")]
-        [Display(Name ="Name")]
+        [Display(Name = "Name")]
         public string ClassName { get; set; }
-        [Display(Name ="Player Enabled")]
+        [Display(Name = "Player Enabled")]
         public bool IsPlayerEnabled { get; set; }
 
     }
 
     [MetadataType(typeof(ClassMetaData))]
     public partial class Class { }
-
-    #endregion
-
-    #region  ClassCharacter Metadata
-    public class ClassCharacterMetaData
-    {
-
-    }
-
-    [MetadataType(typeof(ClassCharacterMetaData))]
-    public partial class ClassCharacter { }
 
     #endregion
 
@@ -178,10 +166,6 @@ namespace RiftWorld.DATA.EF
 
         public short InfoId { get; set; }
 
-        [Required]
-        [StringLength(50)]
-        public string Name { get; set; }
-
         public bool IsHistory { get; set; }
 
         [Required]
@@ -194,12 +178,10 @@ namespace RiftWorld.DATA.EF
         [Display(Name = "Normal Participants")]
         public string NormalParticipants { get; set; }
 
-        public bool IsPublished { get; set; }
-
         [Range(1, 12)]
         public Nullable<byte> DateMonth { get; set; }
 
-        [Range(1,4)]
+        [Range(1, 4)]
         public Nullable<byte> DateSeason { get; set; }
 
     }
@@ -207,11 +189,19 @@ namespace RiftWorld.DATA.EF
     [MetadataType(typeof(EventMetaData))]
     public partial class Event
     {
+        public bool IsPublished
+        {
+            get
+            {
+                return Info.IsPublished;
+            }
+        }
+
         public string Pub
         {
             get
             {
-                if (IsPublished)
+                if (Info.IsPublished)
                 {
                     return "Published";
                 }
@@ -221,6 +211,15 @@ namespace RiftWorld.DATA.EF
                 }
             }
         }
+
+        public string Name
+        {
+            get
+            {
+                return Info.Name;
+            }
+        }
+
         public string Month
         {
             get
@@ -330,7 +329,8 @@ namespace RiftWorld.DATA.EF
     }
 
     [MetadataType(typeof(InfoMetaData))]
-    public partial class Info {
+    public partial class Info
+    {
         public string Pub
         {
             get
@@ -408,10 +408,6 @@ namespace RiftWorld.DATA.EF
 
         public short InfoId { get; set; }
 
-        [Required]
-        [StringLength(50)]
-        public string Name { get; set; }
-
         public string PictureFileName { get; set; }
 
         [Required]
@@ -429,22 +425,27 @@ namespace RiftWorld.DATA.EF
         [Display(Name = "History")]
         public string HistoryText { get; set; }
 
-        public bool IsPublished { get; set; }
-
         [StringLength(40)]
         public string Artist { get; set; }
-
 
     }
 
     [MetadataType(typeof(ItemMetadata))]
     public partial class Item
     {
+        public bool IsPublished
+        {
+            get
+            {
+                return Info.IsPublished;
+            }
+        }
+
         public string Pub
         {
             get
             {
-                if (IsPublished)
+                if (Info.IsPublished)
                 {
                     return "Published";
                 }
@@ -454,6 +455,15 @@ namespace RiftWorld.DATA.EF
                 }
             }
         }
+
+        public string Name
+        {
+            get
+            {
+                return Info.Name;
+            }
+        }
+
     }
     #endregion
 
@@ -492,10 +502,6 @@ namespace RiftWorld.DATA.EF
         public short InfoId { get; set; }
 
         [Required]
-        [StringLength(50)]
-        public string Name { get; set; }
-
-        [Required]
         [Display(Name = "Level of Locale")]
         public byte LevelOfLocaleId { get; set; }
 
@@ -521,8 +527,6 @@ namespace RiftWorld.DATA.EF
         [UIHint("MultilineText")]
         public string About { get; set; }
 
-        public bool IsPublished { get; set; }
-
         [Required]
         [StringLength(3000)]
         [UIHint("MultilineText")]
@@ -533,11 +537,19 @@ namespace RiftWorld.DATA.EF
     [MetadataType(typeof(LocaleMetadata))]
     public partial class Locale
     {
+        public bool IsPublished
+        {
+            get
+            {
+                return Info.IsPublished;
+            }
+        }
+
         public string Pub
         {
             get
             {
-                if (IsPublished)
+                if (Info.IsPublished)
                 {
                     return "Published";
                 }
@@ -545,6 +557,14 @@ namespace RiftWorld.DATA.EF
                 {
                     return "Un-Published";
                 }
+            }
+        }
+
+        public string Name
+        {
+            get
+            {
+                return Info.Name;
             }
         }
     }
@@ -582,26 +602,28 @@ namespace RiftWorld.DATA.EF
         public short InfoId { get; set; }
 
         [Required]
-        [StringLength(50)]
-        public string Name { get; set; }
-
-        [Required]
         [Display(Name = "Main")]
         [UIHint("MultilineText")]
         public string TheContent { get; set; }
-
-        public bool IsPublished { get; set; }
 
     }
 
     [MetadataType(typeof(LoreMetadata))]
     public partial class Lore
     {
+        public bool IsPublished
+        {
+            get
+            {
+                return Info.IsPublished;
+            }
+        }
+
         public string Pub
         {
             get
             {
-                if (IsPublished)
+                if (Info.IsPublished)
                 {
                     return "Published";
                 }
@@ -611,6 +633,15 @@ namespace RiftWorld.DATA.EF
                 }
             }
         }
+
+        public string Name
+        {
+            get
+            {
+                return Info.Name;
+            }
+        }
+
     }
     #endregion
 
@@ -630,10 +661,6 @@ namespace RiftWorld.DATA.EF
         //public short NpcId { get; set; }
 
         public short InfoId { get; set; }
-
-        [Required]
-        [StringLength(30)]
-        public string Name { get; set; }
 
         [Required]
         [StringLength(500)]
@@ -667,8 +694,6 @@ namespace RiftWorld.DATA.EF
         [Display(Name = "Last Location")]
         public Nullable<short> LastLocationId { get; set; }
 
-        public bool IsPublished { get; set; }
-
         [StringLength(40)]
         public string PortraitArtist { get; set; }
 
@@ -682,11 +707,19 @@ namespace RiftWorld.DATA.EF
     [MetadataType(typeof(NPCMetadata))]
     public partial class NPC
     {
+        public bool IsPublished
+        {
+            get
+            {
+                return Info.IsPublished;
+            }
+        }
+
         public string Pub
         {
             get
             {
-                if (IsPublished)
+                if (Info.IsPublished)
                 {
                     return "Published";
                 }
@@ -694,6 +727,14 @@ namespace RiftWorld.DATA.EF
                 {
                     return "Un-Published";
                 }
+            }
+        }
+
+        public string Name
+        {
+            get
+            {
+                return Info.Name;
             }
         }
     }
@@ -737,10 +778,6 @@ namespace RiftWorld.DATA.EF
 
         public short InfoId { get; set; }
 
-        [Required]
-        [StringLength(50)]
-        public string Name { get; set; }
-
         public bool IsPlayerEnabled { get; set; }
 
         public string SymbolFileName { get; set; }
@@ -754,8 +791,6 @@ namespace RiftWorld.DATA.EF
         [Display(Name = "About")]
         public string AboutText { get; set; }
 
-        public bool IsPublished { get; set; }
-
         [StringLength(40)]
         public string Artist { get; set; }
 
@@ -765,11 +800,19 @@ namespace RiftWorld.DATA.EF
     [MetadataType(typeof(OrgMetadata))]
     public partial class Org
     {
+        public bool IsPublished
+        {
+            get
+            {
+                return Info.IsPublished;
+            }
+        }
+
         public string Pub
         {
             get
             {
-                if (IsPublished)
+                if (Info.IsPublished)
                 {
                     return "Published";
                 }
@@ -779,6 +822,15 @@ namespace RiftWorld.DATA.EF
                 }
             }
         }
+
+        public string Name
+        {
+            get
+            {
+                return Info.Name;
+            }
+        }
+
     }
     #endregion
 
@@ -855,9 +907,6 @@ namespace RiftWorld.DATA.EF
 
         public short InfoId { get; set; }
 
-        [StringLength(50)]
-        public string Nickname { get; set; }
-
         [Required]
         [StringLength(300)]
         [UIHint("MultilineText")]
@@ -871,18 +920,24 @@ namespace RiftWorld.DATA.EF
         [UIHint("MultilineText")]
         public string Hazards { get; set; }
 
-        public bool IsPublished { get; set; }
-
     }
 
     [MetadataType(typeof(RiftMetadata))]
     public partial class Rift
     {
+        public bool IsPublished
+        {
+            get
+            {
+                return Info.IsPublished;
+            }
+        }
+
         public string Pub
         {
             get
             {
-                if (IsPublished)
+                if (Info.IsPublished)
                 {
                     return "Published";
                 }
@@ -890,6 +945,14 @@ namespace RiftWorld.DATA.EF
                 {
                     return "Un-Published";
                 }
+            }
+        }
+
+        public string Name
+        {
+            get
+            {
+                return Info.Name;
             }
         }
     }

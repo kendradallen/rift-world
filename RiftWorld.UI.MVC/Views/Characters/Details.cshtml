@@ -20,7 +20,6 @@
             <div id="startTop-left_character" class="col-md-3 align-self-center">
                 <div id="picture" class="@status">
                     <div class="padder">
-                        @*<img src="https://vignette.wikia.nocookie.net/criticalrole/images/9/91/Percy2.png/revision/latest/scale-to-width-down/310?cb=20151228164610" />*@
                         <img src="~/Content/img/character/@Model.PortraitFileName" />
                         <div class="overlay char">Art by @Model.Artist</div>
                     </div>
@@ -37,27 +36,13 @@
                 <div class="row chara-space topper">
                     <div class="col-auto">
                         <span class="dt">@Html.DisplayNameFor(model => model.RaceId):</span> @Html.DisplayFor(model => model.Race.RaceName)
-                        @*@if (Model.Gender.IconName != null)
-                            {
-                                <i class="fas fa-@Model.Gender.IconName" title="@Model.Gender.GenderName"></i>
-                            }*@
                     </div>
                     <div class="col-auto divider">
                         |
                     </div>
                     <div class="col-auto end">
                         <span class="dt">@Html.DisplayNameFor(model => model.GenderId):</span>
-                        @if (Model.Gender.GenderName == "Wildcard")
-                        {
-                            <span style="color: red;">W</span>
-                            <span style="color: orange;">i</span>
-                            <span style="color: gold;">l</span>
-                            <span style="color: green;">d</span>
-                            <span style="color: blue;">c</span>
-                            <span style="color: indigo;">a</span>
-                            <span style="color: purple;">r</span>
-                            <span>d</span>
-                        }
+       
                         @if (Model.Gender.GenderName == "Wildmagic Incarnate")
                         {
                             <span style="color: red;">W</span>
@@ -103,7 +88,7 @@
                 </div>
                 <footer class="row chara-space ooc">
                     <div class="col-auto">
-                        <span class="dt">Portrayed by:</span> @Html.DisplayFor(model => model.UserDetail.DiscordFull)
+                        <span class="dt">Portrayed by:</span> @(Model.IsPlayerDemo ? Html.DisplayFor(model => model.BackupPortrayerName) : Html.DisplayFor(model => model.UserDetail.DiscordFull))
                     </div>
                     <div class="col-auto">
                         <span class="dt">Status:</span> @Html.DisplayFor(model => model.Status)

@@ -201,12 +201,12 @@ namespace RiftWorld.UI.MVC.Models
         {
             InfoId = item.InfoId;
             ItemId = item.ItemId;
-            Name = item.Name;
+            Name = info.Name;
             PictureFileName = item.PictureFileName;
             DescriptionText = item.DescriptionText;
             PropertyText = item.PropertyText;
             HistoryText = item.HistoryText;
-            IsPublished = item.IsPublished;
+            IsPublished = info.IsPublished;
             Artist = item.Artist;
             Blurb = info.Blurb;
             IsSecret = info.IsSecret;
@@ -347,12 +347,12 @@ namespace RiftWorld.UI.MVC.Models
         {
             InfoId = item.InfoId;
             ItemId = item.ItemId;
-            Name = item.Name;
+            Name = info.Name;
             PictureFileName = item.PictureFileName;
             DescriptionText = item.DescriptionText;
             PropertyText = item.PropertyText;
             HistoryText = item.HistoryText;
-            IsPublished = item.IsPublished;
+            IsPublished = info.IsPublished;
             Artist = item.Artist;
             Blurb = info.Blurb;
             IsSecret = info.IsSecret;

@@ -144,8 +144,8 @@ namespace RiftWorld.UI.MVC.Controllers
             }
 
             ViewBag.GenderId = new SelectList(db.Genders, "GenderId", "GenderName");
-            ViewBag.CurrentLocationId = new SelectList(db.Locales.OrderBy(l => l.Name), "LocaleId", "Name");
-            ViewBag.RaceId = new SelectList(db.Races.Where(r => r.IsPlayerEnabled), "RaceId", "RaceName");
+            ViewBag.CurrentLocationId = new SelectList(db.Locales.Where(l => l.Info.IsPublished).OrderBy(l => l.Info.Name), "LocaleId", "Name");
+            ViewBag.RaceId = new SelectList(db.Races.Where(r => r.IsPlayerEnabled).OrderBy(r=>r.RaceName), "RaceId", "RaceName");
             ViewBag.TierId = new SelectList(db.Tiers, "TierId", "TierName");
 
             return View();
@@ -231,8 +231,8 @@ namespace RiftWorld.UI.MVC.Controllers
             }
 
             ViewBag.GenderId = new SelectList(db.Genders, "GenderId", "GenderName", character.GenderId);
-            ViewBag.CurrentLocationId = new SelectList(db.Locales.OrderBy(l => l.Name), "LocaleId", "Name", character.CurrentLocationId);
-            ViewBag.RaceId = new SelectList(db.Races.Where(r => r.IsPlayerEnabled).OrderBy(r => r.RaceName), "RaceId", "RaceName", character.RaceId);
+            ViewBag.CurrentLocationId = new SelectList(db.Locales.Where(l => l.Info.IsPublished).OrderBy(l => l.Info.Name), "LocaleId", "Name", character.CurrentLocationId);
+            ViewBag.RaceId = new SelectList(db.Races.Where(r => r.IsPlayerEnabled), "RaceId", "RaceName", character.RaceId).OrderBy(l=>l.Text);
             ViewBag.TierId = new SelectList(db.Tiers, "TierId", "TierName", character.TierId);
             if (picture != null)
             {
@@ -355,10 +355,10 @@ namespace RiftWorld.UI.MVC.Controllers
         public ActionResult AdminCreate()
         {
             ViewBag.GenderId = new SelectList(db.Genders, "GenderId", "GenderName");
-            ViewBag.CurrentLocationId = new SelectList(db.Locales.OrderBy(l => l.Name), "LocaleId", "Name");
+            ViewBag.CurrentLocationId = new SelectList(db.Locales.Where(l => l.Info.IsPublished).OrderBy(l => l.Info.Name), "LocaleId", "Name");
             ViewBag.RaceId = new SelectList(db.Races.Where(r => r.IsPlayerEnabled), "RaceId", "RaceName");
             ViewBag.TierId = new SelectList(db.Tiers, "TierId", "TierName");
-            ViewBag.PlayerId = new SelectList(db.UserDetails.Where(u => u.IsApproved).OrderBy(u => u.DiscordFull), "UserId", "DiscordFull");
+            ViewBag.PlayerId = new SelectList(db.UserDetails.Where(u => u.IsApproved).OrderBy(u=>u.DiscordName).OrderBy(u=>u.DiscordDiscriminator), "UserId", "DiscordFull");
             return View();
         }
 
@@ -375,31 +375,87 @@ namespace RiftWorld.UI.MVC.Controllers
 
             character.IsPlayerDemo = false;
 
+            #region Getting Demo user
+            var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(new ApplicationDbContext()));
+            var demoUser = roleManager.FindByName("Demo").Users.FirstOrDefault();
+            if (demoUser == null)
+            {
+                ViewBag.Message = "So, we have a problem. There is no demo user.";
+                return View("Error");
+            }
+            #endregion
+
             if (character.PlayerId == null && character.BackupPortrayerName != null)
             {
-                //make demo the assigned player
+                character.PlayerId = demoUser.UserId;
                 character.IsPlayerDemo = true;
             }
             else if (character.PlayerId == null && character.BackupPortrayerName == null)
             {
-                //add error that I need it 
+                ModelState.AddModelError("", "So, here's what happened. You tried to make a character without assigning it a user (the player) OR writing in the discord name override in. If the player of the character does not have an account you need to fill in the backup discord name.");
+            }
+            else
+            {
+                character.BackupPortrayerName = null;
             }
 
-            //check if picture is valid as if it was player making it
+            #region Picture is valid
+            //check picture is valid
+            if (picture != null)
+            {
+                string[] goodExts = { ".jpg", ".jpeg", ".gif", ".png" };
+                string imgName = picture.FileName;
+
+                var length = picture.ContentLength;
+                string ext = imgName.Substring(imgName.LastIndexOf('.'));
+
+                if (!goodExts.Contains(ext.ToLower()))
+                {
+                    ModelState.AddModelError("PortraitFileName", "You have submitted a incorrect file type for your portrait. Please use either: .jpg, .jpeg, .gif, or .png");
+                }
+                if (length > 75000) //todo - figure out a preciese number this file size limiter should be. I'm thinking either 50kb or 75kb
+                {
+                    ModelState.AddModelError("PortraitFileName", "The file you submitted is too big! There is an arbitrarily set limit of 50kb on the size. Check the interaction guide for advice.");
+                }
+                if (character.Artist == null)
+                {
+                    ModelState.AddModelError("Artist", "Hey, we want to really want to give credit where credit is due on this website. You haven't listed the artist that did that artwork you tried to submit. Re-upload that artwork and list who drew it so we can all gush about it!");
+                }
+            }
+            #endregion
 
             if (ModelState.IsValid)
             {
-                //post pic 
-
                 db.Characters.Add(character);
                 db.SaveChanges();
+
+                List<short> charaIds = db.Characters.Where(x => x.PlayerId == demoUser.UserId).Select(x => x.CharacterId).ToList();
+                short charaId = charaIds.Max();
+                #region Image uploads
+
+                if (picture != null)
+                {
+                    string[] goodExts = { ".jpg", ".jpeg", ".gif", ".png" };
+
+                    string imgName = picture.FileName;
+                    string ext = imgName.Substring(imgName.LastIndexOf('.'));
+
+                    imgName = "character-" + charaId.ToString() + ext;
+
+                    picture.SaveAs(Server.MapPath("~/Content/img/character/" + imgName));
+                    character.PortraitFileName = imgName;
+                    db.Entry(character).State = EntityState.Modified;
+                    db.SaveChanges();
+                }
+                #endregion
+
             }
 
             ViewBag.GenderId = new SelectList(db.Genders, "GenderId", "GenderName", character.GenderId);
-            ViewBag.CurrentLocationId = new SelectList(db.Locales.OrderBy(l => l.Name), "LocaleId", "Name", character.CurrentLocationId);
+            ViewBag.CurrentLocationId = new SelectList(db.Locales.Where(l => l.Info.IsPublished).OrderBy(l => l.Info.Name), "LocaleId", "Name", character.CurrentLocationId);
             ViewBag.RaceId = new SelectList(db.Races.Where(r => r.IsPlayerEnabled), "RaceId", "RaceName", character.RaceId);
             ViewBag.TierId = new SelectList(db.Tiers, "TierId", "TierName", character.TierId);
-            ViewBag.PlayerId = new SelectList(db.UserDetails.Where(u => u.IsApproved).OrderBy(u => u.DiscordFull), "UserId", "DiscordFull", character.PlayerId);
+            ViewBag.PlayerId = new SelectList(db.UserDetails.Where(u => u.IsApproved).OrderBy(u=>u.DiscordName).OrderBy(u=>u.DiscordDiscriminator), "UserId", "DiscordFull", character.PlayerId);
             return View(character);
         }
 
@@ -407,7 +463,7 @@ namespace RiftWorld.UI.MVC.Controllers
         public ActionResult AssignUserAsPlayer()
         {
             ViewBag.CharacterId = new SelectList(db.Characters.Where(c => c.IsPlayerDemo), "CharacterId", "CharacterName");
-            ViewBag.PlayerId = new SelectList(db.UserDetails.OrderBy(u => u.DiscordFull), "UserId", "DiscordFull");
+            ViewBag.PlayerId = new SelectList(db.UserDetails.Where(u=>u.IsApproved).OrderBy(u=>u.DiscordName).OrderBy(u=>u.DiscordDiscriminator), "UserId", "DiscordFull");
             return View();
         }
 
@@ -469,7 +525,7 @@ namespace RiftWorld.UI.MVC.Controllers
             }
 
             ViewBag.GenderId = new SelectList(db.Genders, "GenderId", "GenderName", character.GenderId);
-            ViewBag.CurrentLocationId = new SelectList(db.Locales.OrderBy(l => l.Name), "LocaleId", "Name", character.CurrentLocationId);
+            ViewBag.CurrentLocationId = new SelectList(db.Locales.Where(l => l.Info.IsPublished).OrderBy(l => l.Info.Name), "LocaleId", "Name", character.CurrentLocationId);
             ViewBag.RaceId = new SelectList(db.Races.Where(r => r.IsPlayerEnabled).OrderBy(r => r.RaceName), "RaceId", "RaceName", character.RaceId);
             ViewBag.TierId = new SelectList(db.Tiers, "TierId", "TierName", character.TierId);
 
@@ -577,7 +633,7 @@ namespace RiftWorld.UI.MVC.Controllers
             }
 
             ViewBag.GenderId = new SelectList(db.Genders, "GenderId", "GenderName", character.GenderId);
-            ViewBag.CurrentLocationId = new SelectList(db.Locales.OrderBy(l => l.Name), "LocaleId", "Name", character.CurrentLocationId);
+            ViewBag.CurrentLocationId = new SelectList(db.Locales.Where(l => l.Info.IsPublished).OrderBy(l => l.Info.Name), "LocaleId", "Name", character.CurrentLocationId);
             ViewBag.RaceId = new SelectList(db.Races.Where(r => r.IsPlayerEnabled).OrderBy(r => r.RaceName), "RaceId", "RaceName", character.RaceId);
             ViewBag.TierId = new SelectList(db.Tiers, "TierId", "TierName", character.TierId);
 
@@ -624,15 +680,16 @@ namespace RiftWorld.UI.MVC.Controllers
             string playerId = character.PlayerId;
             var player = db.AspNetUsers.Find(character.PlayerId);
             string picture = character.PortraitFileName;
-            db.Characters.Remove(character);
 
             #region Remove Picture
-            string fullPath = Request.MapPath("~/Content/img/character/" + picture);
-            if (System.IO.File.Exists(fullPath))
+            if (character.PortraitFileName != null)
             {
-                System.IO.File.Delete(fullPath);
+                string fullPath = Request.MapPath("~/Content/img/character/" + picture);
+                if (System.IO.File.Exists(fullPath))
+                {
+                    System.IO.File.Delete(fullPath);
+                }
             }
-
             #endregion
 
             #region Remove Rumors
@@ -667,48 +724,43 @@ namespace RiftWorld.UI.MVC.Controllers
             }
             #endregion
 
-            #region Remove ClassCharacters
-            List<ClassCharacter> taclasses = db.ClassCharacters.Where(x => x.CharacterId == id).ToList();
-            foreach (ClassCharacter gone in taclasses)
-            {
-                db.ClassCharacters.Remove(gone);
-            }
-            #endregion
 
             #region Update User
-
-            //role grabbing in preperation for changing acess throughout website (through adding of role "Character")
-            var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext()));
-
-            var userRoles = userManager.GetRoles(player.Id);
-
-            var charRole = db.AspNetRoles.FirstOrDefault(u => u.Name.Equals("Character"));
-            var charRoleConvert = Convert.ToString(charRole.Name);
-            if (charRole != null && userRoles.Contains(charRoleConvert))
+            if (!character.IsRetired)
             {
-                userManager.RemoveFromRole(player.Id, charRoleConvert);
-            }
+                //role grabbing in preperation for changing acess throughout website (through adding of role "Character")
+                var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext()));
 
-            UserDetail playerDetail = db.UserDetails.Where(x => x.UserId == playerId).FirstOrDefault();
-            playerDetail.CurrentCharacterId = null;
-            db.Entry(playerDetail).State = EntityState.Modified;
+                var userRoles = userManager.GetRoles(player.Id);
+
+                var charRole = db.AspNetRoles.FirstOrDefault(u => u.Name.Equals("Character"));
+                var charRoleConvert = Convert.ToString(charRole.Name);
+                if (charRole != null && userRoles.Contains(charRoleConvert))
+                {
+                    userManager.RemoveFromRole(player.Id, charRoleConvert);
+                }
+
+                UserDetail playerDetail = db.UserDetails.Where(x => x.UserId == playerId).FirstOrDefault();
+                playerDetail.CurrentCharacterId = null;
+                db.Entry(playerDetail).State = EntityState.Modified;
+            }
             #endregion
+
+            db.Characters.Remove(character);
+            //if (character.IsDead)
+            //{
+            //    UserDetail playerDetail = db.UserDetails.Where(x => x.UserId == playerId).FirstOrDefault();
+            //    db.UserDetails.Remove(playerDetail);
+            //}
+
 
             db.SaveChanges();
             return RedirectToAction("Index");
         }
 
+        [HttpGet]
         [Authorize(Roles = "Mod, Admin")]
-        public ActionResult DenyRetire(short id)
-        {
-            Character character = db.Characters.Where(x => x.CharacterId == id).FirstOrDefault();
-            character.IsRequestingRetire = false;
-            db.Entry(character).State = EntityState.Modified;
-            db.SaveChanges();
-            return RedirectToAction("Approvals", "Infos", null);
-        }
-        [Authorize(Roles = "Mod, Admin")]
-        public ActionResult Retire(short? id, bool didTheyDie)
+        public ActionResult Retire(short? id)
         {
             if (id == null)
             {
@@ -720,33 +772,58 @@ namespace RiftWorld.UI.MVC.Controllers
                 return HttpNotFound();
             }
 
-            character.IsRequestingRetire = false;
-            character.IsRetired = true;
-            if (didTheyDie)
+            return View(character);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Mod, Admin")]
+        public ActionResult Retire(short? characterId, bool isDead, string submit)
+        {
+            if (characterId == null)
             {
-                character.IsDead = true;
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var player = db.AspNetUsers.Find(character.PlayerId);
-
-            //role grabbing in preperation for changing acess throughout website (through adding of role "Character")
-            var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext()));
-
-            var userRoles = userManager.GetRoles(player.Id);
-
-            var charRole = db.AspNetRoles.FirstOrDefault(u => u.Name.Equals("Character"));
-            var charRoleConvert = Convert.ToString(charRole.Name);
-            if (charRole != null && userRoles.Contains(charRoleConvert))
+            Character character = db.Characters.Where(x => x.CharacterId == characterId).FirstOrDefault();
+            if (character == null)
             {
-                userManager.RemoveFromRole(player.Id, charRoleConvert);
+                return HttpNotFound();
             }
 
-            UserDetail playerDetail = db.UserDetails.Where(x => x.UserId == player.Id).FirstOrDefault();
-            playerDetail.CurrentCharacterId = null;
+            if (submit == "Yes, retire")
+            {
+                character.IsRequestingRetire = false;
+                character.IsRetired = true;
+                if (isDead)
+                {
+                    character.IsDead = true;
+                }
+                var player = db.AspNetUsers.Find(character.PlayerId);
+
+                //role grabbing in preperation for changing acess throughout website (through adding of role "Character")
+                var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext()));
+
+                var userRoles = userManager.GetRoles(player.Id);
+
+                var charRole = db.AspNetRoles.FirstOrDefault(u => u.Name.Equals("Character"));
+                var charRoleConvert = Convert.ToString(charRole.Name);
+                if (charRole != null && userRoles.Contains(charRoleConvert))
+                {
+                    userManager.RemoveFromRole(player.Id, charRoleConvert);
+                }
+
+                UserDetail playerDetail = db.UserDetails.Where(x => x.UserId == player.Id).FirstOrDefault();
+                playerDetail.CurrentCharacterId = null;
+                db.Entry(playerDetail).State = EntityState.Modified;
+
+                db.SaveChanges();
+            }
+            else if(submit == "Deny Retirement")
+            {
+                character.IsRequestingRetire = false;
+            }
+
             db.Entry(character).State = EntityState.Modified;
-            db.Entry(playerDetail).State = EntityState.Modified;
-
-            db.SaveChanges();
-            return RedirectToAction("Details", new { id = id });
+            return RedirectToAction("Approvals", "Infos", null);
         }
 
         protected override void Dispose(bool disposing)

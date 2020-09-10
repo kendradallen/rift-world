@@ -1,0 +1,10 @@
+﻿
+@{
+    ViewBag.Title = "Already Member";
+}
+
+<div class="col-12">
+    <p>You're already a member or pending member of this organization. Sorry about the confusion!</p>
+    @Html.ActionLink("Go Back to Org Page", "Details", new { id=ViewBag.Id})
+</div>
+

@@ -1,88 +1,85 @@
 ﻿@model RiftWorld.DATA.EF.Item
 
 @{
-    ViewBag.Title = "Delete";
+    ViewBag.Title = "Delete " + Model.Name + "?";
+    ViewBag.InfoId = Model.InfoId;
 }
+<section id="description" name="Description" class="col-12" style="margin-top:8px;">
+    <div class="row">
+        <div class="col-md-9" style="padding-left:30px;">
+            <div id="name">
+                @Html.DisplayFor(model => model.Info.Name)
+            </div>
+            <div id="blurb" style="text-align:left;">
+                @Html.DisplayFor(model => model.Info.Blurb)
+            </div>
+        </div>
+        <div id="pic" class="col-md-3 pic align-self-center" style="padding-right:28px;">
+            <img src="~/Content/img/item/@Model.PictureFileName" style="border: 2px groove #c3733a;box-shadow: 1px 1px 6px 0px #2a433e;" />
+            @if (Model.PictureFileName != "default.jpg")
+            {
+                <div class="overlay" style="right:28px; padding:15px;">Art by @Model.Artist</div>
+            }
 
-<h2>Delete</h2>
+        </div>
 
-<h3>Are you sure you want to delete this?</h3>
-<div>
-    <h4>Item</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Blurb)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Blurb)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.PictureFileName)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.PictureFileName)
-        </dd>
-
-        <dt>
+    </div>
+    <br />
+    <div class="row">
+    </div>
+    @if (Model.DescriptionText != "Nada")
+    {
+        <h2 class="line">
             @Html.DisplayNameFor(model => model.DescriptionText)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.DescriptionText)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.PropertyText)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.PropertyText)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.HistoryText)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.HistoryText)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.IsPublished)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.IsPublished)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Info.Blurb)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Info.Blurb)
-        </dd>
-
-    </dl>
-
-    @using (Html.BeginForm()) {
-        @Html.AntiForgeryToken()
-
-        <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-default" /> |
-            @Html.ActionLink("Back to List", "Index")
+        </h2>
+        <div class="hang">
+            @Html.Raw(Model.DescriptionText)
         </div>
     }
-</div>
+</section>
+@if (Model.PropertyText != "Nada")
+{
+    <section id="properties" name="Properties" class="col-12">
+        <h2 class="line">
+            @Html.DisplayNameFor(model => model.PropertyText)
+        </h2>
+        <div class="hang">
+            @Html.Raw(Model.PropertyText)
+        </div>
+    </section>
+}
+@if (Model.HistoryText != "Nada")
+{
+    <section id="history" name="History" class="col-12">
+        <h2 class="line">
+            @Html.DisplayNameFor(model => model.HistoryText)
+        </h2>
+        <div class="hang">
+            @Html.Raw(Model.HistoryText)
+        </div>
+    </section>
+}
+@Html.Action("_Details", "Secrets", new { id = Model.InfoId })
+@Html.Action("_Stories", "Stories", new { id = Model.InfoId })
+<section id="rumors" class="col-12" name="Rumors">
+    <h2 class="line">Rumors</h2>
+    @Html.Action("_Rumors", "Rumors", new { id = Model.InfoId })
+    @Html.Action("CreateRumor", "Rumors", new { id = Model.InfoId })
+</section>
+<footer id="tags" class="col-12">
+    @Html.Action("_TagList", "Infos", new { id = Model.InfoId })
+</footer>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-actions no-color col-12 btn-group fixed-bottom" style="bottom:0;">
+        @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-warning btn-lg" })
+        <input type="submit" value="Delete" class="btn btn-danger btn-lg" />
+
+    </div>
+}
+
+@section Scripts{
+    <script src="~/Scripts/MyJS/deets.min.js"></script>
+}

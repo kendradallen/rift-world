@@ -130,14 +130,14 @@
             </div>
         </div>
     }
-        <div style="text-align:left;">
-            @Html.ActionLink("Cancel", "Details", new { id = Model.NpcId })
-        </div>
+    <div style="text-align:left;">
+        @Html.ActionLink("Cancel", "Details", new { id = Model.NpcId })
+    </div>
 </div>
 
 @section Scripts{
-    <script src="~/Scripts/SelectBoxes/multi.js"></script>
-    <script src="~/Scripts/MyJS/assoedit.js"></script>
+    <script src="~/Scripts/SelectBoxes/multi.min.js"></script>
+    <script src="~/Scripts/MyJS/assoedit.min.js"></script>
     <script>
         class AssoClass {
             constructor(daClassid, daClassOrder) {

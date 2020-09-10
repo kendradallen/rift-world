@@ -32,146 +32,193 @@
         }
     </style>
 }
-<div class="col-12">
-    <h2>Approvals</h2>
-    @if (Request.IsAuthenticated && User.IsInRole("Admin"))
-    {
-        <button class="tablink-a" onclick="openPage('Users', this, 'red')">Users (@Model.Users.Count)</button>
-    }
-    <button class="tablink-a" onclick="openPage('Characters', this, 'green')" id="defaultOpen">Characters (@Model.Characters.Count)</button>
-    <button class="tablink-a" onclick="openPage('Rumors', this, 'green')">Rumors (@Model.Rumors.Count)</button>
-    <button class="tablink-a" onclick="openPage('Journals', this, 'green')">Journals (@Model.Journals.Count)</button>
-    <button class="tablink-a" onclick="openPage('JournalEdits', this, 'yellow')">Journal Edits (@Model.JournalEdits.Count)</button>
-    <button class="tablink-a" onclick="openPage('CharacterEdits', this, 'yellow')">Character Edits (@Model.CharacterEdits.Count)</button>
+    <div class="col-12">
+        <h2>Approvals</h2>
+        @if (Request.IsAuthenticated && User.IsInRole("Admin"))
+        {
+            <button class="tablink-a" onclick="openPage('Users', this, 'red')">Users (@Model.Users.Count)</button>
+            <button class="tablink-a" onclick="openPage('Orgs', this, 'red')">Memberships (@Model.Orgs.Count)</button>
+        }
+        <button class="tablink-a" onclick="openPage('Characters', this, 'green')" id="defaultOpen">Characters (@Model.Characters.Count)</button>
+        <button class="tablink-a" onclick="openPage('Rumors', this, 'green')">Rumors (@Model.Rumors.Count)</button>
+        <button class="tablink-a" onclick="openPage('Journals', this, 'green')">Journals (@Model.Journals.Count)</button>
+        <button class="tablink-a" onclick="openPage('JournalEdits', this, 'yellow')">Journal Edits (@Model.JournalEdits.Count)</button>
+        <button class="tablink-a" onclick="openPage('CharacterEdits', this, 'yellow')">Character Edits (@Model.CharacterEdits.Count)</button>
+        <button class="tablink-a" onclick="openPage('RetireRequests', this, 'yellow')">Retirement Requests (@Model.RetireRequests.Count)</button>
 
-    @if (Request.IsAuthenticated && User.IsInRole("Admin"))
-    {
-        <div id="Users" class="tabcontent-a">
+
+        @if (Request.IsAuthenticated && User.IsInRole("Admin"))
+        {
+            <div id="Users" class="tabcontent-a">
+                <table class="table">
+                    <tr>
+                        <th>User</th>
+                        <th></th>
+                    </tr>
+                    @if (Model.Users.Count != 0)
+                    {
+                        foreach (UserDetail item in Model.Users)
+                        {
+                            <tr>
+                                <td>@Html.DisplayFor(modelItem => item.DiscordFull)</td>
+                                <td>@Html.ActionLink("Decide", "Approve", "UsersAdmin", new { id = item.UserId }, null)</td>
+                            </tr>
+                        }
+                    }
+                </table>
+            </div>
+            <div id="Orgs" class="tabcontent-a">
+                <table class="table">
+                    <tr>
+                        <th>Character</th>
+                        <th>Org</th>
+                        <th></th>
+                    </tr>
+                    @if (Model.Orgs.Count != 0)
+                    {
+                        foreach (CharOrg item in Model.Orgs)
+                        {
+                            <tr>
+                                <td>@Html.DisplayFor(modelItem => item.Character.CharacterName)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Org.Name)</td>
+                                <td>@Html.ActionLink("Address", "AssoEdit", "Orgs", new { id = item.OrgId }, null)</td>
+                            </tr>
+                        }
+                    }
+                </table>
+            </div>
+        }
+        <div id="Characters" class="tabcontent-a">
             <table class="table">
                 <tr>
                     <th>User</th>
+                    <th>Character Name</th>
                     <th></th>
                 </tr>
-                @if (Model.Users.Count != 0)
+                @if (Model.Characters.Count != 0)
                 {
-                    foreach (UserDetail item in Model.Users)
+                    foreach (Character item in Model.Characters)
                     {
+                        //todo - add updated indicator
                         <tr>
-                            <td>@Html.DisplayFor(modelItem => item.DiscordFull)</td>
-                            <td>@Html.ActionLink("Decide", "Approve", "UsersAdmin", new { id = item.UserId }, null)</td>
+                            <td>@Html.DisplayFor(modelItem => item.UserDetail.DiscordFull)</td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CharacterName) @if (item.HasUnseenEdit)
+                                {<span class="alert alert-info">Updated</span>}
+                            </td>
+                            <td>@Html.ActionLink("Decide", "Approve", "Characters", new { id = item.CharacterId }, null)</td>
                         </tr>
                     }
                 }
             </table>
         </div>
-    }
-    <div id="Characters" class="tabcontent-a">
-        <table class="table">
-            <tr>
-                <th>User</th>
-                <th>Character Name</th>
-                <th></th>
-            </tr>
-            @if (Model.Characters.Count != 0)
-            {
-                foreach (Character item in Model.Characters)
+        <div id="Rumors" class="tabcontent-a">
+            <table class="table">
+                <tr>
+                    <th>Character</th>
+                    <th>Info Rumor about</th>
+                    <th></th>
+                </tr>
+                @if (Model.Rumors.Count != 0)
                 {
-                    //todo - add updated indicator
-                    <tr>
-                        <td>@Html.DisplayFor(modelItem => item.UserDetail.DiscordFull)</td>
-                        <td>@Html.DisplayFor(modelItem => item.CharacterName)</td>
-                        <td>@Html.ActionLink("Decide", "Approve", "Characters", new { id = item.CharacterId }, null)</td>
-                    </tr>
+                    foreach (Rumor item in Model.Rumors)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(modelItem => item.Character.CharacterName)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Info.Name)</td>
+                            <td>@Html.ActionLink("Decide", "Approve", "Rumors", new { id = item.RumorsId }, null)</td>
+                        </tr>
+                    }
                 }
-            }
-        </table>
-    </div>
-    <div id="Rumors" class="tabcontent-a">
-        <table class="table">
-            <tr>
-                <th>Character</th>
-                <th>Info Rumor about</th>
-                <th></th>
-            </tr>
-            @if (Model.Rumors.Count != 0)
-            {
-                foreach (Rumor item in Model.Rumors)
+            </table>
+        </div>
+        <div id="Journals" class="tabcontent-a">
+            <table class="table">
+                <tr>
+                    <th>Character</th>
+                    <th></th>
+                </tr>
+                @if (Model.Journals.Count != 0)
                 {
-                    <tr>
-                        <td>@Html.DisplayFor(modelItem => item.Character.CharacterName)</td>
-                        <td>@Html.DisplayFor(modelItem => item.Info.Name)</td>
-                        <td>@Html.ActionLink("Decide", "Approve", "Rumors", new { id = item.RumorsId }, null)</td>
-                    </tr>
+                    foreach (Journal item in Model.Journals)
+                    {
+                        //todo - add updated indicator
+                        <tr>
+                            <td>@Html.DisplayFor(modelItem => item.Character.CharacterName)</td>
+                            <td>@Html.ActionLink("Decide", "Approve", "Journals", new { id = item.JournalId }, null)</td>
+                        </tr>
+                    }
                 }
-            }
-        </table>
-    </div>
-    <div id="Journals" class="tabcontent-a">
-        <table class="table">
-            <tr>
-                <th>Character</th>
-                <th></th>
-            </tr>
-            @if (Model.Journals.Count != 0)
-            {
-                foreach (Journal item in Model.Journals)
+            </table>
+        </div>
+        <div id="JournalEdits" class="tabcontent-a">
+            <table class="table">
+                <tr>
+                    <th>Character</th>
+                    <th>Journal Written Date</th>
+                    <th></th>
+                </tr>
+                @if (Model.JournalEdits.Count != 0)
                 {
-                    //todo - add updated indicator
-                    <tr>
-                        <td>@Html.DisplayFor(modelItem => item.Character.CharacterName)</td>
-                        <td>@Html.ActionLink("Decide", "Approve", "Journals", new { id = item.JournalId }, null)</td>
-                    </tr>
+                    foreach (Journal item in Model.JournalEdits)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(modelItem => item.Character.CharacterName)</td>
+                            <td>@Html.DisplayFor(modelItem => item.OocDateWritten)</td>
+                            <td>
+                                @Html.ActionLink("Review Change", "Details", "Journals", new { id = item.CharacterId }, null) | 
+                                @Html.ActionLink("Acknowledge", "RecognizeEdit", "Journals", new { id = item.CharacterId }, null)
+                            </td>
+                        </tr>
+                    }
                 }
-            }
-        </table>
-    </div>
-    <div id="JournalEdits" class="tabcontent-a">
-        <table class="table">
-            <tr>
-                <th>Character</th>
-                <th>Journal Written Date</th>
-                <th></th>
-            </tr>
-            @if (Model.JournalEdits.Count != 0)
-            {
-                foreach (Journal item in Model.JournalEdits)
+            </table>
+        </div>
+        <div id="CharacterEdits" class="tabcontent-a">
+            <table class="table">
+                <tr>
+                    <th>UserName</th>
+                    <th>Character Name</th>
+                    <th></th>
+                </tr>
+                @if (Model.CharacterEdits.Count != 0)
                 {
-                    <tr>
-                        <td>@Html.DisplayFor(modelItem => item.Character.CharacterName)</td>
-                        <td>@Html.DisplayFor(modelItem => item.OocDateWritten)</td>
-                        <td>
-                            @Html.ActionLink("Review Change", "Details", "Journals", new { id = item.CharacterId }, null)
-                            @Html.ActionLink("Acknowledge", "RecognizeEdit", "Journals", new { id = item.CharacterId }, null)
-                        </td>
-                    </tr>
+                    foreach (Character item in Model.CharacterEdits)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(modelItem => item.UserDetail.DiscordFull)</td>
+                            <td>@Html.DisplayFor(modelItem => item.CharacterName)</td>
+                            <td>
+                                @Html.ActionLink("Review Change", "Details", "Characters", new { id = item.CharacterId }, null) | 
+                                @Html.ActionLink("Acknowledge", "RecognizeEdit", "Characters", new { id = item.CharacterId }, null)
+                            </td>
+                        </tr>
+                    }
                 }
-            }
-        </table>
-    </div>
-    <div id="CharacterEdits" class="tabcontent-a">
-        <table class="table">
-            <tr>
-                <th>UserName</th>
-                <th>Character Name</th>
-                <th></th>
-            </tr>
-            @if (Model.CharacterEdits.Count != 0)
-            {
-                foreach (Character item in Model.CharacterEdits)
+            </table>
+        </div>
+        <div id="RetireRequests" class="tabcontent-a">
+            <table class="table">
+                <tr>
+                    <th>Character</th>
+                    <th></th>
+                </tr>
+                @if (Model.Characters.Count != 0)
                 {
-                    <tr>
-                        <td>@Html.DisplayFor(modelItem => item.UserDetail.DiscordFull)</td>
-                        <td>@Html.DisplayFor(modelItem => item.CharacterName)</td>
-                        <td>
-                            @Html.ActionLink("Review Change", "Details", "Characters", new { id = item.CharacterId }, null)
-                            @Html.ActionLink("Acknowledge", "RecognizeEdit", "Characters", new { id = item.CharacterId }, null)
-                        </td>
-                    </tr>
+                    foreach (Character item in Model.RetireRequests)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(modelItem => item.CharacterName)</td>
+                            <td>
+                                @Html.ActionLink("Review Character", "Details", "Characters", new { id = item.CharacterId }, new { target = "_blank" }) |
+                                @Html.ActionLink("Decide", "Retire", "Characters", new { id = item.CharacterId }, null)
+                            </td>
+                        </tr>
+                    }
                 }
-            }
-        </table>
+            </table>
+        </div>
     </div>
-</div>
 @section Scripts{
     <script>
         function openPage(pageName, elmnt, color) {

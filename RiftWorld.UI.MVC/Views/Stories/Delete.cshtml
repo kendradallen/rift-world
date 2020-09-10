@@ -1,0 +1,42 @@
+﻿@model RiftWorld.UI.MVC.Models.StoryVM
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<div class="col-12">
+    <h2>For <a href="@Url.Action("Details", "Infos", new { id = Model.Story.Info.InfoId })">@Model.Story.Info.Name</a></h2>
+    <h3>@Model.Story.Title</h3>
+    <div class="intro">
+        <p>
+            As told by the bard Sel'thein on @Html.DisplayFor(model => model.Story.DateTold)
+        </p>
+        <p>Requested by @Html.DisplayFor(model => model.Story.CommissionedBy)</p>
+        @if (!Model.Story.IsCannon)
+        {
+            <div class="cannon">
+                <p>Some say this story is untrue.</p>
+                <p>I say: not all stories need be true.</p>
+            </div>
+        }
+    </div>
+    <div class="more hang">
+        @Html.Raw(Model.Story.TheContent)
+    </div>
+    <div class="tags">
+        @foreach (var itemTag in Model.Tags)
+        {
+            @Html.ActionLink(itemTag.TagName, "TagIndex", "Infos", new { id = itemTag.TagId }, null)
+        }
+    </div>
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color col-12 btn-group fixed-bottom" style="bottom:0;">
+            @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-warning btn-lg" })
+            <input type="submit" value="Delete" class="btn btn-danger btn-lg" />
+
+        </div>
+    }
+</div>

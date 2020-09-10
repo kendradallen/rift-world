@@ -12,6 +12,49 @@ body {
     text-align: center;
 }
 
+.ht-widget ul{
+    padding:0;
+}
+
+.copyright-area .ca-links a{
+    font-size: 16px;
+}
+
+.ht-options .ht-social a{
+    font-size: 17px;
+    vertical-align:bottom;
+}
+
+.humberger-menu-wrapper .hw-social a{
+    -webkit-transform: none;
+    -ms-transform: none;
+    transform: none;
+    font-size: 23px;
+}
+
+.hang h1 {
+    font-size: 40px;
+}
+
+.hang h2{
+    font-size: 36px;
+}
+.hang h3{
+    font-size: 30px;
+}
+
+.hang h4{
+    font-size:28px;
+}
+
+.hang h5{
+    font-size: 24px;
+}
+
+.hang h6{
+    font-size: 20px;
+}
+
 /*.tox .tox-edit-area__iframe {
     box-shadow: inset -1px 1px 20px 7px #e8b182;
 }
@@ -20,12 +63,44 @@ body {
     box-shadow: inset -1px 1px 20px 20px #e8b182;
 }*/
 
+.humberger-menu-wrapper .slicknav_nav a{
+    text-shadow: 1px 1px black;
+    font-family:"Cinzel", serif;
+}
+
+/*.logo a {
+    font-family: 'Tangerine', cursive;
+    color: white;
+    font-size: 76px;
+    line-height: 1;
+    margin-bottom: -10px;
+    text-shadow: 1px 2px black;
+}
+
+.logo a:hover, logo a:focus{
+    color:white;
+}*/
+
+
+.humberger-menu-wrapper .logo {
+    margin-bottom: 65px;
+    padding: unset;
+}
+
+.humberger-menu-wrapper .logo a{
+    text-shadow: 2px 1px black;
+}
+
+.table-row {
+    cursor: pointer;
+}
+
 .navbar-text a {
     padding-top: unset;
     padding-bottom: unset;
 }
 
-ul {
+ul, ol {
     list-style-position: inside;
 }
 
@@ -506,6 +581,7 @@ blockquote h4 {
     background: rgba(248,248,255,.75);
     box-shadow: 1px 1px rgba(0,0,0, .18);
 }
+
     /* -- create the quotation marks -- */
     #start blockquote:before,
     #start blockquote:after {
@@ -558,6 +634,27 @@ h2.line {
         margin: 0 0 0 20px;
     }
 
+h3.line {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: darkslategray;
+    font-weight: bold;
+}
+h3.line:before,
+h3:after {
+    content: '';
+    /*border-top: 2px solid;*/
+    border-top: 8px solid;
+    margin: 0 20px 0 0;
+    flex: 1 0 20px;
+}
+
+h3.line:after {
+    margin: 0 0 0 20px;
+}
 
 /**************  sidenav ****************/
 @media(max-width: 576px) {
@@ -745,7 +842,8 @@ a[data-pub] {
 /**************  Rifts  ****************/
 .rift #content {
     /*background: radial-gradient(circle, rgba(0, 212,255,.7) 37%, rgba(2,0,26,.5) 66%, rgba(89,13,147,.8) 100%);*/
-    background: radial-gradient(circle, rgb(13 172 94 / 70%) -20%,rgba(0, 212,255,.8) 37%, rgba(2,0,26,.5) 66%, rgba(89,13,147,.8) 100%);
+    /*background: radial-gradient(circle, rgb(13 172 94 / 70%) -20%,rgba(0, 212,255,.8) 37%, rgba(2,0,26,.5) 66%, rgba(89,13,147,.8) 100%);*/
+    background: radial-gradient(circle, rgb(13 172 94 / 70%) -20%,rgba(0, 212,255,.8) 0%, rgb(37 158 208 / 0.8) 37%, rgba(2,0,26,.5) 66%, rgba(89,13,147,.8) 100%);
     border-radius: 15px / 100px;
     color: white;
     text-shadow: 1px 1px 5px black;
@@ -1047,8 +1145,9 @@ a {
     background: rgba(95, 13, 214, 1);
     box-shadow: 0px 0px 6px 2px ghostwhite;
 }
-/**************  Editing style  ****************/
 
+
+/**************  Editing style  ****************/
 .btn-group-vertical.quick {
     position: fixed;
     bottom: 20px;
@@ -1084,6 +1183,20 @@ a.quick:focus {
     color: white;
 }
 
+/*For tiny mce*/
+.mce-toc {
+    border: 1px solid gray;
+    text-align:left;
+}
+
+    .mce-toc h2 {
+        margin: 4px;
+    }
+
+    .mce-toc li {
+        list-style-type: none;
+    }
+
 /**************  Forms  ****************/
 .form-control {
     color: darkblue;
@@ -1114,6 +1227,10 @@ input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:foc
     /*-webkit-transition-delay: 99999s;*/
 }
 
+    .search-model input:-webkit-autofill, input:-webkit-autofill:hover, .search-model input:-webkit-autofill:focus, .search-model input:-webkit-autofill:active {
+        -webkit-box-shadow: inset 0 0 0 50px black;
+        -webkit-text-fill-color: white;
+    }
 
 .input-group-text {
     background-color: floralwhite;

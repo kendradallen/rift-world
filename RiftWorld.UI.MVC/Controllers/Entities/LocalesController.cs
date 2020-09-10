@@ -20,14 +20,18 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
         [OverrideAuthorization]
         public ActionResult Index()
         {
-            //v1 - for testing so I don't have to constantly switch accounts
-            var locales = db.Locales.Include(l => l.Info).Include(l => l.LocaleLevel).Include(l => l.Locale1).Include(l => l.Locale2).Include(l => l.NPC);
-
-            //v2 - prevent non-admin from seeing unpublished work
-            //todo - uncomment below to prevent users from seeing un-published work
-            //var locales = db.Locales.Include(l => l.Info).Include(l => l.LocaleLevel).Include(l => l.Locale1).Include(l => l.Locale2).Include(l => l.NPC).Where(l => l.IsPublished);
-
-            return View(locales.ToList());
+            //admin sees all (client request)
+            List<Locale> locales = new List<Locale> { };
+            if (User.IsInRole("Admin"))
+            {
+                locales = db.Locales.Include(l => l.Info).Include(l => l.LocaleLevel).Include(l => l.Locale1).Include(l => l.Locale2).Include(l => l.NPC).OrderBy(l=>l.Info.Name).ToList();
+            }
+            //everyone else doesn't see unpublished work
+            else
+            {
+                locales = db.Locales.Include(l => l.Info).Include(l => l.LocaleLevel).Include(l => l.Locale1).Include(l => l.Locale2).Include(l => l.NPC).Where(l => l.Info.IsPublished).OrderBy(l => l.Info.Name).ToList();
+            }
+            return View(locales);
         }
 
         // GET: Locales/Details/5
@@ -86,13 +90,14 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             List<_LocaleEventsVM> past =
                 (from le in db.LocaleEvents
                  join e in db.Events on le.EventId equals e.EventId
+                 join i in db.Infos on e.InfoId equals i.InfoId
                  where
                     le.LocaleId == id &&
-                    e.IsPublished &&
+                    i.IsPublished &&
                     e.IsHistory
                  select new _LocaleEventsVM()
                  {
-                     Name = e.Name,
+                     Name = i.Name,
                      Id = e.EventId
                  }
                 )
@@ -105,14 +110,15 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             List<_LocaleEventsVM> holidays =
                 (from le in db.LocaleEvents
                  join e in db.Events on le.EventId equals e.EventId
+                 join i in db.Infos on e.InfoId equals i.InfoId
                  where
                     le.LocaleId == id &&
-                    e.IsPublished &&
+                    i.IsPublished &&
                     !e.IsHistory
                 orderby e.DateMonth
                  select new _LocaleEventsVM()
                  {
-                     Name = e.Name,
+                     Name = i.Name,
                      Id = e.EventId
                  }
                 )
@@ -129,9 +135,9 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
         public ActionResult Create()
         {
             ViewBag.LevelOfLocaleId = new SelectList(db.LocaleLevels, "LocaleLevelId", "LocaleName");
-            ViewBag.RegionId = new SelectList(db.Locales.Where(l => l.LevelOfLocaleId == 1).OrderBy(l=>l.Name), "LocaleId", "Name"); //<-- only locales of region type
-            ViewBag.ClosestCityId = new SelectList(db.Locales.Where(l => l.LevelOfLocaleId == 2).OrderBy(l=>l.Name), "LocaleId", "Name"); //<-- only locales of city type
-            ViewBag.CouncilDelegateId = new SelectList(db.NPCs.OrderBy(n=>n.Name), "NpcId", "Name");
+            ViewBag.RegionId = new SelectList(db.Locales.Where(l => l.LevelOfLocaleId == 1).OrderBy(l=>l.Info.Name), "LocaleId", "Name"); //<-- only locales of region type
+            ViewBag.ClosestCityId = new SelectList(db.Locales.Where(l => l.LevelOfLocaleId == 2).OrderBy(l=>l.Info.Name), "LocaleId", "Name"); //<-- only locales of city type
+            ViewBag.CouncilDelegateId = new SelectList(db.NPCs.OrderBy(n=>n.Info.Name), "NpcId", "Name");
             ViewBag.Tags = new MultiSelectList(db.Tags, "TagId", "TagName");
 
             return View();
@@ -183,7 +189,6 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                 Locale daLocale = new Locale
                 {
                     InfoId = infoId,
-                    Name = locale.Name,
                     LevelOfLocaleId = locale.LevelOfLocaleId,
                     RegionId = locale.RegionId,
                     ClosestCityId = locale.ClosestCityId,
@@ -191,7 +196,6 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                     Appointed = locale.Appointed,
                     Environment = locale.Environment,
                     About = locale.About,
-                    IsPublished = locale.IsPublished,
                     AvgLifestyle = locale.AvgLifestyle
                 };
                 db.Locales.Add(daLocale);
@@ -211,9 +215,9 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
 
             //if model is not valid
             ViewBag.LevelOfLocaleId = new SelectList(db.LocaleLevels, "LocaleLevelId", "LocaleName", locale.LevelOfLocaleId);
-            ViewBag.RegionId = new SelectList(db.Locales.Where(l => l.LevelOfLocaleId == 1).OrderBy(l=>l.Name), "LocaleId", "Name", locale.RegionId);
-            ViewBag.ClosestCityId = new SelectList(db.Locales.Where(l => l.LevelOfLocaleId == 2).OrderBy(l=> l.Name), "LocaleId", "Name", locale.ClosestCityId);
-            ViewBag.CouncilDelegateId = new SelectList(db.NPCs.OrderBy(n=>n.Name), "NpcId", "Name", locale.CouncilDelegateId);
+            ViewBag.RegionId = new SelectList(db.Locales.Where(l => l.LevelOfLocaleId == 1).OrderBy(l=>l.Info.Name), "LocaleId", "Name", locale.RegionId);
+            ViewBag.ClosestCityId = new SelectList(db.Locales.Where(l => l.LevelOfLocaleId == 2).OrderBy(l=> l.Info.Name), "LocaleId", "Name", locale.ClosestCityId);
+            ViewBag.CouncilDelegateId = new SelectList(db.NPCs.OrderBy(n=>n.Info.Name), "NpcId", "Name", locale.CouncilDelegateId);
 
             ViewBag.Tags = new MultiSelectList(db.Tags, "TagId", "TagName", tags);
 
@@ -242,7 +246,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                 assoMajs.Add(toAdd);
             }
 
-            ViewBag.Events = db.Events.OrderBy(e=>e.Name).ToList();
+            ViewBag.Events = db.Events.OrderBy(e=>e.Info.Name).ToList();
             var selected2 = db.LocaleEvents.Where(i => i.LocaleId == locale.LocaleId).ToList();
             List<AssoEvent_Locale> assoEvents = new List<AssoEvent_Locale>();
             foreach (LocaleEvent localeEvent in selected2)
@@ -274,19 +278,16 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                     case "Un-Publish":
                     case "Save and Continue":
                         info.IsPublished = false;
-                        locale.IsPublished = false;
                         break;
                     case "Publish":
                     case "Save":
                         info.IsPublished = true;
-                        locale.IsPublished = true;
                         break;
                     case "Save and associate":
                         break;
                     default:
                         break;
                 }
-                db.Entry(locale).State = EntityState.Modified;
                 db.Entry(info).State = EntityState.Modified;
                 #endregion
 
@@ -369,14 +370,13 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             }
             //having a lot of trouble with the return so the ajax right now
             ViewBag.Majs = db.Races.OrderBy(r => r.RaceName).ToList();
-            ViewBag.Events = db.Events.OrderBy(e => e.Name).ToList();
+            ViewBag.Events = db.Events.OrderBy(e => e.Info.Name).ToList();
             AssoLocaleVM model = new AssoLocaleVM { InfoId = infoId, LocaleId = localeId, Submit = submit, AssoMajs = majs, AssoEvents = events, Name = locale.Name };
             return View(model);
         }
 
-        public ActionResult Skip(short infoId, short localeId, string submit)
+        public ActionResult Skip(short infoId, string submit)
         {
-            var locale = db.Locales.Where(i => i.LocaleId == localeId).FirstOrDefault();
             var info = db.Infos.Where(i => i.InfoId == infoId).FirstOrDefault();
 
             #region Save or Publish?
@@ -386,12 +386,10 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                 case "Un-Publish":
                 case "Save and Continue":
                     info.IsPublished = false;
-                    locale.IsPublished = false;
                     break;
                 case "Publish":
                 case "Save":
                     info.IsPublished = true;
-                    locale.IsPublished = true;
                     break;
                 case "Save and associate":
                     break;
@@ -399,10 +397,9 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                     break;
             }
             #endregion
-            db.Entry(locale).State = EntityState.Modified;
             db.Entry(info).State = EntityState.Modified;
             db.SaveChanges();
-            return RedirectToAction("Details", new { id = localeId });
+            return RedirectToAction("Details", new { id = info.IdWithinType });
         }
 
 
@@ -419,9 +416,9 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                 return HttpNotFound();
             }
             ViewBag.LevelOfLocaleId = new SelectList(db.LocaleLevels, "LocaleLevelId", "LocaleName", locale.LevelOfLocaleId);
-            ViewBag.RegionId = new SelectList(db.Locales.OrderBy(l=>l.Name), "LocaleId", "Name", locale.RegionId);
-            ViewBag.ClosestCityId = new SelectList(db.Locales.OrderBy(l=>l.Name), "LocaleId", "Name", locale.ClosestCityId);
-            ViewBag.CouncilDelegateId = new SelectList(db.NPCs.OrderBy(r=>r.Name), "NpcId", "Name", locale.CouncilDelegateId);
+            ViewBag.RegionId = new SelectList(db.Locales.OrderBy(l=>l.Info.Name), "LocaleId", "Name", locale.RegionId);
+            ViewBag.ClosestCityId = new SelectList(db.Locales.OrderBy(l=>l.Info.Name), "LocaleId", "Name", locale.ClosestCityId);
+            ViewBag.CouncilDelegateId = new SelectList(db.NPCs.OrderBy(r=>r.Info.Name), "NpcId", "Name", locale.CouncilDelegateId);
 
             short infoid = locale.InfoId;
             Info info = db.Infos.Find(infoid);
@@ -508,7 +505,6 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                 {
                     InfoId = locale.InfoId,
                     LocaleId = locale.LocaleId,
-                    Name = locale.Name,
                     LevelOfLocaleId = locale.LevelOfLocaleId,
                     RegionId = locale.RegionId,
                     ClosestCityId = locale.ClosestCityId,
@@ -516,7 +512,6 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                     Appointed = locale.Appointed,
                     Environment = locale.Environment,
                     About = locale.About,
-                    IsPublished = locale.IsPublished,
                     AvgLifestyle = locale.AvgLifestyle
                 };
                 db.Entry(daLocale).State = EntityState.Modified;
@@ -532,9 +527,9 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
 
             //if model invalid
             ViewBag.LevelOfLocaleId = new SelectList(db.LocaleLevels, "LocaleLevelId", "LocaleName", locale.LevelOfLocaleId);
-            ViewBag.RegionId = new SelectList(db.Locales.OrderBy(l => l.Name), "LocaleId", "Name", locale.RegionId);
-            ViewBag.ClosestCityId = new SelectList(db.Locales.OrderBy(l => l.Name), "LocaleId", "Name", locale.ClosestCityId);
-            ViewBag.CouncilDelegateId = new SelectList(db.NPCs.OrderBy(r => r.Name), "NpcId", "Name", locale.CouncilDelegateId);
+            ViewBag.RegionId = new SelectList(db.Locales.OrderBy(l => l.Info.Name), "LocaleId", "Name", locale.RegionId);
+            ViewBag.ClosestCityId = new SelectList(db.Locales.OrderBy(l => l.Info.Name), "LocaleId", "Name", locale.ClosestCityId);
+            ViewBag.CouncilDelegateId = new SelectList(db.NPCs.OrderBy(r => r.Info.Name), "NpcId", "Name", locale.CouncilDelegateId);
 
             ViewBag.Tags = db.Tags.ToList();
             if (tags != null)
@@ -571,7 +566,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                 assoMajs.Add(toAdd);
             }
 
-            ViewBag.Events = db.Events.OrderBy(e => e.Name).ToList();
+            ViewBag.Events = db.Events.OrderBy(e => e.Info.Name).ToList();
             var selected2 = db.LocaleEvents.Where(i => i.LocaleId == locale.LocaleId).ToList();
             List<AssoEvent_Locale> assoEvents = new List<AssoEvent_Locale>();
             foreach (LocaleEvent localeEvent in selected2)
@@ -672,7 +667,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             }
             //having a lot of trouble with the return so the ajax right now
             ViewBag.Majs = db.Races.OrderBy(r => r.RaceName).ToList();
-            ViewBag.Events = db.Events.OrderBy(e => e.Name).ToList();
+            ViewBag.Events = db.Events.OrderBy(e => e.Info.Name).ToList();
             var locale = db.Locales.Find(localeId);
             AssoLocaleVM model = new AssoLocaleVM { InfoId = infoId, LocaleId = localeId, Submit = submit, AssoMajs = majs, AssoEvents = events, Name = locale.Name };
             return View(model);
@@ -690,6 +685,25 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             if (locale == null)
             {
                 return HttpNotFound();
+            }
+
+            int characters = db.Characters.Where(x => x.CurrentLocationId == id).Select(x => x.CharacterId).ToList().Count;
+            if (characters != 0)
+            {
+                ViewBag.Message = "A character is currently in this city (as said by the site). Please, go make them not there before you decide to retcot this place's existance.";
+                return View("Error");
+            }
+            int regions = db.Locales.Where(x => x.RegionId == id).Select(x => x.LocaleId).ToList().Count;
+            if (regions != 0)
+            {
+                ViewBag.Message = "Before retconing a region, make sure no where is in a region";
+                return View("Error");
+            }
+            int cities = db.Locales.Where(x => x.ClosestCityId == id).Select(x => x.LocaleId).ToList().Count;
+            if (cities != 0)
+            {
+                ViewBag.Message = "Before retconing a city, make sure no where says it's the closest city";
+                return View("Error");
             }
             return View(locale);
         }
@@ -721,6 +735,30 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             #endregion
             #endregion
 
+            #region Remove being a location
+            #region from NPCs
+            List<NPC> npcs = db.NPCs.Where(l => l.LastLocationId == id).ToList();
+            foreach (NPC npc in npcs)
+            {
+                npc.LastLocationId = null;
+                db.Entry(npc).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+            #endregion
+            #region from Orgs
+            List<Org> orgs = db.Orgs.Where(x => x.BaseLocationId == id).ToList();
+            foreach (Org org in orgs)
+            {
+                org.BaseLocationId = null;
+                db.Entry(org).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+            #endregion
+            #region from characters
+            //there shouldn't be any characters with it. 
+            #endregion
+            //and there should be no locales refrencing this locale
+            #endregion
             db.Locales.Remove(locale);
 
             #region Remove Rumors

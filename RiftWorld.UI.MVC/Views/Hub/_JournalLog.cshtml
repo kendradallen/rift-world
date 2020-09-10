@@ -12,9 +12,6 @@
                 <th>
                     @Html.DisplayNameFor(model => model.OocDateWritten)
                 </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.HasUnseenEdit)
-                </th>
                 <th></th>
                 <th></th>
             </tr>
@@ -24,9 +21,6 @@
                 <tr>
                     <td>
                         @Html.DisplayFor(modelItem => item.OocDateWritten)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.HasUnseenEdit)
                     </td>
                     <td>
                         @Html.ActionLink("Read", "Details", "Journals", new { id = item.JournalId }, null)

@@ -1,0 +1,19 @@
+﻿@model RiftWorld.DATA.EF.Rumor
+
+@{
+    ViewBag.Title = "Delete Rumor";
+}
+<div class="col-12">
+    <h2>@ViewBag.Title</h2>
+    @Html.DisplayFor(model => model.RumorText)
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color col-12 btn-group fixed-bottom" style="bottom:0;">
+            @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-warning btn-lg" })
+            <input type="submit" value="Delete" class="btn btn-danger btn-lg" />
+
+        </div>
+    }
+</div>

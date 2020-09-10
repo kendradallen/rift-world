@@ -28,6 +28,12 @@
 
 <div class="col-12">
     <h2>@ViewBag.Title</h2>
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        Make sure you read the <a target="_blank" href="/Home/StyleGuide#org">style guide</a> if you plan on uploading an image.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
 
     @using (Html.BeginForm("Create", "Orgs", FormMethod.Post, new { @enctype = "multipart/form-data", id = "daForm" }))
     {
@@ -168,7 +174,9 @@
     </div>
 </div>
 @section Scripts{
-    <script src="~/Scripts/MyJS/edit.js"></script>
+    <script src="~/Scripts/tinymce/tinymce.min.js"></script>
+    <script src="~/Scripts/SelectBoxes/slimselect.min.js"></script>
+    <script src="~/Scripts/MyJS/edit.min.js"></script>
 
     <script>
         new SlimSelect({

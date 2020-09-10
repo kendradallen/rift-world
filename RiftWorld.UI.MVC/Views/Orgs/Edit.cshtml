@@ -40,7 +40,7 @@
         <a class="btn btn-secondary" href="#qPlayerEnabled">Player Enabled</a>
         <a class="btn btn-secondary" href="#qAbout">About</a>
         <a class="btn btn-secondary" href="#qTags">Tags</a>
-        <a class="btn btn-secondary" href="#qSecret">Secret</a>
+        <a class="btn btn-secondary disabled" href="#qSecret">Secret</a>
     </div>
 
     <!-- Edit form -->
@@ -205,7 +205,9 @@
     </div>
 </div>
 @section Scripts{
-    <script src="~/Scripts/MyJS/edit.js"></script>
+    <script src="~/Scripts/tinymce/tinymce.min.js"></script>
+    <script src="~/Scripts/SelectBoxes/slimselect.min.js"></script>
+    <script src="~/Scripts/MyJS/edit.min.js"></script>
 
     <script>
         new SlimSelect({

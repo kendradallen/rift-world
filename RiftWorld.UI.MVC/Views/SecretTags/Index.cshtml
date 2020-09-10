@@ -1,39 +1,69 @@
 ﻿@model IEnumerable<RiftWorld.DATA.EF.SecretTag>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Secret Tags";
 }
+@section styles{
+    <style>
+        .table td{
+            border-top:none ;
+        }
+    </style>
+    }
+<div class="col-12">
 
-<h2>Index</h2>
+    <h2 class="line">@ViewBag.Title</h2>
+    <div class="row justify-content-center">
+        <div class="col-6">
+            <div class="da-focus">
+                <input id="tagSearch" type="text" placeholder="Search.." class="form-control">
+            </div>
+        </div>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Description)
-        </th>
-        <th></th>
-    </tr>
+        <table class="table table-hover table-sm col-sm-7">
+            <thead>
+                <tr>
+                    <th>
+                        Name
+                    </th>
+                    <th>
+                        Description
+                    </th>
+                </tr>
+            </thead>
+            <tbody id="tagTable">
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Description)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.SecretTagId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.SecretTagId }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.SecretTagId })
-        </td>
-    </tr>
-}
+                @foreach (var item in Model)
+                {
+                    <tr class="table-row" data-href="@Url.Action("Details", new { id = item.SecretTagId })" scope="row">
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Description)
+                        </td>
+                    </tr>
+                }
 
 </table>
+    </div>
+</div>
+@section Scripts {
+    <script>
+        $(document).ready(function ($) {
+            $(".table-row").click(function () {
+                window.document.location = $(this).data("href");
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            $("#tagSearch").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+                $("#tagTable tr").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+    </script>
+}

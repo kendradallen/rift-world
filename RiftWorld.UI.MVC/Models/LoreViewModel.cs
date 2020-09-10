@@ -66,10 +66,10 @@ namespace RiftWorld.UI.MVC.Models
         {
             InfoId = lore.InfoId;
             LoreId = lore.LoreId;
-            Name = lore.Name;
+            Name = info.Name;
             Blurb = info.Blurb;
             TheContent = lore.TheContent;
-            IsPublished = lore.IsPublished;
+            IsPublished = info.IsPublished;
             IsSecret = info.IsSecret;
         }
         #endregion

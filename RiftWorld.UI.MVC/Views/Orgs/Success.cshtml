@@ -1,0 +1,9 @@
+﻿
+@{
+    ViewBag.Title = "Success";
+}
+
+<div class="col-12">
+    <p>You have successfully applied to be a member of this organization</p>
+    @Html.ActionLink("Go Back to Org Page", "Details", new { id = ViewBag.Id })
+</div>

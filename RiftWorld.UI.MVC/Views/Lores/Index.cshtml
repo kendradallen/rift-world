@@ -1,41 +1,48 @@
 ﻿@model IEnumerable<RiftWorld.DATA.EF.Lore>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Others";
 }
 <div class="col-12">
-    <h2>Index</h2>
+    <h2 class="line">@ViewBag.Title</h2>
+    <div class="row justify-content-center">
+        <div class="col-sm-6 col-12">
+            <div class="da-focus">
+                <input id="infoSearch" type="text" placeholder="Search.." class="form-control">
+            </div>
+        </div>
+        <table class="table table-hover table-sm col-sm-7">
+            <tbody id="infoTable">
+                @foreach (var item in Model)
+                {
+                    <tr class="table-row" data-href="@Url.Action("Details", new { id = item.LoreId })">
+                        <td scope="row" style="text-align:justify; border:none" class="@(item.IsPublished? "" : "table-danger")">
+                            <b>@Html.DisplayFor(modelItem => item.Name)</b><br />
+                            <i>@Html.DisplayFor(modelItem => item.Info.Blurb)</i>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 
-    <p>
-        @Html.ActionLink("Create New", "Create")
-    </p>
-    <table class="table">
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Info.Blurb)
-            </th>
-            <th></th>
-        </tr>
-
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Info.Blurb)
-                </td>
-                <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.LoreId }) |
-                    @Html.ActionLink("Details", "Details", new { id = item.LoreId }) |
-                    @Html.ActionLink("Delete", "Delete", new { id = item.LoreId })
-                </td>
-            </tr>
-        }
-
-    </table>
 </div>
+@section Scripts{
+    <script>
+        $(document).ready(function ($) {
+            $(".table-row").click(function () {
+                window.document.location = $(this).data("href");
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            $("#infoSearch").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+                $("#infoTable tr").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+    </script>
+}

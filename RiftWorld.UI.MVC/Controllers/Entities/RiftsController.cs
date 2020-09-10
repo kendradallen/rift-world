@@ -20,14 +20,18 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
         [OverrideAuthorization]
         public ActionResult Index()
         {
-            //v1 - for testing so I don't have to constantly switch accounts
-            var rifts = db.Rifts.Include(r => r.Info);
+            //admin sees all (client request)
+            List<Rift> rifts = new List<Rift> { };
+            if (User.IsInRole("Admin"))
+            {
+                rifts = db.Rifts.Include(r => r.Info).OrderBy(r=>r.Info.Name).ToList();
+            }
+            else
+            {
+                rifts = db.Rifts.Include(r => r.Info).Where(r => r.Info.IsPublished).OrderBy(r=>r.Info.Name).ToList();
+            }
 
-            //v2 - prevent non-admin from seeing unpublished work
-            //todo - uncomment below to prevent users from seeing un-published work
-            //var rifts = db.Rifts.Include(r => r.Info).Where(r => r.IsPublished);
-
-            return View(rifts.ToList());
+            return View(rifts);
         }
 
         [HttpGet]
@@ -134,11 +138,9 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                 Rift daRift = new Rift
                 {
                     InfoId = infoId,
-                    Nickname = rift.Nickname,
                     Location = rift.Location,
                     Environment = rift.Environment,
-                    Hazards = rift.Hazards,
-                    IsPublished = rift.IsPublished
+                    Hazards = rift.Hazards
                 };
                 db.Rifts.Add(daRift);
                 db.SaveChanges();
@@ -185,7 +187,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
 
             var infoId = rift.InfoId;
             //AssoRiftVM model = new AssoRiftVM { InfoId = infoId, RiftId = rift.RiftId, Submit = submit };
-            AssoRiftVM model = new AssoRiftVM { InfoId = infoId, RiftId = rift.RiftId, Submit = submit, Assos = theSelected, Name = rift.Nickname };
+            AssoRiftVM model = new AssoRiftVM { InfoId = infoId, RiftId = rift.RiftId, Submit = submit, Assos = theSelected, Name = rift.Info.Name };
             return View(model);
         }
 
@@ -205,19 +207,16 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                     case "Un-Publish":
                     case "Save and Continue":
                         info.IsPublished = false;
-                        rift.IsPublished = false;
                         break;
                     case "Publish":
                     case "Save":
                         info.IsPublished = true;
-                        rift.IsPublished = true;
                         break;
                     case "Save and associate":
                         break;
                     default:
                         break;
                 }
-                db.Entry(rift).State = EntityState.Modified;
                 db.Entry(info).State = EntityState.Modified;
                 #endregion
 
@@ -262,14 +261,13 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             }
             //if model fails
             ViewBag.Races = db.Races.OrderBy(r => r.RaceName).ToList();
-            AssoRiftVM model = new AssoRiftVM { InfoId = infoId, RiftId = riftId, Submit = submit, Assos = varieties, Name =  rift.Nickname};
+            AssoRiftVM model = new AssoRiftVM { InfoId = infoId, RiftId = riftId, Submit = submit, Assos = varieties, Name =  rift.Info.Name};
             ViewBag.Selected = varieties.Select(v => v.RaceId).ToList();
             return Json(model);
         }
 
-        public ActionResult Skip(short infoId, short riftId, string submit)
+        public ActionResult Skip(short infoId, string submit)
         {
-            var rift = db.Rifts.Where(i => i.RiftId == riftId).FirstOrDefault();
             var info = db.Infos.Where(i => i.InfoId == infoId).FirstOrDefault();
 
             #region Save or Publish?
@@ -279,12 +277,10 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                 case "Un-Publish":
                 case "Save and Continue":
                     info.IsPublished = false;
-                    rift.IsPublished = false;
                     break;
                 case "Publish":
                 case "Save":
                     info.IsPublished = true;
-                    rift.IsPublished = true;
                     break;
                 case "Save and associate":
                     break;
@@ -292,10 +288,9 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                     break;
             }
             #endregion
-            db.Entry(rift).State = EntityState.Modified;
             db.Entry(info).State = EntityState.Modified;
             db.SaveChanges();
-            return RedirectToAction("Details", new { id = riftId });
+            return RedirectToAction("Details", new { id = info.IdWithinType });
         }
 
         // GET: Rifts/Edit/5
@@ -396,11 +391,9 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                 {
                     InfoId = rift.InfoId,
                     RiftId = rift.RiftId,
-                    Nickname = rift.Nickname,
                     Location = rift.Location,
                     Environment = rift.Environment,
-                    Hazards = rift.Hazards,
-                    IsPublished = rift.IsPublished
+                    Hazards = rift.Hazards
                 };
                 db.Entry(daRift).State = EntityState.Modified;
                 db.Entry(info).State = EntityState.Modified;
@@ -450,7 +443,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             }
 
             var infoId = rift.InfoId;
-            AssoRiftVM model = new AssoRiftVM { InfoId = infoId, RiftId = rift.RiftId, Submit = "Save", Assos = theSelected, Name = rift.Nickname };
+            AssoRiftVM model = new AssoRiftVM { InfoId = infoId, RiftId = rift.RiftId, Submit = "Save", Assos = theSelected, Name = rift.Info.Name };
             return View(model);
         }
 
@@ -503,7 +496,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             //if model fails
             ViewBag.Races = db.Races.OrderBy(r => r.RaceName).ToList();
             var rift = db.Rifts.Find(riftId);
-            AssoRiftVM model = new AssoRiftVM { InfoId = infoId, RiftId = riftId, Submit = submit, Assos = varieties, Name = rift.Nickname };
+            AssoRiftVM model = new AssoRiftVM { InfoId = infoId, RiftId = riftId, Submit = submit, Assos = varieties, Name = rift.Info.Name };
             return View(model);
         }
 
@@ -520,6 +513,8 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             {
                 return HttpNotFound();
             }
+            ViewBag.Variety = Variety((short)id);
+
             return View(rift);
         }
 

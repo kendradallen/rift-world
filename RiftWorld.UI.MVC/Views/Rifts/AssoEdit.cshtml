@@ -51,13 +51,13 @@
         </div>
     }
 
-        <div style="text-align:left;">
-            @Html.ActionLink("Cancel", "Details", new { id = Model.RiftId })
-        </div>
+    <div style="text-align:left;">
+        @Html.ActionLink("Cancel", "Details", new { id = Model.RiftId })
+    </div>
 </div>
 @section Scripts{
-    <script src="~/Scripts/SelectBoxes/multi.js"></script>
-    <script src="~/Scripts/MyJS/assoedit.js"></script>
+    <script src="~/Scripts/SelectBoxes/multi.min.js"></script>
+    <script src="~/Scripts/MyJS/assoedit.min.js"></script>
     @*note to self - below required too much constant changing between different info types to be included in the assoedit script*@
     <script>
         //prep for submitting associations

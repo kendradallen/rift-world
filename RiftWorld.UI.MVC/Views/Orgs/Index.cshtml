@@ -3,49 +3,35 @@
 @{
     ViewBag.Title = "Organizations";
 }
+<div class="col-12">
+    <h2 class="line">@ViewBag.Title</h2>
 
-@section styles{
-    <style>
-        .table-row {
-            cursor: pointer;
-        }
-    </style>
-}
-    <div class="col-12">
-        <h2 class="line">@ViewBag.Title</h2>
-        <div class="row justify-content-end">
-            <div class="col-3">
-                <div class="da-focus">
-                    <input id="myInput" type="text" placeholder="Search.." class="form-control">
-                </div>
-
+    <div class="row justify-content-center">
+        <div class="col-sm-6 col-12">
+            <div class="da-focus">
+                <input id="infoSearch" type="text" placeholder="Search.." class="form-control">
             </div>
-
-        </div>
-        <div class="row justify-content-center">
-
-            <table class="table table-hover table-sm col-sm-7">
-
-                <tbody id="myTable">
-
-                    @foreach (var item in Model)
-                    {
-                        <tr class="table-row" data-href="@Url.Action("Details", new { id = item.OrgId })">
-                            <td scope="row" style="text-align:justify; border:none">
-                                <b>@Html.DisplayFor(modelItem => item.Name)</b><br />
-                                <i>@Html.DisplayFor(ModelItem => item.Info.Blurb)</i>
-                            </td>
-                            <td style="display:none">
-                                @Html.DisplayFor(modelItem => item.Locale.Name)
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-
-            </table>
         </div>
 
+        <table class="table table-hover table-sm col-sm-7">
+
+            <tbody id="infoTable">
+
+                @foreach (var item in Model)
+                {
+                    <tr class="table-row" data-href="@Url.Action("Details", new { id = item.OrgId })">
+                        <td scope="row" style="text-align:justify; border:none" class="@(item.IsPublished? "" : "table-danger")">
+                            <b>@Html.DisplayFor(modelItem => item.Name)</b><br />
+                            <i>@Html.DisplayFor(ModelItem => item.Info.Blurb)</i>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+
+        </table>
     </div>
+
+</div>
 @section Scripts {
     <script>
         $(document).ready(function ($) {
@@ -56,9 +42,9 @@
     </script>
     <script>
         $(document).ready(function () {
-            $("#myInput").on("keyup", function () {
+            $("#infoSearch").on("keyup", function () {
                 var value = $(this).val().toLowerCase();
-                $("#myTable tr").filter(function () {
+                $("#infoTable tr").filter(function () {
                     $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
                 });
             });

@@ -1,112 +1,136 @@
 ﻿@model RiftWorld.DATA.EF.NPC
 
-@{
-    ViewBag.Title = "Delete";
+@{ ViewBag.Title = "Delete " + Model.Name + "?";
+
+    ViewBag.InfoId = Model.InfoId;
+    string status = "";
+    if (Model.IsDead)
+    {
+        status = "dead";
+    }
+}
+<section id="start" class="col-12 special" name="The Basics">
+    <div id="quote" class="clearfix">
+        <blockquote>
+            <h4>
+                @Html.DisplayFor(model => model.Quote)
+            </h4>
+        </blockquote>
+    </div>
+    <div id="startTop" class="row">
+        <div id="startTop-left" class="col-lg-9 col-md-8">
+            <div id="name">
+                @Html.DisplayFor(model => model.Name)
+            </div>
+            <div id="aliases">
+                <h5>
+                    @Html.DisplayNameFor(model => model.Alias)
+                </h5>
+                @if (Model.Alias != "Nada")
+                {
+                    <p>
+                        @Html.DisplayFor(model => model.Alias)
+                    </p>
+                }
+            </div>
+            @if (Model.IsDead)
+            {
+                <div id="explictDead">DECEASED</div>
+            }
+        </div>
+        <div id="startTop-right" class="col-8 offset-2 col-lg-3 col-md-4 align-self-center offset-md-0 row justify-content-around">
+            <div id="picture" class="@status col-12">
+                <div class="padder">
+                    <img src="~/Content/img/npc/@Html.DisplayFor(model => model.PortraitFileName)" />
+                    @if (Model.PortraitFileName != "default.jpg")
+                    {
+                        <div class="overlay npc-por">Art by @Model.PortraitArtist</div>
+                    }
+                </div>
+
+            </div>
+
+            <p id="gender" class="col-auto">
+                @Html.DisplayFor(model => model.Gender.GenderName)
+            </p>
+            <p id="race" class="col-auto">
+                @Html.DisplayFor(model => model.Race.RaceName)
+            </p>
+            <p id="class" class="col-auto">@ViewBag.Classes</p>
+
+        </div>
+    </div>
+    <br />
+    <div id="startLower" class="row align-items-center">
+        <div id="crest" class="col-md-3 col-lg-2 pic">
+            <img src="~/Content/img/npc/@Model.CrestFileName" />
+            @if (Model.CrestArtist != "org_default.jpg")
+            {
+                <div class="overlay npc-crest">Art by @Model.CrestArtist</div>
+            }
+        </div>
+        <div id="startLower-right" class="col-md-9 col-lg-10">
+            <div id="orgs">
+                <h3 style="text-decoration:underline;">Member of</h3>
+                @Html.Action("_OrgsPartial", "NPCs", new { id = Model.NpcId })
+            </div>
+            <div id="lastLo">
+                <dl>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.LastLocationId)
+                    </dt>
+                    <dd>
+                        @if (Model.LastLocationId == null)
+                        {
+                            <span>Unknown</span>
+                        }
+                        else
+                        {
+                            @Html.DisplayFor(model => model.Locale.Name)
+                        }
+                    </dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+</section>
+<section id="apperance" class="col-12" name="Apperance">
+    <h2 class="line">
+        @Html.DisplayNameFor(model => model.ApperanceText)
+    </h2>
+    <div class="hang">
+        @Html.Raw(Model.ApperanceText)
+    </div>
+</section>
+<section id="about" class="col-12" name="About">
+    <h2 class="line">
+        @Html.DisplayNameFor(model => model.AboutText)
+    </h2>
+    <div class="hang">
+        @Html.Raw(Model.AboutText)
+    </div>
+</section>
+@Html.Action("_Details", "Secrets", new { id = Model.InfoId })
+@Html.Action("_Stories", "Stories", new { id = Model.InfoId })
+<section id="rumors" class="col-12" name="Rumors">
+    <h2 class="line">Rumors</h2>
+    @Html.Action("_Rumors", "Rumors", new { id = Model.InfoId })
+    @Html.Action("CreateRumor", "Rumors", new { id = Model.InfoId })
+</section>
+<footer id="tags" class="col-12">
+    @Html.Action("_TagList", "Infos", new { id = Model.InfoId })
+</footer>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-actions no-color col-12 btn-group fixed-bottom" style="bottom:0;">
+        @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-warning btn-lg" })
+        <input type="submit" value="Delete" class="btn btn-danger btn-lg" />
+
+    </div>}
+}
+@section Scripts{
+    <script src="~/Scripts/MyJS/deets.min.js"></script>
 }
 
-<h2>Delete</h2>
-
-<h3>Are you sure you want to delete this?</h3>
-<div>
-    <h4>NPC</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Alias)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Alias)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Quote)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Quote)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.PortraitFileName)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.PortraitFileName)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.CrestFileName)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.CrestFileName)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.ApperanceText)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.ApperanceText)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.AboutText)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.AboutText)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.IsPublished)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.IsPublished)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Info.Blurb)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Info.Blurb)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Locale.Name)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Locale.Name)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Race.RaceName)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Race.RaceName)
-        </dd>
-
-    </dl>
-
-    @using (Html.BeginForm()) {
-        @Html.AntiForgeryToken()
-
-        <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-default" /> |
-            @Html.ActionLink("Back to List", "Index")
-        </div>
-    }
-</div>

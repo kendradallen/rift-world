@@ -53,7 +53,7 @@
             <div class="form-group">
                 <div class="form-check larger">
                     <div class="checkbox">
-                        @Html.CheckBoxFor(model => model.IsCannon, new { htmlAttribute = new { @class = "form-check-input" }, @checked = "checked"  })
+                        @Html.CheckBoxFor(model => model.IsCannon, new { htmlAttribute = new { @class = "form-check-input" }, @checked = "checked" })
                         @Html.LabelFor(model => model.IsCannon, htmlAttributes: new { @class = "form-check-label" })
                     </div>
                 </div>
@@ -92,11 +92,13 @@
     }
 
     <div style="text-align:left;">
-        @Html.ActionLink("Back to Create New", "CreateWhat", "Infos")
+        @Html.ActionLink("Cancel", "CreateWhat", "Infos")
     </div>
 </div>
 @section Scripts{
-    <script src="~/Scripts/MyJS/edit.js"></script>
+    <script src="~/Scripts/tinymce/tinymce.min.js"></script>
+    <script src="~/Scripts/SelectBoxes/slimselect.min.js"></script>
+    <script src="~/Scripts/MyJS/edit.min.js"></script>
     <script>
         $('select#IsAboutId option:first-child').attr("data-placeholder", "true");
         new SlimSelect({

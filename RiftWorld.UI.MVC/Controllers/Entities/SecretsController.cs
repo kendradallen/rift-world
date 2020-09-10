@@ -13,7 +13,7 @@ using RiftWorld.UI.MVC.Models;
 
 namespace RiftWorld.UI.MVC.Controllers.Entities
 {
-    //[Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
     public class SecretsController : Controller
     {
         private RiftWorldEntities db = new RiftWorldEntities();
@@ -87,20 +87,19 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             return View(secrets);
         }
 
-        //// GET: Secrets/Details/5
-        //public async Task<ActionResult> _Details(short? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    Secret secret = await db.Secrets.FindAsync(id);
-        //    if (secret == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    return View(secret);
-        //}
+        public ActionResult Details(short id)
+        {
+            Secret secret = db.Secrets.Find(id);
+            //get secret tags
+            List<short> tagIds = db.SecretSecretTags.Where(x => x.SecretId == id).Select(x => x.SecretTagId).ToList();
+            List<SecretTag> tags = db.SecretSecretTags.Where(x => x.SecretId == id).Select(x => x.SecretTag).ToList();
+            //get connected secrets
+            List<Secret> assoSecrets = db.SecretSecretTags.Where(x => tagIds.Contains(x.SecretTagId) && x.SecretId != id).Select(x=>x.Secret).ToList();
+            //get characters who know
+            List<Character> characters = db.CharSecrets.Where(x => tagIds.Contains(x.SecretId)).Select(x => x.Character).ToList();
+            SecretCompleteVM model = new SecretCompleteVM { Secret = secret, CharactersKnow = characters, ConnectedSecrets = assoSecrets, Tags = tags };
+            return View(model);
+        }
 
         //// GET: Secrets/Create
         public ActionResult Create(short? infoId)
@@ -270,7 +269,16 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             {
                 return HttpNotFound();
             }
-            return View(secret);
+
+            //get secret tags
+            List<short> tagIds = db.SecretSecretTags.Where(x => x.SecretId == id).Select(x => x.SecretTagId).ToList();
+            List<SecretTag> tags = db.SecretSecretTags.Where(x => x.SecretId == id).Select(x => x.SecretTag).ToList();
+            //get connected secrets
+            List<Secret> assoSecrets = db.SecretSecretTags.Where(x => tagIds.Contains(x.SecretTagId) && x.SecretId != id).Select(x => x.Secret).ToList();
+            //get characters who know
+            List<Character> characters = db.CharSecrets.Where(x => tagIds.Contains(x.SecretId)).Select(x => x.Character).ToList();
+            SecretCompleteVM model = new SecretCompleteVM { Secret = secret, CharactersKnow = characters, ConnectedSecrets = assoSecrets, Tags = tags };
+            return View(model);
         }
 
         //// POST: Secrets/Delete/5
@@ -279,15 +287,16 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
         public ActionResult DeleteConfirmed(short id)
         {
             Secret secret = db.Secrets.Find(id);
+            List<SecretSecretTag> ssts = db.SecretSecretTags.Where(s => s.SecretId == id).ToList();
+            //remove sst
+            foreach (SecretSecretTag secretSecretTag in ssts)
+            {
+                db.SecretSecretTags.Remove(secretSecretTag);
+            }
             db.Secrets.Remove(secret);
              db.SaveChanges();
             return RedirectToAction("Index");
         }
-
-        //distribute many secrets
-        //give a character secrets
-        //edit a single character's secret tags
-
 
         // GET: CharSecrets/Create
         public ActionResult GiveSecretSingle(short? charId)
@@ -326,21 +335,6 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             }
 
             ViewBag.CharId = new SelectList(db.Characters.Where(c => !c.IsRetired && c.IsApproved), "CharacterId", "CharacterName");
-            ViewBag.SecretId = new SelectList(db.SecretTags, "SecretTagId", "Name", charSecret.SecretId);
-            return View(charSecret);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "CharSecretId,CharId,SecretId")] CharSecret charSecret)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Entry(charSecret).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            ViewBag.CharId = new SelectList(db.Characters, "CharacterId", "PlayerId", charSecret.CharId);
             ViewBag.SecretId = new SelectList(db.SecretTags, "SecretTagId", "Name", charSecret.SecretId);
             return View(charSecret);
         }

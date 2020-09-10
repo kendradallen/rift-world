@@ -4,47 +4,46 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="10634d86441848718c76c7af2ddd5ad0" Name="Diagram1">
-        <EntityTypeShape EntityType="RiftWorldModel.C__MigrationHistory" Width="1.5" PointX="0.75" PointY="6.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="RiftWorldModel.AspNetRole" Width="1.5" PointX="0.75" PointY="2.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="RiftWorldModel.AspNetUserClaim" Width="1.5" PointX="5.25" PointY="1" IsExpanded="true" />
-        <EntityTypeShape EntityType="RiftWorldModel.AspNetUserLogin" Width="1.5" PointX="5.25" PointY="3.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="RiftWorldModel.AspNetUser" Width="1.5" PointX="3" PointY="1.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="RiftWorldModel.Character" Width="1.5" PointX="3" PointY="17.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="RiftWorldModel.CharOrg" Width="1.5" PointX="8.25" PointY="19.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="RiftWorldModel.CharSecret" Width="1.5" PointX="8.25" PointY="23.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="RiftWorldModel.Class" Width="1.5" PointX="6" PointY="10.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="RiftWorldModel.ClassCharacter" Width="1.5" PointX="11.25" PointY="19.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="RiftWorldModel.ClassNPC" Width="1.5" PointX="8.25" PointY="14.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="RiftWorldModel.Event" Width="1.5" PointX="11.25" PointY="8.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="RiftWorldModel.Gender" Width="1.5" PointX="0.75" PointY="16.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="RiftWorldModel.Info" Width="1.5" PointX="3.75" PointY="12.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="RiftWorldModel.InfoTag" Width="1.5" PointX="10" PointY="4.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="RiftWorldModel.InfoType" Width="1.5" PointX="1.5" PointY="13.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="RiftWorldModel.Item" Width="1.5" PointX="6" PointY="42.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="RiftWorldModel.Journal" Width="1.5" PointX="5.25" PointY="27" IsExpanded="true" />
-        <EntityTypeShape EntityType="RiftWorldModel.LocaleEvent" Width="1.5" PointX="13.5" PointY="14.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="RiftWorldModel.LocaleLevel" Width="1.5" PointX="9" PointY="11.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="RiftWorldModel.Locale" Width="1.5" PointX="11.25" PointY="12.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="RiftWorldModel.Lore" Width="1.5" PointX="6" PointY="30.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="RiftWorldModel.Majority" Width="1.5" PointX="6" PointY="19.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="RiftWorldModel.NpcOrg" Width="1.5" PointX="18.75" PointY="14.125" IsExpanded="true" />
+      <Diagram DiagramId="6e4701446a1a474a8bf2e53b125ebb4e" Name="Diagram1">
+        <EntityTypeShape EntityType="RiftWorldModel.C__MigrationHistory" Width="1.5" PointX="0.75" PointY="2.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="RiftWorldModel.AspNetRole" Width="1.5" PointX="5.75" PointY="4.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="RiftWorldModel.AspNetUserClaim" Width="1.5" PointX="10.25" PointY="2.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="RiftWorldModel.AspNetUserLogin" Width="1.5" PointX="10.25" PointY="5.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="RiftWorldModel.AspNetUser" Width="1.5" PointX="8" PointY="3.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="RiftWorldModel.Character" Width="1.5" PointX="3" PointY="17.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="RiftWorldModel.CharOrg" Width="1.5" PointX="8.25" PointY="19.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="RiftWorldModel.CharSecret" Width="1.5" PointX="8.25" PointY="23.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="RiftWorldModel.Class" Width="1.5" PointX="6" PointY="10" IsExpanded="true" />
+        <EntityTypeShape EntityType="RiftWorldModel.ClassNPC" Width="1.5" PointX="8.25" PointY="14.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="RiftWorldModel.Event" Width="1.5" PointX="11.25" PointY="9.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="RiftWorldModel.Gender" Width="1.5" PointX="3.75" PointY="11" IsExpanded="true" />
+        <EntityTypeShape EntityType="RiftWorldModel.Info" Width="1.5" PointX="3.75" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="RiftWorldModel.InfoTag" Width="1.5" PointX="15" PointY="5.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="RiftWorldModel.InfoType" Width="1.5" PointX="1.5" PointY="6.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="RiftWorldModel.Item" Width="1.5" PointX="6" PointY="40.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="RiftWorldModel.Journal" Width="1.5" PointX="5.25" PointY="26.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="RiftWorldModel.LocaleEvent" Width="1.5" PointX="13.5" PointY="14.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="RiftWorldModel.LocaleLevel" Width="1.5" PointX="9" PointY="12.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="RiftWorldModel.Locale" Width="1.5" PointX="11.25" PointY="13.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="RiftWorldModel.Lore" Width="1.5" PointX="6" PointY="43.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="RiftWorldModel.Majority" Width="1.5" PointX="6" PointY="19.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="RiftWorldModel.NpcOrg" Width="1.5" PointX="18.75" PointY="14.375" IsExpanded="true" />
         <EntityTypeShape EntityType="RiftWorldModel.NPC" Width="1.5" PointX="6" PointY="13.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="RiftWorldModel.OrgEvent" Width="1.5" PointX="21.75" PointY="14.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="RiftWorldModel.Org" Width="1.5" PointX="16.5" PointY="13.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="RiftWorldModel.Race" Width="1.5" PointX="0.75" PointY="19.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="RiftWorldModel.Rift" Width="1.5" PointX="3.75" PointY="8.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="RiftWorldModel.Rumor" Width="1.5" PointX="11.25" PointY="22.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="RiftWorldModel.Secret" Width="1.5" PointX="6" PointY="39.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="RiftWorldModel.SecretSecretTag" Width="1.5" PointX="8.25" PointY="36.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="RiftWorldModel.SecretTag" Width="1.5" PointX="6" PointY="36.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="RiftWorldModel.Story" Width="1.5" PointX="7.75" PointY="6" IsExpanded="true" />
-        <EntityTypeShape EntityType="RiftWorldModel.StoryTag" Width="1.5" PointX="10" PointY="1.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="RiftWorldModel.sysdiagram" Width="1.5" PointX="0.75" PointY="9.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="RiftWorldModel.Tag" Width="1.5" PointX="7.75" PointY="2.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="RiftWorldModel.Tier" Width="1.5" PointX="0.75" PointY="22.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="RiftWorldModel.UserDetail" Width="1.5" PointX="5.25" PointY="33.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="RiftWorldModel.VarietyOfInhabitant" Width="1.5" PointX="6" PointY="22.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="RiftWorldModel.OrgEvent" Width="1.5" PointX="21.75" PointY="14.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="RiftWorldModel.Org" Width="1.5" PointX="16.5" PointY="14.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="RiftWorldModel.Race" Width="1.5" PointX="0.75" PointY="19.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="RiftWorldModel.Rift" Width="1.5" PointX="3.75" PointY="34.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="RiftWorldModel.Rumor" Width="1.5" PointX="11.25" PointY="19.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="RiftWorldModel.Secret" Width="1.5" PointX="6" PointY="36.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="RiftWorldModel.SecretSecretTag" Width="1.5" PointX="8.25" PointY="33.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="RiftWorldModel.SecretTag" Width="1.5" PointX="6" PointY="33.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="RiftWorldModel.Story" Width="1.5" PointX="12.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="RiftWorldModel.StoryTag" Width="1.5" PointX="15" PointY="2.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="RiftWorldModel.sysdiagram" Width="1.5" PointX="0.75" PointY="9.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="RiftWorldModel.Tag" Width="1.5" PointX="12.75" PointY="4.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="RiftWorldModel.Tier" Width="1.5" PointX="0.75" PointY="16.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="RiftWorldModel.UserDetail" Width="1.5" PointX="5.25" PointY="30.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="RiftWorldModel.VarietyOfInhabitant" Width="1.5" PointX="6" PointY="22.75" IsExpanded="true" />
         <AssociationConnector Association="RiftWorldModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" ManuallyRouted="false" />
         <AssociationConnector Association="RiftWorldModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" ManuallyRouted="false" />
         <AssociationConnector Association="RiftWorldModel.FK_Characters_Gender" ManuallyRouted="false" />
@@ -54,18 +53,17 @@
         <AssociationConnector Association="RiftWorldModel.FK_Characters_Users" ManuallyRouted="false" />
         <AssociationConnector Association="RiftWorldModel.FK_CharOrgs_Characters" ManuallyRouted="false" />
         <AssociationConnector Association="RiftWorldModel.FK_CharSecrets_Characters" ManuallyRouted="false" />
-        <AssociationConnector Association="RiftWorldModel.FK_ClassCharacters_Characters" ManuallyRouted="false" />
         <AssociationConnector Association="RiftWorldModel.FK_Journals_Characters" ManuallyRouted="false" />
         <AssociationConnector Association="RiftWorldModel.FK_Rumors_Characters" ManuallyRouted="false" />
         <AssociationConnector Association="RiftWorldModel.FK_Users_Characters" ManuallyRouted="false" />
         <AssociationConnector Association="RiftWorldModel.FK_CharOrgs_Orgs" ManuallyRouted="false" />
         <AssociationConnector Association="RiftWorldModel.FK_CharSecrets_SecretTags" ManuallyRouted="false" />
-        <AssociationConnector Association="RiftWorldModel.FK_ClassCharacters_Class" ManuallyRouted="false" />
         <AssociationConnector Association="RiftWorldModel.FK_ClassNPCs_Class" ManuallyRouted="false" />
         <AssociationConnector Association="RiftWorldModel.FK_ClassNPCs_NPCs" ManuallyRouted="false" />
         <AssociationConnector Association="RiftWorldModel.FK_Events_Infos" ManuallyRouted="false" />
         <AssociationConnector Association="RiftWorldModel.FK_LocaleEvents_Events" ManuallyRouted="false" />
         <AssociationConnector Association="RiftWorldModel.FK_OrgEvents_Events" ManuallyRouted="false" />
+        <AssociationConnector Association="RiftWorldModel.FK_NPCs_Gender" ManuallyRouted="false" />
         <AssociationConnector Association="RiftWorldModel.FK_Infos_InfoType" ManuallyRouted="false" />
         <AssociationConnector Association="RiftWorldModel.FK_InfoTags_Infos" ManuallyRouted="false" />
         <AssociationConnector Association="RiftWorldModel.FK_Items_Infos" ManuallyRouted="false" />
@@ -98,7 +96,6 @@
         <AssociationConnector Association="RiftWorldModel.FK_StoryTags_Stories" ManuallyRouted="false" />
         <AssociationConnector Association="RiftWorldModel.FK_StoryTags_Tags" ManuallyRouted="false" />
         <AssociationConnector Association="RiftWorldModel.AspNetUserRoles" ManuallyRouted="false" />
-        <AssociationConnector Association="RiftWorldModel.FK_NPCs_Gender" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

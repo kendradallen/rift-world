@@ -19,7 +19,6 @@ namespace RiftWorld.DATA.EF
         {
             this.CharOrgs = new HashSet<CharOrg>();
             this.CharSecrets = new HashSet<CharSecret>();
-            this.ClassCharacters = new HashSet<ClassCharacter>();
             this.Journals = new HashSet<Journal>();
             this.Rumors = new HashSet<Rumor>();
             this.UserDetails = new HashSet<UserDetail>();
@@ -54,8 +53,6 @@ namespace RiftWorld.DATA.EF
         public virtual ICollection<CharOrg> CharOrgs { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CharSecret> CharSecrets { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ClassCharacter> ClassCharacters { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Journal> Journals { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

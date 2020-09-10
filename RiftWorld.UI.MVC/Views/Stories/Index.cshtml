@@ -4,60 +4,63 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<div class="col-12">
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.DateTold)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CommissionedBy)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.IsCannon)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.TheContent)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Title)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Info.Name)
-        </th>
-        <th></th>
-    </tr>
+    <h2>Index</h2>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.DateTold)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CommissionedBy)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.IsCannon)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.TheContent)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Title)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Info.Name)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.StoryId }) |
-            @*@Html.ActionLink("Details", "Details", new { id=item.StoryId }) |*@
-            @Html.ActionLink("Delete", "Delete", new { id=item.StoryId })
-        </td>
-    </tr>
-}
+    <p>
+        @Html.ActionLink("Create New", "Create")
+    </p>
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.DateTold)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CommissionedBy)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsCannon)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TheContent)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Info.Name)
+            </th>
+            <th></th>
+        </tr>
 
-</table>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateTold)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CommissionedBy)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsCannon)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TheContent)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Info.Name)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.StoryId }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.StoryId })
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>

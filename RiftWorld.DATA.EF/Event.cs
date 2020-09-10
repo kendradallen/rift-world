@@ -23,11 +23,9 @@ namespace RiftWorld.DATA.EF
     
         public short EventId { get; set; }
         public short InfoId { get; set; }
-        public string Name { get; set; }
         public bool IsHistory { get; set; }
         public string AboutText { get; set; }
         public string NormalParticipants { get; set; }
-        public bool IsPublished { get; set; }
         public Nullable<byte> DateMonth { get; set; }
         public Nullable<byte> DateSeason { get; set; }
     

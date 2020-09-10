@@ -20,13 +20,18 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
         [OverrideAuthorization]
         public ActionResult Index()
         {
-            //v1 - for testing so I don't have to constantly switch accounts
-            var items = db.Items.Include(i => i.Info);
-
-            //v2 - prevent non-admin from seeing unpublished work
-            //todo - uncomment below to prevent users from seeing un-published work
-            //var items = db.Items.Include(i => i.Info).Where(i => i.IsPublished);
-            return View(items.ToList());
+            //admin sees all (client request)
+            List<Item> items = new List<Item> { };
+            if (User.IsInRole("Admin"))
+            {
+                items = db.Items.Include(i => i.Info).OrderBy(i => i.Info.Name).ToList();
+            }
+            //everyone else doesn't see unpublished work
+            else
+            {
+                items = db.Items.Include(i => i.Info).Where(i => i.Info.IsPublished).ToList();
+            }
+            return View(items);
         }
 
         // GET: Items/Details/5
@@ -44,7 +49,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             }
 
             //prevent users from seeing un-published work
-            if (!item.IsPublished && !User.IsInRole("Admin"))
+            if (!item.Info.IsPublished && !User.IsInRole("Admin"))
             {
                 return View("Error");
                 //todo change redirect to a error 404 page
@@ -164,12 +169,10 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                 Item daItem = new Item
                 {
                     InfoId = infoId,
-                    Name = item.Name,
                     PictureFileName = item.PictureFileName,
                     DescriptionText = item.DescriptionText,
                     PropertyText = item.PropertyText,
                     HistoryText = item.HistoryText,
-                    IsPublished = item.IsPublished,
                     Artist = item.Artist
                 };
                 db.Items.Add(daItem);
@@ -356,12 +359,10 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                 {
                     ItemId = item.ItemId,
                     InfoId = item.InfoId,
-                    Name = item.Name,
                     PictureFileName = item.PictureFileName,
                     DescriptionText = item.DescriptionText,
                     PropertyText = item.PropertyText,
                     HistoryText = item.HistoryText,
-                    IsPublished = item.IsPublished,
                     Artist = item.Artist
                 };
                 db.Entry(daItem).State = EntityState.Modified;

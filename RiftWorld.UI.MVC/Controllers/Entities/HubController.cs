@@ -141,14 +141,14 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
 
             Character character = db.Characters.Where(c => c.CharacterId == user.CurrentCharacterId).First();
 
-            ViewBag.CurrentLocationId = new SelectList(db.Locales.OrderBy(l => l.Name), "LocaleId", "Name", character.CurrentLocationId);
+            ViewBag.CurrentLocationId = new SelectList(db.Locales.Where(l=>l.Info.IsPublished).OrderBy(l => l.Info.Name), "LocaleId", "Name", character.CurrentLocationId);
 
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult ChangeLocation(short id)
+        public ActionResult ChangeLocation(short currentLocationId)
         {
             var userId = User.Identity.GetUserId();
 
@@ -156,7 +156,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
 
             Character character = db.Characters.Where(c => c.CharacterId == user.CurrentCharacterId).First();
 
-            character.CurrentLocationId = id;
+            character.CurrentLocationId = currentLocationId;
             character.HasUnseenEdit = true;
 
             db.Entry(character).State = EntityState.Modified;

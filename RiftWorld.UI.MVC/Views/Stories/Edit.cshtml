@@ -40,76 +40,76 @@
     {
         @Html.AntiForgeryToken()
 
-    <div class="form-horizontal">
-        <hr />
-        @Html.HiddenFor(model => model.DateTold)
-        @Html.HiddenFor(model => model.StoryId)
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="form-group row" id="qIsAbout">
-            @Html.LabelFor(model => model.IsAboutId, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownList("IsAboutId", null , htmlAttributes: new { @class = "" })
-                @Html.ValidationMessageFor(model => model.IsAboutId, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group row" id="qComm">
-            @Html.LabelFor(model => model.CommissionedBy, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <div class="da-focus">
-                    @Html.EditorFor(model => model.CommissionedBy, new { htmlAttributes = new { @class = "form-control count", data_max = commMax } })
-                </div>
-                @Html.ValidationMessageFor(model => model.CommissionedBy, "", new { @class = "text-danger" })
-                <div id="tcp-CommissionedBy" class="col-md-offset-2 col-12 @(startCommissionedBy <0 ? "invalid":"")"><span id="tc-CommissionedBy">@startCommissionedBy</span> character(s) left.</div>
-            </div>
-        </div>
-
-        <div class="form-group" id="qCannon">
-            <div class="form-check larger">
-                <div class="checkbox">
-                    @Html.EditorFor(model => model.IsCannon, new { htmlAttribute = new { @class = "form-check-input" } })
-                    @Html.LabelFor(model => model.IsCannon, htmlAttributes: new { @class = "form-check-label" })
+        <div class="form-horizontal">
+            <hr />
+            @Html.HiddenFor(model => model.DateTold)
+            @Html.HiddenFor(model => model.StoryId)
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group row" id="qIsAbout">
+                @Html.LabelFor(model => model.IsAboutId, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownList("IsAboutId", null, htmlAttributes: new { @class = "" })
+                    @Html.ValidationMessageFor(model => model.IsAboutId, "", new { @class = "text-danger" })
                 </div>
             </div>
-        </div>
 
-        <div class="form-group row" id="qTitle">
-            @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <div class="da-focus">
-                    @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control count", data_max = titleMax } })
+            <div class="form-group row" id="qComm">
+                @Html.LabelFor(model => model.CommissionedBy, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <div class="da-focus">
+                        @Html.EditorFor(model => model.CommissionedBy, new { htmlAttributes = new { @class = "form-control count", data_max = commMax } })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.CommissionedBy, "", new { @class = "text-danger" })
+                    <div id="tcp-CommissionedBy" class="col-md-offset-2 col-12 @(startCommissionedBy <0 ? "invalid":"")"><span id="tc-CommissionedBy">@startCommissionedBy</span> character(s) left.</div>
                 </div>
-                @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
-                <div id="tcp-Title" class="col-md-offset-2 col-12 @(startTitle <0 ? "invalid":"")"><span id="tc-Title">@startTitle</span> character(s) left.</div>
             </div>
-        </div>
 
-        <div class="form-group row" id="qContent">
-            @Html.LabelFor(model => model.TheContent, htmlAttributes: new { @class = "control-label col-md-2" })
-            @Html.ValidationMessageFor(model => model.TheContent, "", new { @class = "text-danger col-auto" })
-            <div class="col-12">
-                @Html.EditorFor(model => model.TheContent, new { htmlAttributes = new { @class = "form-control rich", style = "height:20em;" } })
+            <div class="form-group" id="qCannon">
+                <div class="form-check larger">
+                    <div class="checkbox">
+                        @Html.EditorFor(model => model.IsCannon, new { htmlAttribute = new { @class = "form-check-input" } })
+                        @Html.LabelFor(model => model.IsCannon, htmlAttributes: new { @class = "form-check-label" })
+                    </div>
+                </div>
             </div>
-        </div>
 
-        <div class="form-group" id="qTags">
-            <label for="tags">Tags</label>
-            <div class="col-12">
-                <select multiple="multiple" name="tags" id="tags">
-                    @foreach (var x in ViewBag.Tags)
-                    {
-                        <option value="@x.TagId" @(theSelected.Contains(x.TagId) ? "selected" : "")>@x.TagName</option>
-                    }
-                </select>
+            <div class="form-group row" id="qTitle">
+                @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <div class="da-focus">
+                        @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control count", data_max = titleMax } })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+                    <div id="tcp-Title" class="col-md-offset-2 col-12 @(startTitle <0 ? "invalid":"")"><span id="tc-Title">@startTitle</span> character(s) left.</div>
+                </div>
             </div>
-        </div>
 
-        <div class="form-group row" id="qFinish">
-            <div class="col-12">
-                <input type="submit" value="Save" class="btn btn-success btn-block btn-lg" />
+            <div class="form-group row" id="qContent">
+                @Html.LabelFor(model => model.TheContent, htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.ValidationMessageFor(model => model.TheContent, "", new { @class = "text-danger col-auto" })
+                <div class="col-12">
+                    @Html.EditorFor(model => model.TheContent, new { htmlAttributes = new { @class = "form-control rich", style = "height:20em;" } })
+                </div>
+            </div>
+
+            <div class="form-group" id="qTags">
+                <label for="tags">Tags</label>
+                <div class="col-12">
+                    <select multiple="multiple" name="tags" id="tags">
+                        @foreach (var x in ViewBag.Tags)
+                        {
+                            <option value="@x.TagId" @(theSelected.Contains(x.TagId) ? "selected" : "")>@x.TagName</option>
+                        }
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group row" id="qFinish">
+                <div class="col-12">
+                    <input type="submit" value="Save" class="btn btn-success btn-block btn-lg" />
+                </div>
             </div>
         </div>
-    </div>
     }
 
     <div style="text-align:left;">
@@ -117,7 +117,9 @@
     </div>
 </div>
 @section Scripts{
-    <script src="~/Scripts/MyJS/edit.js"></script>
+    <script src="~/Scripts/tinymce/tinymce.min.js"></script>
+    <script src="~/Scripts/SelectBoxes/slimselect.min.js"></script>
+    <script src="~/Scripts/MyJS/edit.min.js"></script>
     <script>
         new SlimSelect({
             select: '#IsAboutId'

@@ -1,7 +1,7 @@
 ﻿@model RiftWorld.DATA.EF.Rift
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = Model.Name;
     bool hasVariety = true;
     if (ViewBag.Variety.Length == 0)
     {
@@ -16,7 +16,7 @@
 }
 <section id="location" class="col-12" name="Location">
     <p style="font-size:3em;">Rift Location: @Model.Location</p>
-    <p style="font-size:larger;">Aka: @Model.Nickname</p>
+    <p style="font-size:larger;">Aka: @Model.Name</p>
 </section>
 @if (Model.Environment != "Nada")
 {
@@ -41,10 +41,7 @@
 <section id="rumors" class="col-12" name="Rumors">
     <h2 class="line">Rumors</h2>
     @Html.Action("_Rumors", "Rumors", new { id = Model.InfoId })
-    <div class="clearfix"></div>
-    <div id="make-rumor">
-        @Html.Action("CreateRumor", "Rumors", new { id = Model.InfoId })
-    </div>
+    @Html.Action("CreateRumor", "Rumors", new { id = Model.InfoId })
 </section>
 <footer id="tags" class="col-12">
     @Html.Action("_TagList", "Infos", new { id = Model.InfoId })
@@ -97,29 +94,7 @@
 }
 @section Scripts{
     <script>
-        //$("#content").addClass("rift");
         $(".sneaky-shadow").addClass("rift");
     </script>
-    <script src="~/Scripts/MyJS/story.js"></script>
-    <script>
-        const okButton = document.getElementById('daSubmit');
-        $('#RumorText').keyup(function (e) {
-            var max = 300
-            var len = $(this).val().length;
-            var char = max - len;
-            $('#tc-Rumor').html(char);
-
-            if (char < 0) {
-                $('#tcp-Rumor').addClass("invalid");
-                okButton.disabled = true;
-            }
-            else {
-                $('#tcp-Rumor').removeClass("invalid");
-                okButton.disabled = false;
-            }
-
-
-        });
-    </script>
-
+    <script src="~/Scripts/MyJS/deets.min.js"></script>
 }

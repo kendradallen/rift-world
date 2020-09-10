@@ -38,121 +38,119 @@
     {
         @Html.AntiForgeryToken()
 
-    <div class="form-horizontal">
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-horizontal">
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-        <div class="form-group row">
-            @Html.LabelFor(model => model.CharacterName, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <div class="da-focus">
-                    @Html.EditorFor(model => model.CharacterName, new { htmlAttributes = new { @class = "form-control count", data_max = nameMax } })
+            <div class="form-group row">
+                @Html.LabelFor(model => model.CharacterName, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <div class="da-focus">
+                        @Html.EditorFor(model => model.CharacterName, new { htmlAttributes = new { @class = "form-control count", data_max = nameMax } })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.CharacterName, "", new { @class = "text-danger" })
+                    <div id="tcp-CharacterName" class="col-md-offset-2 col-12 @(startCharacterName <0 ? "invalid":"")"><span id="tc-CharacterName">@startCharacterName</span> character(s) left.</div>
+
                 </div>
-                @Html.ValidationMessageFor(model => model.CharacterName, "", new { @class = "text-danger" })
-                <div id="tcp-CharacterName" class="col-md-offset-2 col-12 @(startCharacterName <0 ? "invalid":"")"><span id="tc-CharacterName">@startCharacterName</span> character(s) left.</div>
-
             </div>
-        </div>
 
-        <div class="form-group row">
-            @Html.LabelFor(model => model.RaceId, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownList("RaceId", (SelectList)ViewBag.RaceId, "", htmlAttributes: new { @class = "" })
-                @Html.ValidationMessageFor(model => model.RaceId, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group row">
-            @Html.LabelFor(model => model.GenderId, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownList("GenderId", (SelectList)ViewBag.GenderId, "", htmlAttributes: new { @class = "" })
-                @Html.ValidationMessageFor(model => model.GenderId, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group row">
-            @Html.LabelFor(model => model.ClassString, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <div class="da-focus">
-                    @Html.EditorFor(model => model.ClassString, new { htmlAttributes = new { @class = "form-control count", data_max = classMax } })
+            <div class="form-group row">
+                @Html.LabelFor(model => model.RaceId, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownList("RaceId", (SelectList)ViewBag.RaceId, "", htmlAttributes: new { @class = "" })
+                    @Html.ValidationMessageFor(model => model.RaceId, "", new { @class = "text-danger" })
                 </div>
-                @Html.ValidationMessageFor(model => model.ClassString, "", new { @class = "text-danger" })
-                <div id="tcp-ClassString" class="col-md-offset-2 col-12 @(startClassString <0 ? "invalid":"")"><span id="tc-ClassString">@startClassString</span> character(s) left.</div>
-
             </div>
-        </div>
 
-        <div class="form-group row">
-            @Html.LabelFor(model => model.TierId, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownList("TierId", (SelectList)ViewBag.TierId, "", htmlAttributes: new { @class = "" })
-                @Html.ValidationMessageFor(model => model.TierId, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group row">
-            @Html.LabelFor(model => model.PortraitFileName, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @*@Html.EditorFor(model => model.PortraitFileName, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.PortraitFileName, "", new { @class = "text-danger" })*@
-                @Html.HiddenFor(model => model.PortraitFileName)
-                <input type="file" name="picture" id="imgInp" />
-                <img class="img-fluid img-thumbnail border-00" src="#" id="imgPre" />
-                @Html.ValidationMessageFor(model => model.PortraitFileName, "", new { @class = "text-danger" })
-
-            </div>
-        </div>
-
-        <div class="form-group row">
-            @Html.LabelFor(model => model.Artist, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <div class="da-focus">
-                    @Html.EditorFor(model => model.Artist, new { htmlAttributes = new { @class = "form-control" } })
+            <div class="form-group row">
+                @Html.LabelFor(model => model.GenderId, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownList("GenderId", (SelectList)ViewBag.GenderId, "", htmlAttributes: new { @class = "" })
+                    @Html.ValidationMessageFor(model => model.GenderId, "", new { @class = "text-danger" })
                 </div>
-                @Html.ValidationMessageFor(model => model.Artist, "", new { @class = "text-danger" })
             </div>
-        </div>
 
-        <div class="form-group row">
-            @Html.LabelFor(model => model.CurrentLocationId, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownList("CurrentLocationId", (SelectList)ViewBag.CurrentLocationId, "", htmlAttributes: new { @class = "" })
-                @Html.ValidationMessageFor(model => model.CurrentLocationId, "", new { @class = "text-danger" })
-            </div>
-        </div>
+            <div class="form-group row">
+                @Html.LabelFor(model => model.ClassString, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <div class="da-focus">
+                        @Html.EditorFor(model => model.ClassString, new { htmlAttributes = new { @class = "form-control count", data_max = classMax } })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.ClassString, "", new { @class = "text-danger" })
+                    <div id="tcp-ClassString" class="col-md-offset-2 col-12 @(startClassString <0 ? "invalid":"")"><span id="tc-ClassString">@startClassString</span> character(s) left.</div>
 
-
-        <div class="form-group row">
-            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <div class="da-focus">
-                    @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control count", data_max = descripMax, style = "height: 7em;font-size:1em;" } })
                 </div>
-                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
-                <div id="tcp-Description" class="col-md-offset-2 col-12 @(startDescription <0 ? "invalid":"")"><span id="tc-Description">@startDescription</span> character(s) left.</div>
-
             </div>
-        </div>
 
-        <div class="form-group row">
-            @Html.LabelFor(model => model.About, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <div class="da-focus">
-                    @Html.EditorFor(model => model.About, new { htmlAttributes = new { @class = "form-control count", data_max = aboutMax, style = "height: 10em;font-size:1em;" } })
+            <div class="form-group row">
+                @Html.LabelFor(model => model.TierId, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownList("TierId", (SelectList)ViewBag.TierId, "", htmlAttributes: new { @class = "" })
+                    @Html.ValidationMessageFor(model => model.TierId, "", new { @class = "text-danger" })
                 </div>
-                @Html.ValidationMessageFor(model => model.About, "", new { @class = "text-danger" })
-                <div id="tcp-About" class="col-md-offset-2 col-12 @(startAbout <0 ? "invalid":"")"><span id="tc-About">@startAbout</span> character(s) left.</div>
+            </div>
 
+            <div class="form-group row">
+                @Html.LabelFor(model => model.PortraitFileName, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.HiddenFor(model => model.PortraitFileName)
+                    <input type="file" name="picture" id="imgInp" />
+                    <img class="img-fluid img-thumbnail border-00" src="#" id="imgPre" />
+                    @Html.ValidationMessageFor(model => model.PortraitFileName, "", new { @class = "text-danger" })
+
+                </div>
+            </div>
+
+            <div class="form-group row">
+                @Html.LabelFor(model => model.Artist, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <div class="da-focus">
+                        @Html.EditorFor(model => model.Artist, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.Artist, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group row">
+                @Html.LabelFor(model => model.CurrentLocationId, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownList("CurrentLocationId", (SelectList)ViewBag.CurrentLocationId, "", htmlAttributes: new { @class = "" })
+                    @Html.ValidationMessageFor(model => model.CurrentLocationId, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+
+            <div class="form-group row">
+                @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <div class="da-focus">
+                        @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control count", data_max = descripMax, style = "height: 7em;font-size:1em;" } })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                    <div id="tcp-Description" class="col-md-offset-2 col-12 @(startDescription <0 ? "invalid":"")"><span id="tc-Description">@startDescription</span> character(s) left.</div>
+
+                </div>
+            </div>
+
+            <div class="form-group row">
+                @Html.LabelFor(model => model.About, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <div class="da-focus">
+                        @Html.EditorFor(model => model.About, new { htmlAttributes = new { @class = "form-control count", data_max = aboutMax, style = "height: 10em;font-size:1em;" } })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.About, "", new { @class = "text-danger" })
+                    <div id="tcp-About" class="col-md-offset-2 col-12 @(startAbout <0 ? "invalid":"")"><span id="tc-About">@startAbout</span> character(s) left.</div>
+
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-12">
+                    <input type="submit" value="Create" class="btn btn-success btn-block btn-lg" />
+                </div>
             </div>
         </div>
-
-
-        <div class="form-group">
-            <div class="col-md-offset-2 col-12">
-                <input type="submit" value="Create" class="btn btn-success btn-block btn-lg" />
-            </div>
-        </div>
-    </div>
     }
 
     <div>
@@ -161,13 +159,14 @@
 </div>
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
-    <script src="~/Scripts/MyJS/edit.js"></script>
+    <script src="~/Scripts/tinymce/tinymce.min.js"></script>
+    <script src="~/Scripts/SelectBoxes/slimselect.min.js"></script>
+    <script src="~/Scripts/MyJS/edit.min.js"></script>
     <script>
         $('select#GenderId option:first-child').attr("data-placeholder", "true");
         $('select#RaceId option:first-child').attr("data-placeholder", "true");
         $('select#CurrentLocationId option:first-child').attr("data-placeholder", "true");
         $('select#TierId option:first-child').attr("data-placeholder", "true");
-
     </script>
     <script>
         //slim select tags

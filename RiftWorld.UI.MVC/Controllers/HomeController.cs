@@ -69,5 +69,16 @@ namespace RiftWorld.UI.MVC.Controllers
             return View();
         }
 
+        [Authorize(Roles ="Admin")]
+        public ActionResult StyleGuide()
+        {
+            return View();
+        }
+
+        public ActionResult Explore()
+        {
+            ViewBag.Tags = db.Tags.ToList();
+            return View();
+        }
     }
 }

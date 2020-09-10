@@ -87,13 +87,13 @@
             </div>
         </div>
     }
-        <div style="text-align:left;">
-            @Html.ActionLink("Skip", "Skip", new { infoId = Model.InfoId, eventId = Model.EventId, submit = Model.Submit })
-        </div>
+    <div style="text-align:left;">
+        @Html.ActionLink("Skip", "Skip", new { infoId = Model.InfoId, submit = Model.Submit })
+    </div>
 </div>
 @section Scripts{
-    <script src="~/Scripts/SelectBoxes/multi.js"></script>
-    <script src="~/Scripts/MyJS/assoedit.js"></script>
+    <script src="~/Scripts/SelectBoxes/multi.min.js"></script>
+    <script src="~/Scripts/MyJS/assoedit.min.js"></script>
     <script>
         class AssoLocale {
             constructor(localeid) {

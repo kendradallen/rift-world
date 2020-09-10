@@ -1,0 +1,36 @@
+﻿@{
+    ViewBag.Title = "Explore";
+}
+<div class="col-12">
+    <h2 class="line">Explore</h2>
+    <br />
+    <div class="row justify-content-center">
+        <div class="col-12">
+            <h3 class="line">
+                by Type
+            </h3>
+            @Html.ActionLink("NPCs", "Index", "NPCs", null, new { @class = "btn btn-info" })
+            @Html.ActionLink("Locales", "Index", "Locales", null, new { @class = "btn btn-info" })
+            @Html.ActionLink("Rifts", "Index", "Rifts", null, new { @class = "btn btn-info" })
+            @Html.ActionLink("Items", "Index", "Items", null, new { @class = "btn btn-info" })
+            @Html.ActionLink("Organizations", "Index", "Orgs", null, new { @class = "btn btn-info" })
+            @Html.ActionLink("Events", "Index", "Events", null, new { @class = "btn btn-info" })
+            @Html.ActionLink("Other Lore", "Index", "Lores", null, new { @class = "btn btn-info" })
+
+            <br />
+        </div>
+        <div class="col-10">
+            <h3 class="line">by Tags</h3>
+            <div class="tags">
+
+                @foreach (var item in ViewBag.Tags)
+                {
+                    <a href="@Url.Action("TagIndex", "Infos", new { id=item.TagId})">@item.TagName</a>
+                }
+            </div>
+        </div>
+    </div>
+
+
+</div>
+

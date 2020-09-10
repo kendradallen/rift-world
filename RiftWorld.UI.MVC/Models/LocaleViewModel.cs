@@ -247,7 +247,7 @@ namespace RiftWorld.UI.MVC.Models
         {
             InfoId = locale.InfoId;
             LocaleId = locale.LocaleId;
-            Name = locale.Name;
+            Name = info.Name;
             LevelOfLocaleId = locale.LevelOfLocaleId;
             RegionId = locale.RegionId;
             ClosestCityId = locale.ClosestCityId;
@@ -255,7 +255,7 @@ namespace RiftWorld.UI.MVC.Models
             Appointed = locale.Appointed;
             Environment = locale.Environment;
             About = locale.About;
-            IsPublished = locale.IsPublished;
+            IsPublished = info.IsPublished;
             AvgLifestyle = locale.AvgLifestyle;
             Blurb = info.Blurb;
             IsSecret = info.IsSecret;
@@ -425,7 +425,7 @@ namespace RiftWorld.UI.MVC.Models
         {
             InfoId = locale.InfoId;
             LocaleId = locale.LocaleId;
-            Name = locale.Name;
+            Name = info.Name;
             LevelOfLocaleId = locale.LevelOfLocaleId;
             RegionId = locale.RegionId;
             ClosestCityId = locale.ClosestCityId;
@@ -433,7 +433,7 @@ namespace RiftWorld.UI.MVC.Models
             Appointed = locale.Appointed;
             Environment = locale.Environment;
             About = locale.About;
-            IsPublished = locale.IsPublished;
+            IsPublished = info.IsPublished;
             AvgLifestyle = locale.AvgLifestyle;
             Blurb = info.Blurb;
             IsSecret = info.IsSecret;

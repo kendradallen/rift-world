@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
 using RiftWorld.DATA.EF;
 using RiftWorld.UI.MVC.Models;
 
@@ -20,14 +21,19 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
         [OverrideAuthorization]
         public ActionResult Index()
         {
-            //v1 - for testing so I don't have to constantly switch accounts
-            var orgs = db.Orgs.Include(o => o.Info).Include(o => o.Locale);
+            //admin sees all (client request)
+            List<Org> orgs = new List<Org> { };
+            if (User.IsInRole("Admin"))
+            {
+                orgs = db.Orgs.Include(o => o.Info).Include(o => o.Locale).OrderBy(o => o.Info.Name).ToList();
+            }
+            //everyone else doesn't see unpublished work
+            else
+            {
+                orgs = db.Orgs.Include(o => o.Info).Include(o => o.Locale).Where(o => o.Info.IsPublished).OrderBy(o => o.Info.Name).ToList() ;
 
-            //v2 - prevent non-admin from seeing unpublished work
-            //todo - uncomment below to prevent users from seeing un-published work
-            //var orgs = db.Orgs.Include(o => o.Info).Include(o => o.Locale).Where(o => o.IsPublished);
-
-            return View(orgs.ToList());
+            }
+            return View(orgs);
         }
 
         // GET: Orgs/Details/5
@@ -45,7 +51,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             }
 
             //prevent users from seeing un-published work
-            if (!org.IsPublished && !User.IsInRole("Admin"))
+            if (!org.Info.IsPublished && !User.IsInRole("Admin"))
             {
                 return View("Error");
                 //todo change redirect to a error 404 page
@@ -83,13 +89,14 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             List<_MembersVM> npcs =
                 (from norg in db.NpcOrgs
                  join n in db.NPCs on norg.NpcId equals n.NpcId
+                 join i in db.Infos on n.InfoId equals i.InfoId
                  where
                      norg.OrgId == id &&
                      norg.IsCurrent &&
-                     n.IsPublished
+                     i.IsPublished
                  select new _MembersVM()
                  {
-                     Name = n.Name,
+                     Name = i.Name,
                      Blurb = norg.BlurbOrgPage,
                      Id = norg.NpcId,
                      IsPlayer = false,
@@ -128,13 +135,14 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             List<_MembersVM> pastnpcs =
                 (from norg in db.NpcOrgs
                  join n in db.NPCs on norg.NpcId equals n.NpcId
+                 join i in db.Infos on n.InfoId equals i.InfoId
                  where
                     norg.OrgId == id &&
                     !norg.IsCurrent &&
-                    n.IsPublished
+                    i.IsPublished
                  select new _MembersVM() //has to be empty due to linq rules
                  {
-                     Name = n.Name,
+                     Name = i.Name,
                      Blurb = norg.BlurbOrgPage,
                      Id = norg.NpcId,
                      IsPlayer = false,
@@ -183,14 +191,15 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                 (
                     from eo in db.OrgEvents
                     join e in db.Events on eo.EventId equals e.EventId
+                    join i in db.Infos on e.InfoId equals i.InfoId
                     where
                         eo.OrgId == id &&
-                        e.IsPublished &&
+                        i.IsPublished &&
                         !e.IsHistory
                     orderby e.DateMonth
                     select new _OrgEventsVM()
                     {
-                        Name = e.Name,
+                        Name = i.Name,
                         Id = eo.EventId,
                         Blurb = eo.Blurb
                     }
@@ -202,14 +211,15 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                 (
                     from eo in db.OrgEvents
                     join e in db.Events on eo.EventId equals e.EventId
+                    join i in db.Infos on e.InfoId equals i.InfoId
                     where
                         eo.OrgId == id &&
-                        e.IsPublished &&
+                        i.IsPublished &&
                         e.IsHistory
                     orderby  e.DateMonth
                     select new _OrgEventsVM()
                     {
-                        Name = e.Name,
+                        Name = i.Name,
                         Id = eo.EventId,
                         Blurb = eo.Blurb
                     }
@@ -226,14 +236,40 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
         [Authorize(Roles = "Character")]
         public ActionResult JoinOrg(short id)
         {
+            var userId = User.Identity.GetUserId();
 
-            return RedirectToAction("Details", new { id = id });
+            UserDetail user = db.UserDetails.Where(u => u.UserId == userId).First();
+
+            Character character = db.Characters.Where(c => c.CharacterId == user.CurrentCharacterId).First();
+
+            var isMem = db.CharOrgs.Where(o => o.OrgId == id && o.CharId == character.CharacterId).FirstOrDefault();
+
+            ViewBag.Id = id;
+            if (isMem != null)
+            {
+                return View("AlreadyMember");
+            }
+            else
+            {
+                CharOrg charOrg = new CharOrg
+                {
+                    CharId = character.CharacterId,
+                    OrgId = id,
+                    IsCurrent = true,
+                    IsPublic = true,
+                    KatherineApproved = false
+                };
+                db.CharOrgs.Add(charOrg);
+                db.SaveChanges();
+                return View("Success");
+            }
+
         }
 
         // GET: Orgs/Create
         public ActionResult Create()
         {
-            ViewBag.BaseLocationId = new SelectList(db.Locales.OrderBy(l=>l.Name), "LocaleId", "Name");
+            ViewBag.BaseLocationId = new SelectList(db.Locales.OrderBy(l=>l.Info.Name), "LocaleId", "Name");
             ViewBag.Tags = new MultiSelectList(db.Tags, "TagId", "TagName");
             return View();
         }
@@ -321,12 +357,10 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                 Org daOrg = new Org
                 {
                     InfoId = infoId,
-                    Name = org.Name,
                     IsPlayerEnabled = org.IsPlayerEnabled,
                     SymbolFileName = org.SymbolFileName,
                     BaseLocationId = org.BaseLocationId,
                     AboutText = org.AboutText,
-                    IsPublished = org.IsPublished,
                     Artist = org.Artist
                 };
                 db.Orgs.Add(daOrg);
@@ -343,7 +377,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                 return RedirectToAction("AssoCreate", new { id = maxi, submit = submit });
             }
             //if model not valid
-            ViewBag.BaseLocationId = new SelectList(db.Locales.OrderBy(l => l.Name), "LocaleId", "Name");
+            ViewBag.BaseLocationId = new SelectList(db.Locales.OrderBy(l => l.Info.Name), "LocaleId", "Name");
             ViewBag.Tags = new MultiSelectList(db.Tags, "TagId", "TagName", tags);
 
             if (picture != null)
@@ -366,7 +400,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             {
                 return HttpNotFound();
             }
-            ViewBag.Npcs = db.NPCs.OrderBy(n=>n.Name).ToList();
+            ViewBag.Npcs = db.NPCs.OrderBy(n=>n.Info.Name).ToList();
             var selected = db.NpcOrgs.Where(x => x.OrgId == org.OrgId).ToList();
             List<AssoNpc_Org> assoNpcs = new List<AssoNpc_Org>();
             foreach (NpcOrg npcOrg in selected)
@@ -375,7 +409,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                 assoNpcs.Add(toAdd);
             }
 
-            ViewBag.Events = db.Events.OrderBy(e=>e.Name).ToList();
+            ViewBag.Events = db.Events.OrderBy(e=>e.Info.Name).ToList();
             var selected2 = db.OrgEvents.Where(i => i.OrgId == org.OrgId).ToList();
             List<AssoEvent_Org> assoEvents = new List<AssoEvent_Org>();
             foreach (OrgEvent item in selected2)
@@ -394,7 +428,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             }
 
             var infoid = org.InfoId;
-            AssoOrgVM model = new AssoOrgVM { InfoId = infoid, OrgId = org.OrgId, Submit = submit, Name = org.Name, AssoNpcs = assoNpcs, AssoEvents = assoEvents, AssoChars = assoChars };
+            AssoOrgVM model = new AssoOrgVM { InfoId = infoid, OrgId = org.OrgId, Submit = submit, Name = org.Info.Name, AssoNpcs = assoNpcs, AssoEvents = assoEvents, AssoChars = assoChars };
             return View(model);
         }
 
@@ -416,17 +450,14 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                     case "Un-Publish":
                     case "Save and Continue":
                         info.IsPublished = false;
-                        org.IsPublished = false;
                         break;
                     case "Publish":
                     case "Save":
                         info.IsPublished = true;
-                        org.IsPublished = true;
                         break;
                     default:
                         break;
                 }
-                db.Entry(org).State = EntityState.Modified;
                 db.Entry(info).State = EntityState.Modified;
                 #endregion
 
@@ -563,16 +594,15 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                 return Json(true);
             }
             //if model fails
-            ViewBag.Npcs = db.NPCs.OrderBy(n => n.Name).ToList();
-            ViewBag.Events = db.Events.OrderBy(e => e.Name).ToList();
+            ViewBag.Npcs = db.NPCs.OrderBy(n => n.Info.Name).ToList();
+            ViewBag.Events = db.Events.OrderBy(e => e.Info.Name).ToList();
             ViewBag.Characters = db.Characters.Where(i => i.IsApproved).OrderBy(c => c.CharacterName).ToList();
-            AssoOrgVM model = new AssoOrgVM { InfoId = infoId, OrgId = orgId, Submit = submit, Name = org.Name, AssoNpcs = npcs, AssoEvents = events, AssoChars = charas };
+            AssoOrgVM model = new AssoOrgVM { InfoId = infoId, OrgId = orgId, Submit = submit, Name = org.Info.Name, AssoNpcs = npcs, AssoEvents = events, AssoChars = charas };
             return View(model);
         }
 
-        public ActionResult Skip(short infoId, short orgId, string submit)
+        public ActionResult Skip(short infoId, string submit)
         {
-            var org = db.Orgs.Where(i => i.OrgId == orgId).FirstOrDefault();
             var info = db.Infos.Where(i => i.InfoId == infoId).FirstOrDefault();
 
             #region Save or Publish?
@@ -582,12 +612,10 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                 case "Un-Publish":
                 case "Save and Continue":
                     info.IsPublished = false;
-                    org.IsPublished = false;
                     break;
                 case "Publish":
                 case "Save":
                     info.IsPublished = true;
-                    org.IsPublished = true;
                     break;
                 case "Save and associate":
                     break;
@@ -595,10 +623,9 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                     break;
             }
             #endregion
-            db.Entry(org).State = EntityState.Modified;
             db.Entry(info).State = EntityState.Modified;
             db.SaveChanges();
-            return RedirectToAction("Details", new { id = orgId });
+            return RedirectToAction("Details", new { id = info.IdWithinType });
         }
 
         // GET: Orgs/Edit/5
@@ -613,7 +640,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             {
                 return HttpNotFound();
             }
-            ViewBag.BaseLocationId = new SelectList(db.Locales.OrderBy(l =>l.Name), "LocaleId", "Name", org.BaseLocationId);
+            ViewBag.BaseLocationId = new SelectList(db.Locales.OrderBy(l =>l.Info.Name), "LocaleId", "Name", org.BaseLocationId);
 
             short infoid = org.InfoId;
             Info info = db.Infos.Find(infoid);
@@ -762,12 +789,10 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                 {
                     OrgId = org.OrgId,
                     InfoId = org.InfoId,
-                    Name = org.Name,
                     IsPlayerEnabled = org.IsPlayerEnabled,
                     SymbolFileName = org.SymbolFileName,
                     BaseLocationId = org.BaseLocationId,
                     AboutText = org.AboutText,
-                    IsPublished = org.IsPublished,
                     Artist = org.Artist
                 };
                 db.Entry(daOrg).State = EntityState.Modified;
@@ -782,7 +807,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             }
 
             //if model invalid
-            ViewBag.BaseLocationId = new SelectList(db.Locales.OrderBy(l => l.Name), "LocaleId", "Name", org.BaseLocationId);
+            ViewBag.BaseLocationId = new SelectList(db.Locales.OrderBy(l => l.Info.Name), "LocaleId", "Name", org.BaseLocationId);
             ViewBag.Tags = db.Tags.ToList();
             if (tags != null)
             {
@@ -813,7 +838,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             {
                 return HttpNotFound();
             }
-            ViewBag.Npcs = db.NPCs.OrderBy(n => n.Name).ToList();
+            ViewBag.Npcs = db.NPCs.OrderBy(n => n.Info.Name).ToList();
             var selected = db.NpcOrgs.Where(x => x.OrgId == org.OrgId).ToList();
             List<AssoNpc_Org> assoNpcs = new List<AssoNpc_Org>();
             foreach (NpcOrg npcOrg in selected)
@@ -822,7 +847,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                 assoNpcs.Add(toAdd);
             }
 
-            ViewBag.Events = db.Events.OrderBy(e => e.Name).ToList();
+            ViewBag.Events = db.Events.OrderBy(e => e.Info.Name).ToList();
             var selected2 = db.OrgEvents.Where(i => i.OrgId == org.OrgId).ToList();
             List<AssoEvent_Org> assoEvents = new List<AssoEvent_Org>();
             foreach (OrgEvent item in selected2)
@@ -842,7 +867,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
 
 
             var infoid = org.InfoId;
-            AssoOrgVM model = new AssoOrgVM { InfoId = infoid, OrgId = org.OrgId, Submit = "Save", Name = org.Name, AssoNpcs = assoNpcs, AssoEvents = assoEvents, AssoChars = assoChars };
+            AssoOrgVM model = new AssoOrgVM { InfoId = infoid, OrgId = org.OrgId, Submit = "Save", Name = org.Info.Name, AssoNpcs = assoNpcs, AssoEvents = assoEvents, AssoChars = assoChars };
             return View(model);
         }
 
@@ -990,11 +1015,11 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                 return Json(true);
             }
             //if model fails
-            ViewBag.Npcs = db.NPCs.OrderBy(n => n.Name).ToList();
-            ViewBag.Events = db.Events.OrderBy(e => e.Name).ToList();
+            ViewBag.Npcs = db.NPCs.OrderBy(n => n.Info.Name).ToList();
+            ViewBag.Events = db.Events.OrderBy(e => e.Info.Name).ToList();
             ViewBag.Characters = db.Characters.Where(i => i.IsApproved).OrderBy(c => c.CharacterName).ToList();
             var org = db.Orgs.Find(orgId);
-            AssoOrgVM model = new AssoOrgVM { InfoId = infoId, OrgId = orgId, Submit = submit, Name = org.Name, AssoNpcs = npcs, AssoEvents = events, AssoChars = charas };
+            AssoOrgVM model = new AssoOrgVM { InfoId = infoId, OrgId = orgId, Submit = submit, Name = org.Info.Name, AssoNpcs = npcs, AssoEvents = events, AssoChars = charas };
             return View(model);
         }
 

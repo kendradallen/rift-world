@@ -1,5 +1,5 @@
 ﻿@model RiftWorld.UI.MVC.Models.NpcCreateVM
-
+@using RiftWorld.DATA.EF
 @{
     ViewBag.Title = "NPC Create";
     int nameMax;
@@ -45,6 +45,12 @@
 
 <div class="col-12">
     <h2>@ViewBag.Title</h2>
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        Make sure you read the <a target="_blank" href="/Home/StyleGuide#portrait">style guide</a> if you plan on uploading an image.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
 
     @using (Html.BeginForm("Create", "NPCs", FormMethod.Post,
         new { @enctype = "multipart/form-data" }))  ///FOR THE LOVE OF ALL THAT IS KENDRA STOP FORGETTING THIS FOR FILE UPLOADS. IT IS CRUCIAL
@@ -260,7 +266,9 @@
 </div>
 
 @section Scripts{
-    <script src="~/Scripts/MyJS/edit.js"></script>
+    <script src="~/Scripts/tinymce/tinymce.min.js"></script>
+    <script src="~/Scripts/SelectBoxes/slimselect.min.js"></script>
+    <script src="~/Scripts/MyJS/edit.min.js"></script>
 
     <script>
         $('select#GenderId option:first-child').attr("data-placeholder", "true");

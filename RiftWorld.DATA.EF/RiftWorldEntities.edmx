@@ -118,15 +118,6 @@
           <Property Name="ClassName" Type="varchar" MaxLength="15" Nullable="false" />
           <Property Name="IsPlayerEnabled" Type="bit" Nullable="false" />
         </EntityType>
-        <EntityType Name="ClassCharacters">
-          <Key>
-            <PropertyRef Name="ClassCharacterId" />
-          </Key>
-          <Property Name="ClassCharacterId" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="ClassId" Type="tinyint" Nullable="false" />
-          <Property Name="CharacterId" Type="smallint" Nullable="false" />
-          <Property Name="ClassOrder" Type="tinyint" />
-        </EntityType>
         <EntityType Name="ClassNPCs">
           <Key>
             <PropertyRef Name="ClassNpcId" />
@@ -142,11 +133,9 @@
           </Key>
           <Property Name="EventId" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="InfoId" Type="smallint" Nullable="false" />
-          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="IsHistory" Type="bit" Nullable="false" />
           <Property Name="AboutText" Type="varchar(max)" Nullable="false" />
           <Property Name="NormalParticipants" Type="varchar(max)" Nullable="false" />
-          <Property Name="IsPublished" Type="bit" Nullable="false" />
           <Property Name="DateMonth" Type="tinyint" />
           <Property Name="DateSeason" Type="tinyint" />
         </EntityType>
@@ -191,12 +180,10 @@
           </Key>
           <Property Name="ItemId" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="InfoId" Type="smallint" Nullable="false" />
-          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="PictureFileName" Type="varchar" MaxLength="75" />
           <Property Name="DescriptionText" Type="varchar(max)" Nullable="false" />
           <Property Name="PropertyText" Type="varchar(max)" Nullable="false" />
           <Property Name="HistoryText" Type="varchar(max)" Nullable="false" />
-          <Property Name="IsPublished" Type="bit" Nullable="false" />
           <Property Name="Artist" Type="nvarchar" MaxLength="40" />
         </EntityType>
         <EntityType Name="Journals">
@@ -231,7 +218,6 @@
           </Key>
           <Property Name="LocaleId" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="InfoId" Type="smallint" Nullable="false" />
-          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="LevelOfLocaleId" Type="tinyint" Nullable="false" />
           <Property Name="RegionId" Type="smallint" />
           <Property Name="ClosestCityId" Type="smallint" />
@@ -239,7 +225,6 @@
           <Property Name="Appointed" Type="varchar" MaxLength="8000" Nullable="false" />
           <Property Name="Environment" Type="varchar(max)" Nullable="false" />
           <Property Name="About" Type="varchar(max)" Nullable="false" />
-          <Property Name="IsPublished" Type="bit" Nullable="false" />
           <Property Name="AvgLifestyle" Type="varchar" MaxLength="3000" Nullable="false" />
         </EntityType>
         <EntityType Name="Lores">
@@ -248,9 +233,7 @@
           </Key>
           <Property Name="LoreId" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="InfoId" Type="smallint" Nullable="false" />
-          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="TheContent" Type="varchar(max)" Nullable="false" />
-          <Property Name="IsPublished" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Majorities">
           <Key>
@@ -280,7 +263,6 @@
           </Key>
           <Property Name="NpcId" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="InfoId" Type="smallint" Nullable="false" />
-          <Property Name="Name" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="Alias" Type="varchar" MaxLength="500" Nullable="false" />
           <Property Name="Quote" Type="varchar" MaxLength="150" Nullable="false" />
           <Property Name="PortraitFileName" Type="varchar" MaxLength="75" />
@@ -289,7 +271,6 @@
           <Property Name="ApperanceText" Type="varchar" MaxLength="2000" Nullable="false" />
           <Property Name="AboutText" Type="varchar(max)" Nullable="false" />
           <Property Name="LastLocationId" Type="smallint" />
-          <Property Name="IsPublished" Type="bit" Nullable="false" />
           <Property Name="PortraitArtist" Type="nvarchar" MaxLength="40" />
           <Property Name="CrestArtist" Type="nvarchar" MaxLength="40" />
           <Property Name="IsDead" Type="bit" Nullable="false" />
@@ -310,12 +291,10 @@
           </Key>
           <Property Name="OrgId" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="InfoId" Type="smallint" Nullable="false" />
-          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="IsPlayerEnabled" Type="bit" Nullable="false" />
           <Property Name="SymbolFileName" Type="varchar" MaxLength="75" />
           <Property Name="BaseLocationId" Type="smallint" />
           <Property Name="AboutText" Type="varchar(max)" Nullable="false" />
-          <Property Name="IsPublished" Type="bit" Nullable="false" />
           <Property Name="Artist" Type="nvarchar" MaxLength="40" />
         </EntityType>
         <EntityType Name="Race">
@@ -332,11 +311,9 @@
           </Key>
           <Property Name="RiftId" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="InfoId" Type="smallint" Nullable="false" />
-          <Property Name="Nickname" Type="varchar" MaxLength="50" />
           <Property Name="Location" Type="varchar" MaxLength="300" Nullable="false" />
           <Property Name="Environment" Type="varchar(max)" Nullable="false" />
           <Property Name="Hazards" Type="varchar(max)" Nullable="false" />
-          <Property Name="IsPublished" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Rumors">
           <Key>
@@ -544,30 +521,6 @@
             </Principal>
             <Dependent Role="CharSecrets">
               <PropertyRef Name="SecretId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_ClassCharacters_Characters">
-          <End Role="Characters" Type="Self.Characters" Multiplicity="1" />
-          <End Role="ClassCharacters" Type="Self.ClassCharacters" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Characters">
-              <PropertyRef Name="CharacterId" />
-            </Principal>
-            <Dependent Role="ClassCharacters">
-              <PropertyRef Name="CharacterId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_ClassCharacters_Class">
-          <End Role="Class" Type="Self.Class" Multiplicity="1" />
-          <End Role="ClassCharacters" Type="Self.ClassCharacters" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Class">
-              <PropertyRef Name="ClassId" />
-            </Principal>
-            <Dependent Role="ClassCharacters">
-              <PropertyRef Name="ClassId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1107,9 +1060,194 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="fn_diagramobjects" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int" />
         <Function Name="getSecrets" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="PlayerId" Type="nvarchar" Mode="In" />
           <Parameter Name="InfoId" Type="smallint" Mode="In" />
+        </Function>
+        <Function Name="sp_alterdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+          <Parameter Name="version" Type="int" Mode="In" />
+          <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+        </Function>
+        <Function Name="sp_creatediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+          <Parameter Name="version" Type="int" Mode="In" />
+          <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+        </Function>
+        <Function Name="sp_dropdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_helpdiagramdefinition" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_helpdiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_renamediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+          <Parameter Name="new_diagramname" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="sp_upgraddiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="uspCharOrg_Create" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CharId" Type="smallint" Mode="In" />
+          <Parameter Name="OrgId" Type="smallint" Mode="In" />
+        </Function>
+        <Function Name="uspCharSecret_Create" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CharId" Type="smallint" Mode="In" />
+          <Parameter Name="SecretId" Type="smallint" Mode="In" />
+        </Function>
+        <Function Name="uspClass_Create" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Name" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="uspClassChar_Create" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ClassId" Type="tinyint" Mode="In" />
+          <Parameter Name="CharId" Type="smallint" Mode="In" />
+        </Function>
+        <Function Name="uspClassNpc_Create" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ClassId" Type="tinyint" Mode="In" />
+          <Parameter Name="NpcId" Type="smallint" Mode="In" />
+        </Function>
+        <Function Name="uspEvent_Create" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="InfoId" Type="smallint" Mode="In" />
+          <Parameter Name="Name" Type="varchar" Mode="In" />
+          <Parameter Name="IsHistory" Type="bit" Mode="In" />
+          <Parameter Name="Date" Type="date" Mode="In" />
+          <Parameter Name="About" Type="varchar(max)" Mode="In" />
+          <Parameter Name="NormalParticipants" Type="varchar(max)" Mode="In" />
+        </Function>
+        <Function Name="uspGender_Create" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Name" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="uspInfo_Create" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Type" Type="tinyint" Mode="In" />
+          <Parameter Name="Name" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="uspInfoTag_Create" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="InfoId" Type="smallint" Mode="In" />
+          <Parameter Name="tagId" Type="smallint" Mode="In" />
+        </Function>
+        <Function Name="uspInfoType_Create" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Name" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="uspItem_Create" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="InfoId" Type="smallint" Mode="In" />
+          <Parameter Name="Name" Type="varchar" Mode="In" />
+          <Parameter Name="Blurb" Type="varchar" Mode="In" />
+          <Parameter Name="Description" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Property" Type="varchar(max)" Mode="In" />
+          <Parameter Name="History" Type="varchar(max)" Mode="In" />
+        </Function>
+        <Function Name="uspJournal_Create" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CharId" Type="smallint" Mode="In" />
+          <Parameter Name="Content" Type="varchar(max)" Mode="In" />
+        </Function>
+        <Function Name="uspLocale_Create" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="InfoId" Type="smallint" Mode="In" />
+          <Parameter Name="Name" Type="varchar" Mode="In" />
+          <Parameter Name="LevelOfLocal" Type="tinyint" Mode="In" />
+          <Parameter Name="CouncilDelegateId" Type="smallint" Mode="In" />
+          <Parameter Name="Appointed" Type="varchar" Mode="In" />
+          <Parameter Name="Environment" Type="varchar(max)" Mode="In" />
+          <Parameter Name="About" Type="varchar(max)" Mode="In" />
+        </Function>
+        <Function Name="uspLocaleEvent_Create" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="LocaleId" Type="smallint" Mode="In" />
+          <Parameter Name="EventId" Type="smallint" Mode="In" />
+        </Function>
+        <Function Name="uspLocaleLevel_Create" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Name" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="uspLore_Create" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="InfoId" Type="smallint" Mode="In" />
+          <Parameter Name="Name" Type="varchar" Mode="In" />
+          <Parameter Name="TheContent" Type="varchar(max)" Mode="In" />
+        </Function>
+        <Function Name="uspMajority_Create" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="LocaleId" Type="smallint" Mode="In" />
+          <Parameter Name="RaceId" Type="tinyint" Mode="In" />
+          <Parameter Name="IsFirst" Type="bit" Mode="In" />
+        </Function>
+        <Function Name="uspNpc_Create" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="InfoId" Type="smallint" Mode="In" />
+          <Parameter Name="Name" Type="varchar" Mode="In" />
+          <Parameter Name="Alias" Type="varchar" Mode="In" />
+          <Parameter Name="Quote" Type="varchar" Mode="In" />
+          <Parameter Name="RaceId" Type="tinyint" Mode="In" />
+          <Parameter Name="Apperance" Type="varchar" Mode="In" />
+          <Parameter Name="About" Type="varchar(max)" Mode="In" />
+        </Function>
+        <Function Name="uspNpcOrg_Create" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="NpcId" Type="smallint" Mode="In" />
+          <Parameter Name="OrgId" Type="smallint" Mode="In" />
+        </Function>
+        <Function Name="uspOrg_Create" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="InfoId" Type="smallint" Mode="In" />
+          <Parameter Name="Name" Type="varchar" Mode="In" />
+          <Parameter Name="About" Type="varchar(max)" Mode="In" />
+        </Function>
+        <Function Name="uspOrgEvents_Create" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="OrgId" Type="smallint" Mode="In" />
+          <Parameter Name="EventId" Type="smallint" Mode="In" />
+        </Function>
+        <Function Name="uspRace_Create" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Name" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="uspRift_Create" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="InfoId" Type="smallint" Mode="In" />
+          <Parameter Name="Nickname" Type="varchar" Mode="In" />
+          <Parameter Name="Location" Type="varchar" Mode="In" />
+          <Parameter Name="Environment" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Harzards" Type="varchar(max)" Mode="In" />
+        </Function>
+        <Function Name="uspRumors_Create" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="RumorOf" Type="smallint" Mode="In" />
+          <Parameter Name="AuthorId" Type="smallint" Mode="In" />
+          <Parameter Name="Content" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="uspSecert_Create" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="InfoId" Type="smallint" Mode="In" />
+          <Parameter Name="Content" Type="varchar(max)" Mode="In" />
+        </Function>
+        <Function Name="uspSecertSecertTag_Create" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="SecretId" Type="smallint" Mode="In" />
+          <Parameter Name="SecretTagId" Type="smallint" Mode="In" />
+        </Function>
+        <Function Name="uspSecretTag_Create" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Name" Type="varchar" Mode="In" />
+          <Parameter Name="Description" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="uspStory_Create" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="info" Type="smallint" Mode="In" />
+          <Parameter Name="date" Type="date" Mode="In" />
+          <Parameter Name="CommisionedBy" Type="varchar" Mode="In" />
+          <Parameter Name="IsCannon" Type="bit" Mode="In" />
+          <Parameter Name="TheContent" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Title" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="uspStoryTag_Create" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="StoryId" Type="smallint" Mode="In" />
+          <Parameter Name="TagId" Type="smallint" Mode="In" />
+        </Function>
+        <Function Name="uspTag_Create" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="TagName" Type="varchar" Mode="In" />
+          <Parameter Name="Description" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="uspTier_Create" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Name" Type="varchar" Mode="In" />
+          <Parameter Name="Min" Type="tinyint" Mode="In" />
+          <Parameter Name="Max" Type="tinyint" Mode="In" />
+        </Function>
+        <Function Name="uspVarietyOfInhabitant_Create" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="RiftId" Type="smallint" Mode="In" />
+          <Parameter Name="RaceId" Type="tinyint" Mode="In" />
+          <Parameter Name="RaceOrder" Type="tinyint" Mode="In" />
         </Function>
         <EntityContainer Name="RiftWorldModelStoreContainer">
           <EntitySet Name="__MigrationHistory" EntityType="Self.__MigrationHistory" Schema="dbo" store:Type="Tables" />
@@ -1122,7 +1260,6 @@
           <EntitySet Name="CharOrgs" EntityType="Self.CharOrgs" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CharSecrets" EntityType="Self.CharSecrets" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Class" EntityType="Self.Class" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="ClassCharacters" EntityType="Self.ClassCharacters" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ClassNPCs" EntityType="Self.ClassNPCs" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Events" EntityType="Self.Events" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Gender" EntityType="Self.Gender" Schema="dbo" store:Type="Tables" />
@@ -1188,14 +1325,6 @@
           <AssociationSet Name="FK_CharSecrets_SecretTags" Association="Self.FK_CharSecrets_SecretTags">
             <End Role="SecretTags" EntitySet="SecretTags" />
             <End Role="CharSecrets" EntitySet="CharSecrets" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ClassCharacters_Characters" Association="Self.FK_ClassCharacters_Characters">
-            <End Role="Characters" EntitySet="Characters" />
-            <End Role="ClassCharacters" EntitySet="ClassCharacters" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ClassCharacters_Class" Association="Self.FK_ClassCharacters_Class">
-            <End Role="Class" EntitySet="Class" />
-            <End Role="ClassCharacters" EntitySet="ClassCharacters" />
           </AssociationSet>
           <AssociationSet Name="FK_ClassNPCs_Class" Association="Self.FK_ClassNPCs_Class">
             <End Role="Class" EntitySet="Class" />
@@ -1453,17 +1582,6 @@
           <Property Name="TierId" Type="Byte" Nullable="false" />
           <Property Name="IsRetired" Type="Boolean" Nullable="false" />
           <Property Name="IsApproved" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="Gender" Relationship="Self.FK_Characters_Gender" FromRole="Characters" ToRole="Gender" />
-          <NavigationProperty Name="Locale" Relationship="Self.FK_Characters_Locales" FromRole="Characters" ToRole="Locales" />
-          <NavigationProperty Name="Race" Relationship="Self.FK_Characters_Race" FromRole="Characters" ToRole="Race" />
-          <NavigationProperty Name="Tier" Relationship="Self.FK_Characters_Tier" FromRole="Characters" ToRole="Tier" />
-          <NavigationProperty Name="UserDetail" Relationship="Self.FK_Characters_Users" FromRole="Characters" ToRole="UserDetails" />
-          <NavigationProperty Name="CharOrgs" Relationship="Self.FK_CharOrgs_Characters" FromRole="Characters" ToRole="CharOrgs" />
-          <NavigationProperty Name="CharSecrets" Relationship="Self.FK_CharSecrets_Characters" FromRole="Characters" ToRole="CharSecrets" />
-          <NavigationProperty Name="ClassCharacters" Relationship="Self.FK_ClassCharacters_Characters" FromRole="Characters" ToRole="ClassCharacters" />
-          <NavigationProperty Name="Journals" Relationship="Self.FK_Journals_Characters" FromRole="Characters" ToRole="Journals" />
-          <NavigationProperty Name="Rumors" Relationship="Self.FK_Rumors_Characters" FromRole="Characters" ToRole="Rumors" />
-          <NavigationProperty Name="UserDetails" Relationship="Self.FK_Users_Characters" FromRole="Characters" ToRole="UserDetails" />
           <Property Name="Artist" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
           <Property Name="ClassString" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
           <Property Name="HasUnseenEdit" Type="Boolean" Nullable="false" />
@@ -1471,6 +1589,16 @@
           <Property Name="BackupPortrayerName" Type="String" MaxLength="32" FixedLength="false" Unicode="false" />
           <Property Name="IsPlayerDemo" Type="Boolean" Nullable="false" />
           <Property Name="IsRequestingRetire" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Gender" Relationship="Self.FK_Characters_Gender" FromRole="Characters" ToRole="Gender" />
+          <NavigationProperty Name="Locale" Relationship="Self.FK_Characters_Locales" FromRole="Characters" ToRole="Locales" />
+          <NavigationProperty Name="Race" Relationship="Self.FK_Characters_Race" FromRole="Characters" ToRole="Race" />
+          <NavigationProperty Name="Tier" Relationship="Self.FK_Characters_Tier" FromRole="Characters" ToRole="Tier" />
+          <NavigationProperty Name="UserDetail" Relationship="Self.FK_Characters_Users" FromRole="Characters" ToRole="UserDetails" />
+          <NavigationProperty Name="CharOrgs" Relationship="Self.FK_CharOrgs_Characters" FromRole="Characters" ToRole="CharOrgs" />
+          <NavigationProperty Name="CharSecrets" Relationship="Self.FK_CharSecrets_Characters" FromRole="Characters" ToRole="CharSecrets" />
+          <NavigationProperty Name="Journals" Relationship="Self.FK_Journals_Characters" FromRole="Characters" ToRole="Journals" />
+          <NavigationProperty Name="Rumors" Relationship="Self.FK_Rumors_Characters" FromRole="Characters" ToRole="Rumors" />
+          <NavigationProperty Name="UserDetails" Relationship="Self.FK_Users_Characters" FromRole="Characters" ToRole="UserDetails" />
         </EntityType>
         <EntityType Name="CharOrg">
           <Key>
@@ -1482,9 +1610,9 @@
           <Property Name="BlurbOrgPage" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="IsPublic" Type="Boolean" Nullable="false" />
           <Property Name="IsCurrent" Type="Boolean" Nullable="false" />
+          <Property Name="KatherineApproved" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Character" Relationship="Self.FK_CharOrgs_Characters" FromRole="CharOrgs" ToRole="Characters" />
           <NavigationProperty Name="Org" Relationship="Self.FK_CharOrgs_Orgs" FromRole="CharOrgs" ToRole="Orgs" />
-          <Property Name="KatherineApproved" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="CharSecret">
           <Key>
@@ -1503,19 +1631,7 @@
           <Property Name="ClassId" Type="Byte" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="ClassName" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="IsPlayerEnabled" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="ClassCharacters" Relationship="Self.FK_ClassCharacters_Class" FromRole="Class" ToRole="ClassCharacters" />
           <NavigationProperty Name="ClassNPCs" Relationship="Self.FK_ClassNPCs_Class" FromRole="Class" ToRole="ClassNPCs" />
-        </EntityType>
-        <EntityType Name="ClassCharacter">
-          <Key>
-            <PropertyRef Name="ClassCharacterId" />
-          </Key>
-          <Property Name="ClassCharacterId" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ClassId" Type="Byte" Nullable="false" />
-          <Property Name="CharacterId" Type="Int16" Nullable="false" />
-          <Property Name="ClassOrder" Type="Byte" />
-          <NavigationProperty Name="Character" Relationship="Self.FK_ClassCharacters_Characters" FromRole="ClassCharacters" ToRole="Characters" />
-          <NavigationProperty Name="Class" Relationship="Self.FK_ClassCharacters_Class" FromRole="ClassCharacters" ToRole="Class" />
         </EntityType>
         <EntityType Name="ClassNPC">
           <Key>
@@ -1534,16 +1650,14 @@
           </Key>
           <Property Name="EventId" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="InfoId" Type="Int16" Nullable="false" />
-          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="IsHistory" Type="Boolean" Nullable="false" />
           <Property Name="AboutText" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="NormalParticipants" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="IsPublished" Type="Boolean" Nullable="false" />
+          <Property Name="DateMonth" Type="Byte" />
+          <Property Name="DateSeason" Type="Byte" />
           <NavigationProperty Name="Info" Relationship="Self.FK_Events_Infos" FromRole="Events" ToRole="Infos" />
           <NavigationProperty Name="LocaleEvents" Relationship="Self.FK_LocaleEvents_Events" FromRole="Events" ToRole="LocaleEvents" />
           <NavigationProperty Name="OrgEvents" Relationship="Self.FK_OrgEvents_Events" FromRole="Events" ToRole="OrgEvents" />
-          <Property Name="DateMonth" Type="Byte" />
-          <Property Name="DateSeason" Type="Byte" />
         </EntityType>
         <EntityType Name="Gender">
           <Key>
@@ -1553,7 +1667,7 @@
           <Property Name="GenderName" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="IconName" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Characters" Relationship="Self.FK_Characters_Gender" FromRole="Gender" ToRole="Characters" />
-          <NavigationProperty Name="NPCs" Relationship="RiftWorldModel.FK_NPCs_Gender" FromRole="Gender" ToRole="NPC" />
+          <NavigationProperty Name="NPCs" Relationship="Self.FK_NPCs_Gender" FromRole="Gender" ToRole="NPCs" />
         </EntityType>
         <EntityType Name="Info">
           <Key>
@@ -1565,6 +1679,7 @@
           <Property Name="Blurb" Type="String" MaxLength="350" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="IsPublished" Type="Boolean" Nullable="false" />
+          <Property Name="IsSecret" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Events" Relationship="Self.FK_Events_Infos" FromRole="Infos" ToRole="Events" />
           <NavigationProperty Name="InfoType" Relationship="Self.FK_Infos_InfoType" FromRole="Infos" ToRole="InfoType" />
           <NavigationProperty Name="InfoTags" Relationship="Self.FK_InfoTags_Infos" FromRole="Infos" ToRole="InfoTags" />
@@ -1577,7 +1692,6 @@
           <NavigationProperty Name="Rumors" Relationship="Self.FK_Rumors_Infos" FromRole="Infos" ToRole="Rumors" />
           <NavigationProperty Name="Secrets" Relationship="Self.FK_Secrets_Infos" FromRole="Infos" ToRole="Secrets" />
           <NavigationProperty Name="Stories" Relationship="Self.FK_Stories_Infos" FromRole="Infos" ToRole="Stories" />
-          <Property Name="IsSecret" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="InfoTag">
           <Key>
@@ -1603,14 +1717,12 @@
           </Key>
           <Property Name="ItemId" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="InfoId" Type="Int16" Nullable="false" />
-          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="PictureFileName" Type="String" MaxLength="75" FixedLength="false" Unicode="false" />
           <Property Name="DescriptionText" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="PropertyText" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="HistoryText" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="IsPublished" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="Info" Relationship="Self.FK_Items_Infos" FromRole="Items" ToRole="Infos" />
           <Property Name="Artist" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Info" Relationship="Self.FK_Items_Infos" FromRole="Items" ToRole="Infos" />
         </EntityType>
         <EntityType Name="Journal">
           <Key>
@@ -1621,8 +1733,8 @@
           <Property Name="OocDateWritten" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="TheContent" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="IsApproved" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="Character" Relationship="Self.FK_Journals_Characters" FromRole="Journals" ToRole="Characters" />
           <Property Name="HasUnseenEdit" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Character" Relationship="Self.FK_Journals_Characters" FromRole="Journals" ToRole="Characters" />
         </EntityType>
         <EntityType Name="LocaleEvent">
           <Key>
@@ -1648,7 +1760,6 @@
           </Key>
           <Property Name="LocaleId" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="InfoId" Type="Int16" Nullable="false" />
-          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="LevelOfLocaleId" Type="Byte" Nullable="false" />
           <Property Name="RegionId" Type="Int16" />
           <Property Name="ClosestCityId" Type="Int16" />
@@ -1656,7 +1767,6 @@
           <Property Name="Appointed" Type="String" MaxLength="8000" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Environment" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="About" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="IsPublished" Type="Boolean" Nullable="false" />
           <Property Name="AvgLifestyle" Type="String" MaxLength="3000" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="Characters" Relationship="Self.FK_Characters_Locales" FromRole="Locales" ToRole="Characters" />
           <NavigationProperty Name="Info" Relationship="Self.FK_Locales_Infos" FromRole="Locales" ToRole="Infos" />
@@ -1677,9 +1787,7 @@
           </Key>
           <Property Name="LoreId" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="InfoId" Type="Int16" Nullable="false" />
-          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="TheContent" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="IsPublished" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Info" Relationship="Self.FK_Lores_Infos" FromRole="Lores" ToRole="Infos" />
         </EntityType>
         <EntityType Name="Majority">
@@ -1714,7 +1822,6 @@
           </Key>
           <Property Name="NpcId" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="InfoId" Type="Int16" Nullable="false" />
-          <Property Name="Name" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Alias" Type="String" MaxLength="500" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Quote" Type="String" MaxLength="150" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="PortraitFileName" Type="String" MaxLength="75" FixedLength="false" Unicode="false" />
@@ -1723,18 +1830,17 @@
           <Property Name="ApperanceText" Type="String" MaxLength="2000" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="AboutText" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="LastLocationId" Type="Int16" />
-          <Property Name="IsPublished" Type="Boolean" Nullable="false" />
+          <Property Name="PortraitArtist" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
+          <Property Name="CrestArtist" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
+          <Property Name="IsDead" Type="Boolean" Nullable="false" />
+          <Property Name="GenderId" Type="Byte" Nullable="false" />
           <NavigationProperty Name="ClassNPCs" Relationship="Self.FK_ClassNPCs_NPCs" FromRole="NPCs" ToRole="ClassNPCs" />
+          <NavigationProperty Name="Gender" Relationship="Self.FK_NPCs_Gender" FromRole="NPCs" ToRole="Gender" />
           <NavigationProperty Name="Info" Relationship="Self.FK_NPCs_Infos" FromRole="NPCs" ToRole="Infos" />
           <NavigationProperty Name="Locales" Relationship="Self.FK_Locales_NPCs" FromRole="NPCs" ToRole="Locales" />
           <NavigationProperty Name="Locale" Relationship="Self.FK_NPCs_Locales" FromRole="NPCs" ToRole="Locales" />
           <NavigationProperty Name="NpcOrgs" Relationship="Self.FK_NpcOrgs_NPCs" FromRole="NPCs" ToRole="NpcOrgs" />
           <NavigationProperty Name="Race" Relationship="Self.FK_NPCs_Race" FromRole="NPCs" ToRole="Race" />
-          <Property Name="PortraitArtist" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
-          <Property Name="CrestArtist" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
-          <Property Name="IsDead" Type="Boolean" Nullable="false" />
-          <Property Name="GenderId" Type="Byte" Nullable="false" />
-          <NavigationProperty Name="Gender" Relationship="RiftWorldModel.FK_NPCs_Gender" FromRole="NPC" ToRole="Gender" />
         </EntityType>
         <EntityType Name="OrgEvent">
           <Key>
@@ -1753,18 +1859,16 @@
           </Key>
           <Property Name="OrgId" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="InfoId" Type="Int16" Nullable="false" />
-          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="IsPlayerEnabled" Type="Boolean" Nullable="false" />
           <Property Name="SymbolFileName" Type="String" MaxLength="75" FixedLength="false" Unicode="false" />
           <Property Name="BaseLocationId" Type="Int16" />
           <Property Name="AboutText" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="IsPublished" Type="Boolean" Nullable="false" />
+          <Property Name="Artist" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="CharOrgs" Relationship="Self.FK_CharOrgs_Orgs" FromRole="Orgs" ToRole="CharOrgs" />
           <NavigationProperty Name="Info" Relationship="Self.FK_Orgs_Infos" FromRole="Orgs" ToRole="Infos" />
           <NavigationProperty Name="Locale" Relationship="Self.FK_Orgs_Locales" FromRole="Orgs" ToRole="Locales" />
           <NavigationProperty Name="NpcOrgs" Relationship="Self.FK_NpcOrgs_Orgs" FromRole="Orgs" ToRole="NpcOrgs" />
           <NavigationProperty Name="OrgEvents" Relationship="Self.FK_OrgEvents_Orgs" FromRole="Orgs" ToRole="OrgEvents" />
-          <Property Name="Artist" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="Race">
           <Key>
@@ -1784,11 +1888,9 @@
           </Key>
           <Property Name="RiftId" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="InfoId" Type="Int16" Nullable="false" />
-          <Property Name="Nickname" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Location" Type="String" MaxLength="300" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Environment" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Hazards" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="IsPublished" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Info" Relationship="Self.FK_Rifts_Infos" FromRole="Rifts" ToRole="Infos" />
           <NavigationProperty Name="VarietyOfInhabitants" Relationship="Self.FK_VarietyOfInhabitants_Rifts" FromRole="Rifts" ToRole="VarietyOfInhabitants" />
         </EntityType>
@@ -1800,9 +1902,9 @@
           <Property Name="RumorOfId" Type="Int16" Nullable="false" />
           <Property Name="AuthorId" Type="Int16" Nullable="false" />
           <Property Name="IsApproved" Type="Boolean" Nullable="false" />
+          <Property Name="RumorText" Type="String" MaxLength="300" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="Character" Relationship="Self.FK_Rumors_Characters" FromRole="Rumors" ToRole="Characters" />
           <NavigationProperty Name="Info" Relationship="Self.FK_Rumors_Infos" FromRole="Rumors" ToRole="Infos" />
-          <Property Name="RumorText" Type="String" Nullable="false" FixedLength="false" MaxLength="300" Unicode="false" />
         </EntityType>
         <EntityType Name="Secret">
           <Key>
@@ -2024,18 +2126,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_ClassCharacters_Characters">
-          <End Role="Characters" Type="Self.Character" Multiplicity="1" />
-          <End Role="ClassCharacters" Type="Self.ClassCharacter" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Characters">
-              <PropertyRef Name="CharacterId" />
-            </Principal>
-            <Dependent Role="ClassCharacters">
-              <PropertyRef Name="CharacterId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Journals_Characters">
           <End Role="Characters" Type="Self.Character" Multiplicity="1" />
           <End Role="Journals" Type="Self.Journal" Multiplicity="*" />
@@ -2096,18 +2186,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_ClassCharacters_Class">
-          <End Role="Class" Type="Self.Class" Multiplicity="1" />
-          <End Role="ClassCharacters" Type="Self.ClassCharacter" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Class">
-              <PropertyRef Name="ClassId" />
-            </Principal>
-            <Dependent Role="ClassCharacters">
-              <PropertyRef Name="ClassId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_ClassNPCs_Class">
           <End Role="Class" Type="Self.Class" Multiplicity="0..1" />
           <End Role="ClassNPCs" Type="Self.ClassNPC" Multiplicity="*" />
@@ -2165,6 +2243,18 @@
             </Principal>
             <Dependent Role="OrgEvents">
               <PropertyRef Name="EventId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_NPCs_Gender">
+          <End Role="Gender" Type="Self.Gender" Multiplicity="1" />
+          <End Role="NPCs" Type="Self.NPC" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Gender">
+              <PropertyRef Name="GenderId" />
+            </Principal>
+            <Dependent Role="NPCs">
+              <PropertyRef Name="GenderId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2554,7 +2644,6 @@
           <EntitySet Name="CharOrgs" EntityType="Self.CharOrg" />
           <EntitySet Name="CharSecrets" EntityType="Self.CharSecret" />
           <EntitySet Name="Classes" EntityType="Self.Class" />
-          <EntitySet Name="ClassCharacters" EntityType="Self.ClassCharacter" />
           <EntitySet Name="ClassNPCs" EntityType="Self.ClassNPC" />
           <EntitySet Name="Events" EntityType="Self.Event" />
           <EntitySet Name="Genders" EntityType="Self.Gender" />
@@ -2621,10 +2710,6 @@
             <End Role="Characters" EntitySet="Characters" />
             <End Role="CharSecrets" EntitySet="CharSecrets" />
           </AssociationSet>
-          <AssociationSet Name="FK_ClassCharacters_Characters" Association="Self.FK_ClassCharacters_Characters">
-            <End Role="Characters" EntitySet="Characters" />
-            <End Role="ClassCharacters" EntitySet="ClassCharacters" />
-          </AssociationSet>
           <AssociationSet Name="FK_Journals_Characters" Association="Self.FK_Journals_Characters">
             <End Role="Characters" EntitySet="Characters" />
             <End Role="Journals" EntitySet="Journals" />
@@ -2645,10 +2730,6 @@
             <End Role="SecretTags" EntitySet="SecretTags" />
             <End Role="CharSecrets" EntitySet="CharSecrets" />
           </AssociationSet>
-          <AssociationSet Name="FK_ClassCharacters_Class" Association="Self.FK_ClassCharacters_Class">
-            <End Role="Class" EntitySet="Classes" />
-            <End Role="ClassCharacters" EntitySet="ClassCharacters" />
-          </AssociationSet>
           <AssociationSet Name="FK_ClassNPCs_Class" Association="Self.FK_ClassNPCs_Class">
             <End Role="Class" EntitySet="Classes" />
             <End Role="ClassNPCs" EntitySet="ClassNPCs" />
@@ -2668,6 +2749,10 @@
           <AssociationSet Name="FK_OrgEvents_Events" Association="Self.FK_OrgEvents_Events">
             <End Role="Events" EntitySet="Events" />
             <End Role="OrgEvents" EntitySet="OrgEvents" />
+          </AssociationSet>
+          <AssociationSet Name="FK_NPCs_Gender" Association="Self.FK_NPCs_Gender">
+            <End Role="Gender" EntitySet="Genders" />
+            <End Role="NPCs" EntitySet="NPCs" />
           </AssociationSet>
           <AssociationSet Name="FK_Infos_InfoType" Association="Self.FK_Infos_InfoType">
             <End Role="InfoType" EntitySet="InfoTypes" />
@@ -2797,27 +2882,206 @@
             <End Role="AspNetRoles" EntitySet="AspNetRoles" />
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
           </AssociationSet>
-          <FunctionImport Name="getSecrets" EntitySet="Secrets" ReturnType="Collection(RiftWorldModel.Secret)">
+          <FunctionImport Name="getSecrets" ReturnType="Collection(Int16)">
             <Parameter Name="PlayerId" Mode="In" Type="String" />
             <Parameter Name="InfoId" Mode="In" Type="Int16" />
           </FunctionImport>
-          <AssociationSet Name="FK_NPCs_Gender" Association="RiftWorldModel.FK_NPCs_Gender">
-            <End Role="Gender" EntitySet="Genders" />
-            <End Role="NPC" EntitySet="NPCs" />
-          </AssociationSet>
+          <FunctionImport Name="sp_alterdiagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="version" Mode="In" Type="Int32" />
+            <Parameter Name="definition" Mode="In" Type="Binary" />
+          </FunctionImport>
+          <FunctionImport Name="sp_creatediagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="version" Mode="In" Type="Int32" />
+            <Parameter Name="definition" Mode="In" Type="Binary" />
+          </FunctionImport>
+          <FunctionImport Name="sp_dropdiagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_helpdiagramdefinition" ReturnType="Collection(RiftWorldModel.sp_helpdiagramdefinition_Result)">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_helpdiagrams" ReturnType="Collection(RiftWorldModel.sp_helpdiagrams_Result)">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_renamediagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="new_diagramname" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_upgraddiagrams" />
+          <FunctionImport Name="uspCharOrg_Create">
+            <Parameter Name="CharId" Mode="In" Type="Int16" />
+            <Parameter Name="OrgId" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <FunctionImport Name="uspCharSecret_Create">
+            <Parameter Name="CharId" Mode="In" Type="Int16" />
+            <Parameter Name="SecretId" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <FunctionImport Name="uspClass_Create">
+          <Parameter Name="Name" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="uspClassChar_Create">
+            <Parameter Name="ClassId" Mode="In" Type="Byte" />
+            <Parameter Name="CharId" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <FunctionImport Name="uspClassNpc_Create">
+            <Parameter Name="ClassId" Mode="In" Type="Byte" />
+            <Parameter Name="NpcId" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <FunctionImport Name="uspEvent_Create">
+            <Parameter Name="InfoId" Mode="In" Type="Int16" />
+            <Parameter Name="Name" Mode="In" Type="String" />
+            <Parameter Name="IsHistory" Mode="In" Type="Boolean" />
+            <Parameter Name="Date" Mode="In" Type="DateTime" />
+            <Parameter Name="About" Mode="In" Type="String" />
+            <Parameter Name="NormalParticipants" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="uspGender_Create">
+          <Parameter Name="Name" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="uspInfo_Create">
+            <Parameter Name="Type" Mode="In" Type="Byte" />
+            <Parameter Name="Name" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="uspInfoTag_Create">
+            <Parameter Name="InfoId" Mode="In" Type="Int16" />
+            <Parameter Name="tagId" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <FunctionImport Name="uspInfoType_Create">
+          <Parameter Name="Name" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="uspItem_Create">
+            <Parameter Name="InfoId" Mode="In" Type="Int16" />
+            <Parameter Name="Name" Mode="In" Type="String" />
+            <Parameter Name="Blurb" Mode="In" Type="String" />
+            <Parameter Name="Description" Mode="In" Type="String" />
+            <Parameter Name="Property" Mode="In" Type="String" />
+            <Parameter Name="History" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="uspJournal_Create">
+            <Parameter Name="CharId" Mode="In" Type="Int16" />
+            <Parameter Name="Content" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="uspLocale_Create">
+            <Parameter Name="InfoId" Mode="In" Type="Int16" />
+            <Parameter Name="Name" Mode="In" Type="String" />
+            <Parameter Name="LevelOfLocal" Mode="In" Type="Byte" />
+            <Parameter Name="CouncilDelegateId" Mode="In" Type="Int16" />
+            <Parameter Name="Appointed" Mode="In" Type="String" />
+            <Parameter Name="Environment" Mode="In" Type="String" />
+            <Parameter Name="About" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="uspLocaleEvent_Create">
+            <Parameter Name="LocaleId" Mode="In" Type="Int16" />
+            <Parameter Name="EventId" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <FunctionImport Name="uspLocaleLevel_Create">
+          <Parameter Name="Name" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="uspLore_Create">
+            <Parameter Name="InfoId" Mode="In" Type="Int16" />
+            <Parameter Name="Name" Mode="In" Type="String" />
+            <Parameter Name="TheContent" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="uspMajority_Create">
+            <Parameter Name="LocaleId" Mode="In" Type="Int16" />
+            <Parameter Name="RaceId" Mode="In" Type="Byte" />
+            <Parameter Name="IsFirst" Mode="In" Type="Boolean" />
+          </FunctionImport>
+          <FunctionImport Name="uspNpc_Create">
+            <Parameter Name="InfoId" Mode="In" Type="Int16" />
+            <Parameter Name="Name" Mode="In" Type="String" />
+            <Parameter Name="Alias" Mode="In" Type="String" />
+            <Parameter Name="Quote" Mode="In" Type="String" />
+            <Parameter Name="RaceId" Mode="In" Type="Byte" />
+            <Parameter Name="Apperance" Mode="In" Type="String" />
+            <Parameter Name="About" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="uspNpcOrg_Create">
+            <Parameter Name="NpcId" Mode="In" Type="Int16" />
+            <Parameter Name="OrgId" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <FunctionImport Name="uspOrg_Create">
+            <Parameter Name="InfoId" Mode="In" Type="Int16" />
+            <Parameter Name="Name" Mode="In" Type="String" />
+            <Parameter Name="About" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="uspOrgEvents_Create">
+            <Parameter Name="OrgId" Mode="In" Type="Int16" />
+            <Parameter Name="EventId" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <FunctionImport Name="uspRace_Create">
+          <Parameter Name="Name" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="uspRift_Create">
+            <Parameter Name="InfoId" Mode="In" Type="Int16" />
+            <Parameter Name="Nickname" Mode="In" Type="String" />
+            <Parameter Name="Location" Mode="In" Type="String" />
+            <Parameter Name="Environment" Mode="In" Type="String" />
+            <Parameter Name="Harzards" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="uspRumors_Create">
+            <Parameter Name="RumorOf" Mode="In" Type="Int16" />
+            <Parameter Name="AuthorId" Mode="In" Type="Int16" />
+            <Parameter Name="Content" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="uspSecert_Create">
+            <Parameter Name="InfoId" Mode="In" Type="Int16" />
+            <Parameter Name="Content" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="uspSecertSecertTag_Create">
+            <Parameter Name="SecretId" Mode="In" Type="Int16" />
+            <Parameter Name="SecretTagId" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <FunctionImport Name="uspSecretTag_Create">
+            <Parameter Name="Name" Mode="In" Type="String" />
+            <Parameter Name="Description" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="uspStory_Create">
+            <Parameter Name="info" Mode="In" Type="Int16" />
+            <Parameter Name="date" Mode="In" Type="DateTime" />
+            <Parameter Name="CommisionedBy" Mode="In" Type="String" />
+            <Parameter Name="IsCannon" Mode="In" Type="Boolean" />
+            <Parameter Name="TheContent" Mode="In" Type="String" />
+            <Parameter Name="Title" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="uspStoryTag_Create">
+            <Parameter Name="StoryId" Mode="In" Type="Int16" />
+            <Parameter Name="TagId" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <FunctionImport Name="uspTag_Create">
+            <Parameter Name="TagName" Mode="In" Type="String" />
+            <Parameter Name="Description" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="uspTier_Create">
+            <Parameter Name="Name" Mode="In" Type="String" />
+            <Parameter Name="Min" Mode="In" Type="Byte" />
+            <Parameter Name="Max" Mode="In" Type="Byte" />
+          </FunctionImport>
+          <FunctionImport Name="uspVarietyOfInhabitant_Create">
+            <Parameter Name="RiftId" Mode="In" Type="Int16" />
+            <Parameter Name="RaceId" Mode="In" Type="Byte" />
+            <Parameter Name="RaceOrder" Mode="In" Type="Byte" />
+          </FunctionImport>
         </EntityContainer>
-        <Association Name="FK_NPCs_Gender">
-          <End Type="RiftWorldModel.Gender" Role="Gender" Multiplicity="1" />
-          <End Type="RiftWorldModel.NPC" Role="NPC" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Gender">
-              <PropertyRef Name="GenderId" />
-            </Principal>
-            <Dependent Role="NPC">
-              <PropertyRef Name="GenderId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
+        <ComplexType Name="sp_helpdiagramdefinition_Result">
+          <Property Type="Int32" Name="version" Nullable="true" />
+          <Property Type="Binary" Name="definition" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="sp_helpdiagrams_Result">
+          <Property Type="String" Name="Database" Nullable="true" MaxLength="128" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="128" />
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
+          <Property Type="Int32" Name="OwnerID" Nullable="false" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2882,13 +3146,6 @@
           <EntitySetMapping Name="Characters">
             <EntityTypeMapping TypeName="RiftWorldModel.Character">
               <MappingFragment StoreEntitySet="Characters">
-                <ScalarProperty Name="IsRequestingRetire" ColumnName="IsRequestingRetire" />
-                <ScalarProperty Name="IsPlayerDemo" ColumnName="IsPlayerDemo" />
-                <ScalarProperty Name="BackupPortrayerName" ColumnName="BackupPortrayerName" />
-                <ScalarProperty Name="IsDead" ColumnName="IsDead" />
-                <ScalarProperty Name="HasUnseenEdit" ColumnName="HasUnseenEdit" />
-                <ScalarProperty Name="ClassString" ColumnName="ClassString" />
-                <ScalarProperty Name="Artist" ColumnName="Artist" />
                 <ScalarProperty Name="CharacterId" ColumnName="CharacterId" />
                 <ScalarProperty Name="PlayerId" ColumnName="PlayerId" />
                 <ScalarProperty Name="CharacterName" ColumnName="CharacterName" />
@@ -2901,19 +3158,26 @@
                 <ScalarProperty Name="TierId" ColumnName="TierId" />
                 <ScalarProperty Name="IsRetired" ColumnName="IsRetired" />
                 <ScalarProperty Name="IsApproved" ColumnName="IsApproved" />
+                <ScalarProperty Name="Artist" ColumnName="Artist" />
+                <ScalarProperty Name="ClassString" ColumnName="ClassString" />
+                <ScalarProperty Name="HasUnseenEdit" ColumnName="HasUnseenEdit" />
+                <ScalarProperty Name="IsDead" ColumnName="IsDead" />
+                <ScalarProperty Name="BackupPortrayerName" ColumnName="BackupPortrayerName" />
+                <ScalarProperty Name="IsPlayerDemo" ColumnName="IsPlayerDemo" />
+                <ScalarProperty Name="IsRequestingRetire" ColumnName="IsRequestingRetire" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="CharOrgs">
             <EntityTypeMapping TypeName="RiftWorldModel.CharOrg">
               <MappingFragment StoreEntitySet="CharOrgs">
-                <ScalarProperty Name="KatherineApproved" ColumnName="KatherineApproved" />
                 <ScalarProperty Name="CharOrgsId" ColumnName="CharOrgsId" />
                 <ScalarProperty Name="CharId" ColumnName="CharId" />
                 <ScalarProperty Name="OrgId" ColumnName="OrgId" />
                 <ScalarProperty Name="BlurbOrgPage" ColumnName="BlurbOrgPage" />
                 <ScalarProperty Name="IsPublic" ColumnName="IsPublic" />
                 <ScalarProperty Name="IsCurrent" ColumnName="IsCurrent" />
+                <ScalarProperty Name="KatherineApproved" ColumnName="KatherineApproved" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -2935,16 +3199,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="ClassCharacters">
-            <EntityTypeMapping TypeName="RiftWorldModel.ClassCharacter">
-              <MappingFragment StoreEntitySet="ClassCharacters">
-                <ScalarProperty Name="ClassCharacterId" ColumnName="ClassCharacterId" />
-                <ScalarProperty Name="ClassId" ColumnName="ClassId" />
-                <ScalarProperty Name="CharacterId" ColumnName="CharacterId" />
-                <ScalarProperty Name="ClassOrder" ColumnName="ClassOrder" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="ClassNPCs">
             <EntityTypeMapping TypeName="RiftWorldModel.ClassNPC">
               <MappingFragment StoreEntitySet="ClassNPCs">
@@ -2958,15 +3212,13 @@
           <EntitySetMapping Name="Events">
             <EntityTypeMapping TypeName="RiftWorldModel.Event">
               <MappingFragment StoreEntitySet="Events">
-                <ScalarProperty Name="DateSeason" ColumnName="DateSeason" />
-                <ScalarProperty Name="DateMonth" ColumnName="DateMonth" />
                 <ScalarProperty Name="EventId" ColumnName="EventId" />
                 <ScalarProperty Name="InfoId" ColumnName="InfoId" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="IsHistory" ColumnName="IsHistory" />
                 <ScalarProperty Name="AboutText" ColumnName="AboutText" />
                 <ScalarProperty Name="NormalParticipants" ColumnName="NormalParticipants" />
-                <ScalarProperty Name="IsPublished" ColumnName="IsPublished" />
+                <ScalarProperty Name="DateMonth" ColumnName="DateMonth" />
+                <ScalarProperty Name="DateSeason" ColumnName="DateSeason" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -2982,13 +3234,13 @@
           <EntitySetMapping Name="Infos">
             <EntityTypeMapping TypeName="RiftWorldModel.Info">
               <MappingFragment StoreEntitySet="Infos">
-                <ScalarProperty Name="IsSecret" ColumnName="IsSecret" />
                 <ScalarProperty Name="InfoId" ColumnName="InfoId" />
                 <ScalarProperty Name="InfoTypeId" ColumnName="InfoTypeId" />
                 <ScalarProperty Name="IdWithinType" ColumnName="IdWithinType" />
                 <ScalarProperty Name="Blurb" ColumnName="Blurb" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="IsPublished" ColumnName="IsPublished" />
+                <ScalarProperty Name="IsSecret" ColumnName="IsSecret" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -3012,27 +3264,25 @@
           <EntitySetMapping Name="Items">
             <EntityTypeMapping TypeName="RiftWorldModel.Item">
               <MappingFragment StoreEntitySet="Items">
-                <ScalarProperty Name="Artist" ColumnName="Artist" />
-                <ScalarProperty Name="IsPublished" ColumnName="IsPublished" />
                 <ScalarProperty Name="ItemId" ColumnName="ItemId" />
                 <ScalarProperty Name="InfoId" ColumnName="InfoId" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="PictureFileName" ColumnName="PictureFileName" />
                 <ScalarProperty Name="DescriptionText" ColumnName="DescriptionText" />
                 <ScalarProperty Name="PropertyText" ColumnName="PropertyText" />
                 <ScalarProperty Name="HistoryText" ColumnName="HistoryText" />
+                <ScalarProperty Name="Artist" ColumnName="Artist" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Journals">
             <EntityTypeMapping TypeName="RiftWorldModel.Journal">
               <MappingFragment StoreEntitySet="Journals">
-                <ScalarProperty Name="HasUnseenEdit" ColumnName="HasUnseenEdit" />
                 <ScalarProperty Name="JournalId" ColumnName="JournalId" />
                 <ScalarProperty Name="CharacterId" ColumnName="CharacterId" />
                 <ScalarProperty Name="OocDateWritten" ColumnName="OocDateWritten" />
                 <ScalarProperty Name="TheContent" ColumnName="TheContent" />
                 <ScalarProperty Name="IsApproved" ColumnName="IsApproved" />
+                <ScalarProperty Name="HasUnseenEdit" ColumnName="HasUnseenEdit" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -3058,7 +3308,6 @@
               <MappingFragment StoreEntitySet="Locales">
                 <ScalarProperty Name="LocaleId" ColumnName="LocaleId" />
                 <ScalarProperty Name="InfoId" ColumnName="InfoId" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="LevelOfLocaleId" ColumnName="LevelOfLocaleId" />
                 <ScalarProperty Name="RegionId" ColumnName="RegionId" />
                 <ScalarProperty Name="ClosestCityId" ColumnName="ClosestCityId" />
@@ -3066,7 +3315,6 @@
                 <ScalarProperty Name="Appointed" ColumnName="Appointed" />
                 <ScalarProperty Name="Environment" ColumnName="Environment" />
                 <ScalarProperty Name="About" ColumnName="About" />
-                <ScalarProperty Name="IsPublished" ColumnName="IsPublished" />
                 <ScalarProperty Name="AvgLifestyle" ColumnName="AvgLifestyle" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -3076,9 +3324,7 @@
               <MappingFragment StoreEntitySet="Lores">
                 <ScalarProperty Name="LoreId" ColumnName="LoreId" />
                 <ScalarProperty Name="InfoId" ColumnName="InfoId" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="TheContent" ColumnName="TheContent" />
-                <ScalarProperty Name="IsPublished" ColumnName="IsPublished" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -3109,13 +3355,8 @@
           <EntitySetMapping Name="NPCs">
             <EntityTypeMapping TypeName="RiftWorldModel.NPC">
               <MappingFragment StoreEntitySet="NPCs">
-                <ScalarProperty Name="GenderId" ColumnName="GenderId" />
-                <ScalarProperty Name="IsDead" ColumnName="IsDead" />
-                <ScalarProperty Name="CrestArtist" ColumnName="CrestArtist" />
-                <ScalarProperty Name="PortraitArtist" ColumnName="PortraitArtist" />
                 <ScalarProperty Name="NpcId" ColumnName="NpcId" />
                 <ScalarProperty Name="InfoId" ColumnName="InfoId" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Alias" ColumnName="Alias" />
                 <ScalarProperty Name="Quote" ColumnName="Quote" />
                 <ScalarProperty Name="PortraitFileName" ColumnName="PortraitFileName" />
@@ -3124,7 +3365,10 @@
                 <ScalarProperty Name="ApperanceText" ColumnName="ApperanceText" />
                 <ScalarProperty Name="AboutText" ColumnName="AboutText" />
                 <ScalarProperty Name="LastLocationId" ColumnName="LastLocationId" />
-                <ScalarProperty Name="IsPublished" ColumnName="IsPublished" />
+                <ScalarProperty Name="PortraitArtist" ColumnName="PortraitArtist" />
+                <ScalarProperty Name="CrestArtist" ColumnName="CrestArtist" />
+                <ScalarProperty Name="IsDead" ColumnName="IsDead" />
+                <ScalarProperty Name="GenderId" ColumnName="GenderId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -3141,15 +3385,13 @@
           <EntitySetMapping Name="Orgs">
             <EntityTypeMapping TypeName="RiftWorldModel.Org">
               <MappingFragment StoreEntitySet="Orgs">
-                <ScalarProperty Name="Artist" ColumnName="Artist" />
                 <ScalarProperty Name="OrgId" ColumnName="OrgId" />
                 <ScalarProperty Name="InfoId" ColumnName="InfoId" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="IsPlayerEnabled" ColumnName="IsPlayerEnabled" />
                 <ScalarProperty Name="SymbolFileName" ColumnName="SymbolFileName" />
                 <ScalarProperty Name="BaseLocationId" ColumnName="BaseLocationId" />
                 <ScalarProperty Name="AboutText" ColumnName="AboutText" />
-                <ScalarProperty Name="IsPublished" ColumnName="IsPublished" />
+                <ScalarProperty Name="Artist" ColumnName="Artist" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -3167,22 +3409,20 @@
               <MappingFragment StoreEntitySet="Rifts">
                 <ScalarProperty Name="RiftId" ColumnName="RiftId" />
                 <ScalarProperty Name="InfoId" ColumnName="InfoId" />
-                <ScalarProperty Name="Nickname" ColumnName="Nickname" />
                 <ScalarProperty Name="Location" ColumnName="Location" />
                 <ScalarProperty Name="Environment" ColumnName="Environment" />
                 <ScalarProperty Name="Hazards" ColumnName="Hazards" />
-                <ScalarProperty Name="IsPublished" ColumnName="IsPublished" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Rumors">
             <EntityTypeMapping TypeName="RiftWorldModel.Rumor">
               <MappingFragment StoreEntitySet="Rumors">
-                <ScalarProperty Name="RumorText" ColumnName="RumorText" />
                 <ScalarProperty Name="RumorsId" ColumnName="RumorsId" />
                 <ScalarProperty Name="RumorOfId" ColumnName="RumorOfId" />
                 <ScalarProperty Name="AuthorId" ColumnName="AuthorId" />
                 <ScalarProperty Name="IsApproved" ColumnName="IsApproved" />
+                <ScalarProperty Name="RumorText" ColumnName="RumorText" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -3296,6 +3536,62 @@
             </EndProperty>
           </AssociationSetMapping>
           <FunctionImportMapping FunctionImportName="getSecrets" FunctionName="RiftWorldModel.Store.getSecrets" />
+          <FunctionImportMapping FunctionImportName="sp_alterdiagram" FunctionName="RiftWorldModel.Store.sp_alterdiagram" />
+          <FunctionImportMapping FunctionImportName="sp_creatediagram" FunctionName="RiftWorldModel.Store.sp_creatediagram" />
+          <FunctionImportMapping FunctionImportName="sp_dropdiagram" FunctionName="RiftWorldModel.Store.sp_dropdiagram" />
+          <FunctionImportMapping FunctionImportName="sp_helpdiagramdefinition" FunctionName="RiftWorldModel.Store.sp_helpdiagramdefinition">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="RiftWorldModel.sp_helpdiagramdefinition_Result">
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_helpdiagrams" FunctionName="RiftWorldModel.Store.sp_helpdiagrams">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="RiftWorldModel.sp_helpdiagrams_Result">
+                <ScalarProperty Name="Database" ColumnName="Database" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Owner" ColumnName="Owner" />
+                <ScalarProperty Name="OwnerID" ColumnName="OwnerID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_renamediagram" FunctionName="RiftWorldModel.Store.sp_renamediagram" />
+          <FunctionImportMapping FunctionImportName="sp_upgraddiagrams" FunctionName="RiftWorldModel.Store.sp_upgraddiagrams" />
+          <FunctionImportMapping FunctionImportName="uspCharOrg_Create" FunctionName="RiftWorldModel.Store.uspCharOrg_Create" />
+          <FunctionImportMapping FunctionImportName="uspCharSecret_Create" FunctionName="RiftWorldModel.Store.uspCharSecret_Create" />
+          <FunctionImportMapping FunctionImportName="uspClass_Create" FunctionName="RiftWorldModel.Store.uspClass_Create" />
+          <FunctionImportMapping FunctionImportName="uspClassChar_Create" FunctionName="RiftWorldModel.Store.uspClassChar_Create" />
+          <FunctionImportMapping FunctionImportName="uspClassNpc_Create" FunctionName="RiftWorldModel.Store.uspClassNpc_Create" />
+          <FunctionImportMapping FunctionImportName="uspEvent_Create" FunctionName="RiftWorldModel.Store.uspEvent_Create" />
+          <FunctionImportMapping FunctionImportName="uspGender_Create" FunctionName="RiftWorldModel.Store.uspGender_Create" />
+          <FunctionImportMapping FunctionImportName="uspInfo_Create" FunctionName="RiftWorldModel.Store.uspInfo_Create" />
+          <FunctionImportMapping FunctionImportName="uspInfoTag_Create" FunctionName="RiftWorldModel.Store.uspInfoTag_Create" />
+          <FunctionImportMapping FunctionImportName="uspInfoType_Create" FunctionName="RiftWorldModel.Store.uspInfoType_Create" />
+          <FunctionImportMapping FunctionImportName="uspItem_Create" FunctionName="RiftWorldModel.Store.uspItem_Create" />
+          <FunctionImportMapping FunctionImportName="uspJournal_Create" FunctionName="RiftWorldModel.Store.uspJournal_Create" />
+          <FunctionImportMapping FunctionImportName="uspLocale_Create" FunctionName="RiftWorldModel.Store.uspLocale_Create" />
+          <FunctionImportMapping FunctionImportName="uspLocaleEvent_Create" FunctionName="RiftWorldModel.Store.uspLocaleEvent_Create" />
+          <FunctionImportMapping FunctionImportName="uspLocaleLevel_Create" FunctionName="RiftWorldModel.Store.uspLocaleLevel_Create" />
+          <FunctionImportMapping FunctionImportName="uspLore_Create" FunctionName="RiftWorldModel.Store.uspLore_Create" />
+          <FunctionImportMapping FunctionImportName="uspMajority_Create" FunctionName="RiftWorldModel.Store.uspMajority_Create" />
+          <FunctionImportMapping FunctionImportName="uspNpc_Create" FunctionName="RiftWorldModel.Store.uspNpc_Create" />
+          <FunctionImportMapping FunctionImportName="uspNpcOrg_Create" FunctionName="RiftWorldModel.Store.uspNpcOrg_Create" />
+          <FunctionImportMapping FunctionImportName="uspOrg_Create" FunctionName="RiftWorldModel.Store.uspOrg_Create" />
+          <FunctionImportMapping FunctionImportName="uspOrgEvents_Create" FunctionName="RiftWorldModel.Store.uspOrgEvents_Create" />
+          <FunctionImportMapping FunctionImportName="uspRace_Create" FunctionName="RiftWorldModel.Store.uspRace_Create" />
+          <FunctionImportMapping FunctionImportName="uspRift_Create" FunctionName="RiftWorldModel.Store.uspRift_Create" />
+          <FunctionImportMapping FunctionImportName="uspRumors_Create" FunctionName="RiftWorldModel.Store.uspRumors_Create" />
+          <FunctionImportMapping FunctionImportName="uspSecert_Create" FunctionName="RiftWorldModel.Store.uspSecert_Create" />
+          <FunctionImportMapping FunctionImportName="uspSecertSecertTag_Create" FunctionName="RiftWorldModel.Store.uspSecertSecertTag_Create" />
+          <FunctionImportMapping FunctionImportName="uspSecretTag_Create" FunctionName="RiftWorldModel.Store.uspSecretTag_Create" />
+          <FunctionImportMapping FunctionImportName="uspStory_Create" FunctionName="RiftWorldModel.Store.uspStory_Create" />
+          <FunctionImportMapping FunctionImportName="uspStoryTag_Create" FunctionName="RiftWorldModel.Store.uspStoryTag_Create" />
+          <FunctionImportMapping FunctionImportName="uspTag_Create" FunctionName="RiftWorldModel.Store.uspTag_Create" />
+          <FunctionImportMapping FunctionImportName="uspTier_Create" FunctionName="RiftWorldModel.Store.uspTier_Create" />
+          <FunctionImportMapping FunctionImportName="uspVarietyOfInhabitant_Create" FunctionName="RiftWorldModel.Store.uspVarietyOfInhabitant_Create" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

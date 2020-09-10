@@ -123,12 +123,12 @@ namespace RiftWorld.UI.MVC.Models
         {
             InfoId = org.InfoId;
             OrgId = org.OrgId;
-            Name = org.Name;
+            Name = info.Name;
             IsPlayerEnabled = org.IsPlayerEnabled;
             SymbolFileName = org.SymbolFileName;
             BaseLocationId = org.BaseLocationId;
             AboutText = org.AboutText;
-            IsPublished = org.IsPublished;
+            IsPublished = info.IsPublished;
             Artist = org.Artist;
             Blurb = info.Blurb;
             IsSecret = info.IsSecret;
@@ -208,12 +208,12 @@ namespace RiftWorld.UI.MVC.Models
         {
             InfoId = org.InfoId;
             OrgId = org.OrgId;
-            Name = org.Name;
+            Name = info.Name;
             IsPlayerEnabled = org.IsPlayerEnabled;
             SymbolFileName = org.SymbolFileName;
             BaseLocationId = org.BaseLocationId;
             AboutText = org.AboutText;
-            IsPublished = org.IsPublished;
+            IsPublished = info.IsPublished;
             Artist = org.Artist;
             Blurb = info.Blurb;
             IsSecret = info.IsSecret;

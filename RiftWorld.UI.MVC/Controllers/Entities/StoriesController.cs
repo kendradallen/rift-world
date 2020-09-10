@@ -227,7 +227,15 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             {
                 return HttpNotFound();
             }
-            return View(story);
+            List<Tag> tags = (from st in db.StoryTags
+                              join t in db.Tags on st.TagId equals t.TagId
+                              where st.StoryId == story.StoryId
+                              select t
+                            )
+                            .ToList()
+                            ;
+            StoryVM daStory = new StoryVM { Story = story, Tags = tags };
+            return View(daStory);
         }
 
         // POST: Stories/Delete/5
@@ -236,6 +244,14 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
         public ActionResult DeleteConfirmed(short id)
         {
             Story story = db.Stories.Find(id);
+
+            List<StoryTag> st = db.StoryTags.Where(s => s.StoryId == id).ToList();
+            //remove story tags
+            foreach (StoryTag storyTag in st)
+            {
+                db.StoryTags.Remove(storyTag);
+            }
+
             db.Stories.Remove(story);
             db.SaveChanges();
             return RedirectToAction("Index");

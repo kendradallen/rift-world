@@ -37,10 +37,7 @@
             <div class="form-group">
                 <div class="form-check">
                     <div class="checkbox">
-                        @*default checked*@
-                        @*@Html.CheckBoxFor(model => model.IsPlayerEnabled, new { htmlAttribute = new { @class = "form-check-input" }, @checked = "checked" })*@
-                        @*default unchecked*@
-                        @Html.CheckBoxFor(model => model.IsPlayerEnabled, new { htmlAttribute = new { @class = "form-check-input" }})
+                        @Html.CheckBoxFor(model => model.IsPlayerEnabled, new { htmlAttribute = new { @class = "form-check-input" } })
                         @Html.LabelFor(model => model.IsPlayerEnabled, htmlAttributes: new { @class = "form-check-label" })
                     </div>
                 </div>
@@ -59,5 +56,5 @@
     </div>
 </div>
 @section Scripts{
-    <script src="~/Scripts/MyJS/edit.js"></script>
+    <script src="~/Scripts/MyJS/edit.min.js"></script>
 }

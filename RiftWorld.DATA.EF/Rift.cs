@@ -22,11 +22,9 @@ namespace RiftWorld.DATA.EF
     
         public short RiftId { get; set; }
         public short InfoId { get; set; }
-        public string Nickname { get; set; }
         public string Location { get; set; }
         public string Environment { get; set; }
         public string Hazards { get; set; }
-        public bool IsPublished { get; set; }
     
         public virtual Info Info { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

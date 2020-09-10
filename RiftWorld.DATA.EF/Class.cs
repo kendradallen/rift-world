@@ -17,7 +17,6 @@ namespace RiftWorld.DATA.EF
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Class()
         {
-            this.ClassCharacters = new HashSet<ClassCharacter>();
             this.ClassNPCs = new HashSet<ClassNPC>();
         }
     
@@ -25,8 +24,6 @@ namespace RiftWorld.DATA.EF
         public string ClassName { get; set; }
         public bool IsPlayerEnabled { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ClassCharacter> ClassCharacters { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ClassNPC> ClassNPCs { get; set; }
     }

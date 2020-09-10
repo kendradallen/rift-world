@@ -1,13 +1,13 @@
 ﻿@model RiftWorld.DATA.EF.Lore
 
 @{
-    ViewBag.Title = Model.Name;
+    ViewBag.Title = "Delete " + Model.Name + "?";
     ViewBag.InfoId = Model.InfoId;
 }
 
 <section id="start" name="Main" class="col-12">
     <div id="name" class="mb-3" style="text-decoration:underline;">
-        @Html.DisplayFor(model => model.Name)
+        @Html.DisplayFor(model => model.Info.Name)
     </div>
     <div class="hang">
         @Html.Raw(Model.TheContent)
@@ -27,16 +27,14 @@
 {
     @Html.AntiForgeryToken()
 
-<div class="form-actions no-color col-12 btn-group fixed-bottom" style="bottom:0;">
-    @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-warning btn-lg" })
-    <input type="submit" value="Delete" class="btn btn-danger btn-lg" />
+    <div class="form-actions no-color col-12 btn-group fixed-bottom" style="bottom:0;">
+        @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-warning btn-lg" })
+        <input type="submit" value="Delete" class="btn btn-danger btn-lg" />
 
-</div>
+    </div>
 }
 
 
 @section Scripts{
-    <script src="~/Scripts/MyJS/story.js"></script>
-    <script src="~/Scripts/MyJS/rumor.js"></script>
-    <script src="~/Scripts/MyJS/secret.js"></script>
+    <script src="~/Scripts/MyJS/deets.min.js"></script>
 }

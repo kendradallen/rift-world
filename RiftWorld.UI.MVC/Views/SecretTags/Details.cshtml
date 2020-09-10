@@ -1,34 +1,43 @@
-﻿@model RiftWorld.DATA.EF.SecretTag
+﻿@model RiftWorld.UI.MVC.Models.SecretTagVM
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Secret Tag: " + Model.Tag.Name;
 }
+<div class="col-12">
+    <h2>@ViewBag.Title</h2>
+    <p>
+        <strong>
+            @Html.DisplayNameFor(model => model.Tag.Description):
+        </strong>
+        @Html.DisplayFor(model => model.Tag.Description)
+    </p>
+    <h3>Knowledge it brings:</h3>
+    @if (Model.KnowledgeGiven.Count == 0)
+    {
+        <p>There are none.</p>
+    }
+    <ul>
+        @foreach (var item in Model.KnowledgeGiven)
+        {
+            <li>@Html.DisplayFor(modelItem => item.Info.Name) - <span class="italic">@Html.DisplayFor(modelItem => item.TheContent)</span><a href="@Url.Action("Details", "Secrets", new { id=item.SecretId})"><i class="fas fa-external-link-square-alt"></i></a></li>
+        }
+    </ul>
+    <h3>Character's who know</h3>
+    @if (Model.CharactersKnow.Count == 0)
+    {
+        <p>No one</p>
+    }
+    <ul>
+        @foreach (var item in Model.CharactersKnow)
+        {
+            <li>@Html.ActionLink(item.CharacterName, "Details", "Characters", new { id = item.CharacterId}, new { target="_blank"})</li>
+        }
+    </ul>
 
-<h2>Details</h2>
+    <p>
+        @Html.ActionLink("Edit", "Edit", new { id = Model.Tag.SecretTagId }) |
+        @Html.ActionLink("Delete", "Delete", new { id = Model.Tag.SecretTagId }) |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
 
-<div>
-    <h4>SecretTag</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-
-    </dl>
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.SecretTagId }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>

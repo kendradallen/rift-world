@@ -7,7 +7,6 @@
 <section id="start" class="col-12 row justify-content-center" name="Start">
     <div id="pic" class=" pic col-sm-8 col-md-6 col-lg-3">
         <img src="~/Content/img/org/@Model.SymbolFileName" />
-        @*@if (Model.Artist != null)*@
         @if (Model.SymbolFileName != "default.jpg")
         {
             <div class="overlay">Art by @Model.Artist</div>
@@ -35,7 +34,7 @@
     @Html.Action("_Members", "Orgs", new { id = Model.OrgId })
     @if (Model.IsPlayerEnabled && User.IsInRole("Character"))
     {
-        <button class="btn btn-dark btn-block">JOIN TODAY!</button>
+        @Html.ActionLink("JOIN TODAY!", "JoinOrg", new { id = Model.OrgId }, new { @class = "btn btn-dark btn-block" })
     }
 </section>
 <section id="events" class="col-md-6" name="Events">
@@ -98,7 +97,5 @@
     </nav>
 }
 @section Scripts{
-    <script src="~/Scripts/MyJS/story.js"></script>
-    <script src="~/Scripts/MyJS/rumor.js"></script>
-    <script src="~/Scripts/MyJS/secret.js"></script>
+    <script src="~/Scripts/MyJS/deets.min.js"></script>
 }

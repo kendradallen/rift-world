@@ -19,12 +19,31 @@ namespace RiftWorld.UI.MVC
                         "~/Scripts/modernizr-*"));
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
-                      "~/Scripts/bootstrap.js",
-                      "~/Scripts/respond.js"));
+                      "~/Scripts/bootstrap.bundle.min.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
-                      "~/Content/bootstrap.css",
+                      "~/Content/bootstrap.min.css",
                       "~/Content/site.css"));
+
+            //bundles.Add(new ScriptBundle("~/bundles/genTemScript.js").Include(
+            //          "~/Scripts/js/jquery.magnific-popup.min.js",
+            //          "~/Scripts/js/jquery.slicknav.js",
+            //          "~/Scripts/js/main.js"));
+
+            //bundles.Add(new ScriptBundle("~/bundles/edit").Include(
+            //            "~/Scripts/tinymce/tinymce.min.js",
+            //            "~/Scripts/SelectBoxes/slimselect.min.js",
+            //            "~/Scripts/MyJS/edit.js"));
+
+            //bundles.Add(new ScriptBundle("~/bundles/assoedit").Include(
+            //            "~/Scripts/SelectBoxes/multi.js",
+            //            "~/Scripts/MyJS/assoedit.js"));
+
+            //bundles.Add(new ScriptBundle("~/bundles/deets").Include(
+            //            "~/Scripts/MyJS/story.js",
+            //            "~/Scripts/MyJS/rumor.js",
+            //            "~/Scripts/MyJS/secret.js"));
+
         }
     }
 }

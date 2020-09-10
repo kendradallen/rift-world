@@ -156,11 +156,11 @@ namespace RiftWorld.UI.MVC.Models
         {
             InfoId = taevent.InfoId;
             EventId = taevent.EventId;
-            Name = taevent.Name;
+            Name = info.Name;
             IsHistory = taevent.IsHistory;
             AboutText = taevent.AboutText;
             NormalParticipants = taevent.NormalParticipants;
-            IsPublished = taevent.IsPublished;
+            IsPublished = info.IsPublished;
             DateMonth = taevent.DateMonth;
             DateSeason = taevent.DateSeason;
             Blurb = info.Blurb;
@@ -267,11 +267,11 @@ namespace RiftWorld.UI.MVC.Models
         {
             InfoId = taevent.InfoId;
             EventId = taevent.EventId;
-            Name = taevent.Name;
+            Name = info.Name;
             IsHistory = taevent.IsHistory;
             AboutText = taevent.AboutText;
             NormalParticipants = taevent.NormalParticipants;
-            IsPublished = taevent.IsPublished;
+            IsPublished = info.IsPublished;
             DateMonth = taevent.DateMonth;
             DateSeason = taevent.DateSeason;
             Blurb = info.Blurb;

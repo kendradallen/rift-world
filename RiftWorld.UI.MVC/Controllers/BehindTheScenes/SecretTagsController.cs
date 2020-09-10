@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using RiftWorld.DATA.EF;
+using RiftWorld.UI.MVC.Models;
 
 namespace RiftWorld.UI.MVC.Controllers.BehindTheScenes
 {
@@ -33,7 +34,11 @@ namespace RiftWorld.UI.MVC.Controllers.BehindTheScenes
             {
                 return HttpNotFound();
             }
-            return View(secretTag);
+
+            List<Character> characters = db.CharSecrets.Where(x => x.SecretId == id).Select(x => x.Character).ToList();
+            List<Secret> secrets = db.SecretSecretTags.Where(x => x.SecretTagId == id).Select(x => x.Secret).ToList();
+            SecretTagVM model = new SecretTagVM { Tag = secretTag, CharactersKnow = characters, KnowledgeGiven = secrets };
+            return View(model);
         }
 
         // GET: SecretTags/Create
@@ -103,12 +108,12 @@ namespace RiftWorld.UI.MVC.Controllers.BehindTheScenes
                 return HttpNotFound();
             }
 
-            int characters = db.CharSecrets.Where(x => x.SecretId == id).Select(x => x.CharId).ToList().Count;
+            int characters = db.CharSecrets.Where(x => x.SecretId == id && !x.Character.IsRetired).Select(x => x.CharId).ToList().Count;
             int secrets = db.SecretSecretTags.Where(x => x.SecretTagId == id).Select(x => x.SecretId).ToList().Count;
             //todo - v2 cascade a removal instead of preventing deletion
             if (characters != 0 || secrets != 0)
             {
-                ViewBag.Message = "Something in the database is using this secret tag currently. You can't delete a secret tag unless nothing is using it. You'll have find the entries using the secret tag and change them first.";
+                ViewBag.Message = "Something in the database is using this secret tag currently. There are "+secrets+"secrets with this tag and " + characters +" active characters who know this. You can't delete a secret tag unless nothing is using it. You'll have find the entries using the secret tag and change them first.";
                 return View("Error");
 
             }
@@ -121,6 +126,13 @@ namespace RiftWorld.UI.MVC.Controllers.BehindTheScenes
         public ActionResult DeleteConfirmed(short id)
         {
             SecretTag secretTag = db.SecretTags.Find(id);
+
+            //removing the retired characters who know this secret tag
+            List<CharSecret> chars = db.CharSecrets.Where(x => x.SecretId == id).ToList();
+            foreach (CharSecret gone in chars)
+            {
+                db.CharSecrets.Remove(gone);
+            }
             db.SecretTags.Remove(secretTag);
             db.SaveChanges();
             return RedirectToAction("Index");

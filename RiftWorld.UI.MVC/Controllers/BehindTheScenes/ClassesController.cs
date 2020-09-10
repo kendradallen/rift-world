@@ -103,9 +103,8 @@ namespace RiftWorld.UI.MVC.Controllers.BehindTheScenes
             {
                 return HttpNotFound();
             }
-            int characters = db.ClassCharacters.Where(x => x.ClassId == id).Select(x => x.CharacterId).ToList().Count;
             int npcs = db.ClassNPCs.Where(x => x.ClassId == id).Select(x => x.NpcId).ToList().Count;
-            if (characters != 0 || npcs != 0)
+            if (npcs != 0)
             {
                 ViewBag.Message = "Something in the database is using this class currently. You can't delete a class unless nothing is using it. You'll have find the entries using the class and change them first.";
                 return View("Error");

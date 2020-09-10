@@ -443,12 +443,24 @@ namespace RiftWorld.UI.MVC.Controllers
                 {
                     return HttpNotFound();
                 }
-                UserManager.Delete(user);
+
+                #region Getting Demo user
+                var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(new ApplicationDbContext()));
+                var demoUser = roleManager.FindByName("Demo").Users.FirstOrDefault();
+                if (demoUser == null)
+                {
+                    ViewBag.Message = "So, we have a problem. There is no demo user.";
+                    return View("Error");
+                }
+                #endregion
+
+
 
                 RiftWorldEntities db = new RiftWorldEntities();
                 var userDeets = db.UserDetails.Where(x => x.UserId == id).FirstOrDefault();
                 var currentCharacter = userDeets.CurrentCharacterId;
                 var consent = userDeets.ConsentFileName;
+                var discordName = userDeets.DiscordName;
 
                 string fullPath = Request.MapPath("~/Content/ConsentFiles/" + consent);
                 if (System.IO.File.Exists(fullPath))
@@ -456,13 +468,25 @@ namespace RiftWorld.UI.MVC.Controllers
                     System.IO.File.Delete(fullPath);
                 }
 
-                db.UserDetails.Remove(userDeets);
                 if (currentCharacter != null)
                 {
                     var character = db.Characters.Where(c => c.CharacterId == currentCharacter).FirstOrDefault();
                     character.IsRetired = true;
                     db.Entry(character).State = EntityState.Modified;
+                    db.SaveChanges();
                 }
+                var characters = db.Characters.Where(x => x.PlayerId == id).ToList();
+                foreach (Character item in characters)
+                {
+                    item.PlayerId = demoUser.UserId;
+                    item.IsPlayerDemo = true;
+                    item.BackupPortrayerName = discordName;
+                    db.Entry(item).State = EntityState.Modified;
+                    db.SaveChanges();
+                }
+
+                db.UserDetails.Remove(userDeets);
+                UserManager.Delete(user);
                 db.SaveChanges();
 
                 return RedirectToAction("Index");

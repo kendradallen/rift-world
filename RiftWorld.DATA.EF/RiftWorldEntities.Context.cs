@@ -36,7 +36,6 @@ namespace RiftWorld.DATA.EF
         public virtual DbSet<CharOrg> CharOrgs { get; set; }
         public virtual DbSet<CharSecret> CharSecrets { get; set; }
         public virtual DbSet<Class> Classes { get; set; }
-        public virtual DbSet<ClassCharacter> ClassCharacters { get; set; }
         public virtual DbSet<ClassNPC> ClassNPCs { get; set; }
         public virtual DbSet<Event> Events { get; set; }
         public virtual DbSet<Gender> Genders { get; set; }
@@ -68,7 +67,7 @@ namespace RiftWorld.DATA.EF
         public virtual DbSet<UserDetail> UserDetails { get; set; }
         public virtual DbSet<VarietyOfInhabitant> VarietyOfInhabitants { get; set; }
     
-        public virtual ObjectResult<Secret> getSecrets(string playerId, Nullable<short> infoId)
+        public virtual ObjectResult<Nullable<short>> getSecrets(string playerId, Nullable<short> infoId)
         {
             var playerIdParameter = playerId != null ?
                 new ObjectParameter("PlayerId", playerId) :
@@ -78,20 +77,630 @@ namespace RiftWorld.DATA.EF
                 new ObjectParameter("InfoId", infoId) :
                 new ObjectParameter("InfoId", typeof(short));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Secret>("getSecrets", playerIdParameter, infoIdParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<short>>("getSecrets", playerIdParameter, infoIdParameter);
         }
     
-        public virtual ObjectResult<Secret> getSecrets(string playerId, Nullable<short> infoId, MergeOption mergeOption)
+        public virtual int sp_alterdiagram(string diagramname, Nullable<int> owner_id, Nullable<int> version, byte[] definition)
         {
-            var playerIdParameter = playerId != null ?
-                new ObjectParameter("PlayerId", playerId) :
-                new ObjectParameter("PlayerId", typeof(string));
+            var diagramnameParameter = diagramname != null ?
+                new ObjectParameter("diagramname", diagramname) :
+                new ObjectParameter("diagramname", typeof(string));
     
+            var owner_idParameter = owner_id.HasValue ?
+                new ObjectParameter("owner_id", owner_id) :
+                new ObjectParameter("owner_id", typeof(int));
+    
+            var versionParameter = version.HasValue ?
+                new ObjectParameter("version", version) :
+                new ObjectParameter("version", typeof(int));
+    
+            var definitionParameter = definition != null ?
+                new ObjectParameter("definition", definition) :
+                new ObjectParameter("definition", typeof(byte[]));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_alterdiagram", diagramnameParameter, owner_idParameter, versionParameter, definitionParameter);
+        }
+    
+        public virtual int sp_creatediagram(string diagramname, Nullable<int> owner_id, Nullable<int> version, byte[] definition)
+        {
+            var diagramnameParameter = diagramname != null ?
+                new ObjectParameter("diagramname", diagramname) :
+                new ObjectParameter("diagramname", typeof(string));
+    
+            var owner_idParameter = owner_id.HasValue ?
+                new ObjectParameter("owner_id", owner_id) :
+                new ObjectParameter("owner_id", typeof(int));
+    
+            var versionParameter = version.HasValue ?
+                new ObjectParameter("version", version) :
+                new ObjectParameter("version", typeof(int));
+    
+            var definitionParameter = definition != null ?
+                new ObjectParameter("definition", definition) :
+                new ObjectParameter("definition", typeof(byte[]));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_creatediagram", diagramnameParameter, owner_idParameter, versionParameter, definitionParameter);
+        }
+    
+        public virtual int sp_dropdiagram(string diagramname, Nullable<int> owner_id)
+        {
+            var diagramnameParameter = diagramname != null ?
+                new ObjectParameter("diagramname", diagramname) :
+                new ObjectParameter("diagramname", typeof(string));
+    
+            var owner_idParameter = owner_id.HasValue ?
+                new ObjectParameter("owner_id", owner_id) :
+                new ObjectParameter("owner_id", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_dropdiagram", diagramnameParameter, owner_idParameter);
+        }
+    
+        public virtual ObjectResult<sp_helpdiagramdefinition_Result> sp_helpdiagramdefinition(string diagramname, Nullable<int> owner_id)
+        {
+            var diagramnameParameter = diagramname != null ?
+                new ObjectParameter("diagramname", diagramname) :
+                new ObjectParameter("diagramname", typeof(string));
+    
+            var owner_idParameter = owner_id.HasValue ?
+                new ObjectParameter("owner_id", owner_id) :
+                new ObjectParameter("owner_id", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_helpdiagramdefinition_Result>("sp_helpdiagramdefinition", diagramnameParameter, owner_idParameter);
+        }
+    
+        public virtual ObjectResult<sp_helpdiagrams_Result> sp_helpdiagrams(string diagramname, Nullable<int> owner_id)
+        {
+            var diagramnameParameter = diagramname != null ?
+                new ObjectParameter("diagramname", diagramname) :
+                new ObjectParameter("diagramname", typeof(string));
+    
+            var owner_idParameter = owner_id.HasValue ?
+                new ObjectParameter("owner_id", owner_id) :
+                new ObjectParameter("owner_id", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_helpdiagrams_Result>("sp_helpdiagrams", diagramnameParameter, owner_idParameter);
+        }
+    
+        public virtual int sp_renamediagram(string diagramname, Nullable<int> owner_id, string new_diagramname)
+        {
+            var diagramnameParameter = diagramname != null ?
+                new ObjectParameter("diagramname", diagramname) :
+                new ObjectParameter("diagramname", typeof(string));
+    
+            var owner_idParameter = owner_id.HasValue ?
+                new ObjectParameter("owner_id", owner_id) :
+                new ObjectParameter("owner_id", typeof(int));
+    
+            var new_diagramnameParameter = new_diagramname != null ?
+                new ObjectParameter("new_diagramname", new_diagramname) :
+                new ObjectParameter("new_diagramname", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_renamediagram", diagramnameParameter, owner_idParameter, new_diagramnameParameter);
+        }
+    
+        public virtual int sp_upgraddiagrams()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_upgraddiagrams");
+        }
+    
+        public virtual int uspCharOrg_Create(Nullable<short> charId, Nullable<short> orgId)
+        {
+            var charIdParameter = charId.HasValue ?
+                new ObjectParameter("CharId", charId) :
+                new ObjectParameter("CharId", typeof(short));
+    
+            var orgIdParameter = orgId.HasValue ?
+                new ObjectParameter("OrgId", orgId) :
+                new ObjectParameter("OrgId", typeof(short));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("uspCharOrg_Create", charIdParameter, orgIdParameter);
+        }
+    
+        public virtual int uspCharSecret_Create(Nullable<short> charId, Nullable<short> secretId)
+        {
+            var charIdParameter = charId.HasValue ?
+                new ObjectParameter("CharId", charId) :
+                new ObjectParameter("CharId", typeof(short));
+    
+            var secretIdParameter = secretId.HasValue ?
+                new ObjectParameter("SecretId", secretId) :
+                new ObjectParameter("SecretId", typeof(short));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("uspCharSecret_Create", charIdParameter, secretIdParameter);
+        }
+    
+        public virtual int uspClass_Create(string name)
+        {
+            var nameParameter = name != null ?
+                new ObjectParameter("Name", name) :
+                new ObjectParameter("Name", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("uspClass_Create", nameParameter);
+        }
+    
+        public virtual int uspClassChar_Create(Nullable<byte> classId, Nullable<short> charId)
+        {
+            var classIdParameter = classId.HasValue ?
+                new ObjectParameter("ClassId", classId) :
+                new ObjectParameter("ClassId", typeof(byte));
+    
+            var charIdParameter = charId.HasValue ?
+                new ObjectParameter("CharId", charId) :
+                new ObjectParameter("CharId", typeof(short));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("uspClassChar_Create", classIdParameter, charIdParameter);
+        }
+    
+        public virtual int uspClassNpc_Create(Nullable<byte> classId, Nullable<short> npcId)
+        {
+            var classIdParameter = classId.HasValue ?
+                new ObjectParameter("ClassId", classId) :
+                new ObjectParameter("ClassId", typeof(byte));
+    
+            var npcIdParameter = npcId.HasValue ?
+                new ObjectParameter("NpcId", npcId) :
+                new ObjectParameter("NpcId", typeof(short));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("uspClassNpc_Create", classIdParameter, npcIdParameter);
+        }
+    
+        public virtual int uspEvent_Create(Nullable<short> infoId, string name, Nullable<bool> isHistory, Nullable<System.DateTime> date, string about, string normalParticipants)
+        {
             var infoIdParameter = infoId.HasValue ?
                 new ObjectParameter("InfoId", infoId) :
                 new ObjectParameter("InfoId", typeof(short));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Secret>("getSecrets", mergeOption, playerIdParameter, infoIdParameter);
+            var nameParameter = name != null ?
+                new ObjectParameter("Name", name) :
+                new ObjectParameter("Name", typeof(string));
+    
+            var isHistoryParameter = isHistory.HasValue ?
+                new ObjectParameter("IsHistory", isHistory) :
+                new ObjectParameter("IsHistory", typeof(bool));
+    
+            var dateParameter = date.HasValue ?
+                new ObjectParameter("Date", date) :
+                new ObjectParameter("Date", typeof(System.DateTime));
+    
+            var aboutParameter = about != null ?
+                new ObjectParameter("About", about) :
+                new ObjectParameter("About", typeof(string));
+    
+            var normalParticipantsParameter = normalParticipants != null ?
+                new ObjectParameter("NormalParticipants", normalParticipants) :
+                new ObjectParameter("NormalParticipants", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("uspEvent_Create", infoIdParameter, nameParameter, isHistoryParameter, dateParameter, aboutParameter, normalParticipantsParameter);
+        }
+    
+        public virtual int uspGender_Create(string name)
+        {
+            var nameParameter = name != null ?
+                new ObjectParameter("Name", name) :
+                new ObjectParameter("Name", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("uspGender_Create", nameParameter);
+        }
+    
+        public virtual int uspInfo_Create(Nullable<byte> type, string name)
+        {
+            var typeParameter = type.HasValue ?
+                new ObjectParameter("Type", type) :
+                new ObjectParameter("Type", typeof(byte));
+    
+            var nameParameter = name != null ?
+                new ObjectParameter("Name", name) :
+                new ObjectParameter("Name", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("uspInfo_Create", typeParameter, nameParameter);
+        }
+    
+        public virtual int uspInfoTag_Create(Nullable<short> infoId, Nullable<short> tagId)
+        {
+            var infoIdParameter = infoId.HasValue ?
+                new ObjectParameter("InfoId", infoId) :
+                new ObjectParameter("InfoId", typeof(short));
+    
+            var tagIdParameter = tagId.HasValue ?
+                new ObjectParameter("tagId", tagId) :
+                new ObjectParameter("tagId", typeof(short));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("uspInfoTag_Create", infoIdParameter, tagIdParameter);
+        }
+    
+        public virtual int uspInfoType_Create(string name)
+        {
+            var nameParameter = name != null ?
+                new ObjectParameter("Name", name) :
+                new ObjectParameter("Name", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("uspInfoType_Create", nameParameter);
+        }
+    
+        public virtual int uspItem_Create(Nullable<short> infoId, string name, string blurb, string description, string property, string history)
+        {
+            var infoIdParameter = infoId.HasValue ?
+                new ObjectParameter("InfoId", infoId) :
+                new ObjectParameter("InfoId", typeof(short));
+    
+            var nameParameter = name != null ?
+                new ObjectParameter("Name", name) :
+                new ObjectParameter("Name", typeof(string));
+    
+            var blurbParameter = blurb != null ?
+                new ObjectParameter("Blurb", blurb) :
+                new ObjectParameter("Blurb", typeof(string));
+    
+            var descriptionParameter = description != null ?
+                new ObjectParameter("Description", description) :
+                new ObjectParameter("Description", typeof(string));
+    
+            var propertyParameter = property != null ?
+                new ObjectParameter("Property", property) :
+                new ObjectParameter("Property", typeof(string));
+    
+            var historyParameter = history != null ?
+                new ObjectParameter("History", history) :
+                new ObjectParameter("History", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("uspItem_Create", infoIdParameter, nameParameter, blurbParameter, descriptionParameter, propertyParameter, historyParameter);
+        }
+    
+        public virtual int uspJournal_Create(Nullable<short> charId, string content)
+        {
+            var charIdParameter = charId.HasValue ?
+                new ObjectParameter("CharId", charId) :
+                new ObjectParameter("CharId", typeof(short));
+    
+            var contentParameter = content != null ?
+                new ObjectParameter("Content", content) :
+                new ObjectParameter("Content", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("uspJournal_Create", charIdParameter, contentParameter);
+        }
+    
+        public virtual int uspLocale_Create(Nullable<short> infoId, string name, Nullable<byte> levelOfLocal, Nullable<short> councilDelegateId, string appointed, string environment, string about)
+        {
+            var infoIdParameter = infoId.HasValue ?
+                new ObjectParameter("InfoId", infoId) :
+                new ObjectParameter("InfoId", typeof(short));
+    
+            var nameParameter = name != null ?
+                new ObjectParameter("Name", name) :
+                new ObjectParameter("Name", typeof(string));
+    
+            var levelOfLocalParameter = levelOfLocal.HasValue ?
+                new ObjectParameter("LevelOfLocal", levelOfLocal) :
+                new ObjectParameter("LevelOfLocal", typeof(byte));
+    
+            var councilDelegateIdParameter = councilDelegateId.HasValue ?
+                new ObjectParameter("CouncilDelegateId", councilDelegateId) :
+                new ObjectParameter("CouncilDelegateId", typeof(short));
+    
+            var appointedParameter = appointed != null ?
+                new ObjectParameter("Appointed", appointed) :
+                new ObjectParameter("Appointed", typeof(string));
+    
+            var environmentParameter = environment != null ?
+                new ObjectParameter("Environment", environment) :
+                new ObjectParameter("Environment", typeof(string));
+    
+            var aboutParameter = about != null ?
+                new ObjectParameter("About", about) :
+                new ObjectParameter("About", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("uspLocale_Create", infoIdParameter, nameParameter, levelOfLocalParameter, councilDelegateIdParameter, appointedParameter, environmentParameter, aboutParameter);
+        }
+    
+        public virtual int uspLocaleEvent_Create(Nullable<short> localeId, Nullable<short> eventId)
+        {
+            var localeIdParameter = localeId.HasValue ?
+                new ObjectParameter("LocaleId", localeId) :
+                new ObjectParameter("LocaleId", typeof(short));
+    
+            var eventIdParameter = eventId.HasValue ?
+                new ObjectParameter("EventId", eventId) :
+                new ObjectParameter("EventId", typeof(short));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("uspLocaleEvent_Create", localeIdParameter, eventIdParameter);
+        }
+    
+        public virtual int uspLocaleLevel_Create(string name)
+        {
+            var nameParameter = name != null ?
+                new ObjectParameter("Name", name) :
+                new ObjectParameter("Name", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("uspLocaleLevel_Create", nameParameter);
+        }
+    
+        public virtual int uspLore_Create(Nullable<short> infoId, string name, string theContent)
+        {
+            var infoIdParameter = infoId.HasValue ?
+                new ObjectParameter("InfoId", infoId) :
+                new ObjectParameter("InfoId", typeof(short));
+    
+            var nameParameter = name != null ?
+                new ObjectParameter("Name", name) :
+                new ObjectParameter("Name", typeof(string));
+    
+            var theContentParameter = theContent != null ?
+                new ObjectParameter("TheContent", theContent) :
+                new ObjectParameter("TheContent", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("uspLore_Create", infoIdParameter, nameParameter, theContentParameter);
+        }
+    
+        public virtual int uspMajority_Create(Nullable<short> localeId, Nullable<byte> raceId, Nullable<bool> isFirst)
+        {
+            var localeIdParameter = localeId.HasValue ?
+                new ObjectParameter("LocaleId", localeId) :
+                new ObjectParameter("LocaleId", typeof(short));
+    
+            var raceIdParameter = raceId.HasValue ?
+                new ObjectParameter("RaceId", raceId) :
+                new ObjectParameter("RaceId", typeof(byte));
+    
+            var isFirstParameter = isFirst.HasValue ?
+                new ObjectParameter("IsFirst", isFirst) :
+                new ObjectParameter("IsFirst", typeof(bool));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("uspMajority_Create", localeIdParameter, raceIdParameter, isFirstParameter);
+        }
+    
+        public virtual int uspNpc_Create(Nullable<short> infoId, string name, string alias, string quote, Nullable<byte> raceId, string apperance, string about)
+        {
+            var infoIdParameter = infoId.HasValue ?
+                new ObjectParameter("InfoId", infoId) :
+                new ObjectParameter("InfoId", typeof(short));
+    
+            var nameParameter = name != null ?
+                new ObjectParameter("Name", name) :
+                new ObjectParameter("Name", typeof(string));
+    
+            var aliasParameter = alias != null ?
+                new ObjectParameter("Alias", alias) :
+                new ObjectParameter("Alias", typeof(string));
+    
+            var quoteParameter = quote != null ?
+                new ObjectParameter("Quote", quote) :
+                new ObjectParameter("Quote", typeof(string));
+    
+            var raceIdParameter = raceId.HasValue ?
+                new ObjectParameter("RaceId", raceId) :
+                new ObjectParameter("RaceId", typeof(byte));
+    
+            var apperanceParameter = apperance != null ?
+                new ObjectParameter("Apperance", apperance) :
+                new ObjectParameter("Apperance", typeof(string));
+    
+            var aboutParameter = about != null ?
+                new ObjectParameter("About", about) :
+                new ObjectParameter("About", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("uspNpc_Create", infoIdParameter, nameParameter, aliasParameter, quoteParameter, raceIdParameter, apperanceParameter, aboutParameter);
+        }
+    
+        public virtual int uspNpcOrg_Create(Nullable<short> npcId, Nullable<short> orgId)
+        {
+            var npcIdParameter = npcId.HasValue ?
+                new ObjectParameter("NpcId", npcId) :
+                new ObjectParameter("NpcId", typeof(short));
+    
+            var orgIdParameter = orgId.HasValue ?
+                new ObjectParameter("OrgId", orgId) :
+                new ObjectParameter("OrgId", typeof(short));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("uspNpcOrg_Create", npcIdParameter, orgIdParameter);
+        }
+    
+        public virtual int uspOrg_Create(Nullable<short> infoId, string name, string about)
+        {
+            var infoIdParameter = infoId.HasValue ?
+                new ObjectParameter("InfoId", infoId) :
+                new ObjectParameter("InfoId", typeof(short));
+    
+            var nameParameter = name != null ?
+                new ObjectParameter("Name", name) :
+                new ObjectParameter("Name", typeof(string));
+    
+            var aboutParameter = about != null ?
+                new ObjectParameter("About", about) :
+                new ObjectParameter("About", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("uspOrg_Create", infoIdParameter, nameParameter, aboutParameter);
+        }
+    
+        public virtual int uspOrgEvents_Create(Nullable<short> orgId, Nullable<short> eventId)
+        {
+            var orgIdParameter = orgId.HasValue ?
+                new ObjectParameter("OrgId", orgId) :
+                new ObjectParameter("OrgId", typeof(short));
+    
+            var eventIdParameter = eventId.HasValue ?
+                new ObjectParameter("EventId", eventId) :
+                new ObjectParameter("EventId", typeof(short));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("uspOrgEvents_Create", orgIdParameter, eventIdParameter);
+        }
+    
+        public virtual int uspRace_Create(string name)
+        {
+            var nameParameter = name != null ?
+                new ObjectParameter("Name", name) :
+                new ObjectParameter("Name", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("uspRace_Create", nameParameter);
+        }
+    
+        public virtual int uspRift_Create(Nullable<short> infoId, string nickname, string location, string environment, string harzards)
+        {
+            var infoIdParameter = infoId.HasValue ?
+                new ObjectParameter("InfoId", infoId) :
+                new ObjectParameter("InfoId", typeof(short));
+    
+            var nicknameParameter = nickname != null ?
+                new ObjectParameter("Nickname", nickname) :
+                new ObjectParameter("Nickname", typeof(string));
+    
+            var locationParameter = location != null ?
+                new ObjectParameter("Location", location) :
+                new ObjectParameter("Location", typeof(string));
+    
+            var environmentParameter = environment != null ?
+                new ObjectParameter("Environment", environment) :
+                new ObjectParameter("Environment", typeof(string));
+    
+            var harzardsParameter = harzards != null ?
+                new ObjectParameter("Harzards", harzards) :
+                new ObjectParameter("Harzards", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("uspRift_Create", infoIdParameter, nicknameParameter, locationParameter, environmentParameter, harzardsParameter);
+        }
+    
+        public virtual int uspRumors_Create(Nullable<short> rumorOf, Nullable<short> authorId, string content)
+        {
+            var rumorOfParameter = rumorOf.HasValue ?
+                new ObjectParameter("RumorOf", rumorOf) :
+                new ObjectParameter("RumorOf", typeof(short));
+    
+            var authorIdParameter = authorId.HasValue ?
+                new ObjectParameter("AuthorId", authorId) :
+                new ObjectParameter("AuthorId", typeof(short));
+    
+            var contentParameter = content != null ?
+                new ObjectParameter("Content", content) :
+                new ObjectParameter("Content", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("uspRumors_Create", rumorOfParameter, authorIdParameter, contentParameter);
+        }
+    
+        public virtual int uspSecert_Create(Nullable<short> infoId, string content)
+        {
+            var infoIdParameter = infoId.HasValue ?
+                new ObjectParameter("InfoId", infoId) :
+                new ObjectParameter("InfoId", typeof(short));
+    
+            var contentParameter = content != null ?
+                new ObjectParameter("Content", content) :
+                new ObjectParameter("Content", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("uspSecert_Create", infoIdParameter, contentParameter);
+        }
+    
+        public virtual int uspSecertSecertTag_Create(Nullable<short> secretId, Nullable<short> secretTagId)
+        {
+            var secretIdParameter = secretId.HasValue ?
+                new ObjectParameter("SecretId", secretId) :
+                new ObjectParameter("SecretId", typeof(short));
+    
+            var secretTagIdParameter = secretTagId.HasValue ?
+                new ObjectParameter("SecretTagId", secretTagId) :
+                new ObjectParameter("SecretTagId", typeof(short));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("uspSecertSecertTag_Create", secretIdParameter, secretTagIdParameter);
+        }
+    
+        public virtual int uspSecretTag_Create(string name, string description)
+        {
+            var nameParameter = name != null ?
+                new ObjectParameter("Name", name) :
+                new ObjectParameter("Name", typeof(string));
+    
+            var descriptionParameter = description != null ?
+                new ObjectParameter("Description", description) :
+                new ObjectParameter("Description", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("uspSecretTag_Create", nameParameter, descriptionParameter);
+        }
+    
+        public virtual int uspStory_Create(Nullable<short> info, Nullable<System.DateTime> date, string commisionedBy, Nullable<bool> isCannon, string theContent, string title)
+        {
+            var infoParameter = info.HasValue ?
+                new ObjectParameter("info", info) :
+                new ObjectParameter("info", typeof(short));
+    
+            var dateParameter = date.HasValue ?
+                new ObjectParameter("date", date) :
+                new ObjectParameter("date", typeof(System.DateTime));
+    
+            var commisionedByParameter = commisionedBy != null ?
+                new ObjectParameter("CommisionedBy", commisionedBy) :
+                new ObjectParameter("CommisionedBy", typeof(string));
+    
+            var isCannonParameter = isCannon.HasValue ?
+                new ObjectParameter("IsCannon", isCannon) :
+                new ObjectParameter("IsCannon", typeof(bool));
+    
+            var theContentParameter = theContent != null ?
+                new ObjectParameter("TheContent", theContent) :
+                new ObjectParameter("TheContent", typeof(string));
+    
+            var titleParameter = title != null ?
+                new ObjectParameter("Title", title) :
+                new ObjectParameter("Title", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("uspStory_Create", infoParameter, dateParameter, commisionedByParameter, isCannonParameter, theContentParameter, titleParameter);
+        }
+    
+        public virtual int uspStoryTag_Create(Nullable<short> storyId, Nullable<short> tagId)
+        {
+            var storyIdParameter = storyId.HasValue ?
+                new ObjectParameter("StoryId", storyId) :
+                new ObjectParameter("StoryId", typeof(short));
+    
+            var tagIdParameter = tagId.HasValue ?
+                new ObjectParameter("TagId", tagId) :
+                new ObjectParameter("TagId", typeof(short));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("uspStoryTag_Create", storyIdParameter, tagIdParameter);
+        }
+    
+        public virtual int uspTag_Create(string tagName, string description)
+        {
+            var tagNameParameter = tagName != null ?
+                new ObjectParameter("TagName", tagName) :
+                new ObjectParameter("TagName", typeof(string));
+    
+            var descriptionParameter = description != null ?
+                new ObjectParameter("Description", description) :
+                new ObjectParameter("Description", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("uspTag_Create", tagNameParameter, descriptionParameter);
+        }
+    
+        public virtual int uspTier_Create(string name, Nullable<byte> min, Nullable<byte> max)
+        {
+            var nameParameter = name != null ?
+                new ObjectParameter("Name", name) :
+                new ObjectParameter("Name", typeof(string));
+    
+            var minParameter = min.HasValue ?
+                new ObjectParameter("Min", min) :
+                new ObjectParameter("Min", typeof(byte));
+    
+            var maxParameter = max.HasValue ?
+                new ObjectParameter("Max", max) :
+                new ObjectParameter("Max", typeof(byte));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("uspTier_Create", nameParameter, minParameter, maxParameter);
+        }
+    
+        public virtual int uspVarietyOfInhabitant_Create(Nullable<short> riftId, Nullable<byte> raceId, Nullable<byte> raceOrder)
+        {
+            var riftIdParameter = riftId.HasValue ?
+                new ObjectParameter("RiftId", riftId) :
+                new ObjectParameter("RiftId", typeof(short));
+    
+            var raceIdParameter = raceId.HasValue ?
+                new ObjectParameter("RaceId", raceId) :
+                new ObjectParameter("RaceId", typeof(byte));
+    
+            var raceOrderParameter = raceOrder.HasValue ?
+                new ObjectParameter("RaceOrder", raceOrder) :
+                new ObjectParameter("RaceOrder", typeof(byte));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("uspVarietyOfInhabitant_Create", riftIdParameter, raceIdParameter, raceOrderParameter);
         }
     }
 }

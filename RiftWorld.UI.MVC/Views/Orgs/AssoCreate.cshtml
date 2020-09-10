@@ -45,7 +45,7 @@
                                     <span class="input-group-text">Org Order</span>
                                 </div>
                                 <div class="da-focus asso input-group-append form-control">
-                                    <input class="form-control" data-value="@x.NpcId" type="number" data-name="org-order"value="@(theSelectedNpcs.Contains(x.NpcId) ? (Model.AssoNpcs.Where(a => a.NpcId == x.NpcId).Select(a => a.OrgOrder).FirstOrDefault().ToString()) : "")" />
+                                    <input class="form-control" data-value="@x.NpcId" type="number" data-name="org-order" value="@(theSelectedNpcs.Contains(x.NpcId) ? (Model.AssoNpcs.Where(a => a.NpcId == x.NpcId).Select(a => a.OrgOrder).FirstOrDefault().ToString()) : "")" />
                                 </div>
                             </div>
 
@@ -54,7 +54,7 @@
                                     <span class="input-group-text">Blurb for NPC's page about postion in org</span>
                                 </div>
                                 <div class="da-focus asso input-group-append form-control">
-                                    <input class="form-control count" data-value="@x.NpcId" type="text" data-name="blurb-npc-page" data-max="@npcNpcPageBlurb_Max"  data-list="npc" value="@(theSelectedNpcs.Contains(x.NpcId) ? (Model.AssoNpcs.Where(a => a.NpcId == x.NpcId).Select(a => a.BlurbNpcPage).FirstOrDefault()) : "")" />
+                                    <input class="form-control count" data-value="@x.NpcId" type="text" data-name="blurb-npc-page" data-max="@npcNpcPageBlurb_Max" data-list="npc" value="@(theSelectedNpcs.Contains(x.NpcId) ? (Model.AssoNpcs.Where(a => a.NpcId == x.NpcId).Select(a => a.BlurbNpcPage).FirstOrDefault()) : "")" />
                                 </div>
                                 <div id="tcp_npc-blurb-npc-page-@x.NpcId" class=" tcp col-md-offset-2 col-12">
                                     <span id="tc_npc-blurb-npc-page-@x.NpcId">
@@ -90,7 +90,7 @@
 
                             <div class="input-group">
                                 <div class="form-check">
-                                    <input class="form-check-input" data-value="@x.NpcId" type="checkbox" value="" data-name="current"@(Model.AssoNpcs.Where(a => a.NpcId == x.NpcId && !a.IsCurrent).FirstOrDefault() != null ? "" : "checked" ) />
+                                    <input class="form-check-input" data-value="@x.NpcId" type="checkbox" value="" data-name="current" @(Model.AssoNpcs.Where(a => a.NpcId == x.NpcId && !a.IsCurrent).FirstOrDefault() != null ? "" : "checked" ) />
                                     <label class="form-check-label" for="@x.NpcId">current member</label>
                                 </div>
                             </div>
@@ -189,14 +189,14 @@
             </div>
         </div>
     }
-        <div style="text-align:left;">
-            @Html.ActionLink("Skip", "Skip", new { infoId = Model.InfoId, orgId = Model.OrgId, submit = Model.Submit })
-        </div>
+    <div style="text-align:left;">
+        @Html.ActionLink("Skip", "Skip", new { infoId = Model.InfoId, submit = Model.Submit })
+    </div>
 </div>
 
 @section Scripts{
-    <script src="~/Scripts/SelectBoxes/multi.js"></script>
-    <script src="~/Scripts/MyJS/assoedit.js"></script>
+    <script src="~/Scripts/SelectBoxes/multi.min.js"></script>
+    <script src="~/Scripts/MyJS/assoedit.min.js"></script>
     <script>
         class AssoNpc {
             constructor(npcid, orgOrder, blurbNpc, blurbOrg, memberOrder, isCurrent) {

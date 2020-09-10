@@ -28,7 +28,6 @@ namespace RiftWorld.DATA.EF
     
         public short LocaleId { get; set; }
         public short InfoId { get; set; }
-        public string Name { get; set; }
         public byte LevelOfLocaleId { get; set; }
         public Nullable<short> RegionId { get; set; }
         public Nullable<short> ClosestCityId { get; set; }
@@ -36,7 +35,6 @@ namespace RiftWorld.DATA.EF
         public string Appointed { get; set; }
         public string Environment { get; set; }
         public string About { get; set; }
-        public bool IsPublished { get; set; }
         public string AvgLifestyle { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

@@ -4,36 +4,40 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<div class="col-12">
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.RaceName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.IsPlayerEnabled)
-        </th>
-        <th></th>
-    </tr>
+    <h2>Index</h2>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.RaceName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.IsPlayerEnabled)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.RaceId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.RaceId }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.RaceId })
-        </td>
-    </tr>
-}
+    <p>
+        @Html.ActionLink("Create New", "Create")
+    </p>
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.RaceName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsPlayerEnabled)
+            </th>
+            <th></th>
+        </tr>
 
-</table>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RaceName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsPlayerEnabled)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.RaceId }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.RaceId }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.RaceId })
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>

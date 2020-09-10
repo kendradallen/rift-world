@@ -139,6 +139,7 @@ namespace RiftWorld.UI.MVC.Models
     {
         public Secret Secret { get; set; }
         public List<SecretTag> Tags { get; set; }
+        public List<Secret> ConnectedSecrets { get; set; }
         public List<Character> CharactersKnow { get; set; }
     }
 
@@ -162,4 +163,12 @@ namespace RiftWorld.UI.MVC.Models
         public short CharId { get; set; }
         public IEnumerable<SelectListItem> SecretTags { get; set; }
     }
+
+    public class SecretTagVM
+    {
+        public SecretTag Tag { get; set; }
+        public List<Character> CharactersKnow { get; set; }
+        public List<Secret> KnowledgeGiven { get; set; }
+    }
+
 }

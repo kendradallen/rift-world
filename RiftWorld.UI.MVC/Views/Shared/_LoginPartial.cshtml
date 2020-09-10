@@ -9,8 +9,9 @@
     string charName;
     string discordName = "future hero";
     short? charId;
-    int pendingStuff = db.Rumors.Where(i => i.IsApproved == false).Count() + db.Characters.Where(c => c.IsApproved == false).Count() + db.Journals.Where(j => j.IsApproved == false).Count();
-    int onlyAdmin = db.UserDetails.Where(i => i.IsApproved == false).Count();
+    int pendingStuff = db.Rumors.Where(i => i.IsApproved == false).Count() + db.Characters.Where(c => c.IsApproved == false || c.HasUnseenEdit || c.IsRequestingRetire).Count() + db.Journals.Where(j => j.IsApproved == false || j.HasUnseenEdit).Count();
+    int onlyAdmin = db.UserDetails.Where(i => i.IsApproved == false).Count() + db.CharOrgs.Where(o=>!o.KatherineApproved).Count();
+    int todo = db.Infos.Where(i => !i.IsPublished).Count();
     if (User.IsInRole("Admin"))
     {
         discordName = "Katherine";
@@ -43,6 +44,7 @@
     else if (Request.IsAuthenticated && User.IsInRole("Admin"))
     {
         <li><a href="@Url.Action("CreateWhat", "Infos")">Create New</a></li>
+        <li><a href="@Url.Action("Todo", "Infos")">Todo <span class="badge badge-pill badge-warning">@todo</span></a></li>
         <li>
             <a href="@Url.Action("Approvals", "Infos")">Approvals</a> <span class="badge badge-pill badge-info">@pendingStuff</span> @if (onlyAdmin > 0)
             {<span class="badge badge-pill badge-danger">@onlyAdmin</span>}
@@ -58,7 +60,7 @@
     }
     <li>@Html.ActionLink("Profile", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })</li>
     <li>
-        @Html.ActionLink("Hi " + (!charName.IsEmpty() ? charName : discordName) + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
+        <span style="cursor:default;color:unset; font-size:unset;">Hi @(!charName.IsEmpty() ? charName : discordName)!</span>
     </li>
     <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
 </ul>

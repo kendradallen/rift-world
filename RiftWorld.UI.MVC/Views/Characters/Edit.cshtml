@@ -48,7 +48,6 @@
             @Html.HiddenFor(model => model.PlayerId)
             @Html.HiddenFor(model => model.IsApproved)
             @Html.HiddenFor(model => model.IsRetired)
-            @Html.HiddenFor(model => model.IsDead)
 
 
             <div class="form-group row">
@@ -102,8 +101,6 @@
             <div class="form-group row">
                 @Html.LabelFor(model => model.PortraitFileName, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10 row">
-                    @*@Html.EditorFor(model => model.PortraitFileName, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.PortraitFileName, "", new { @class = "text-danger" })*@
                     @Html.HiddenFor(model => model.PortraitFileName)
                     <div class="col-12">
                         <input type="file" name="picture" id="imgInp" />
@@ -134,6 +131,21 @@
                 </div>
             </div>
 
+            @if (User.IsInRole("Admin") || User.IsInRole("Mod"))
+            {
+                <div class="form-group">
+                    <div class="form-check larger">
+                        <div class="checkbox">
+                            @Html.EditorFor(model => model.IsDead, new { htmlAttribute = new { @class = "form-check-input" } })
+                            @Html.LabelFor(model => model.IsDead, new { htmlAttribute = new { @class = "form-check-label"} })
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                @Html.HiddenFor(model => model.IsDead)
+            }
 
             <div class="form-group row">
                 @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -173,7 +185,9 @@
 </div>
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
-    <script src="~/Scripts/MyJS/edit.js"></script>
+    <script src="~/Scripts/tinymce/tinymce.min.js"></script>
+    <script src="~/Scripts/SelectBoxes/slimselect.min.js"></script>
+    <script src="~/Scripts/MyJS/edit.min.js"></script>
     <script>
         //slim select tags
         new SlimSelect({

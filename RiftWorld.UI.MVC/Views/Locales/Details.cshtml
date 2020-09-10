@@ -40,7 +40,7 @@
                 }
                 <p id="councilDelegate">
                     <b>@Html.DisplayNameFor(model => model.CouncilDelegateId)</b>
-                    @if (Model.CouncilDelegateId != null)
+                    @if (Model.CouncilDelegateId != null && Model.NPC.IsPublished)
                     {
                         @Html.ActionLink(Model.NPC.Name, "Details", "NPCs", new { id = Model.CouncilDelegateId }, null)
                     }
@@ -166,7 +166,5 @@
     </nav>
 }
 @section Scripts{
-    <script src="~/Scripts/MyJS/story.js"></script>
-    <script src="~/Scripts/MyJS/rumor.js"></script>
-    <script src="~/Scripts/MyJS/secret.js"></script>
+    <script src="~/Scripts/MyJS/deets.min.js"></script>
 }

@@ -20,13 +20,17 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
         [OverrideAuthorization]
         public ActionResult Index()
         {
-            //v1 - for testing so I don't have to constantly switch accounts
-            var lores = db.Lores.Include(l => l.Info);
-
-            //v2 - prevent non-admin from seeing unpublished work
-            //todo - uncomment below to prevent users from seeing un-published work
-            //var lores = db.Lores.Include(l => l.Info).Where(l => l.IsPublished);
-            return View(lores.ToList());
+            //admin sees all (client request)
+            List<Lore> lores = new List<Lore> { };
+            if (User.IsInRole("Admin"))
+            {
+                lores = db.Lores.Include(l => l.Info).OrderBy(l=>l.Info.Name).ToList();
+            }
+            else
+            {
+                lores = db.Lores.Include(l => l.Info).Where(l => l.Info.IsPublished).OrderBy(l=> l.Info.Name).ToList();
+            }
+            return View(lores);
         }
 
         // GET: Lores/Details/5
@@ -43,8 +47,9 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                 return HttpNotFound();
             }
 
+
             //prevent users from seeing un-published work
-            if (!lore.IsPublished && !User.IsInRole("Admin"))
+            if (!lore.Info.IsPublished && !User.IsInRole("Admin"))
             {
                 return View("Error");
                 //todo change redirect to a error 404 page
@@ -116,9 +121,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                 Lore daLore = new Lore
                 {
                     InfoId = infoId,
-                    Name = lore.Name,
-                    TheContent = lore.TheContent,
-                    IsPublished = lore.IsPublished
+                    TheContent = lore.TheContent
                 };
                 db.Lores.Add(daLore);
                 db.SaveChanges();
@@ -235,9 +238,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                 {
                     LoreId = lore.LoreId,
                     InfoId = lore.InfoId,
-                    Name = lore.Name,
-                    TheContent = lore.TheContent,
-                    IsPublished = lore.IsPublished
+                    TheContent = lore.TheContent
                 };
                 db.Entry(daLore).State = EntityState.Modified;
                 db.SaveChanges();

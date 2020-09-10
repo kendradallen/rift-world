@@ -24,7 +24,6 @@ namespace RiftWorld.DATA.EF
     
         public short NpcId { get; set; }
         public short InfoId { get; set; }
-        public string Name { get; set; }
         public string Alias { get; set; }
         public string Quote { get; set; }
         public string PortraitFileName { get; set; }
@@ -33,7 +32,6 @@ namespace RiftWorld.DATA.EF
         public string ApperanceText { get; set; }
         public string AboutText { get; set; }
         public Nullable<short> LastLocationId { get; set; }
-        public bool IsPublished { get; set; }
         public string PortraitArtist { get; set; }
         public string CrestArtist { get; set; }
         public bool IsDead { get; set; }
@@ -41,6 +39,7 @@ namespace RiftWorld.DATA.EF
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ClassNPC> ClassNPCs { get; set; }
+        public virtual Gender Gender { get; set; }
         public virtual Info Info { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Locale> Locales { get; set; }
@@ -48,6 +47,5 @@ namespace RiftWorld.DATA.EF
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<NpcOrg> NpcOrgs { get; set; }
         public virtual Race Race { get; set; }
-        public virtual Gender Gender { get; set; }
     }
 }

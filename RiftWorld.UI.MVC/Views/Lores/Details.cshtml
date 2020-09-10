@@ -1,13 +1,13 @@
 ﻿@model RiftWorld.DATA.EF.Lore
 
 @{
-    ViewBag.Title = Model.Name;
+    ViewBag.Title = Model.Info.Name;
     ViewBag.InfoId = Model.InfoId;
 }
 
 <section id="start" name="Main" class="col-12">
     <div id="name" class="mb-3" style="text-decoration:underline;">
-        @Html.DisplayFor(model => model.Name)
+        @Html.DisplayFor(model => model.Info.Name)
     </div>
     <div class="hang">
         @Html.Raw(Model.TheContent)
@@ -52,8 +52,8 @@
                 </li>
             </ul>
         </div>
-        <span class="navbar-text @Model.Pub.ToLower()">
-            @if (Model.IsPublished)
+        <span class="navbar-text @Model.Info.Pub.ToLower()">
+            @if (Model.Info.IsPublished)
             {
                 <span class="navbar-text">
                     @Html.ActionLink("Un-Publish", "TogglePub", "Infos", new { id = Model.InfoId, submit = "Un-Publish" }, new { @class = "nav-link" })
@@ -65,12 +65,10 @@
                     @Html.ActionLink("Publish", "TogglePub", "Infos", new { id = Model.InfoId, submit = "Publish" }, new { @class = "nav-link" })
                 </span>
             }
-            @Model.Pub
+            @Model.Info.Pub
         </span>
     </nav>
 }
 @section Scripts{
-    <script src="~/Scripts/MyJS/story.js"></script>
-    <script src="~/Scripts/MyJS/rumor.js"></script>
-    <script src="~/Scripts/MyJS/secret.js"></script>
+    <script src="~/Scripts/MyJS/deets.min.js"></script>
 }

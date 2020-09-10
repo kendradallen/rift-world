@@ -151,7 +151,7 @@ namespace RiftWorld.UI.MVC.Models
         {
             InfoId = rift.InfoId;
             RiftId = rift.RiftId;
-            Nickname = rift.Nickname;
+            Nickname = info.Name;
             Location = rift.Location;
             Environment = rift.Environment;
             Hazards = rift.Hazards;
@@ -259,7 +259,7 @@ namespace RiftWorld.UI.MVC.Models
         {
             InfoId = rift.InfoId;
             RiftId = rift.RiftId;
-            Nickname = rift.Nickname;
+            Nickname = info.Name;
             Location = rift.Location;
             Environment = rift.Environment;
             Hazards = rift.Hazards;

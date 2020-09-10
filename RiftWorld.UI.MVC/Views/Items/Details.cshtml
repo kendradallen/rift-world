@@ -1,14 +1,14 @@
 ﻿@model RiftWorld.DATA.EF.Item
 
 @{
-    ViewBag.Title = Model.Name;
+    ViewBag.Title = Model.Info.Name;
     ViewBag.InfoId = Model.InfoId;
 }
 <section id="description" name="Description" class="col-12" style="margin-top:8px;">
     <div class="row">
         <div class="col-md-9" style="padding-left:30px;">
             <div id="name">
-                @Html.DisplayFor(model => model.Name)
+                @Html.DisplayFor(model => model.Info.Name)
             </div>
             <div id="blurb" style="text-align:left;">
                 @Html.DisplayFor(model => model.Info.Blurb)
@@ -98,8 +98,8 @@
                 </li>
             </ul>
         </div>
-        <span class="navbar-text @Model.Pub.ToLower()">
-            @if (Model.IsPublished)
+        <span class="navbar-text @Model.Info.Pub.ToLower()">
+            @if (Model.Info.IsPublished)
             {
                 <span class="navbar-text">
                     @Html.ActionLink("Un-Publish", "TogglePub", "Infos", new { id = Model.InfoId, submit = "Un-Publish" }, new { @class = "nav-link" })
@@ -111,14 +111,13 @@
                     @Html.ActionLink("Publish", "TogglePub", "Infos", new { id = Model.InfoId, submit = "Publish" }, new { @class = "nav-link" })
                 </span>
             }
-            @Model.Pub
+            @Model.Info.Pub
         </span>
     </nav>
 }
 
 
 @section Scripts{
-    <script src="~/Scripts/MyJS/story.js"></script>
-    <script src="~/Scripts/MyJS/rumor.js"></script>
-    <script src="~/Scripts/MyJS/secret.js"></script>
+    <script src="~/Scripts/MyJS/deets.min.js"></script>
+
 }

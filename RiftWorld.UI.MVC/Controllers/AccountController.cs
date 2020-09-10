@@ -104,10 +104,10 @@ namespace RiftWorld.UI.MVC.Controllers
                         userName = user.UserName;
                     }
                 }
-                //if (!ModelState.IsValid)
-                //{
-                //    return View(model);
-                //}
+                if (!ModelState.IsValid)
+                {
+                    return View(model);
+                }
 
                 #region ADDED - prevent login if user unapproved
                 var yaBoi = model.Email;

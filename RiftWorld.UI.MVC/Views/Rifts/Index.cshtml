@@ -6,54 +6,48 @@
 
 
 <div class="col-12">
-
-
-    <h2>@ViewBag.Title</h2>
-
-    <p>
-        @Html.ActionLink("Create New", "Create")
-    </p>
-    @*@foreach (var item in Model)
-    {
-        <div class="rift row">
-            <p class="col-sm-4">@item.Nickname</p>
-            <p class="col-sm-8">@item.Info.Blurb</p>
+    <h2 class="line">@ViewBag.Title</h2>
+    <div class="row justify-content-center">
+        <div class="col-sm-6 col-12">
+            <div class="da-focus">
+                <input id="infoSearch" type="text" placeholder="Search.." class="form-control">
+            </div>
         </div>
-    }*@
-    <table class="table">
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Nickname)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Location)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Info.Blurb)
-            </th>
-            <th></th>
-        </tr>
+        <table class="table table-hover table-sm col-sm-7">
+            <tbody id="infoTable">
+                @foreach (var item in Model)
+                {
+                    <tr class="table-row" data-href="@Url.Action("Details", new { id = item.RiftId })">
+                        <td scope="row" style="text-align:justify; border:none" class="@(item.IsPublished? "" : "table-danger")">
+                            <b>@Html.DisplayFor(modelItem => item.Name)</b><br />
+                            <i>@Html.DisplayFor(modelItem => item.Info.Blurb)</i>
+                        </td>
+                        <td style="display:none">
+                            @Html.DisplayFor(modelItem => item.Location)
+                        </td>
 
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.ActionLink(item.Nickname, "Details", new { id = item.RiftId })
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Location)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Info.Blurb)
-                </td>
-                <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.RiftId }) |
-                    @Html.ActionLink("Edit Complex", "AssoEdit", new { id = item.RiftId }) |
-                    @*@Html.ActionLink("Details", "Details", new { id = item.RiftId }) |*@
-                    @Html.ActionLink("Delete", "Delete", new { id = item.RiftId })
-                </td>
-            </tr>
-        }
-
-    </table>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 </div>
+@section Scripts{
+    <script>
+        $(document).ready(function ($) {
+            $(".table-row").click(function () {
+                window.document.location = $(this).data("href");
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            $("#infoSearch").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+                $("#infoTable tr").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+    </script>
+}

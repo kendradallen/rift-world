@@ -1,0 +1,12 @@
+C:\Users\student\Documents\Visual Studio 2017\Projects\RiftWorld\RiftWorld\src\RiftWorld.DATA.EF\bin\Release\RiftWorld.DATA.EF.dll.config
+C:\Users\student\Documents\Visual Studio 2017\Projects\RiftWorld\RiftWorld\src\RiftWorld.DATA.EF\bin\Release\RiftWorld.DATA.EF.dll
+C:\Users\student\Documents\Visual Studio 2017\Projects\RiftWorld\RiftWorld\src\RiftWorld.DATA.EF\bin\Release\RiftWorld.DATA.EF.pdb
+C:\Users\student\Documents\Visual Studio 2017\Projects\RiftWorld\RiftWorld\src\RiftWorld.DATA.EF\bin\Release\EntityFramework.dll
+C:\Users\student\Documents\Visual Studio 2017\Projects\RiftWorld\RiftWorld\src\RiftWorld.DATA.EF\bin\Release\EntityFramework.SqlServer.dll
+C:\Users\student\Documents\Visual Studio 2017\Projects\RiftWorld\RiftWorld\src\RiftWorld.DATA.EF\bin\Release\EntityFramework.xml
+C:\Users\student\Documents\Visual Studio 2017\Projects\RiftWorld\RiftWorld\src\RiftWorld.DATA.EF\bin\Release\EntityFramework.SqlServer.xml
+C:\Users\student\Documents\Visual Studio 2017\Projects\RiftWorld\RiftWorld\src\RiftWorld.DATA.EF\obj\Release\RiftWorld.DATA.EF.csprojAssemblyReference.cache
+C:\Users\student\Documents\Visual Studio 2017\Projects\RiftWorld\RiftWorld\src\RiftWorld.DATA.EF\obj\Release\RiftWorld.DATA.EF.csproj.CoreCompileInputs.cache
+C:\Users\student\Documents\Visual Studio 2017\Projects\RiftWorld\RiftWorld\src\RiftWorld.DATA.EF\obj\Release\RiftWorld.DATA.EF.csproj.CopyComplete
+C:\Users\student\Documents\Visual Studio 2017\Projects\RiftWorld\RiftWorld\src\RiftWorld.DATA.EF\obj\Release\RiftWorld.DATA.EF.dll
+C:\Users\student\Documents\Visual Studio 2017\Projects\RiftWorld\RiftWorld\src\RiftWorld.DATA.EF\obj\Release\RiftWorld.DATA.EF.pdb

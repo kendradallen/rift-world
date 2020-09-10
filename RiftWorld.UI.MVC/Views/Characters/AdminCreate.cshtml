@@ -6,10 +6,10 @@
 
 <h2>AdminCreate</h2>
 
-@using (Html.BeginForm()) 
+@using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <h4>Character</h4>
         <hr />
@@ -120,16 +120,6 @@
             </div>
         </div>
 
-        @*<div class="form-group">
-            @Html.LabelFor(model => model.IsPlayerDemo, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <div class="checkbox">
-                    @Html.EditorFor(model => model.IsPlayerDemo)
-                    @Html.ValidationMessageFor(model => model.IsPlayerDemo, "", new { @class = "text-danger" })
-                </div>
-            </div>
-        </div>*@
-
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Create" class="btn btn-default" />
@@ -141,3 +131,8 @@
 <div>
     @Html.ActionLink("Back to List", "Index")
 </div>
+@section Scripts{
+    <script src="~/Scripts/tinymce/tinymce.min.js"></script>
+    <script src="~/Scripts/SelectBoxes/slimselect.min.js"></script>
+    <script src="~/Scripts/MyJS/edit.min.js"></script>
+}

@@ -4,48 +4,52 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<div class="col-12">
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.IsApproved)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.RumorText)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Character.PlayerId)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Info.Blurb)
-        </th>
-        <th></th>
-    </tr>
+    <h2>Index</h2>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.IsApproved)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.RumorText)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Character.PlayerId)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Info.Blurb)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.RumorsId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.RumorsId }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.RumorsId })
-        </td>
-    </tr>
-}
+    <p>
+        @Html.ActionLink("Create New", "Create")
+    </p>
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.IsApproved)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RumorText)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Character.PlayerId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Info.Blurb)
+            </th>
+            <th></th>
+        </tr>
 
-</table>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsApproved)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RumorText)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Character.PlayerId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Info.Blurb)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.RumorsId }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.RumorsId }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.RumorsId })
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>

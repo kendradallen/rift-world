@@ -283,11 +283,18 @@ ol {
 
     .search-model-form input {
         width: 500px;
+        border-bottom: 2px solid #333;
+    }
+    .search-model-form button,
+    .search-model-form input {
         font-size: 40px;
         border: none;
-        border-bottom: 2px solid #333;
         background: none;
         color: #999;
+    }
+    .search-model-form button{
+        font-size: 37px;
+        padding-bottom: 3px;
     }
 
 .search-close-switch {
@@ -1290,7 +1297,7 @@ ol {
 
 
     .search-model-form input {
-        width: 100%;
+        width: auto;
     }
 }
 
@@ -1316,7 +1323,10 @@ ol {
     }
 
 
-    .search-model-form input {
+    .search-model-form input{
         font-size: 28px;
+    }
+    .search-model-form button {
+        font-size: 25px;
     }
 }

@@ -26,7 +26,7 @@
         @Html.ActionLink("Back to List", "Index")
     </p>
 </footer>
-@if (User.IsInRole("Admin"))
+@if (Request.IsAuthenticated && User.IsInRole("Admin"))
 {
     <nav id="adminNav" class="navbar fixed-bottom navbar-light navbar-expand-md">
         <span class="navbar-brand">Katherine's Bar</span>
@@ -38,9 +38,6 @@
                 <li class="nav-item">
                     @Html.ActionLink("Edit", "Edit", new { id = Model.LoreId }, new { @class = "nav-link" })
                 </li>
-                @*<li class="nav-item">
-                        @Html.ActionLink("Edit Complex", "AssoEdit", new { id = Model.LoreId }, new { @class = "nav-link" })
-                    </li>*@
                 <li class="nav-item">
                     @Html.ActionLink("Add Secret", "Create", "Secrets", new { infoId = Model.InfoId }, new { @class = "nav-link" })
                 </li>
@@ -71,4 +68,44 @@
 }
 @section Scripts{
     <script src="~/Scripts/MyJS/deets.min.js"></script>
+    @if (ViewBag.OpenStory != null)
+    {
+        <script>
+            $(document).ready(function () {
+                $(".tab #story-" +@ViewBag.OpenStory).click();
+                $(".tab #story-" +@ViewBag.OpenStory).addClass("active");
+            });
+        </script>
+    }
+    else
+    {
+        <script>
+            $(document).ready(function () {
+                if (document.getElementById("story")) {
+                    $(".tab").children().first().click();
+                    $(".tab").children().first().addClass("active");
+                }
+            });
+        </script>
+    }
+    @if (!Request.IsAuthenticated)
+    {
+        <script>
+            if (window.sessionStorage) {
+                var iknow = sessionStorage.getItem('iknow');
+                if (iknow != "true") {
+                    $("#psst").show();
+                }
+                function stopShowing() {
+                    sessionStorage.setItem('iknow', "true");
+                    $("#psst").hide();
+                }
+            }
+            $(document).ready(function () {
+                setTimeout(function () {
+                    $("#psst-full").hide()
+                }, 3000)
+            });
+        </script>
+    }
 }

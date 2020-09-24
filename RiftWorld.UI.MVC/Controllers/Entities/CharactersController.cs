@@ -15,7 +15,6 @@ namespace RiftWorld.UI.MVC.Controllers
 {
     public class CharactersController : Controller
     {
-        //todo change delete to use the backup name instead
         private RiftWorldEntities db = new RiftWorldEntities();
 
         // GET: Characters
@@ -25,7 +24,7 @@ namespace RiftWorld.UI.MVC.Controllers
             //var characters = db.Characters.Include(c => c.Gender).Include(c => c.Locale).Include(c => c.Race).Include(c => c.Tier).Include(c => c.UserDetails);
 
             //v2 - don't list unapproved characters
-            var characters = db.Characters.Include(c => c.Gender).Include(c => c.Locale).Include(c => c.Race).Include(c => c.Tier).Include(c => c.UserDetails).Where(c => c.IsApproved);
+            var characters = db.Characters.Include(c => c.Gender).Include(c => c.Locale).Include(c => c.Race).Include(c => c.Tier).Include(c => c.UserDetails).Where(c => c.IsApproved).OrderBy(c => c.CharacterName);
 
             return View(characters.ToList());
         }
@@ -42,8 +41,16 @@ namespace RiftWorld.UI.MVC.Controllers
                 return HttpNotFound();
             }
 
-            var journals = db.Journals.Where(x => x.CharacterId == id && x.IsApproved);
-            return View(journals.ToList());
+            ViewBag.Name = character.CharacterName;
+            ViewBag.Id = id;
+            var journals = db.Journals.Where(x => x.CharacterId == id && x.IsApproved).OrderByDescending(x => x.OocDateWritten).ThenByDescending(x => x.JournalId);
+            List<MiniJournalVM> journalsMini = new List<MiniJournalVM>();
+            foreach (Journal item in journals)
+            {
+                MiniJournalVM toAdd = new MiniJournalVM(item, 300);
+                journalsMini.Add(toAdd);
+            }
+            return View(journalsMini);
         }
 
         // GET: Characters/Details/5
@@ -61,15 +68,15 @@ namespace RiftWorld.UI.MVC.Controllers
             //prevent getting an un-approved character
             if (!character.IsApproved && !User.IsInRole("Mod") && !User.IsInRole("Admin"))
             {
-                return View("Error");
-                //todo change redirect to a error page
+                ViewBag.Message = "Whatever you think exists, doesn't yet.";
+                return View("TheForbiddenZone");
             }
             return View(character);
         }
 
         public PartialViewResult _Journals(short id)
         {
-            var journalsHolder = db.Journals.Where(x => x.CharacterId == id && x.IsApproved).OrderByDescending(x => x.OocDateWritten);
+            var journalsHolder = db.Journals.Where(x => x.CharacterId == id && x.IsApproved).OrderByDescending(x => x.OocDateWritten).ThenByDescending(x => x.JournalId);
             bool hasMore = false;
             if (journalsHolder.Count() > 5)
             {
@@ -79,7 +86,7 @@ namespace RiftWorld.UI.MVC.Controllers
             List<MiniJournalVM> journalsMini = new List<MiniJournalVM>();
             foreach (Journal journal in journalsHolder.Take(5))
             {
-                MiniJournalVM toAdd = new MiniJournalVM(journal);
+                MiniJournalVM toAdd = new MiniJournalVM(journal, 100);
                 journalsMini.Add(toAdd);
             }
             JournalVM journals = new JournalVM { Journals = journalsMini, HasMore = hasMore, CharacterId = id };
@@ -134,18 +141,19 @@ namespace RiftWorld.UI.MVC.Controllers
             if (User.IsInRole("Character"))
             {
                 ViewBag.Message = "You already have a character. You can't make another one until you have decided to retire the other";
-                return View("Error");
+                return View("TheForbiddenZone");
             }
             Character currentCharacter = db.Characters.Where(x => x.PlayerId == userId && !x.IsRetired).FirstOrDefault();
             if (currentCharacter != null)
             {
                 ViewBag.Message = "You currently have one character already awaiting approval. Please wait paitently for the results to come back on it";
-                return View("Error");
+                ViewBag.CharId = currentCharacter.CharacterId;
+                return View("Patience");
             }
 
             ViewBag.GenderId = new SelectList(db.Genders, "GenderId", "GenderName");
             ViewBag.CurrentLocationId = new SelectList(db.Locales.Where(l => l.Info.IsPublished).OrderBy(l => l.Info.Name), "LocaleId", "Name");
-            ViewBag.RaceId = new SelectList(db.Races.Where(r => r.IsPlayerEnabled).OrderBy(r=>r.RaceName), "RaceId", "RaceName");
+            ViewBag.RaceId = new SelectList(db.Races.Where(r => r.IsPlayerEnabled).OrderBy(r => r.RaceName), "RaceId", "RaceName");
             ViewBag.TierId = new SelectList(db.Tiers, "TierId", "TierName");
 
             return View();
@@ -165,13 +173,13 @@ namespace RiftWorld.UI.MVC.Controllers
             if (User.IsInRole("Character"))
             {
                 ViewBag.Message = "I'm not sure how you got this far, but you already have a character. You can't make another one until you have decided to retire the other";
-                return View("Error");
+                return View("TheForbiddenZone");
             }
             Character currentCharacter = db.Characters.Where(x => x.PlayerId == userId && !x.IsRetired).FirstOrDefault();
             if (currentCharacter != null)
             {
                 ViewBag.Message = "I'm not sure how you got this far, but you currently have one character already awaiting approval. Please wait paitently for the results to come back on it";
-                return View("Error");
+                return View("TheForbiddenZone");
             }
 
             character.PlayerId = userId;
@@ -202,6 +210,7 @@ namespace RiftWorld.UI.MVC.Controllers
                     ModelState.AddModelError("Artist", "Hey, we want to really want to give credit where credit is due on this website. You haven't listed the artist that did that artwork you tried to submit. Re-upload that artwork and list who drew it so we can all gush about it!");
                 }
             }
+
             if (ModelState.IsValid)
             {
                 db.Characters.Add(character);
@@ -232,12 +241,13 @@ namespace RiftWorld.UI.MVC.Controllers
 
             ViewBag.GenderId = new SelectList(db.Genders, "GenderId", "GenderName", character.GenderId);
             ViewBag.CurrentLocationId = new SelectList(db.Locales.Where(l => l.Info.IsPublished).OrderBy(l => l.Info.Name), "LocaleId", "Name", character.CurrentLocationId);
-            ViewBag.RaceId = new SelectList(db.Races.Where(r => r.IsPlayerEnabled), "RaceId", "RaceName", character.RaceId).OrderBy(l=>l.Text);
+            ViewBag.RaceId = new SelectList(db.Races.Where(r => r.IsPlayerEnabled).OrderBy(r => r.RaceName), "RaceId", "RaceName", character.RaceId);
             ViewBag.TierId = new SelectList(db.Tiers, "TierId", "TierName", character.TierId);
             if (picture != null)
             {
                 ModelState.AddModelError("PortraitFileName", "Hey, there was some error, so you have to re-upload the picture");
             }
+            ModelState.AddModelError("", "Something's missing. Roll an investigation check!");
             return View(character);
         }
 
@@ -267,7 +277,7 @@ namespace RiftWorld.UI.MVC.Controllers
         [Authorize(Roles = "Mod, Admin")]
         public ActionResult Approve(short characterId)
         {
-            //todo - add logic to check if the approved thing and what's on the db match
+            //todo - add logic to check if the approved thing and what's on the db match - bonus goal
             Character character = db.Characters.Where(x => x.CharacterId == characterId).FirstOrDefault();
             //check to see if other mod/admin has already denied this (thus it won't exist)
             if (character == null)
@@ -313,6 +323,7 @@ namespace RiftWorld.UI.MVC.Controllers
             db.Entry(character).State = EntityState.Modified;
             db.Entry(playerDetail).State = EntityState.Modified;
             db.SaveChanges();
+            //todo -consideration- may change to go make to approvals depending on feedback from Katherine/Dan
             return RedirectToAction("Details", new { id = characterId });
         }
 
@@ -340,10 +351,13 @@ namespace RiftWorld.UI.MVC.Controllers
             db.Characters.Remove(character);
 
             #region Remove Picture
-            string fullPath = Request.MapPath("~/Content/img/character/" + picture);
-            if (System.IO.File.Exists(fullPath))
+            if (!String.IsNullOrEmpty(picture))
             {
-                System.IO.File.Delete(fullPath);
+                string fullPath = Request.MapPath("~/Content/img/character/" + picture);
+                if (System.IO.File.Exists(fullPath))
+                {
+                    System.IO.File.Delete(fullPath);
+                }
             }
             #endregion
 
@@ -356,9 +370,9 @@ namespace RiftWorld.UI.MVC.Controllers
         {
             ViewBag.GenderId = new SelectList(db.Genders, "GenderId", "GenderName");
             ViewBag.CurrentLocationId = new SelectList(db.Locales.Where(l => l.Info.IsPublished).OrderBy(l => l.Info.Name), "LocaleId", "Name");
-            ViewBag.RaceId = new SelectList(db.Races.Where(r => r.IsPlayerEnabled), "RaceId", "RaceName");
+            ViewBag.RaceId = new SelectList(db.Races.Where(r => r.IsPlayerEnabled).OrderBy(r => r.RaceName), "RaceId", "RaceName");
             ViewBag.TierId = new SelectList(db.Tiers, "TierId", "TierName");
-            ViewBag.PlayerId = new SelectList(db.UserDetails.Where(u => u.IsApproved).OrderBy(u=>u.DiscordName).OrderBy(u=>u.DiscordDiscriminator), "UserId", "DiscordFull");
+            ViewBag.PlayerId = new SelectList(db.UserDetails.Where(u => u.IsApproved).OrderBy(u => u.DiscordName).ThenBy(u => u.DiscordDiscriminator), "UserId", "DiscordFull");
             return View();
         }
 
@@ -377,7 +391,7 @@ namespace RiftWorld.UI.MVC.Controllers
 
             #region Getting Demo user
             var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(new ApplicationDbContext()));
-            var demoUser = roleManager.FindByName("Demo").Users.FirstOrDefault();
+            var demoUser = roleManager.FindByName("Demo").Users.Select(x => x.UserId).FirstOrDefault();
             if (demoUser == null)
             {
                 ViewBag.Message = "So, we have a problem. There is no demo user.";
@@ -387,7 +401,7 @@ namespace RiftWorld.UI.MVC.Controllers
 
             if (character.PlayerId == null && character.BackupPortrayerName != null)
             {
-                character.PlayerId = demoUser.UserId;
+                character.PlayerId = demoUser;
                 character.IsPlayerDemo = true;
             }
             else if (character.PlayerId == null && character.BackupPortrayerName == null)
@@ -429,7 +443,7 @@ namespace RiftWorld.UI.MVC.Controllers
                 db.Characters.Add(character);
                 db.SaveChanges();
 
-                List<short> charaIds = db.Characters.Where(x => x.PlayerId == demoUser.UserId).Select(x => x.CharacterId).ToList();
+                List<short> charaIds = db.Characters.Where(x => x.PlayerId == demoUser).Select(x => x.CharacterId).ToList();
                 short charaId = charaIds.Max();
                 #region Image uploads
 
@@ -448,22 +462,33 @@ namespace RiftWorld.UI.MVC.Controllers
                     db.SaveChanges();
                 }
                 #endregion
-
+                return RedirectToAction("Details", new { id = charaId });
             }
 
             ViewBag.GenderId = new SelectList(db.Genders, "GenderId", "GenderName", character.GenderId);
             ViewBag.CurrentLocationId = new SelectList(db.Locales.Where(l => l.Info.IsPublished).OrderBy(l => l.Info.Name), "LocaleId", "Name", character.CurrentLocationId);
-            ViewBag.RaceId = new SelectList(db.Races.Where(r => r.IsPlayerEnabled), "RaceId", "RaceName", character.RaceId);
+            ViewBag.RaceId = new SelectList(db.Races.Where(r => r.IsPlayerEnabled).OrderBy(r => r.RaceName), "RaceId", "RaceName", character.RaceId);
             ViewBag.TierId = new SelectList(db.Tiers, "TierId", "TierName", character.TierId);
-            ViewBag.PlayerId = new SelectList(db.UserDetails.Where(u => u.IsApproved).OrderBy(u=>u.DiscordName).OrderBy(u=>u.DiscordDiscriminator), "UserId", "DiscordFull", character.PlayerId);
+            ViewBag.PlayerId = new SelectList(db.UserDetails.Where(u => u.IsApproved).OrderBy(u => u.DiscordName).ThenBy(u => u.DiscordDiscriminator), "UserId", "DiscordFull", character.PlayerId);
+            if (picture != null)
+            {
+                ModelState.AddModelError("PortraitFileName", "Hey, there was some error, so you have to re-upload the picture");
+            }
+            ModelState.AddModelError("", "Something's missing. Roll an investigation check!");
             return View(character);
         }
 
         [Authorize(Roles = "Admin")]
         public ActionResult AssignUserAsPlayer()
         {
-            ViewBag.CharacterId = new SelectList(db.Characters.Where(c => c.IsPlayerDemo), "CharacterId", "CharacterName");
-            ViewBag.PlayerId = new SelectList(db.UserDetails.Where(u=>u.IsApproved).OrderBy(u=>u.DiscordName).OrderBy(u=>u.DiscordDiscriminator), "UserId", "DiscordFull");
+            SelectList characters = new SelectList(db.Characters.Where(c => c.IsPlayerDemo).OrderBy(c => c.CharacterName), "CharacterId", "CharacterName");
+            ViewBag.CharacterId = characters;
+            if (characters.Count() == 0)
+            {
+                ViewBag.Message = "There are no characters with no player assigned to them.";
+                return View("Error");
+            }
+            ViewBag.PlayerId = new SelectList(db.UserDetails.Where(u => u.IsApproved).OrderBy(u => u.DiscordName).ThenBy(u => u.DiscordDiscriminator), "UserId", "DiscordFull");
             return View();
         }
 
@@ -475,21 +500,63 @@ namespace RiftWorld.UI.MVC.Controllers
             Character character = db.Characters.Where(c => c.CharacterId == characterId).FirstOrDefault();
             if (character == null)
             {
-                //REALLY error out
+                return HttpNotFound();
+            }
+            UserDetail playerDetail = db.UserDetails.Where(x => x.UserId == playerId).FirstOrDefault();
+            if (playerDetail == null)
+            {
+                return HttpNotFound();
+            }
+            //get if the player trying to be assigned is a demo or admin and error if it is
+            var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext()));
+
+            var player = db.AspNetUsers.Find(playerId);
+            var userRoles = userManager.GetRoles(player.Id);
+
+            var demoRole = db.AspNetRoles.FirstOrDefault(u => u.Name.Equals("Demo"));
+            var adminRole = db.AspNetRoles.FirstOrDefault(u => u.Name.Equals("Admin"));
+
+            var demoRoleConvert = Convert.ToString(demoRole.Name);
+            var adminRoleConvert = Convert.ToString(adminRole.Name);
+            if (userRoles.Contains(demoRoleConvert) || userRoles.Contains(adminRoleConvert))
+            {
+                ViewBag.Message = "the user you selected to be assigned was either a demo user or an admin. So no.";
+                return View("Error");
             }
 
-            UserDetail player = db.UserDetails.Find(playerId);
-            if (player == null)
-            {
-                //error out
-            }
 
             //if all above doesn't error out
             character.PlayerId = playerId;
             character.IsPlayerDemo = false;
-            character.BackupPortrayerName = "";
+            character.BackupPortrayerName = null;
+            //if (unRetire)
+            //{
+            //    Character awaiting = db.Characters.Where(x => x.PlayerId == playerId && !x.IsApproved).FirstOrDefault();
+            //    if (playerDetail.CurrentCharacterId != null)
+            //    {
+            //        ViewBag.Message = "That user already has an active character";
+            //        return View("Error");
+            //    }
+            //    else if (awaiting != null)
+            //    {
+            //        ViewBag.Message = "That user currently has a character awaiting approval. ";
+            //        return View("Error");
+            //    }
+            //    else
+            //    {
+            //        playerDetail.CurrentCharacterId = characterId;
+            //        character.IsRetired = false;
+            //        var charRole = db.AspNetRoles.FirstOrDefault(u => u.Name.Equals("Character"));
+            //        var charRoleConvert = Convert.ToString(charRole.Name);
+            //        if (charRole != null && !userRoles.Contains(charRoleConvert))
+            //        {
+            //            userManager.AddToRole(player.Id, charRoleConvert);
+            //        }
+            //    }
+            //}
 
             db.Entry(character).State = EntityState.Modified;
+            db.Entry(playerDetail).State = EntityState.Modified;
             db.SaveChanges();
             return RedirectToAction("Details", new { id = characterId });
         }
@@ -512,16 +579,19 @@ namespace RiftWorld.UI.MVC.Controllers
             string userid = User.Identity.GetUserId();
             short? currentCharacter = db.UserDetails.Where(u => u.UserId == userid).Select(u => u.CurrentCharacterId).FirstOrDefault();
 
-            if (!User.IsInRole("Character") && User.IsInRole("Player") && character.PlayerId != userid)
+            if (User.IsInRole("Player"))
             {
-                ViewBag.Message = "Hello Mr.Rogue. I am sorry but my amazing security skills have once again foiled yours. The character you are trying to edit does not belong to you.";
-                return View("Error");
-            }
-            //if this isn't a mod, check that the character actually belongs to the current user (and is their 
-            else if (User.IsInRole("Character") && !User.IsInRole("Mod") && currentCharacter != id)
-            {
-                ViewBag.Message = "Hello Mr.Rogue. I am sorry but my amazing security skills have once again foiled yours. The character you are trying to edit does not belong to you.";
-                return View("Error");
+                if (!User.IsInRole("Character") && character.PlayerId != userid)
+                {
+                    ViewBag.Message = "Hello Mr.Rogue. I am sorry but my amazing security skills have once again foiled yours. The character you are trying to edit does not belong to you.";
+                    return View("TheForbiddenZone");
+                }
+                //if this isn't a mod, check that the character actually belongs to the current user (and is their 
+                else if (User.IsInRole("Character") && currentCharacter != id)
+                {
+                    ViewBag.Message = "Hello Mr.Rogue. I am sorry but my amazing security skills have once again foiled yours. The character you are trying to edit does not belong to you.";
+                    return View("TheForbiddenZone");
+                }
             }
 
             ViewBag.GenderId = new SelectList(db.Genders, "GenderId", "GenderName", character.GenderId);
@@ -539,22 +609,27 @@ namespace RiftWorld.UI.MVC.Controllers
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Player, Character, Mod, Admin")]
         public ActionResult Edit([Bind(Include = "CharacterId,PlayerId,CharacterName,RaceId,GenderId,PortraitFileName,Description,About,CurrentLocationId,TierId,IsRetired,IsApproved, Artist, ClassString, IsDead")] Character character,
-            HttpPostedFileBase picture)
+            HttpPostedFileBase picture,
+            bool removePic)
         {
-            #region Is this yours?
-            //make sure that if whoever is editing this is not a mod or admin that this is actually their character
             string userid = User.Identity.GetUserId();
             short? currentCharacter = db.UserDetails.Where(u => u.UserId == userid).Select(u => u.CurrentCharacterId).FirstOrDefault();
-            if (!User.IsInRole("Character") && User.IsInRole("Player") && character.PlayerId != userid)
+            #region Is this yours?
+            //make sure that if whoever is editing this is not a mod or admin that this is actually their character
+            if (User.IsInRole("Player"))
             {
-                ViewBag.Message = "Hello Mr.Rogue. I am sorry but my amazing security skills have once again foiled yours. The character you are trying to edit does not belong to you.";
-                return View("Error");
+                if (!User.IsInRole("Character") && character.PlayerId != userid)
+                {
+                    ViewBag.Message = "Hello Mr.Rogue. I am sorry but my amazing security skills have once again foiled yours. The character you are trying to edit does not belong to you.";
+                    return View("TheForbiddenZone");
+                }
+                else if (User.IsInRole("Character") && currentCharacter != character.CharacterId)
+                {
+                    ViewBag.Message = "Hello Mr.Rogue. I am sorry but my amazing security skills have once again foiled yours. The character you are trying to edit does not belong to you.";
+                    return View("TheForbiddenZone");
+                }
             }
-            else if (User.IsInRole("Character") && !User.IsInRole("Mod") && currentCharacter != character.CharacterId)
-            {
-                ViewBag.Message = "Hello Mr.Rogue. I am sorry but my amazing security skills have once again foiled yours. The character you are trying to edit does not belong to you.";
-                return View("Error");
-            }
+
             #endregion
 
             //check if picture uploaded is valid BEFORE checking  if model is valid
@@ -582,7 +657,7 @@ namespace RiftWorld.UI.MVC.Controllers
             }
 
             //error catch for if they did not upload a new picture (and said picture is NOT the default) but removed the artist text
-            else if (character.PortraitFileName != null && character.Artist == null)
+            else if (character.PortraitFileName != null && character.Artist == null && !removePic)
             {
                 ModelState.AddModelError("Artist", "Hey, we want to really want to give credit where credit is due on this website. Looks like at some point during the editing of the charcter, you accidentally removed the artist text. Please re-add it!");
             }
@@ -614,22 +689,52 @@ namespace RiftWorld.UI.MVC.Controllers
                     picture.SaveAs(Server.MapPath("~/Content/img/character/" + imgName));
                     //remove old picture if it had a different extension (and thus would not be overridden)
                     string oldName = character.PortraitFileName;
-                    string oldExt = oldName.Substring(oldName.LastIndexOf('.'));
-                    if (oldExt != ext)
+                    if (!String.IsNullOrEmpty(oldName))
                     {
-                        string fullPath = Request.MapPath("~/Content/img/character/" + oldName);
-                        if (System.IO.File.Exists(fullPath))
+                        string oldExt = oldName.Substring(oldName.LastIndexOf('.'));
+                        if (oldExt != ext)
                         {
-                            System.IO.File.Delete(fullPath);
+                            string fullPath = Request.MapPath("~/Content/img/character/" + oldName);
+                            if (System.IO.File.Exists(fullPath))
+                            {
+                                System.IO.File.Delete(fullPath);
+                            }
                         }
                     }
                     //assign new PortraitFileName
                     character.PortraitFileName = imgName;
                 }
                 #endregion
+
+                #region Remove Pic
+                if (removePic)
+                {
+                    string picName = character.PortraitFileName;
+                    string fullPath = Request.MapPath("~/Content/img/character/" + picName);
+                    if (System.IO.File.Exists(fullPath))
+                    {
+                        System.IO.File.Delete(fullPath);
+                    }
+                    character.PortraitFileName = null;
+                    character.Artist = null;
+                }
+                #endregion
+
                 db.Entry(character).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+
+                if (User.IsInRole("Player") && !User.IsInRole("Character"))
+                {
+                    return RedirectToAction("Index", "Manage");
+                }
+                else if (User.IsInRole("Player") && (User.IsInRole("Mod") && userid == character.PlayerId && currentCharacter == character.CharacterId))
+                {
+                    return RedirectToAction("Index", "Hub");
+                }
+                else
+                {
+                    return RedirectToAction("Details", new { id = character.CharacterId });
+                }
             }
 
             ViewBag.GenderId = new SelectList(db.Genders, "GenderId", "GenderName", character.GenderId);
@@ -641,6 +746,7 @@ namespace RiftWorld.UI.MVC.Controllers
             {
                 ModelState.AddModelError("PortraitFileName", "Hey, there was some error, so you have to re-upload the picture");
             }
+            ModelState.AddModelError("", "Something's missing. Roll an investigation check!");
             return View(character);
         }
 
@@ -682,7 +788,7 @@ namespace RiftWorld.UI.MVC.Controllers
             string picture = character.PortraitFileName;
 
             #region Remove Picture
-            if (character.PortraitFileName != null)
+            if (!String.IsNullOrEmpty(picture))
             {
                 string fullPath = Request.MapPath("~/Content/img/character/" + picture);
                 if (System.IO.File.Exists(fullPath))
@@ -817,7 +923,7 @@ namespace RiftWorld.UI.MVC.Controllers
 
                 db.SaveChanges();
             }
-            else if(submit == "Deny Retirement")
+            else if (submit == "Deny Retirement")
             {
                 character.IsRequestingRetire = false;
             }

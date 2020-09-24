@@ -171,4 +171,18 @@ namespace RiftWorld.UI.MVC.Models
         public List<Secret> KnowledgeGiven { get; set; }
     }
 
+    public class StorySmVM
+    {
+        public Story Story { get; set; }
+        public string Beginning { get; set; }
+        public StorySmVM() { }
+        public StorySmVM(Story story)
+        {
+            Story = story;
+            string str = story.TheContent;
+            int i1 = str.IndexOf("<p>");
+            int i2 = str.IndexOf("</p>");
+            Beginning = str.Substring(i1-3, Int32.Parse((i2-i1-3)<300? (i2-i1-3).ToString() : "300"));
+        }
+    }
 }

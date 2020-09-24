@@ -39,7 +39,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
 
         // GET: NPCs/Details/5
         [OverrideAuthorization]
-        public ActionResult Details(short? id)
+        public ActionResult Details(short? id, short? story)
         {
             if (id == null)
             {
@@ -52,10 +52,10 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             }
 
             //prevent users from seeing un-published work
-            if (!nPC.IsPublished && !User.IsInRole("Admin"))
+            if (!nPC.Info.IsPublished && !User.IsInRole("Admin"))
             {
-                return View("Error");
-                //todo change redirect to a error 404 page
+                ViewBag.Message = "Whatever you think exists, doesn't yet.";
+                return View("TheForbiddenZone");
             }
 
 
@@ -89,6 +89,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                     break;
             }
             ViewBag.Classes = holder;
+            ViewBag.OpenStory = story;
             return View(nPC);
         }
 
@@ -124,7 +125,6 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
         {
             ViewBag.LastLocationId = new SelectList(db.Locales, "LocaleId", "Name");
             ViewBag.RaceId = new SelectList(db.Races, "RaceId", "RaceName");
-            ViewBag.Races = db.Races.ToList();
             ViewBag.GenderId = new SelectList(db.Genders, "GenderId", "GenderName");
             ViewBag.Tags = new MultiSelectList(db.Tags, "TagId", "TagName");
             return View();
@@ -515,7 +515,9 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             List<short> tags,
             HttpPostedFileBase portraitPic,
             HttpPostedFileBase crestPic,
-            string submit)
+            string submit,
+            bool removePic1,
+            bool removePic2)
         {
 
             #region Pre-model picture check
@@ -536,7 +538,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                     ModelState.AddModelError("PortraitArtist", "Katherine, you're trying to submit something with a picture without an artist. That's a no-no! But seriously, if something came up that means you need to change this rule, you know who to call.");
                 }
             }
-            else if ((npc.PortraitFileName != "default.jpg" && npc.PortraitFileName != null) && npc.PortraitArtist == null)
+            else if ((npc.PortraitFileName != "default.jpg" && npc.PortraitFileName != null) && npc.PortraitArtist == null && !removePic1)
             {
                 ModelState.AddModelError("PortraitArtist", "Yo bud, you tired? Seems you deleted the artist by accident. Why don't ya fix that?");
             }
@@ -558,7 +560,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                     ModelState.AddModelError("CrestArtist", "Katherine, you're trying to submit something with a picture without an artist. That's a no-no! But seriously, if something came up that means you need to change this rule, you know who to call.");
                 }
             }
-            else if ((npc.CrestFileName != "org_default.jpg" && npc.CrestFileName != null) && npc.CrestArtist == null)
+            else if ((npc.CrestFileName != "org_default.jpg" && npc.CrestFileName != null) && npc.CrestArtist == null && !removePic2)
             {
                 ModelState.AddModelError("CrestArtist", "Yo bud, you tired? Seems you deleted the artist by accident. Why don't ya fix that?");
             }
@@ -641,13 +643,16 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                     }
                     //remove old picture if it had a different extension (and thus would not be overridden)
                     string oldName = npc.PortraitFileName;
-                    string oldExt = oldName.Substring(oldName.LastIndexOf('.'));
-                    if (oldName != "default.jpg" && oldExt != ext)
+                    if (!String.IsNullOrEmpty(oldName) && oldName != "default.jpg")
                     {
-                        string fullPath = Request.MapPath("~/Content/img/npc/" + oldName);
-                        if (System.IO.File.Exists(fullPath))
+                        string oldExt = oldName.Substring(oldName.LastIndexOf('.'));
+                        if (oldExt != ext)
                         {
-                            System.IO.File.Delete(fullPath);
+                            string fullPath = Request.MapPath("~/Content/img/npc/" + oldName);
+                            if (System.IO.File.Exists(fullPath))
+                            {
+                                System.IO.File.Delete(fullPath);
+                            }
                         }
                     }
                     //assign new PortraitFileName
@@ -670,13 +675,16 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                     }
                     //remove old picture if it had a different extension (and thus would not be overridden)
                     string oldName = npc.CrestFileName;
-                    string oldExt = oldName.Substring(oldName.LastIndexOf('.'));
-                    if (oldName != "org_default.jpg" && oldExt != ext)
+                    if (!String.IsNullOrEmpty(oldName) && oldName != "org_default.jpg")
                     {
-                        string fullPath = Request.MapPath("~/Content/img/npc/" + oldName);
-                        if (System.IO.File.Exists(fullPath))
+                        string oldExt = oldName.Substring(oldName.LastIndexOf('.'));
+                        if (oldExt != ext)
                         {
-                            System.IO.File.Delete(fullPath);
+                            string fullPath = Request.MapPath("~/Content/img/npc/" + oldName);
+                            if (System.IO.File.Exists(fullPath))
+                            {
+                                System.IO.File.Delete(fullPath);
+                            }
                         }
                     }
                     //assign new CrestFileName
@@ -685,6 +693,37 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                 #endregion
 
                 #endregion
+
+                #region Potential Removal of Pics
+                #region Portrait
+                if (removePic1 && npc.PortraitFileName != "default.jpg")
+                {
+                    string picName = npc.PortraitFileName;
+                    string fullPath = Request.MapPath("~/Content/img/npc/" + picName);
+                    if (System.IO.File.Exists(fullPath))
+                    {
+                        System.IO.File.Delete(fullPath);
+                    }
+                    npc.PortraitFileName = "default.jpg";
+                    npc.PortraitArtist = null;
+                }
+
+                #endregion
+                #region Crest
+                if (removePic2 && npc.CrestFileName != "org_default.jpg")
+                {
+                    string picName = npc.CrestFileName;
+                    string fullPath = Request.MapPath("~/Content/img/npc/" + picName);
+                    if (System.IO.File.Exists(fullPath))
+                    {
+                        System.IO.File.Delete(fullPath);
+                    }
+                    npc.CrestFileName = "org_default.jpg";
+                    npc.CrestArtist = null;
+                }
+                #endregion
+                #endregion
+
 
                 #region Update Npc
                 NPC daNpc = new NPC
@@ -938,7 +977,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
 
             #region Remove Pictures
             //portrait
-            if (picture1 != "default.jpg")
+            if (picture1 != "default.jpg" && !String.IsNullOrEmpty(picture1))
             {
                 string fullPath = Request.MapPath("~/Content/img/npc/" + picture1);
                 if (System.IO.File.Exists(fullPath))
@@ -947,7 +986,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                 }
             }
             //crest
-            if (picture2 != "org_default.jpg")
+            if (picture2 != "org_default.jpg" && !String.IsNullOrEmpty(picture2))
             {
                 string fullPath2 = Request.MapPath("~/Content/img/npc/" + picture2);
                 if (System.IO.File.Exists(fullPath2))

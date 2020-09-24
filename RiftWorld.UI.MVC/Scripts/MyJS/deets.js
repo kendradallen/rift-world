@@ -69,7 +69,7 @@ function openStory(evt, storyID) {
 
     // Show the current tab, and add an "active" class to the button that opened the tab
     document.getElementById(storyID).style.display = "block";
-    evt.currentTarget.className += " active";
+    $(evt.currentTarget).addClass("active");
 }
 $(document).ready(function () {
     // Configure/customize these variables.
@@ -83,7 +83,7 @@ $(document).ready(function () {
         var contentLil = $(this).children().first().text();
         var content2 = $(this).text();
         var content = $(this).html();
-        console.log(contentLil);
+        //console.log(contentLil);
         if (content2.length > showChar) {
 
             var c = contentLil.substr(0, showChar);
@@ -109,7 +109,9 @@ $(document).ready(function () {
     });
 });
 
-$(document).ready(function () {
-    document.getElementById("defaultOpen").click();
-});
+//$(document).ready(function () {
+//    if (document.getElementById("story")) {
+//        document.getElementById("defaultOpen").click();
+//    }
+//});
 

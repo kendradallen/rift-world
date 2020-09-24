@@ -4,210 +4,286 @@
 @{
     ViewBag.Title = "Approvals";
 }
-@*todo - add requests to join org*@
 @section styles{
     <style>
-        .tablink-a {
-            background-color: #555;
-            color: white;
-            float: left;
-            border: none;
-            outline: none;
-            cursor: pointer;
-            padding: 14px 16px;
-            font-size: 17px;
-            width: 15%;
-        }
-
-            .tablink-a:hover {
-                background-color: #777;
-            }
-
-        /* Style the tab content (and add height:100% for full page content) */
         .tabcontent-a {
-            /*color: white;*/
             display: none;
-            padding: 100px 20px;
-            /*height: 100%;*/
+            padding: 20px 20px;
         }
     </style>
 }
-    <div class="col-12">
-        <h2>Approvals</h2>
-        @if (Request.IsAuthenticated && User.IsInRole("Admin"))
+<div class="col-12">
+    <h2>Approvals</h2>
+    <div class="row">
+        @if (User.IsInRole("Admin"))
         {
-            <button class="tablink-a" onclick="openPage('Users', this, 'red')">Users (@Model.Users.Count)</button>
-            <button class="tablink-a" onclick="openPage('Orgs', this, 'red')">Memberships (@Model.Orgs.Count)</button>
+            <button class="tablink lil col-xl col-auto" onclick="openPage('Users', this, 'red')">Users (@Model.Users.Count)</button>
+            <button class="tablink lil col-xl col-auto" onclick="openPage('Orgs', this, 'red')">Memberships (@Model.Orgs.Count)</button>
         }
-        <button class="tablink-a" onclick="openPage('Characters', this, 'green')" id="defaultOpen">Characters (@Model.Characters.Count)</button>
-        <button class="tablink-a" onclick="openPage('Rumors', this, 'green')">Rumors (@Model.Rumors.Count)</button>
-        <button class="tablink-a" onclick="openPage('Journals', this, 'green')">Journals (@Model.Journals.Count)</button>
-        <button class="tablink-a" onclick="openPage('JournalEdits', this, 'yellow')">Journal Edits (@Model.JournalEdits.Count)</button>
-        <button class="tablink-a" onclick="openPage('CharacterEdits', this, 'yellow')">Character Edits (@Model.CharacterEdits.Count)</button>
-        <button class="tablink-a" onclick="openPage('RetireRequests', this, 'yellow')">Retirement Requests (@Model.RetireRequests.Count)</button>
+        <button class="tablink lil col-xl col-auto" onclick="openPage('Characters', this, 'green')" id="defaultOpen">Characters (@Model.Characters.Count)</button>
+        <button class="tablink lil col-xl col-auto" onclick="openPage('Rumors', this, 'green')">Rumors (@Model.Rumors.Count)</button>
+        <button class="tablink lil col-xl col-auto" onclick="openPage('Journals', this, 'green')">Journals (@Model.Journals.Count)</button>
+        <button class="tablink lil col-xl col-auto" onclick="openPage('JournalEdits', this, 'yellow')">Journal Edits (@Model.JournalEdits.Count)</button>
+        <button class="tablink lil col-auto" onclick="openPage('CharacterEdits', this, 'yellow')">Character Edits (@Model.CharacterEdits.Count)</button>
+        <button class="tablink lil col-auto" onclick="openPage('RetireRequests', this, 'green')">Retirement Requests (@Model.RetireRequests.Count)</button>
 
-
-        @if (Request.IsAuthenticated && User.IsInRole("Admin"))
-        {
-            <div id="Users" class="tabcontent-a">
-                <table class="table">
+    </div>
+    @if (User.IsInRole("Admin"))
+    {
+        <div id="Users" class="tabcontent-a">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th colspan="2" style="font-size:larger">
+                            Users
+                        </th>
+                    </tr>
                     <tr>
                         <th>User</th>
                         <th></th>
                     </tr>
+                </thead>
+                <tbody>
                     @if (Model.Users.Count != 0)
                     {
                         foreach (UserDetail item in Model.Users)
                         {
-                            <tr>
+                            <tr class="text-left">
                                 <td>@Html.DisplayFor(modelItem => item.DiscordFull)</td>
                                 <td>@Html.ActionLink("Decide", "Approve", "UsersAdmin", new { id = item.UserId }, null)</td>
                             </tr>
                         }
                     }
-                </table>
-            </div>
-            <div id="Orgs" class="tabcontent-a">
-                <table class="table">
+                </tbody>
+            </table>
+        </div>
+        <div id="Orgs" class="tabcontent-a">
+            <table class="table table-striped">
+                <thead>
                     <tr>
+                        <th colspan="4" style="font-size:larger">
+                            Membership Requests
+                        </th>
+                    </tr>
+                    <tr>
+                        <th>(player)</th>
                         <th>Character</th>
                         <th>Org</th>
                         <th></th>
                     </tr>
+                </thead>
+                <tbody>
                     @if (Model.Orgs.Count != 0)
                     {
                         foreach (CharOrg item in Model.Orgs)
                         {
-                            <tr>
+                            <tr class="text-left">
+                                <td>
+                                    (@Html.DisplayFor(modelItem => item.Character.UserDetail.DiscordFull))
+                                </td>
                                 <td>@Html.DisplayFor(modelItem => item.Character.CharacterName)</td>
                                 <td>@Html.DisplayFor(modelItem => item.Org.Name)</td>
-                                <td>@Html.ActionLink("Address", "AssoEdit", "Orgs", new { id = item.OrgId }, null)</td>
+                                <td>
+                                <a href="@Url.Action("AssoEdit","Orgs", new { id=item.OrgId})#pcs">Address</a></td>
                             </tr>
                         }
                     }
-                </table>
-            </div>
-        }
-        <div id="Characters" class="tabcontent-a">
-            <table class="table">
+                </tbody>
+            </table>
+        </div>
+    }
+    <div id="Characters" class="tabcontent-a">
+        <table class="table table-striped">
+            <thead>
                 <tr>
-                    <th>User</th>
+                    <th colspan="3" style="font-size:larger">
+                        Characters
+                    </th>
+                </tr>
+                <tr>
+                    <th>(player)</th>
                     <th>Character Name</th>
                     <th></th>
                 </tr>
+            </thead>
+            <tbody>
                 @if (Model.Characters.Count != 0)
                 {
                     foreach (Character item in Model.Characters)
                     {
                         //todo - add updated indicator
-                        <tr>
-                            <td>@Html.DisplayFor(modelItem => item.UserDetail.DiscordFull)</td>
+                        <tr class="text-left">
+                            <td>(@Html.DisplayFor(modelItem => item.UserDetail.DiscordFull))</td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.CharacterName) @if (item.HasUnseenEdit)
-                                {<span class="alert alert-info">Updated</span>}
+                                @Html.DisplayFor(modelItem => item.CharacterName)
                             </td>
-                            <td>@Html.ActionLink("Decide", "Approve", "Characters", new { id = item.CharacterId }, null)</td>
+                            <td>
+                                @Html.ActionLink("Decide", "Approve", "Characters", new { id = item.CharacterId }, null)
+                                @if (item.HasUnseenEdit)
+                                {
+                                    <span class="badge badge-success">Updated</span>
+                                }
+                            </td>
                         </tr>
                     }
                 }
-            </table>
-        </div>
-        <div id="Rumors" class="tabcontent-a">
-            <table class="table">
+            </tbody>
+        </table>
+    </div>
+    <div id="Rumors" class="tabcontent-a">
+        <table class="table table-striped">
+            <thead>
                 <tr>
+                    <th colspan="4" style="font-size:larger">
+                        Rumors
+                    </th>
+                </tr>
+                <tr>
+                    <th>(player)</th>
                     <th>Character</th>
                     <th>Info Rumor about</th>
                     <th></th>
                 </tr>
+            </thead>
+            <tbody>
                 @if (Model.Rumors.Count != 0)
                 {
                     foreach (Rumor item in Model.Rumors)
                     {
-                        <tr>
+                        <tr class="text-left">
+                            <td>(@Html.DisplayFor(modelItem => item.Character.UserDetail.DiscordFull))</td>
                             <td>@Html.DisplayFor(modelItem => item.Character.CharacterName)</td>
                             <td>@Html.DisplayFor(modelItem => item.Info.Name)</td>
                             <td>@Html.ActionLink("Decide", "Approve", "Rumors", new { id = item.RumorsId }, null)</td>
                         </tr>
                     }
                 }
-            </table>
-        </div>
-        <div id="Journals" class="tabcontent-a">
-            <table class="table">
+            </tbody>
+        </table>
+    </div>
+    <div id="Journals" class="tabcontent-a">
+        <table class="table table-striped">
+            <thead>
                 <tr>
+                    <th colspan="4" style="font-size:larger">
+                        Journals
+                    </th>
+                </tr>
+                <tr>
+                    <th>(player)</th>
                     <th>Character</th>
+                    <th>Date</th>
                     <th></th>
                 </tr>
+            </thead>
+            <tbody>
                 @if (Model.Journals.Count != 0)
                 {
                     foreach (Journal item in Model.Journals)
                     {
                         //todo - add updated indicator
                         <tr>
+                            <td>(@Html.DisplayFor(modelItem => item.Character.UserDetail.DiscordFull))</td>
                             <td>@Html.DisplayFor(modelItem => item.Character.CharacterName)</td>
-                            <td>@Html.ActionLink("Decide", "Approve", "Journals", new { id = item.JournalId }, null)</td>
+                            <td>@Html.DisplayFor(modedItem => item.OocDateWritten)</td>
+                            <td>
+                                @Html.ActionLink("Decide", "Approve", "Journals", new { id = item.JournalId }, null)
+                                @if (item.HasUnseenEdit)
+                                {
+                                    <span class="badge badge-success">Updated</span>
+                                }
+                            </td>
                         </tr>
                     }
                 }
-            </table>
-        </div>
-        <div id="JournalEdits" class="tabcontent-a">
-            <table class="table">
+            </tbody>
+        </table>
+    </div>
+    <div id="JournalEdits" class="tabcontent-a">
+        <table class="table table-striped">
+            <thead>
                 <tr>
+                    <th colspan="4" style="font-size:larger">
+                        Journal Edits
+                    </th>
+                </tr>
+                <tr>
+                    <th>(player)</th>
                     <th>Character</th>
-                    <th>Journal Written Date</th>
+                    <th>Journal Edited</th>
                     <th></th>
                 </tr>
+            </thead>
+            <tbody>
                 @if (Model.JournalEdits.Count != 0)
                 {
                     foreach (Journal item in Model.JournalEdits)
                     {
-                        <tr>
+                        <tr class="text-left">
+                            <td>(@Html.DisplayFor(modelItem => item.Character.UserDetail.DiscordFull))</td>
                             <td>@Html.DisplayFor(modelItem => item.Character.CharacterName)</td>
                             <td>@Html.DisplayFor(modelItem => item.OocDateWritten)</td>
                             <td>
-                                @Html.ActionLink("Review Change", "Details", "Journals", new { id = item.CharacterId }, null) | 
+                                @Html.ActionLink("Review Change", "Details", "Journals", new { id = item.CharacterId }, null) |
                                 @Html.ActionLink("Acknowledge", "RecognizeEdit", "Journals", new { id = item.CharacterId }, null)
                             </td>
                         </tr>
                     }
                 }
-            </table>
-        </div>
-        <div id="CharacterEdits" class="tabcontent-a">
-            <table class="table">
+            </tbody>
+        </table>
+    </div>
+    <div id="CharacterEdits" class="tabcontent-a">
+        <table class="table table-striped">
+            <thead>
                 <tr>
-                    <th>UserName</th>
+                    <th colspan="3" style="font-size:larger">
+                        Character Edits
+                    </th>
+                </tr>
+                <tr>
+                    <th>(player)</th>
                     <th>Character Name</th>
                     <th></th>
                 </tr>
+            </thead>
+            <tbody>
                 @if (Model.CharacterEdits.Count != 0)
                 {
                     foreach (Character item in Model.CharacterEdits)
                     {
-                        <tr>
-                            <td>@Html.DisplayFor(modelItem => item.UserDetail.DiscordFull)</td>
+                        <tr class="text-left">
+                            <td>(@Html.DisplayFor(modelItem => item.UserDetail.DiscordFull))</td>
                             <td>@Html.DisplayFor(modelItem => item.CharacterName)</td>
                             <td>
-                                @Html.ActionLink("Review Change", "Details", "Characters", new { id = item.CharacterId }, null) | 
+                                @Html.ActionLink("Review Change", "Details", "Characters", new { id = item.CharacterId }, null) |
                                 @Html.ActionLink("Acknowledge", "RecognizeEdit", "Characters", new { id = item.CharacterId }, null)
                             </td>
                         </tr>
                     }
                 }
-            </table>
-        </div>
-        <div id="RetireRequests" class="tabcontent-a">
-            <table class="table">
+            </tbody>
+        </table>
+    </div>
+    <div id="RetireRequests" class="tabcontent-a">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th colspan="2" style="font-size:larger">
+                        Retirements
+                    </th>
+                </tr>
                 <tr>
                     <th>Character</th>
                     <th></th>
                 </tr>
-                @if (Model.Characters.Count != 0)
+            </thead>
+            <tbody>
+                @if (Model.RetireRequests.Count != 0)
                 {
                     foreach (Character item in Model.RetireRequests)
                     {
-                        <tr>
+                        <tr class="text-left">
                             <td>@Html.DisplayFor(modelItem => item.CharacterName)</td>
                             <td>
                                 @Html.ActionLink("Review Character", "Details", "Characters", new { id = item.CharacterId }, new { target = "_blank" }) |
@@ -216,9 +292,10 @@
                         </tr>
                     }
                 }
-            </table>
-        </div>
+            </tbody>
+        </table>
     </div>
+</div>
 @section Scripts{
     <script>
         function openPage(pageName, elmnt, color) {
@@ -230,7 +307,7 @@
             }
 
             // Remove the background color of all tablinks/buttons
-            tablinks = document.getElementsByClassName("tablink-a");
+            tablinks = document.getElementsByClassName("tablink");
             for (i = 0; i < tablinks.length; i++) {
                 tablinks[i].style.backgroundColor = "";
             }

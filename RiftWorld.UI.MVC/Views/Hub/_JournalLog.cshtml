@@ -1,4 +1,4 @@
-﻿@model IEnumerable<RiftWorld.DATA.EF.Journal>
+﻿@model IEnumerable<RiftWorld.UI.MVC.Models.MiniJournalVM>
 
 <div id="journals" class="tabcontent-a" name="Journal Log">
     @if (Model.Count() == 0)
@@ -7,29 +7,34 @@
     }
     else
     {
-        <table class="table">
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.OocDateWritten)
-                </th>
-                <th></th>
-                <th></th>
-            </tr>
+        <div class="row justify-content-center">
 
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.OocDateWritten)
-                    </td>
-                    <td>
-                        @Html.ActionLink("Read", "Details", "Journals", new { id = item.JournalId }, null)
-                    </td>
-                    <td>
-                        @Html.ActionLink("Edit", "Edit", "Journals", new { id = item.JournalId }, null)
-                    </td>
-                </tr>
+            <table class="table table-hover table-sm col-sm-9">
+                <thead>
+                    <tr>
+                        <th colspan="2" style="font-size:larger">
+                            Journals
+                        </th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr class="row">
+                            <td scope="row" class="border-0 text-justify col">
+                                <b>@Html.DisplayFor(modelItem => item.Written)</b><br />
+                                <pre><em>@Html.DisplayFor(modelItem => item.ContentMini) @(item.IsLonger ? "...": "")</em></pre>
+                            </td>
+
+                            <td class="col-2">
+                                @Html.ActionLink("Read Rest", "Details", "Journals", new { id = item.JournalId }, null) |
+                                @Html.ActionLink("Edit", "Edit", "Journals", new { id = item.JournalId }, null)
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            </div>
             }
-        </table>
-    }
-</div>
+        </div>

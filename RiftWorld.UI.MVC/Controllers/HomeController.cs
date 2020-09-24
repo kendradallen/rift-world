@@ -10,6 +10,7 @@ using System.Net;
 
 namespace RiftWorld.UI.MVC.Controllers
 {
+    [HandleError]
     public class HomeController : Controller
     {
         private RiftWorldEntities db = new RiftWorldEntities();
@@ -78,6 +79,10 @@ namespace RiftWorld.UI.MVC.Controllers
         public ActionResult Explore()
         {
             ViewBag.Tags = db.Tags.ToList();
+            return View();
+        }
+        public ActionResult PageNotFound()
+        {
             return View();
         }
     }

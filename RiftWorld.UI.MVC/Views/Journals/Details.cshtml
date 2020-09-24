@@ -1,0 +1,15 @@
+﻿@model RiftWorld.DATA.EF.Journal
+
+@{
+    ViewBag.Title = Model.Character.CharacterName + "'s Journal: " + Model.OocDateWritten.ToShortDateString();
+}
+
+<div class="col-12">
+    <h3 style="font-family:'Tangerine', cursive; line-height:1; font-size:2.5em;">@ViewBag.Title</h3>
+    <hr class="m-1" />
+    <pre>@Html.DisplayFor(model => model.TheContent)</pre>
+    <p>
+        @Html.ActionLink("Back to Journal", "JournalHub", "Characters", new { id = Model.CharacterId }, null) | 
+        @Html.ActionLink("Back to " + Model.Character.CharacterName, "Details", "Characters", new { id = Model.CharacterId }, null)
+    </p>
+</div>

@@ -155,23 +155,10 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
         {
             if (ModelState.IsValid)
             {
-                #region Update Story
-                Story daStory = new Story
-                {
-                    StoryId = story.StoryId,
-                    DateTold = story.DateTold,
-                    CommissionedBy = story.CommissionedBy,
-                    IsAboutId = story.IsAboutId,
-                    IsCannon = story.IsCannon,
-                    TheContent = story.TheContent,
-                    Title = story.Title
-                };
-                db.Entry(daStory).State = EntityState.Modified;
-                db.SaveChanges();
-                #endregion
+
 
                 #region Update Tags
-                List<short> currentTagIds = db.StoryTags.Where(x => x.StoryId == story.StoryId).Select(x => x.StoryId).ToList();
+                List<short> currentTagIds = db.StoryTags.Where(x => x.StoryId == story.StoryId).Select(x => x.TagId).ToList();
                 if (tags != null)
                 {
                     foreach (short t in tags)
@@ -197,6 +184,20 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                         db.StoryTags.Remove(gone);
                     }
                 }
+                #endregion
+
+                #region Update Story
+                Story daStory = new Story
+                {
+                    StoryId = story.StoryId,
+                    DateTold = story.DateTold,
+                    CommissionedBy = story.CommissionedBy,
+                    IsAboutId = story.IsAboutId,
+                    IsCannon = story.IsCannon,
+                    TheContent = story.TheContent,
+                    Title = story.Title
+                };
+                db.Entry(daStory).State = EntityState.Modified;
                 db.SaveChanges();
                 #endregion
                 return RedirectToAction("Details", "Infos", new { id = story.IsAboutId });

@@ -36,7 +36,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
 
         // GET: Locales/Details/5
         [OverrideAuthorization]
-        public ActionResult Details(short? id)
+        public ActionResult Details(short? id, short? story)
         {
             if (id == null)
             {
@@ -49,13 +49,14 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             }
 
             //prevent users from seeing un-published work
-            if (!locale.IsPublished && !User.IsInRole("Admin"))
+            if (!locale.Info.IsPublished && !User.IsInRole("Admin"))
             {
-                return View("Error");
-                //todo change redirect to a error 404 page
+                ViewBag.Message = "Whatever you think exists, doesn't yet.";
+                return View("TheForbiddenZone");
             }
 
             ViewBag.Majorities = Majorities((short)id);
+            ViewBag.OpenStory = story;
             return View(locale);
         }
 

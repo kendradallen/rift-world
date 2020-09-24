@@ -18,30 +18,27 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
     {
         private RiftWorldEntities db = new RiftWorldEntities();
 
-        //TODO accidentally made this an ajax action controller.... I have no idea what to do but this should be looked into later
-
-        // GET: Secrets/Details/5
-        //public PartialViewResult _Details(short? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    Secret secret = db.Secrets.Find(id);
-        //    if (secret == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    return PartialView(secret);
-        //}
-
+        //todo make it easier to edit/remove secrets when admin is looking at it on an info's details page. 
+        //todo (?) add a secret list viewable per info
         //Get: the secrets
         [OverrideAuthorization]
         public PartialViewResult  _Details(short id)
         {
             List<Secret> secrets;
+            //if user is a demo, show the demo stuff
+            if (User.IsInRole("Demo"))
+            {
+                secrets = (from s in db.Secrets
+                           join spaner in db.SecretSecretTags on s.SecretId equals spaner.SecretId
+                           join t in db.SecretTags on spaner.SecretTagId equals t.SecretTagId
+                           where t.Name.ToLower() == "demo" && s.IsAboutId == id
+                           select s
+                        )
+                        .ToList()
+                        ;
+            }
             ////if the user isn't an Admin, dynamically change the content 
-            if (!User.IsInRole("Admin"))
+            else if (!User.IsInRole("Admin"))
             {
                 string userId = User.Identity.GetUserId();
 

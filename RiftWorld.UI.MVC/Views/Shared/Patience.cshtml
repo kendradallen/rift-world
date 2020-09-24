@@ -1,0 +1,12 @@
+﻿
+@{
+    ViewBag.Title = "Patience";
+}
+
+<div class="col-12">
+
+    <h2>Patience</h2>
+
+    <p>You already have a character awaiting approval. Thus you cannot make a new character</p>
+    <p>If you need to make an edit on the character you can find the editor in your profile page or can just use this <a href="@Url.Action("Edit", "Characters", new { id=ViewBag.CharId})" class="see">link</a></p>
+</div>

@@ -1,35 +1,41 @@
-﻿@model IEnumerable<RiftWorld.DATA.EF.Journal>
+﻿@model IEnumerable<RiftWorld.UI.MVC.Models.MiniJournalVM>
 
 @{
-    ViewBag.Title = "JournalHub";
+    ViewBag.Title = ViewBag.Name + "'s Journal";
+    int counter = 1;
 }
 
 <div class="col-12">
 
-    <h2>@ViewBag.Title</h2>
+    <h1 style="font-family:'Tangerine', cursive">@ViewBag.Title</h1>
+    <div class="row justify-content-center">
 
-    <table class="table">
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.OocDateWritten)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TheContent)
-            </th>
-        </tr>
+        <table class="table table-hover table-sm col-sm-9">
 
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.OocDateWritten)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.TheContent)
-                </td>
-            </tr>
-        }
+            @foreach (var item in Model)
+            {
+                <tr class="table-row" data-href="@Url.Action("Details", "Journals", new { id = item.JournalId })">
+                    <td scope="row" class="border-0 text-justify">
+                        <b>@Html.DisplayFor(modelItem => item.Written)</b><br />
+                        <pre><em>@Html.DisplayFor(modelItem => item.ContentMini) @(item.IsLonger ? "...": "")</em></pre>
+                    </td>
+                </tr>
+                counter++;
+            }
 
-    </table>
-    back to character details
+        </table>
+    </div>
+
+    <a href="@Url.Action("Details", new { id = ViewBag.Id })">Return to @ViewBag.Name</a>
 </div>
+@section Scripts{
+    <script>
+        $(document).ready(function ($) {
+            $(".table-row").click(function () {
+                window.document.location = $(this).data("href");
+            });
+        });
+
+        
+    </script>
+}

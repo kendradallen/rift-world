@@ -21,4 +21,17 @@ namespace RiftWorld.UI.MVC.Models
         public List<UserDetail> Users { get; set; }
         public List<CharOrg> Orgs { get; set; }
     }
+
+    public class ComboResult
+    {
+        public List<Info> Infos { get; set; }
+        public List<Story> Stories { get; set; }
+    }
+
+    public class ComboResultUltra
+    {
+        public List<Info> Infos { get; set; }
+        public List<Story> Stories { get; set; }
+        public List<Character> Characters { get; set; }
+    }
 }

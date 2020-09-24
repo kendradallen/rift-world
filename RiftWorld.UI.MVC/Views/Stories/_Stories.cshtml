@@ -4,47 +4,49 @@
 {
     <section id="story" class="col-12" name="Stories">
         <h2 class="line">Stories</h2>
-        <div class="tab">
-            @{int counter = 1;
-
-
-                foreach (var item in Model)
+        <div id="tab" class="tab">
+                @foreach (var item in Model)
                 {
-                    <button id="@(counter == 1 ? "defaultOpen" : "")" class="tablinks" onclick="openStory(event, @item.Story.StoryId)">@item.Story.Title</button>
-                    counter++;
+                    <button id="story-@item.Story.StoryId" class="tablinks" data-story ="@item.Story.StoryId" onclick="openStory(event, @item.Story.StoryId)">@item.Story.Title</button>
                 }
-            }
+            
 
         </div>
         @foreach (var item in Model)
         {
 
-            <div class="tabcontent" id="@item.Story.StoryId">
-                <h3>@item.Story.Title</h3>
-                <div class="intro">
-                    <p>
-                        As told by the bard Sel'thein on @Html.DisplayFor(modelItem => item.Story.DateTold) @* dear future me: html.DisplayFor is how to get the metadata formatting. item.Prop will just get the raw value of it with none of that formatting*@
-                    </p>
-                    <p>Requested by @Html.DisplayFor(modelItem => item.Story.CommissionedBy)</p>
-                    @if (!item.Story.IsCannon)
-                    {
-                        <div class="cannon">
-                            <p>Some say this story is untrue.</p>
-                            <p>I say: not all stories need be true.</p>
-                        </div>
-                    }
-                </div>
-                <div class="more hang">
-                    @Html.Raw(item.Story.TheContent)
-                </div>
-                <div class="tags">
-                    @foreach (var itemTag in item.Tags)
-                    {
-                        @Html.ActionLink(itemTag.TagName, "TagIndex", "Infos", new { id = itemTag.TagId }, null)
-                    }
-                </div>
+        <div class="tabcontent" id="@item.Story.StoryId">
 
+            <h3>
+                @item.Story.Title             
+                @if (Request.IsAuthenticated && User.IsInRole("Admin"))
+                {
+                   <a href="@Url.Action("Edit", "Stories", new { id = item.Story.StoryId })"><i class="fas fa-edit"></i></a>
+                }
+            </h3>
+            <div class="intro">
+                <p>
+                    As told by the bard Sel'thein on @Html.DisplayFor(modelItem => item.Story.DateTold) @* dear future me: html.DisplayFor is how to get the metadata formatting. item.Prop will just get the raw value of it with none of that formatting*@
+                </p>
+                <p>Requested by @Html.DisplayFor(modelItem => item.Story.CommissionedBy)</p>
+                @if (!item.Story.IsCannon)
+                {
+                    <div class="cannon">
+                        <p>Some say this story is untrue.</p>
+                        <p>I say: not all stories need be true.</p>
+                    </div>
+                }
             </div>
+            <div class="more hang">
+                @Html.Raw(item.Story.TheContent)
+            </div>
+            <div class="tags">
+                @foreach (var itemTag in item.Tags)
+                {
+                    @Html.ActionLink(itemTag.TagName, "TagIndex", "Infos", new { id = itemTag.TagId }, null)
+                }
+            </div>
+        </div>
         }
     </section>
 

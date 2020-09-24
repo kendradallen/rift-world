@@ -241,10 +241,24 @@ namespace RiftWorld.UI.MVC.Models
         public short OrgId { get; set; }
         public string Submit { get; set; }
         public string Name { get; set; }
+        public bool IsPlayerEnabled { get; set; }
 
         public List<AssoNpc_Org> AssoNpcs { get; set; }
         public List<AssoEvent_Org> AssoEvents { get; set; }
         public List<AssoChar_Org> AssoChars { get; set; }
+        public AssoOrgVM() { }
+        public AssoOrgVM(Org org, List<AssoNpc_Org> assoNpcs, List<AssoEvent_Org> assoEvents, List<AssoChar_Org> assoChars, string submit)
+        {
+            AssoNpcs = assoNpcs;
+            AssoEvents = assoEvents;
+            AssoChars = assoChars;
+            Submit = submit;
+
+            InfoId = org.InfoId;
+            OrgId = org.OrgId;
+            Name = org.Name;
+            IsPlayerEnabled = org.IsPlayerEnabled;
+        }
     }
 
     public class AssoNpc_Org

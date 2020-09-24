@@ -11,7 +11,7 @@
 }
 
 <div class="col-12">
-    <h2>@ViewBag.Title</h2>
+    <h2>@ViewBag.Title <button id="tips" type="button" class="btn" data-toggle="tooltip" data-html="true" title="Click to get a reminder of how this page works"><i class="fas fa-info-circle"></i></button></h2>
     <button class="btn btn-outline-secondary" onclick="ShowAll()">Show All</button>
     <button class="btn btn-outline-secondary" onclick="HideAll()">Hide All</button>
     @using (Html.BeginForm("AssoCreate", "NPCs", FormMethod.Post, new { id = "daForm" }))
@@ -134,6 +134,7 @@
         @Html.ActionLink("Skip", "Skip", new { infoId = Model.InfoId, submit = Model.Submit })
     </div>
 </div>
+@Html.Action("_AssoTips", "Infos", null)
 
 @section Scripts{
     <script src="~/Scripts/SelectBoxes/multi.min.js"></script>

@@ -20,7 +20,7 @@
         <div class="form-horizontal">
             <hr />
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-            @Html.HiddenFor( model => model.RaceId)
+            @Html.HiddenFor(model => model.RaceId)
             <div class="form-group row">
                 @Html.LabelFor(model => model.RaceName, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
@@ -54,5 +54,7 @@
     </div>
 </div>
 @section Scripts{
+    <script src="~/Scripts/tinymce/tinymce.min.js"></script>
+    <script src="~/Scripts/SelectBoxes/slimselect.min.js"></script>
     <script src="~/Scripts/MyJS/edit.min.js"></script>
 }

@@ -36,7 +36,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
 
         // GET: Items/Details/5
         [OverrideAuthorization]
-        public ActionResult Details(short? id)
+        public ActionResult Details(short? id, short? story)
         {
             if (id == null)
             {
@@ -51,10 +51,10 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             //prevent users from seeing un-published work
             if (!item.Info.IsPublished && !User.IsInRole("Admin"))
             {
-                return View("Error");
-                //todo change redirect to a error 404 page
+                ViewBag.Message = "Whatever you think exists, doesn't yet.";
+                return View("TheForbiddenZone");
             }
-
+            ViewBag.OpenStory = story;
             return View(item);
         }
 
@@ -233,7 +233,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "ItemId,InfoId,Name,Blurb,PictureFileName,DescriptionText,PropertyText,HistoryText, Artist, IsPublished, IsSecret")] ItemEditPostVM item,
             HttpPostedFileBase picture,
-            List<short> tags, string submit)
+            List<short> tags, string submit, bool removePic)
         {
 
             #region Pre-model picture check
@@ -255,7 +255,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                     ModelState.AddModelError("Artist", "Katherine, you're trying to submit something with a picture without an artist. That's a no-no! But seriously, if something came up that means you need to change this rule, you know who to call.");
                 }
             }
-            else if (item.PictureFileName != "default.jpg" && item.Artist == null)
+            else if (item.PictureFileName != "default.jpg" && item.Artist == null && !removePic)
             {
                 ModelState.AddModelError("Artist", "Yo bud, you tired? Seems you deleted the artist by accident. Why don't ya fix that?");
 
@@ -338,20 +338,37 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                         picture.SaveAs(Server.MapPath("~/Content/img/item/" + imgName));
                     }
                     //remove old picture if it had a different extension (and thus would not be overridden)
-                    string oldName = item.PictureFileName;
-                    string oldExt = oldName.Substring(oldName.LastIndexOf('.'));
-                    if (oldName != "default.jpg" && oldExt != ext)
+                    if (item.PictureFileName != null && item.PictureFileName != "default.jpg")
                     {
-                        string fullPath = Request.MapPath("~/Content/img/item/" + oldName);
-                        if (System.IO.File.Exists(fullPath))
+                        string oldName = item.PictureFileName;
+                        string oldExt = oldName.Substring(oldName.LastIndexOf('.'));
+                        if (oldExt != ext)
                         {
-                            System.IO.File.Delete(fullPath);
+                            string fullPath = Request.MapPath("~/Content/img/item/" + oldName);
+                            if (System.IO.File.Exists(fullPath))
+                            {
+                                System.IO.File.Delete(fullPath);
+                            }
                         }
                     }
                     //assign new PictureFileName
                     item.PictureFileName = imgName;
                 }
                 #endregion
+                #endregion
+
+                #region Potential Removal of Pic
+                if (removePic && item.PictureFileName != "default.jpg")
+                {
+                    string picName = item.PictureFileName;
+                    string fullPath = Request.MapPath("~/Content/img/item/" + picName);
+                    if (System.IO.File.Exists(fullPath))
+                    {
+                        System.IO.File.Delete(fullPath);
+                    }
+                    item.PictureFileName = "default.jpg";
+                    item.Artist = null;
+                }
                 #endregion
 
                 #region Update Item
@@ -417,7 +434,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             db.Items.Remove(item);
 
             #region Remove Picture
-            if (picture != "default.jpg")
+            if (picture != "default.jpg" && picture != null)
             {
                 string fullPath = Request.MapPath("~/Content/img/item/" + picture);
                 if (System.IO.File.Exists(fullPath))

@@ -30,7 +30,7 @@ $(document).ready(function () {
         var contentLil = $(this).children().first().text();
         var content2 = $(this).text();
         var content = $(this).html();
-        console.log(contentLil);
+        //console.log(contentLil);
         if (content2.length > showChar) {
 
             var c = contentLil.substr(0, showChar);

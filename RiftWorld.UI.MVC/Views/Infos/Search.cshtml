@@ -1,57 +1,153 @@
-﻿@model IEnumerable<RiftWorld.DATA.EF.Info>
+﻿@model RiftWorld.UI.MVC.Models.ComboResultUltra
 
 @{
-    ViewBag.Title = "Search";
+    ViewBag.Title = "Search: " + ViewBag.Query;
+    int infos = Model.Infos.Count;
+    int stories = Model.Stories.Count;
+    int characters = Model.Characters.Count;
 }
-
-<h2>Search</h2>
-
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.IdWithinType)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Blurb)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.IsPublished)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.InfoType.TypeName)
-        </th>
-        <th></th>
-    </tr>
-
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.IdWithinType)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Blurb)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.IsPublished)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.InfoType.TypeName)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.InfoId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.InfoId }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.InfoId })
-        </td>
-    </tr>
+@section styles{
+    <style>
+        em {
+            color: darkslategray;
+        }
+    </style>
 }
+    <div class="col-12">
+        <!--todo? add type filter-->
 
-</table>
+        <h2>Search "@ViewBag.Query"</h2>
+        @if (infos != 0 || stories != 0 || characters != 0)
+        {
+            <div class="row justify-content-center">
+
+                <div class="tab col-sm-9" style="padding:unset;">
+                    @if (infos != 0)
+                    {
+                        <button id="@(infos >= stories && infos >= characters ? "defaultOpen": "")" class="tablinks" onclick="openPage(event, 'infos')">Lore</button>
+                    }
+                    @if (stories != 0)
+                    {
+                        <button id="@(stories > infos && stories > characters ? "defaultOpen" : "")" class="tablinks" onclick="openPage(event, 'stories')">Stories</button>
+                    }
+                    @if (characters != 0)
+                    {
+                        <button id="@(characters > infos && characters >= stories ? "defaultOpen" : "")" class="tablinks" onclick="openPage(event, 'characters')">Characters</button>
+                    }
+
+                </div>
+                <div class="tabcontent col-sm-9" id="infos">
+                    <table class="table table-hover table-sm ">
+                        <tbody>
+                            @foreach (var item in Model.Infos)
+                            {
+                                <tr class="table-row @(item.IsPublished ? "" : "table-danger")" style="transform:rotate(0)">
+                                    <th scope="row" class="p-0"><a href="@Url.Action("Details", new { id = item.InfoId })" class="stretched-link"></a></th>
+                                    <td class="align-middle text-left" style="opacity:.75;">
+                                        @Html.DisplayFor(modelItem => item.InfoType.TypeName)
+                                    </td>
+                                    <td class="border-0 text-justify">
+                                        <u>@Html.DisplayFor(modelItem => item.Name)</u> -<em>@Html.DisplayFor(modelItem => item.Blurb)</em>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+
+                    </table>
+                </div>
+                <div class="tabcontent col-sm-9" id="stories">
+                    <table class="table table-hover table-sm">
+                        <thead>
+                            <tr>
+                                <th class="p-0"></th>
+                                <th>
+                                    What's it about?
+                                </th>
+                                <th>
+                                    Title
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.Stories)
+                            {
+                                <!--todo figure out what katherine actually wants displayed on the results for story-->
+                                <tr class="table-row @(item.Info.IsPublished ? "" : "table-danger")" style="transform:rotate(0)">
+                                    <th scope="row" class="p-0"><a href="@Url.Action("Details", "Infos", new { id = item.IsAboutId, story = item.StoryId })#story" class="stretched-link"></a></th>
+                                    <td class="align-middle text-left" style="opacity:.75;">
+                                        @Html.DisplayFor(modelItem => item.Info.Name)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Title)
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div class="tabcontent col-sm-9" id="characters">
+                    <table class="table table-hover table-sm">
+                        <tbody>
+
+                            @foreach (var item in Model.Characters)
+                            {
+                                <tr class="table-row" style="transform:rotate(0)">
+                                    <td scope="row" class="border-0 text-justify">
+                                        @Html.DisplayFor(modelItem => item.CharacterName)
+                                        <a href="@Url.Action("Details", "Characters", new { id = item.CharacterId })" class="stretched-link"></a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        }
+        else
+        {
+            <p class="col-12">Nothing here seems to be named that or tagged with that</p>
+            <form action="/Infos/Search" method="get">
+                <div class="form-horizontal">
+
+                    <div class="form-group row">
+                        <div class="col">
+                            <div class="da-focus">
+                                <input type="text" class="form-control text-box single-line" name="Search" placeholder="Search here....." style="font-size:35px;">
+                            </div>
+
+                        </div>
+                        <button type="submit" class="btn col-auto" style="font-size:35px;"><i class="fas fa-search"></i></button>
+
+                    </div>
+                </div>
+
+            </form>
+        }
+    </div>
+@section Scripts{
+    <script>
+        function openPage(evt, storyID) {
+            // Declare all variables
+            var i, tabcontent, tablinks;
+
+            // Get all elements with class="tabcontent" and hide them
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+
+            // Get all elements with class="tablinks" and remove the class "active"
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+
+            // Show the current tab, and add an "active" class to the button that opened the tab
+            document.getElementById(storyID).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+        // Get the element with id="defaultOpen" and click on it
+        document.getElementById("defaultOpen").click();
+    </script>
+}

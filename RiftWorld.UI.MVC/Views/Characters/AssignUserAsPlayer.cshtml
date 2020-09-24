@@ -1,0 +1,109 @@
+﻿
+@{
+    ViewBag.Title = "AssignUserAsPlayer";
+}
+
+
+<div class="col-12">
+    <h2>AssignUserAsPlayer</h2>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            <hr />
+            <div class="col-auto oops-summary">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group row">
+                <label for="CharacterId">Character to be assigned</label>
+                <div class="col-md-10">
+                    @Html.DropDownList("CharacterId", (SelectList)ViewBag.CharacterId, "", htmlAttributes: new { @class = "" })
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="PlayerId">Player Being Assigned</label>
+                <div class="col-md-10">
+                    @Html.DropDownList("PlayerId", (SelectList)ViewBag.PlayerId, "", htmlAttributes: new { @class = "" })
+                </div>
+            </div>
+            @*<div class="form-group">
+                <div class="form-check larger">
+                    <div class="checkbox">
+                        <input id="unRetireCheck" type="checkbox" name="unRetire" class="form-check-input" value="true" />
+                        <input name="unRetire" type="hidden" value="false">
+                        <label for="unRetire" class="form-check-label">Unretire Character? (only to be used during an account reset)</label>
+                    </div>
+                </div>
+            </div>*@
+            <div class="form-group">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#confirmModal">Publish</button>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to publish?</p>
+                        <div id="nulled">
+
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <input type="submit" value="Yes" class="btn btn-success" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+        <div>
+            @Html.ActionLink("Cancel", "CreateWhat", "Infos")
+        </div>
+</div>
+@section Scripts {
+    <script src="~/Scripts/tinymce/tinymce.min.js"></script>
+    <script src="~/Scripts/SelectBoxes/slimselect.min.js"></script>
+    <script src="~/Scripts/MyJS/edit.min.js"></script>
+    <script>
+        $('select#CharacterId option:first-child').attr("data-placeholder", "true");
+        $('select#PlayerId option:first-child').attr("data-placeholder", "true");
+    </script>
+    <script>
+        //slim select tags
+        new SlimSelect({
+            select: '#CharacterId',
+            placeholder: "Pick the character with no assigned player"
+        })
+        new SlimSelect({
+            select: '#PlayerId',
+            placeholder: "Pick the user being assigned as the player"
+        })
+
+        //double check stuff
+        $('#confirmModal').on('show.bs.modal', function () {
+            var slimChar = $("#CharacterId").data("ssid");
+            var selectedChar = $("." + slimChar + " .ss-option-selected").text();
+            var slimPlayer = $("#PlayerId").data("ssid");
+            var selectedPlayer = $("." + slimPlayer + " .ss-option-selected").text();
+            $(function () {
+                const list = $('.modal-body #nulled');
+                list.html("<p>You are assigning <b>" + selectedPlayer + "</b> to be the player of <b>" + selectedChar + "</b>.");
+                //if ($("#unRetireCheck").is(":checked")) {
+                //    list.append("<p>And you are UNRETIRING the character. </p>");
+                //}
+                list.append("</p ><p>Is this correct?</p>")
+            })
+
+        });
+
+    </script>
+}

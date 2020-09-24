@@ -3,23 +3,67 @@
 @{
     ViewBag.Title = "Locales";
 }
-
+@section styles{
+    <style>
+        #locationFilter .active {
+            box-shadow: 0 0 0 0.2rem rgba(255, 215, 0,.25);
+        }
+        .filter{
+            padding-top: 3px;
+            padding-bottom: 3px;
+        }
+    </style>
+    }
 <div class="col-12">
     <h2 class="line">@ViewBag.Title</h2>
     <div class="row justify-content-center">
+        <div class="col-sm-6 col-12 mb-2" id="locationFilter">
+            <button class="filter btn active" onclick="filterByType(event,'all')" data-filter="all"> Show all</button>
+            <button class="filter btn" onclick="filterByType(event, 'region')" data-filter="region"> Region</button>
+            <button class="filter btn" onclick="filterByType(event, 'city')" data-filter="city"> City</button>
+            <button class="filter btn" onclick="filterByType(event, 'poi')" data-filter="poi"> Place Of Interest</button>
+        </div>
+        <div class="w-100"></div>
         <div class="col-sm-6 col-12">
             <div class="da-focus">
                 <input id="infoSearch" type="text" placeholder="Search.." class="form-control">
             </div>
         </div>
-        <table class="table table-hover table-sm col-sm-7">
+        <table class="table table-hover table-sm col-sm-7 gentle">
             <tbody id="infoTable">
                 @foreach (var item in Model)
                 {
-                    <tr class="table-row" data-href="@Url.Action("Details", new { id = item.LocaleId })">
-                        <td scope="row" style="text-align:justify; border:none" class="@(item.IsPublished? "" : "table-danger")">
+                    @*for version 1, see event index*@
+
+                    @*Version 2*@
+
+                    <tr class="table-row
+                            @switch (item.LevelOfLocaleId)
+                            {
+                                case 1:
+                                    @("region")
+                                    break;
+                                case 2:
+                                    @("city")
+                                    break;
+                                case 3:
+                                    @("poi")
+                                    break;
+                                default:
+                                    break;
+                            }
+                            " style="transform:rotate(0)">
+                        <td scope="row" class="border-0 text-justify @(item.IsPublished? "" : "table-danger")">
                             <b>@Html.DisplayFor(modelItem => item.Name)</b><br />
                             <i>@Html.DisplayFor(modelItem => item.Info.Blurb)</i>
+                            <a href="@Url.Action("Details", new { id = item.LocaleId })" class="stretched-link"></a>
+                        </td>
+                        <!--for the ability to grab something by it's tag name-->
+                        <td style="display:none">
+                            @foreach (var tag in item.Info.InfoTags)
+                            {
+                                @(tag.Tag.TagName + ", ")
+                            }
                         </td>
                     </tr>
                 }
@@ -28,21 +72,43 @@
     </div>
 </div>
 @section Scripts{
+
     <script>
-        $(document).ready(function ($) {
-            $(".table-row").click(function () {
-                window.document.location = $(this).data("href");
+        function search(value) {
+            var filter = $(".filter.active").data("filter");
+            if (filter == "all") {
+                $("#infoTable tr").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            }
+            else {
+                $("#infoTable tr." + filter).filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            }
+        }
+        $(document).ready(function () {
+            $("#infoSearch").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+                search(value);
             });
         });
     </script>
     <script>
-        $(document).ready(function () {
-            $("#infoSearch").on("keyup", function () {
-                var value = $(this).val().toLowerCase();
-                $("#infoTable tr").filter(function () {
-                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        function filterByType(evt, c) {
+            $(".filter.active").removeClass("active");
+            evt.currentTarget.className += " active";
+            var value = $("#infoSearch").val().toLowerCase();
+            if (c == "all") {
+                $("tr").show();
+                search(value);
+            }
+            else {
+                $("tr").filter(function () {
+                    $(this).toggle($(this).hasClass(c))
+                    search(value);
                 });
-            });
-        });
+            }
+        }
     </script>
 }

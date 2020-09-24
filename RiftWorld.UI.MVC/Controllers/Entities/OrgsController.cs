@@ -30,7 +30,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             //everyone else doesn't see unpublished work
             else
             {
-                orgs = db.Orgs.Include(o => o.Info).Include(o => o.Locale).Where(o => o.Info.IsPublished).OrderBy(o => o.Info.Name).ToList() ;
+                orgs = db.Orgs.Include(o => o.Info).Include(o => o.Locale).Where(o => o.Info.IsPublished).OrderBy(o => o.Info.Name).ToList();
 
             }
             return View(orgs);
@@ -38,7 +38,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
 
         // GET: Orgs/Details/5
         [OverrideAuthorization]
-        public ActionResult Details(short? id)
+        public ActionResult Details(short? id, short? story)
         {
             if (id == null)
             {
@@ -53,9 +53,10 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             //prevent users from seeing un-published work
             if (!org.Info.IsPublished && !User.IsInRole("Admin"))
             {
-                return View("Error");
-                //todo change redirect to a error 404 page
+                ViewBag.Message = "Whatever you think exists, doesn't yet.";
+                return View("TheForbiddenZone");
             }
+            ViewBag.OpenStory = story;
             return View(org);
         }
 
@@ -160,7 +161,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             #region Secret Members
             List<_MembersVM> secretMembers =
                 (from co in db.CharOrgs
-                    join c in db.Characters on co.CharId equals c.CharacterId
+                 join c in db.Characters on co.CharId equals c.CharacterId
                  where
                     co.OrgId == id &&
                     !co.IsPublic &&
@@ -179,6 +180,8 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             ;
 
             #endregion
+            //todo *bonus goal* refactor the _MemberFullVM and the _Members() to be cleaner. Will also allow me to make a cleaner JoinOrg() where I don't even have to worry about a user clicking the button while already a member
+            //todo *bonus goal* figure out how to get current members of org to be able to see ALL members
             _MemberFullVM allMembers = new _MemberFullVM { CurrentMembers = members, PastMembers = pastMembers, SecretMembers = secretMembers };
             return PartialView(allMembers);
         }
@@ -216,7 +219,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                         eo.OrgId == id &&
                         i.IsPublished &&
                         e.IsHistory
-                    orderby  e.DateMonth
+                    orderby e.DateMonth
                     select new _OrgEventsVM()
                     {
                         Name = i.Name,
@@ -269,7 +272,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
         // GET: Orgs/Create
         public ActionResult Create()
         {
-            ViewBag.BaseLocationId = new SelectList(db.Locales.OrderBy(l=>l.Info.Name), "LocaleId", "Name");
+            ViewBag.BaseLocationId = new SelectList(db.Locales.OrderBy(l => l.Info.Name), "LocaleId", "Name");
             ViewBag.Tags = new MultiSelectList(db.Tags, "TagId", "TagName");
             return View();
         }
@@ -400,7 +403,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             {
                 return HttpNotFound();
             }
-            ViewBag.Npcs = db.NPCs.OrderBy(n=>n.Info.Name).ToList();
+            ViewBag.Npcs = db.NPCs.OrderBy(n => n.Info.Name).ToList();
             var selected = db.NpcOrgs.Where(x => x.OrgId == org.OrgId).ToList();
             List<AssoNpc_Org> assoNpcs = new List<AssoNpc_Org>();
             foreach (NpcOrg npcOrg in selected)
@@ -409,7 +412,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                 assoNpcs.Add(toAdd);
             }
 
-            ViewBag.Events = db.Events.OrderBy(e=>e.Info.Name).ToList();
+            ViewBag.Events = db.Events.OrderBy(e => e.Info.Name).ToList();
             var selected2 = db.OrgEvents.Where(i => i.OrgId == org.OrgId).ToList();
             List<AssoEvent_Org> assoEvents = new List<AssoEvent_Org>();
             foreach (OrgEvent item in selected2)
@@ -418,7 +421,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                 assoEvents.Add(toAdd);
             }
 
-            ViewBag.Characters = db.Characters.Where(i => i.IsApproved).OrderBy(c=>c.CharacterName).ToList();
+            ViewBag.Characters = db.Characters.Where(i => i.IsApproved).OrderBy(c => c.CharacterName).ToList();
             var selected3 = db.CharOrgs.Where(i => i.OrgId == org.OrgId).ToList();
             List<AssoChar_Org> assoChars = new List<AssoChar_Org>();
             foreach (CharOrg item in selected3)
@@ -428,7 +431,8 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             }
 
             var infoid = org.InfoId;
-            AssoOrgVM model = new AssoOrgVM { InfoId = infoid, OrgId = org.OrgId, Submit = submit, Name = org.Info.Name, AssoNpcs = assoNpcs, AssoEvents = assoEvents, AssoChars = assoChars };
+            //AssoOrgVM model = new AssoOrgVM { InfoId = infoid, OrgId = org.OrgId, Submit = submit, Name = org.Info.Name, AssoNpcs = assoNpcs, AssoEvents = assoEvents, AssoChars = assoChars };
+            AssoOrgVM model = new AssoOrgVM(org, assoNpcs, assoEvents, assoChars, submit);
             return View(model);
         }
 
@@ -597,7 +601,8 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             ViewBag.Npcs = db.NPCs.OrderBy(n => n.Info.Name).ToList();
             ViewBag.Events = db.Events.OrderBy(e => e.Info.Name).ToList();
             ViewBag.Characters = db.Characters.Where(i => i.IsApproved).OrderBy(c => c.CharacterName).ToList();
-            AssoOrgVM model = new AssoOrgVM { InfoId = infoId, OrgId = orgId, Submit = submit, Name = org.Info.Name, AssoNpcs = npcs, AssoEvents = events, AssoChars = charas };
+            //AssoOrgVM model = new AssoOrgVM { InfoId = infoId, OrgId = orgId, Submit = submit, Name = org.Info.Name, AssoNpcs = npcs, AssoEvents = events, AssoChars = charas };
+            AssoOrgVM model = new AssoOrgVM(org, npcs, events, charas, submit);
             return View(model);
         }
 
@@ -640,7 +645,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             {
                 return HttpNotFound();
             }
-            ViewBag.BaseLocationId = new SelectList(db.Locales.OrderBy(l =>l.Info.Name), "LocaleId", "Name", org.BaseLocationId);
+            ViewBag.BaseLocationId = new SelectList(db.Locales.OrderBy(l => l.Info.Name), "LocaleId", "Name", org.BaseLocationId);
 
             short infoid = org.InfoId;
             Info info = db.Infos.Find(infoid);
@@ -661,7 +666,8 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
         public ActionResult Edit([Bind(Include = "OrgId,InfoId,Name,IsPlayerEnabled,SymbolFileName,BaseLocationId,AboutText,IsPublished, Blurb, Artist, IsSecret")] OrgEditPostVM org,
             List<short> tags,
             HttpPostedFileBase picture,
-            string submit
+            string submit,
+            bool removePic
             )
         {
             #region Pre-model picture check
@@ -683,7 +689,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                     ModelState.AddModelError("Artist", "Katherine, you're trying to submit something with a picture without an artist. That's a no-no! But seriously, if something came up that means you need to change this rule, you know who to call.");
                 }
             }
-            else if (org.SymbolFileName != "default.jpg" && org.Artist == null)
+            else if (org.SymbolFileName != "default.jpg" && org.Artist == null && !removePic)
             {
                 ModelState.AddModelError("Artist", "Yo bud, you tired? Seems you deleted the artist by accident. Why don't ya fix that?");
 
@@ -769,19 +775,36 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                     }
                     //remove old picture if it had a different extension (and thus would not be overridden)
                     string oldName = org.SymbolFileName;
-                    string oldExt = oldName.Substring(oldName.LastIndexOf('.'));
-                    if (oldName != "default.jpg" && oldExt != ext)
+                    if (!String.IsNullOrEmpty(oldName) && oldName != "default.jpg")
                     {
-                        string fullPath = Request.MapPath("~/Content/img/org/" + oldName);
-                        if (System.IO.File.Exists(fullPath))
+                        string oldExt = oldName.Substring(oldName.LastIndexOf('.'));
+                        if (oldExt != ext)
                         {
-                            System.IO.File.Delete(fullPath);
+                            string fullPath = Request.MapPath("~/Content/img/org/" + oldName);
+                            if (System.IO.File.Exists(fullPath))
+                            {
+                                System.IO.File.Delete(fullPath);
+                            }
                         }
                     }
                     //assign new SymbolFileName
                     org.SymbolFileName = imgName;
                 }
                 #endregion
+                #endregion
+
+                #region Potential Removal of Pic
+                if (removePic && org.SymbolFileName != "default.jpg")
+                {
+                    string picName = org.SymbolFileName;
+                    string fullPath = Request.MapPath("~/Content/img/org/" + picName);
+                    if (System.IO.File.Exists(fullPath))
+                    {
+                        System.IO.File.Delete(fullPath);
+                    }
+                    org.SymbolFileName = "default.jpg";
+                    org.Artist = null;
+                }
                 #endregion
 
                 #region Update Org
@@ -867,7 +890,8 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
 
 
             var infoid = org.InfoId;
-            AssoOrgVM model = new AssoOrgVM { InfoId = infoid, OrgId = org.OrgId, Submit = "Save", Name = org.Info.Name, AssoNpcs = assoNpcs, AssoEvents = assoEvents, AssoChars = assoChars };
+            //AssoOrgVM model = new AssoOrgVM { InfoId = infoid, OrgId = org.OrgId, Submit = "Save", Name = org.Info.Name, AssoNpcs = assoNpcs, AssoEvents = assoEvents, AssoChars = assoChars };
+            AssoOrgVM model = new AssoOrgVM(org, assoNpcs, assoEvents, assoChars, "Save");
             return View(model);
         }
 
@@ -1019,7 +1043,8 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             ViewBag.Events = db.Events.OrderBy(e => e.Info.Name).ToList();
             ViewBag.Characters = db.Characters.Where(i => i.IsApproved).OrderBy(c => c.CharacterName).ToList();
             var org = db.Orgs.Find(orgId);
-            AssoOrgVM model = new AssoOrgVM { InfoId = infoId, OrgId = orgId, Submit = submit, Name = org.Info.Name, AssoNpcs = npcs, AssoEvents = events, AssoChars = charas };
+            //AssoOrgVM model = new AssoOrgVM { InfoId = infoId, OrgId = orgId, Submit = submit, Name = org.Info.Name, AssoNpcs = npcs, AssoEvents = events, AssoChars = charas };
+            AssoOrgVM model = new AssoOrgVM(org, npcs, events, charas, submit);
             return View(model);
         }
 
@@ -1079,7 +1104,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             db.Orgs.Remove(org);
 
             #region Remove Picture
-            if (picture != "default.jpg")
+            if (picture != "default.jpg" && !String.IsNullOrEmpty(picture))
             {
                 string fullPath = Request.MapPath("~/Content/img/org/" + picture);
                 if (System.IO.File.Exists(fullPath))

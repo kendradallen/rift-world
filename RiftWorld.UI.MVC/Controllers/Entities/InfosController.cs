@@ -33,7 +33,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
         }
 
 
-        [Authorize(Roles ="Admin")]
+        [Authorize(Roles = "Admin")]
         public ActionResult Todo()
         {
             var infos = db.Infos.Where(x => !x.IsPublished).ToList();
@@ -43,8 +43,6 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
         [Authorize(Roles = "Mod, Admin")]
         public ActionResult Approvals()
         {
-            //todo - add a list for org join requests. 
-            //todo - add a retire request???
             var rumors = db.Rumors.Where(r => !r.IsApproved).ToList();
             var characters = db.Characters.Where(c => !c.IsApproved).ToList();
             var journals = db.Journals.Where(j => !j.IsApproved).ToList();
@@ -87,12 +85,27 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             }
             ViewBag.Tag = tag.TagName;
 
-            List<Info> model = (from it in db.InfoTags
+            List<Info> infos = (from it in db.InfoTags
                                 join i in db.Infos on it.InfoId equals i.InfoId
-                                where it.TagId == id && i.IsPublished == true
+                                where it.TagId == id
+                                orderby i.Name
                                 select i)
-                                .ToList()
-                                ;
+                .ToList()
+                ;
+            List<Story> stories = (from st in db.StoryTags
+                                   join s in db.Stories on st.StoryId equals s.StoryId
+                                   where st.TagId == id
+                                   orderby s.Title
+                                   select s)
+                                   .ToList()
+                                   ;
+
+            if (!User.IsInRole("Admin"))
+            {
+                infos = infos.Where(i => i.IsPublished).ToList();
+                stories = stories.Where(s => s.Info.IsPublished).ToList();
+            }
+            ComboResult model = new ComboResult { Infos = infos, Stories = stories };
             return View(model);
         }
 
@@ -104,7 +117,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
         }
 
         // GET: Infos/Details/5
-        public ActionResult Details(short? id)
+        public ActionResult Details(short? id, short? story)
         {
             if (id == null)
             {
@@ -116,39 +129,98 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                 return HttpNotFound();
             }
 
-            return RedirectToAction("Details", info.Controller + 's', new { id = info.IdWithinType});
+            return RedirectToAction("Details", info.Controller + 's', new { id = info.IdWithinType, story = story });
         }
 
         // GET: Infos/Create
-        [Authorize(Roles ="Admin")]
+        [Authorize(Roles = "Admin")]
         public ActionResult CreateWhat()
         {
             return View();
         }
 
+        //todo - make ultimate search
         [HttpGet]
         public ActionResult Search(string search)
         {
-            List<short> result = (from i in db.Infos
-                                  join spaner in db.InfoTags on i.InfoId equals spaner.InfoId
-                                  join t in db.Tags on spaner.TagId equals t.TagId
-                                  where i.Name.ToLower().Contains(search.ToLower())
-                                      || t.TagName.ToLower().Contains(search.ToLower())
-                                      || i.InfoId == (from n in db.NPCs
-                                                      where n.Alias.ToLower().Contains(search.ToLower())
-                                                      select n.InfoId).FirstOrDefault()
-                        select i.InfoId 
-                        )
-                        .Distinct()
-                        .ToList()
-                        ;
-            //todo - add the story search too
-            List<Info> model = new List<Info>();
-            foreach (short id in result)
+            string comparer = search.ToLower().Trim();
+
+            //todo - ask katherine if she wants me to search blurb as well (noting the performance drop)
+            #region Infos
+            #region Comparers
+            List<short> peps = (from n in db.NPCs
+                                where n.Alias.ToLower().Contains(comparer)
+                                select n.InfoId
+                                )
+                                .Distinct()
+                                .ToList()
+                                ;
+            List<short> rifts = (from r in db.Rifts
+                                 where r.Location.ToLower().Contains(comparer)
+                                 select r.InfoId
+                                )
+                                .Distinct()
+                                .ToList()
+                                ;
+            #endregion
+
+            List<Info> infosTag = (from i in db.Infos
+                                   join spaner in db.InfoTags on i.InfoId equals spaner.InfoId
+                                   join t in db.Tags on spaner.TagId equals t.TagId
+                                   where t.TagName.ToLower().Contains(comparer)
+                                   select i
+                                )
+                                .ToList()
+                                ;
+            List<Info> infosName = (from i in db.Infos
+                                    where i.Name.ToLower().Contains(comparer)
+                                        || peps.Contains(i.InfoId)
+                                        || rifts.Contains(i.InfoId)
+                                        || i.Blurb.ToLower().Contains(comparer)
+                                    select i
+                                    )
+                                    .Distinct()
+                                    .ToList()
+                                    ;
+            List<Info> infos = infosName.Union(infosTag).Distinct().ToList();
+
+            #endregion
+
+            #region Stories
+            List<Story> storiesTag = (from s in db.Stories
+                                      join spaner in db.StoryTags on s.StoryId equals spaner.StoryId
+                                      join t in db.Tags on spaner.TagId equals t.TagId
+                                      where t.TagName.ToLower().Contains(comparer)
+                                      select s
+                                    )
+                                    .ToList()
+                                    ;
+            List<Story> storiesName = (from s in db.Stories
+                                       where s.Title.ToLower().Contains(comparer)
+                                       select s
+                                    )
+                                    .ToList()
+                                    ;
+            List<Story> stories = storiesTag.Union(storiesName).Distinct().ToList();
+            #endregion
+
+            List<Character> characters = (from c in db.Characters
+                                          where c.CharacterName.ToLower().Contains(comparer) && c.IsApproved
+                                          select c
+                                        )
+                                        .Distinct()
+                                        .ToList()
+                                        ;
+
+            if (!User.IsInRole("Admin"))
             {
-                Info toAdd = db.Infos.Where(i => i.InfoId == id).First();
-                model.Add(toAdd);
+                infos = infos.Where(i => i.IsPublished).ToList();
+                stories = stories.Where(s => s.Info.IsPublished).ToList();
             }
+
+            ComboResultUltra model = new ComboResultUltra { Infos = infos, Stories = stories, Characters = characters };
+
+            ViewBag.Query = search;
             return View(model);
         }
 
@@ -184,7 +256,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
         }
 
         // GET: Infos/Delete/5
-        [Authorize(Roles ="Admin")]
+        [Authorize(Roles = "Admin")]
         public ActionResult Delete(short? id)
         {
             if (id == null)
@@ -197,6 +269,11 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
                 return HttpNotFound();
             }
             return RedirectToAction("Delete", info.Controller + 's', new { id = info.IdWithinType });
+        }
+
+        public PartialViewResult _AssoTips()
+        {
+            return PartialView();
         }
 
         protected override void Dispose(bool disposing)

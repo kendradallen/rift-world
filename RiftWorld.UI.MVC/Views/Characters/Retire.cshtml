@@ -17,17 +17,6 @@
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.CharacterId)
 
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.IsDead, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <div class="checkbox">
-                    @Html.EditorFor(model => model.IsDead)
-                    @Html.ValidationMessageFor(model => model.IsDead, "", new { @class = "text-danger" })
-                </div>
-            </div>
-        </div>
-
         <div class="form-group">
             <label>So, did they die?</label>
             <div class="form-check larger">

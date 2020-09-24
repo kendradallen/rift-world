@@ -24,7 +24,9 @@
         <h2 class="line">@Html.DisplayNameFor(model => model.Environment)</h2>
         @if (hasVariety)
         {<p>Major Inhabitants: @ViewBag.Variety</p>}
-        @Html.Raw(Model.Environment)
+        <div class="hang">
+            @Html.Raw(Model.Environment)
+        </div>
     </section>
 }
 @if (Model.Hazards != "Nada")
@@ -33,7 +35,9 @@
         <h2 class="line">
             @Html.DisplayNameFor(model => model.Hazards)
         </h2>
-        @Html.Raw(Model.Hazards)
+        <div class="hang">
+            @Html.Raw(Model.Hazards)
+        </div>
     </section>
 }
 @Html.Action("_Details", "Secrets", new { id = Model.InfoId })
@@ -49,7 +53,7 @@
         @Html.ActionLink("Back to List", "Index")
     </p>
 </footer>
-@if (User.IsInRole("Admin"))
+@if (Request.IsAuthenticated && User.IsInRole("Admin"))
 {
     <nav id="adminNav" class="navbar fixed-bottom navbar-light navbar-expand-md">
         <span class="navbar-brand">Katherine's Bar</span>
@@ -97,4 +101,44 @@
         $(".sneaky-shadow").addClass("rift");
     </script>
     <script src="~/Scripts/MyJS/deets.min.js"></script>
+    @if (ViewBag.OpenStory != null)
+    {
+        <script>
+            $(document).ready(function () {
+                $(".tab #story-" +@ViewBag.OpenStory).click();
+                $(".tab #story-" +@ViewBag.OpenStory).addClass("active");
+            });
+        </script>
+    }
+    else
+    {
+        <script>
+            $(document).ready(function () {
+                if (document.getElementById("story")) {
+                    $(".tab").children().first().click();
+                    $(".tab").children().first().addClass("active");
+                }
+            });
+        </script>
+    }
+    @if (!Request.IsAuthenticated)
+    {
+        <script>
+            if (window.sessionStorage) {
+                var iknow = sessionStorage.getItem('iknow');
+                if (iknow != "true") {
+                    $("#psst").show();
+                }
+                function stopShowing() {
+                    sessionStorage.setItem('iknow', "true");
+                    $("#psst").hide();
+                }
+            }
+            $(document).ready(function () {
+                setTimeout(function () {
+                    $("#psst-full").hide()
+                }, 3000)
+            });
+        </script>
+    }
 }

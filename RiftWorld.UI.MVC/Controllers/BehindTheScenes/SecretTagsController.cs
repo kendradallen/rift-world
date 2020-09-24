@@ -11,6 +11,7 @@ using RiftWorld.UI.MVC.Models;
 
 namespace RiftWorld.UI.MVC.Controllers.BehindTheScenes
 {
+    //todo increase name limit to 50 characters and decription to 300 characters
     [Authorize(Roles = "Admin")]
     public class SecretTagsController : Controller
     {
@@ -54,6 +55,23 @@ namespace RiftWorld.UI.MVC.Controllers.BehindTheScenes
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "SecretTagId,Name,Description")] SecretTag secretTag)
         {
+            //trim down stuff
+            if (secretTag.Name != null)
+            {
+                secretTag.Name = secretTag.Name.Trim();
+            }
+            if (secretTag.Description != null)
+            {
+                secretTag.Description = secretTag.Description.Trim();
+            }
+            //check if unique
+            bool uniqueCheck = db.SecretTags.Any(x => x.Name == secretTag.Name);
+            if (uniqueCheck)
+            {
+                ModelState.AddModelError("Name", "");
+            }
+
+            //actually run if valid
             if (ModelState.IsValid)
             {
                 db.SecretTags.Add(secretTag);
@@ -61,6 +79,21 @@ namespace RiftWorld.UI.MVC.Controllers.BehindTheScenes
                 return RedirectToAction("CreateWhat", "Infos");
             }
 
+            //if invalid, return the trimmed strings allong with the errors they should have
+            ModelState.Clear();
+            if (secretTag.Name == null)
+            {
+                ModelState.AddModelError("Name", "Ya need a name to identify this with");
+            }
+            else if (uniqueCheck)
+            {
+                ModelState.AddModelError("Name", "To make your life easier, I'm not letting you have identical Secret Tag names. Changing the capitalization will not count.");
+            }
+            if (secretTag.Description == null)
+            {
+                ModelState.AddModelError("Description", "To make future you's life easier, I am not allowing a secret tag with no description. Just write something that might help you remember what all secrets that have this tag relate to.");
+            }
+            ModelState.AddModelError("", "Something went wrong. If you don't see any red trying submiting again; you maybe just had a bunch of spaces in something");
             return View(secretTag);
         }
 
@@ -86,12 +119,45 @@ namespace RiftWorld.UI.MVC.Controllers.BehindTheScenes
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "SecretTagId,Name,Description")] SecretTag secretTag)
         {
+            //trim down stuff
+            if (secretTag.Name != null)
+            {
+                secretTag.Name = secretTag.Name.Trim();
+            }
+            if (secretTag.Description != null)
+            {
+                secretTag.Description = secretTag.Description.Trim();
+            }
+            //check if unique
+            bool uniqueCheck = db.SecretTags.Any(x => x.Name == secretTag.Name && x.SecretTagId != secretTag.SecretTagId);
+            if (uniqueCheck)
+            {
+                ModelState.AddModelError("Name", "");
+            }
+
+            //actually run if valid
             if (ModelState.IsValid)
             {
                 db.Entry(secretTag).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
+
+            //if invalid, return the trimmed strings allong with the errors they should have
+            ModelState.Clear();
+            if (secretTag.Name == null)
+            {
+                ModelState.AddModelError("Name", "How did the name disapper?");
+            }
+            else if (uniqueCheck)
+            {
+                ModelState.AddModelError("Name", "To make your life easier, I'm not letting you have identical Secret Tag names. Changing the capitalization will not count.");
+            }
+            if (secretTag.Description == null)
+            {
+                ModelState.AddModelError("Description", "To make future you's life easier, I am not allowing a secret tag with no description. Just write something that might help you remember what all secrets that have this tag relate to.");
+            }
+            ModelState.AddModelError("", "Something went wrong. If you don't see any red trying submiting again; you maybe just had a bunch of spaces in something");
             return View(secretTag);
         }
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNet.Identity.EntityFramework;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
@@ -83,5 +84,11 @@ namespace RiftWorld.UI.MVC.Models
 
         public IEnumerable<SelectListItem> RolesList { get; set; }
 
+    }
+
+    public class UsersRolesViewModel
+    {
+        public List<ApplicationUser> Users { set; get; }
+        public List<IdentityRole> Roles { set; get; }
     }
 }

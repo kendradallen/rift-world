@@ -17,15 +17,13 @@
         @Html.AntiForgeryToken()
 
         <div class="form-horizontal">
-            <h4>Journal</h4>
-            <hr />
             @Html.HiddenFor(model => model.JournalId)
             @Html.HiddenFor(model => model.CharacterId)
             @Html.HiddenFor(model => model.OocDateWritten)
             @Html.HiddenFor(model => model.IsApproved)
 
             <div class="form-group">
-                @Html.LabelFor(model => model.TheContent, htmlAttributes: new { @class = "control-label col-md-2" })
+                <label class="control-label" for="TheContent">@Html.DisplayNameFor(model =>model.TheContent) - @Html.DisplayFor(model =>model.OocDateWritten)</label>
                 <div class="col-12">
                     <div class="da-focus">
                         @Html.EditorFor(model => model.TheContent, new { htmlAttributes = new { @class = "form-control", style = "height: 15em; font-size:1em;" } })
@@ -34,12 +32,26 @@
                 </div>
             </div>
 
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="Save" class="btn btn-default" />
+            <div class="form-group row justify-content-end">
+                <div class="col-md-offset-2 col-auto btn-signature">
+                    <input type="submit" value="Save Changes to Journal" class="btn btn-default btn-lg" />
                 </div>
             </div>
         </div>
     }
-
+        <div style="text-align:left; font-size:1em; font-weight:200;">
+            <!--todo figure out this linking at the end and where to go in what case-->
+            @if (Model.IsApproved)
+            {
+                @Html.ActionLink("Cancel Edit", "Details", new { id= Model.JournalId})
+            }
+            else if (User.IsInRole("Player") || (User.IsInRole("Mod") && ViewBag.ModChar == Model.CharacterId))
+            {
+                @Html.ActionLink("Cancel Edit", "Index", "Hub")
+            }
+            else
+            {
+                @Html.ActionLink("Cancel Edit", "Approvals", "Infos")
+            }
+        </div>
 </div>

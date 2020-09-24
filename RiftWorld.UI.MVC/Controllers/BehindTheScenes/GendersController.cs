@@ -21,21 +21,6 @@ namespace RiftWorld.UI.MVC.Controllers.BehindTheScenes
             return View(db.Genders.ToList());
         }
 
-        // GET: Genders/Details/5
-        //public ActionResult Details(byte? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    Gender gender = db.Genders.Find(id);
-        //    if (gender == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    return View(gender);
-        //}
-
         // GET: Genders/Create
         public ActionResult Create()
         {
@@ -49,13 +34,41 @@ namespace RiftWorld.UI.MVC.Controllers.BehindTheScenes
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "GenderId,GenderName")] Gender gender)
         {
+            //trim down name 
+            if (gender.GenderName != null)
+            {
+                gender.GenderName = gender.GenderName.Trim();
+            }
+            //check if unique
+            bool uniqueCheck = db.Genders.Any(x => x.GenderName == gender.GenderName);
+            if (uniqueCheck)
+            {
+                ModelState.AddModelError("GenderName", "");
+            }
+
+            //actually run if valid
             if (ModelState.IsValid)
             {
                 db.Genders.Add(gender);
                 db.SaveChanges();
                 return RedirectToAction("CreateWhat", "Infos");
             }
-            ModelState.AddModelError("", "There is preciesly ONE place that something could have gone wrong.");
+
+            //if invalid, return the trimmed strings allong with the errors they should have
+            ModelState.Clear();
+            if (gender.GenderName == null)
+            {
+                ModelState.AddModelError("GenderName", "No matter how much you want it, I can't let you make a nameless gender.");
+            }
+            else if (gender.GenderName.Length > 20)
+            {
+                ModelState.AddModelError("GenderName", "Do me a favor and please make it shorter. I only planned for gender names of 20 characters.");
+            }
+            else if (uniqueCheck)
+            {
+                ModelState.AddModelError("GenderName", "Hey, just so you know, we already have the gender available.");
+            }
+            ModelState.AddModelError("", "There is preciesly ONE place that something could have gone wrong. (and if there isn't any red, you had too much space, and it should be fixed)");
 
             return View(gender);
         }
@@ -82,12 +95,41 @@ namespace RiftWorld.UI.MVC.Controllers.BehindTheScenes
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "GenderId,GenderName")] Gender gender)
         {
+            //trim down name 
+            if (gender.GenderName != null)
+            {
+                gender.GenderName = gender.GenderName.Trim();
+            }
+            //check if unique
+            bool uniqueCheck = db.Genders.Any(x => x.GenderName == gender.GenderName && x.GenderId != gender.GenderId);
+            if (uniqueCheck)
+            {
+                ModelState.AddModelError("GenderName", "");
+            }
+
+            //actually run if valid
             if (ModelState.IsValid)
             {
                 db.Entry(gender).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
+
+            //if invalid, return the trimmed strings allong with the errors they should have
+            ModelState.Clear();
+            if (gender.GenderName == null)
+            {
+                ModelState.AddModelError("GenderName", "No matter how much you want it, I can't let you make a nameless gender.");
+            }
+            else if (gender.GenderName.Length > 20)
+            {
+                ModelState.AddModelError("GenderName", "Do me a favor and please make it shorter. I only planned for gender names of 20 characters.");
+            }
+            else if (uniqueCheck)
+            {
+                ModelState.AddModelError("GenderName", "Hey, just so you know, we already have the gender available.");
+            }
+            ModelState.AddModelError("", "There is preciesly ONE place that something could have gone wrong. (and if there isn't any red, you had too much space, and it should be fixed)");
             return View(gender);
         }
 

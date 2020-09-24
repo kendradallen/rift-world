@@ -4,8 +4,6 @@
     ViewBag.Title = "NPCs";
 }
 
-@*<h2>@ViewBag.Message</h2>
-    <h3>@ViewBag.SecondMessage</h3>*@
 <div class="col-12">
     <h2 class="line">@ViewBag.Title</h2>
     <div class="row justify-content-center">
@@ -18,15 +16,26 @@
             <tbody id="infoTable">
                 @foreach (var item in Model)
                 {
-                    <tr class="table-row" data-href="@Url.Action("Details", new { id = item.NpcId })">
-                        <td scope="row" style="text-align:justify; border:none" class="@(item.IsPublished? "" : "table-danger")">
-                            <b>@Html.DisplayFor(modelItem => item.Name)</b><br />
-                            <i>@Html.DisplayFor(modelItem => item.Info.Blurb)</i>
-                        </td>
-                        <td style="display:none">
-                            @Html.DisplayFor(modelItem => item.Alias)
-                        </td>
-                    </tr>
+                    @*for version 1, see event index*@
+
+                    @*Version 2*@
+                <tr class="table-row" style="transform:rotate(0)">
+                    <td scope="row" class="border-0 text-justify @(item.IsPublished? "" : "table-danger")">
+                        <b>@Html.DisplayFor(modelItem => item.Name)</b><br />
+                        <i>@Html.DisplayFor(modelItem => item.Info.Blurb)</i>
+                        <a href="@Url.Action("Details", new { id = item.NpcId })" class="stretched-link"></a>
+                    </td>
+                    <td style="display:none">
+                        @Html.DisplayFor(modelItem => item.Alias)
+                    </td>
+                    <!--for the ability to grab something by it's tag name-->
+                    <td style="display:none">
+                        @foreach (var tag in item.Info.InfoTags)
+                        {
+                            @(tag.Tag.TagName + ", ") 
+                        }
+                    </td>
+                </tr>
                 }
             </tbody>
         </table>
@@ -34,13 +43,7 @@
 </div>
 
 @section Scripts{
-    <script>
-        $(document).ready(function ($) {
-            $(".table-row").click(function () {
-                window.document.location = $(this).data("href");
-            });
-        });
-    </script>
+
     <script>
         $(document).ready(function () {
             $("#infoSearch").on("keyup", function () {

@@ -113,7 +113,7 @@
 </section>
 @Html.Action("_Journals", "Characters", new { id = Model.CharacterId })
 
-@if (User.IsInRole("Admin"))
+@if (Request.IsAuthenticated && User.IsInRole("Admin"))
 {
     <nav id="adminNav" class="navbar fixed-bottom navbar-light navbar-expand-md">
         <span class="navbar-brand">Katherine's Bar</span>

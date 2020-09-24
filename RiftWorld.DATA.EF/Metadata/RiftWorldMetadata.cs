@@ -15,36 +15,38 @@ namespace RiftWorld.DATA.EF
         [Display(Name = "Player")]
         public string PlayerId { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "But who are you?")]
+        //[Required(ErrorMessage = "You need a name")]
         [Display(Name = "Name")]
         [StringLength(25, ErrorMessage = " ")]
         public string CharacterName { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = ".....The unknowable - aka null - is still not a playable species.")]
         [Display(Name = "Species")]
         public byte RaceId { get; set; }
 
-        [Required]
+        [Required (ErrorMessage = "I really don't think \"What's your gender?\" is a gender")]
         [Display(Name = "Gender")]
         public byte GenderId { get; set; }
 
+        [Display(Name = "Portrait")]
         public string PortraitFileName { get; set; }
 
-        [Required]
+        [Required (ErrorMessage = "But what do you look like?")]
         [UIHint("MultilineText")]
         [StringLength(2000, ErrorMessage = " ")]
         public string Description { get; set; }
 
-        [Required]
+        [Required (ErrorMessage ="Please tell me about yourself, first.")]
         [UIHint("MultilineText")]
         [StringLength(8000, ErrorMessage = " ")]
         public string About { get; set; }
 
-        [Required] //may need to be removed due to weirdness during inital creation
+        [Required(ErrorMessage = "If you want to go to the Void, that's fine. But I can't allow your innocent (maybe) character to be there. So, pick a location, any location ...that's listed...")] 
         [Display(Name = "Current Location")]
         public short CurrentLocationId { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "I need to know your level so that way when I unleash the tarasque- I mean. What tarsque?")]
         [Display(Name = "Tier")]
         public byte TierId { get; set; }
 
@@ -52,12 +54,12 @@ namespace RiftWorld.DATA.EF
 
         public bool IsApproved { get; set; }
 
-        [StringLength(40)]
+        [StringLength(40, ErrorMessage ="Alright, this is awkward. So, there is a character limit on how long an artist can be. {1} is the limit. You went over it. Check for spaces at the end and if that doesn't work. Contact Katherine.")]
         public string Artist { get; set; }
 
-        [Required]
+        [Required(ErrorMessage ="Everyone has a class; what's yours?")]
         [StringLength(40, ErrorMessage = " ")]
-        [Display(Name = "Class")]
+        [Display(Name = "Class(es)")]
         public string ClassString { get; set; }
 
         public bool HasUnseenEdit { get; set; }
@@ -136,6 +138,7 @@ namespace RiftWorld.DATA.EF
     {
         //public byte ClassId { get; set; }
         [Required(ErrorMessage = "Katherine, seriously. If you're going to make a new class you need to actually name it.")]
+        //note to self: if string length changed, remember to update the errors on the create and edit actions
         [StringLength(15, ErrorMessage = "Too long. You have 15 characters; try again.")]
         [Display(Name = "Name")]
         public string ClassName { get; set; }
@@ -288,6 +291,7 @@ namespace RiftWorld.DATA.EF
     {
         //public byte GenderId { get; set; }
         [Required(ErrorMessage = "No matter how much you want it, I can't let you make a nameless gender.")]
+        //note to self: if the string length is changed, remember to update the create and edit error throws too
         [StringLength(20, ErrorMessage = "Do me a favor and please make it shorter. I only planned for gender names of 20 characters.")]
         [Display(Name = "Gender")]
         public string GenderName { get; set; }
@@ -479,7 +483,7 @@ namespace RiftWorld.DATA.EF
         [Display(Name = "Published: ")]
         public System.DateTime OocDateWritten { get; set; }
 
-        [Required]
+        [Required (ErrorMessage = "I'll let you in on a secret. Come closer. I'm not a spellcaster. I can't read minds. Also, can't see invisible text. So, help me keep up the illusion by filling out the journal?")]
         [UIHint("MultilineText")]
         [Display(Name = "Journal Entry")]
         public string TheContent { get; set; }
@@ -854,8 +858,9 @@ namespace RiftWorld.DATA.EF
     {
         //public byte RaceId { get; set; }
 
-        [Required(ErrorMessage = "Katherine... I feel like we need talk. About how things need names. But also about what to do if something needs to be blank.")]
-        [StringLength(15, ErrorMessage = "Well... this is awkward. So, I figured race names would never be more than 15 characters... guess I'm wrong. So, either contact me for a fix or figure out how to shorten it.")]
+        [Required(ErrorMessage = "Making the un-knowable species is not a good plan. This is how we get the Dweller. We don't make the un-knowable species!")]
+        //note to self: if changing string length also change the character check in the edit and create 
+        [StringLength(15, ErrorMessage = "Well... this is awkward. So, I figured species names would never be more than 15 characters... guess I'm wrong. So, either contact me for a fix or figure out how to shorten it.")]
         [Display(Name = "Species Name")]
         public string RaceName { get; set; }
         public bool IsPlayerEnabled { get; set; }
@@ -988,7 +993,7 @@ namespace RiftWorld.DATA.EF
         //public short SecretId { get; set; }
         public short IsAboutId { get; set; }
 
-        [Required]
+        [Required(ErrorMessage ="If this is some hilarious troll of making a secret that contains nothing, I'm in. So, you're gonna want to just hit space once.")]
         [UIHint("MultilineText")]
         [Display(Name = "Content")]
         public string TheContent { get; set; }
@@ -1041,6 +1046,7 @@ namespace RiftWorld.DATA.EF
         [DisplayFormat(NullDisplayText = "an anonymous source")]
         public string CommissionedBy { get; set; }
 
+        [Display(Name = "Is Canon")]
         public bool IsCannon { get; set; }
 
         [Required]
@@ -1049,7 +1055,7 @@ namespace RiftWorld.DATA.EF
         public string TheContent { get; set; }
 
         [Required]
-        [StringLength(20)]
+        [StringLength(20, ErrorMessage = "Alright no jokes here, this is probably too short of a length. So, yeah, call me and I'll fix er up.")]
         public string Title { get; set; }
 
     }

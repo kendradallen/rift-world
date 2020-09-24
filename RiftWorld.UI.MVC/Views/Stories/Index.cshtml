@@ -8,9 +8,7 @@
 
     <h2>Index</h2>
 
-    <p>
-        @Html.ActionLink("Create New", "Create")
-    </p>
+
     <table class="table">
         <tr>
             <th>
@@ -23,13 +21,10 @@
                 @Html.DisplayNameFor(model => model.IsCannon)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.TheContent)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.Title)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Info.Name)
+                @Html.DisplayNameFor(model => model.IsAboutId)
             </th>
             <th></th>
         </tr>
@@ -47,15 +42,13 @@
                     @Html.DisplayFor(modelItem => item.IsCannon)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.TheContent)
-                </td>
-                <td>
                     @Html.DisplayFor(modelItem => item.Title)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Info.Name)
                 </td>
                 <td>
+                    <a href="@Url.Action("Details", "Infos", new { id = item.IsAboutId, story=item.StoryId})#story">View</a> | 
                     @Html.ActionLink("Edit", "Edit", new { id = item.StoryId }) |
                     @Html.ActionLink("Delete", "Delete", new { id = item.StoryId })
                 </td>

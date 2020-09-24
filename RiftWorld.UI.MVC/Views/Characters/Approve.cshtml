@@ -80,15 +80,15 @@
     </h2>
     <pre>@Html.DisplayFor(model => model.About)</pre>
 </section>
-<secion id="actions" class="col-12" name="Actions">
+<section id="actions" class="col-12" name="Actions">
     <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            @using (Html.BeginForm("Deny", "Characters", FormMethod.Post))
+        <div class="col-12 row" >
+            @using (Html.BeginForm("Deny", "Characters", FormMethod.Post, new { @class="col-md-6 col-12"}))
             {
                 @Html.AntiForgeryToken()
                 @Html.HiddenFor(model => model.CharacterId)
 
-                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#areYouSureModal">Deny</button>
+                <button type="button" class="btn btn-danger btn-block" data-toggle="modal" data-target="#areYouSureModal">Deny</button>
                 <!-- Modal -->
                 <div class="modal fade" id="areYouSureModal" tabindex="-1" role="dialog" aria-labelledby="areYouSureModalLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
@@ -113,14 +113,17 @@
                 </div>
 
             }
-            @using (Html.BeginForm("Approve", "Characters", FormMethod.Post))
+            @using (Html.BeginForm("Approve", "Characters", FormMethod.Post, new { @class = "col-md-6 col-12" }))
             {
                 @Html.AntiForgeryToken()
 
                 @Html.HiddenFor(model => model.CharacterId)
 
-                <input type="submit" value="Approve" class="btn btn-success" />
+                <input type="submit" value="Approve" class="btn btn-success btn-block" />
             }
         </div>
     </div>
-</secion>
+    <div>
+        @Html.ActionLink("Back to Approvals", "Approvals", "Infos")
+    </div>
+</section>

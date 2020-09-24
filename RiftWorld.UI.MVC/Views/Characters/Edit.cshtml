@@ -43,7 +43,9 @@
 
         <div class="form-horizontal">
             <hr />
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="col-auto oops-summary">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            </div>
             @Html.HiddenFor(model => model.CharacterId)
             @Html.HiddenFor(model => model.PlayerId)
             @Html.HiddenFor(model => model.IsApproved)
@@ -54,7 +56,7 @@
                 @Html.LabelFor(model => model.CharacterName, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
                     <div class="da-focus">
-                        @Html.EditorFor(model => model.CharacterName, new { htmlAttributes = new { @class = "form-control count", data_max = nameMax } })
+                        @Html.EditorFor(model => model.CharacterName, new { htmlAttributes = new { @class = "form-control count", data_max = nameMax, style = "font-size:.9em;" } })
                     </div>
                     @Html.ValidationMessageFor(model => model.CharacterName, "", new { @class = "text-danger" })
                     <div id="tcp-CharacterName" class="col-md-offset-2 col-12 @(startCharacterName <0 ? "invalid":"")"><span id="tc-CharacterName">@startCharacterName</span> character(s) left.</div>
@@ -82,7 +84,7 @@
                 @Html.LabelFor(model => model.ClassString, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
                     <div class="da-focus">
-                        @Html.EditorFor(model => model.ClassString, new { htmlAttributes = new { @class = "form-control count", data_max = classMax } })
+                        @Html.EditorFor(model => model.ClassString, new { htmlAttributes = new { @class = "form-control count", data_max = classMax, style = "font-size:.9em;" } })
                     </div>
                     @Html.ValidationMessageFor(model => model.ClassString, "", new { @class = "text-danger" })
                     <div id="tcp-ClassString" class="col-md-offset-2 col-12 @(startClassString <0 ? "invalid":"")"><span id="tc-ClassString">@startClassString</span> character(s) left.</div>
@@ -91,7 +93,7 @@
             </div>
 
             <div class="form-group row">
-                @Html.LabelFor(model => model.TierId, htmlAttributes: new { @class = "control-label col-md-2" })
+                <label for="TierId" class="control-label col-md-2">Tier <button type="button" class="btn" data-toggle="tooltip" data-html="true" title="Determined by level<br/><b>Low</b>: 1-4<br/><b>Mid</b>: 5-10<br/><b>High</b>: 11-16<br/><b>God</b>: 17-20"><i class="far fa-question-circle"></i></button> </label>
                 <div class="col-md-10">
                     @Html.DropDownList("TierId", null, htmlAttributes: new { @class = "" })
                     @Html.ValidationMessageFor(model => model.TierId, "", new { @class = "text-danger" })
@@ -99,25 +101,40 @@
             </div>
 
             <div class="form-group row">
-                @Html.LabelFor(model => model.PortraitFileName, htmlAttributes: new { @class = "control-label col-md-2" })
+                <label for="picture" class="control-label col-md-2">Portrait <button id="tips" type="button" class="btn" data-toggle="tooltip" data-html="true" title="File size: 75kb or less<br/>Click for tips on making it look great!"><i class="far fa-question-circle"></i></button> </label>
                 <div class="col-md-10 row">
                     @Html.HiddenFor(model => model.PortraitFileName)
                     <div class="col-12">
                         <input type="file" name="picture" id="imgInp" />
-                        <img class="img-fluid img-thumbnail border-00" src="~/Content/img/character/@Model.PortraitFileName" id="imgPre" />
+                        @if (Model.PortraitFileName != null)
+                        {
+                            <img class="img-fluid img-thumbnail border-00" src="~/Content/img/character/@Model.PortraitFileName" id="imgPre" />
+                        }
+                        else
+                        {
+                            <img class="img-fluid img-thumbnail border-00" src="~/Content/img/npc/default.jpg" id="imgPre" />
+                        }
                     </div>
                     <div class="col-12">
                         @Html.ValidationMessageFor(model => model.PortraitFileName, "", new { @class = "text-danger" })
                     </div>
-
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="form-check">
+                    <div class="checkbox">
+                        <input type="checkbox" name="removePic" class="form-check-input" value="true" />
+                        <input name="removePic" type="hidden" value="false">
+                        <label for="removePic" class="form-check-label">Delete Picture</label>
+                    </div>
                 </div>
             </div>
 
             <div class="form-group row">
-                @Html.LabelFor(model => model.Artist, htmlAttributes: new { @class = "control-label col-md-2" })
+                <label for="Artist" class="control-label col-md-2">Artist <button type="button" class="btn" data-toggle="tooltip" data-html="true" title="Who drew(or captured) that beautiful art of yours?<br/>Can be left blank if you are also leaving the Portrait blank"><i class="far fa-question-circle"></i></button> </label>
                 <div class="col-md-10">
                     <div class="da-focus">
-                        @Html.EditorFor(model => model.Artist, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.EditorFor(model => model.Artist, new { htmlAttributes = new { @class = "form-control", style = "font-size:.9em;" } })
                     </div>
                     @Html.ValidationMessageFor(model => model.Artist, "", new { @class = "text-danger" })
                 </div>
@@ -137,7 +154,7 @@
                     <div class="form-check larger">
                         <div class="checkbox">
                             @Html.EditorFor(model => model.IsDead, new { htmlAttribute = new { @class = "form-check-input" } })
-                            @Html.LabelFor(model => model.IsDead, new { htmlAttribute = new { @class = "form-check-label"} })
+                            @Html.LabelFor(model => model.IsDead, new { htmlAttribute = new { @class = "form-check-label" } })
                         </div>
                     </div>
                 </div>
@@ -151,7 +168,7 @@
                 @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
                     <div class="da-focus">
-                        @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control count", data_max = descripMax, style = "height: 7em;font-size:1em;" } })
+                        @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control count", data_max = descripMax, style = "height: 7em;font-size:1em;", placeholder = "How your character physically appears" } })
                     </div>
                     @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
                     <div id="tcp-Description" class="col-md-offset-2 col-12 @(startDescription <0 ? "invalid":"")"><span id="tc-Description">@startDescription</span> character(s) left.</div>
@@ -171,20 +188,48 @@
                 </div>
             </div>
 
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="Save" class="btn btn-default" />
+            <div class="form-group row justify-content-between">
+                <div class="col-auto">
+                    @Html.ActionLink("Cancel Edit", "Index", null, new { @class = "btn btn-default btn-lg btn-block", style = "font-size:1.5em;font-weight:200;" })
+                </div>
+                <div class="col-md-offset-2 col-auto btn-signature">
+                    <input type="submit" value="Save Changes" class="btn btn-default btn-lg" />
                 </div>
             </div>
         </div>
     }
 
-    <div>
-        @Html.ActionLink("Back to List", "Index")
+    @*<div style="text-align:left;">
+        @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-warning btn-lg btn-block" })
+    </div>*@
+
+    <div class="modal fade" id="tipsModal" tabindex="-1" role="dialog" aria-labelledby="tipsModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="tipsModalLabel">Tips to look awesome!</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        You are hard capped at 75kb file size you can upload. Here is a resource I find extremely helpful.
+                    </p>
+                    <p>
+                        I recommend both to help remain under this limit and to look good to keep an image relatively small. The above provided link can allow to to shrink the size of an image. In general, I would recommend keeping the dimensions at most 450 by 450. But smaller sizes have never caused an issue.
+                    </p>
+                    <p>
+                        The aspect ratios that will make your picture look the best are 4-3 or 1-1 when displaying your character.
+                        Height will be the main factor that cause the character display to look worse
+                    </p>
+                </div>
+            </div>
+        </div>
     </div>
+
 </div>
 @section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
     <script src="~/Scripts/tinymce/tinymce.min.js"></script>
     <script src="~/Scripts/SelectBoxes/slimselect.min.js"></script>
     <script src="~/Scripts/MyJS/edit.min.js"></script>
@@ -209,6 +254,16 @@
         $("#imgInp").change(function () {
             readURL(this, '#imgPre');
         });
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
 
+        $("#tips").click(function (e) {
+            e.preventDefault();
+            getme();
+        });
+        function getme() {
+            $('#tipsModal').modal('show');
+        }
     </script>
 }

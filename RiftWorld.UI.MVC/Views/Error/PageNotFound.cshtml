@@ -1,0 +1,32 @@
+﻿
+@{
+    ViewBag.Title = "PageNotFound";
+}
+<div class="col-12 row justify-content-center">
+    <div class="col-4">
+        <img src="~/Content/img/404clearV2.png" style=" margin-top:1em;" />
+    </div>
+    <div class="col-12 mt-3">
+        <h3> Oh no! What you're looking for doesn't seem to exist! </h3>
+    </div>
+    <div class="col-12 mt-4">
+        <form action="/Infos/Search" method="get">
+            <div class="form-horizontal">
+
+                <div class="form-group row">
+                    <div class="col">
+                        <div class="da-focus">
+                            <input type="text" class="form-control text-box single-line" name="Search" placeholder="May the search spell save you for my mistake" style="font-size:25px;text-align:center;">
+                        </div>
+
+                    </div>
+                    <button type="submit" class="btn col-auto" style="font-size:25px;"><i class="fas fa-search"></i></button>
+
+                </div>
+            </div>
+
+        </form>
+        <p>If you're not sure how to spell something, try searching for information you know is related to it</p>
+
+    </div>
+</div>

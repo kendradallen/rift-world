@@ -1,11 +1,23 @@
 ﻿@model RiftWorld.DATA.EF.NPC
 
-@{ ViewBag.Title = "Details";
+@{ ViewBag.Title = Model.Name;
     ViewBag.InfoId = Model.InfoId;
     string status = "";
     if (Model.IsDead)
     {
         status = "dead";
+    }
+    bool hasOrgPic = Model.CrestFileName != "org_default.jpg";
+}
+@section styles{
+    <!--Note: below style only exists as current placeholder image does not have a noticable difference with the grayscale filter that I normally use to show a dead person. This style needs to be removed if the default portrait image is changed-->
+    @if (Model.PortraitFileName == "default.jpg")
+    {
+        <style>
+            #picture.dead img {
+                filter: invert(1);
+            }
+        </style>
     }
 }
 <section id="start" class="col-12 special" name="The Basics">
@@ -53,7 +65,15 @@
                 @Html.DisplayFor(model => model.Gender.GenderName)
             </p>
             <p id="race" class="col-auto">
-                @Html.DisplayFor(model => model.Race.RaceName)
+                <!--todo figure out a better way to do the race/class null cause may not be good-->
+                @if (Model.RaceId != null)
+                {
+                    @Html.DisplayFor(model => model.Race.RaceName)
+                }
+                else
+                {
+                    @("???");
+                }
             </p>
             <p id="class" class="col-auto">@ViewBag.Classes</p>
 
@@ -61,16 +81,14 @@
     </div>
     <br />
     <div id="startLower" class="row align-items-center">
-        <div id="crest" class="col-md-3 col-lg-2 pic">
-            <!-- todo Crest Pic and overlay-->
-            @* <img src="https://vignette.wikia.nocookie.net/criticalrole/images/5/59/DeRolo_Crest.JPG/revision/latest/scale-to-width-down/180?cb=20180516101724" />*@
-            <img src="~/Content/img/npc/@Model.CrestFileName" />
-            @if (Model.CrestArtist != "org_default.jpg")
-            {
+        @if (hasOrgPic)
+        {
+            <div id="crest" class="col-md-3 col-lg-2 pic">
+                <img src="~/Content/img/npc/@Model.CrestFileName" />
                 <div class="overlay npc-crest">Art by @Model.CrestArtist</div>
-            }
-        </div>
-        <div id="startLower-right" class="col-md-9 col-lg-10">
+            </div>
+        }
+        <div id="startLower-right" class="@(hasOrgPic ? "col-md-9 col-lg-10":"col-md-12")">
             <div id="orgs">
                 <h3 style="text-decoration:underline;">Member of</h3>
                 @Html.Action("_OrgsPartial", "NPCs", new { id = Model.NpcId })
@@ -124,7 +142,7 @@
         @Html.ActionLink("Back to List", "Index")
     </p>
 </footer>
-@if (User.IsInRole("Admin"))
+@if (Request.IsAuthenticated && User.IsInRole("Admin"))
 {
     <nav id="adminNav" class="navbar fixed-bottom navbar-light navbar-expand-md">
         <span class="navbar-brand">Katherine's Bar</span>
@@ -169,4 +187,44 @@
 }
 @section Scripts{
     <script src="~/Scripts/MyJS/deets.min.js"></script>
+    @if (ViewBag.OpenStory != null)
+    {
+        <script>
+            $(document).ready(function () {
+                $(".tab #story-" +@ViewBag.OpenStory).click();
+                $(".tab #story-" +@ViewBag.OpenStory).addClass("active");
+            });
+        </script>
+    }
+    else
+    {
+        <script>
+            $(document).ready(function () {
+                if (document.getElementById("story")) {
+                    $(".tab").children().first().click();
+                    $(".tab").children().first().addClass("active");
+                }
+            });
+        </script>
+    }
+    @if (!Request.IsAuthenticated)
+    {
+        <script>
+            if (window.sessionStorage) {
+                var iknow = sessionStorage.getItem('iknow');
+                if (iknow != "true") {
+                    $("#psst").show();
+                }
+                function stopShowing() {
+                    sessionStorage.setItem('iknow', "true");
+                    $("#psst").hide();
+                }
+            }
+            $(document).ready(function () {
+                setTimeout(function () {
+                    $("#psst-full").hide()
+                }, 3000)
+            });
+        </script>
+    }
 }

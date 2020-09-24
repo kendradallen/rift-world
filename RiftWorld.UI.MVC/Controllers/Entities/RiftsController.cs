@@ -65,7 +65,7 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
 
         // GET: Rifts/Details/5
         [OverrideAuthorization]
-        public ActionResult Details(short? id)
+        public ActionResult Details(short? id, short? story)
         {
             if (id == null)
             {
@@ -80,11 +80,12 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
             //prevent users from seeing un-published work
             if (!rift.IsPublished && !User.IsInRole("Admin"))
             {
-                return View("Error");
-                //todo change redirect to a error 404 page
+                ViewBag.Message = "Whatever you think exists, doesn't yet.";
+                return View("TheForbiddenZone");
             }
 
             ViewBag.Variety = Variety((short)id);
+            ViewBag.OpenStory = story;
             return View(rift);
         }
 

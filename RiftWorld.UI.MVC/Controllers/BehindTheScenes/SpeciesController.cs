@@ -49,6 +49,16 @@ namespace RiftWorld.UI.MVC.Controllers.BehindTheScenes
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "RaceId,RaceName,IsPlayerEnabled")] Race race)
         {
+            if (race.RaceName != null)
+            {
+                race.RaceName = race.RaceName.Trim();
+            }
+            bool uniqueCheck = db.Races.Any(x => x.RaceName == race.RaceName);
+            if (uniqueCheck)
+            {
+                ModelState.AddModelError("RaceName", "");
+            }
+
             if (ModelState.IsValid)
             {
                 db.Races.Add(race);
@@ -56,6 +66,21 @@ namespace RiftWorld.UI.MVC.Controllers.BehindTheScenes
                 return RedirectToAction("CreateWhat", "Infos");
             }
 
+            //if model invalid, return trimmed name and remake the errors 
+            ModelState.Clear();
+            if (race.RaceName == null)
+            {
+                ModelState.AddModelError("RaceName", "Making the un-knowable species is not a good plan. This is how we get the Dweller. We don't make the un-knowable species!");
+            }
+            else if (race.RaceName.Length > 15)
+            {
+                ModelState.AddModelError("RaceName", "Well... this is awkward. So, I figured species names would never be more than 15 characters... guess I'm wrong. So, either contact me for a fix or figure out how to shorten it.");
+            }
+            else if (uniqueCheck)
+            {
+                ModelState.AddModelError("RaceName", "That exact species already exists. It'd be wasteful and confusing to allow it to be made again.");
+            }
+            ModelState.AddModelError("", "Something went wrong. If you don't see any red trying submiting again; you maybe just had a bunch of spaces in something");
             return View(race);
         }
 
@@ -81,12 +106,38 @@ namespace RiftWorld.UI.MVC.Controllers.BehindTheScenes
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "RaceId,RaceName,IsPlayerEnabled")] Race race)
         {
+            if (race.RaceName != null)
+            {
+                race.RaceName = race.RaceName.Trim();
+            }
+            bool uniqueCheck = db.Races.Any(x => x.RaceName == race.RaceName && x.RaceId != race.RaceId);
+            if (uniqueCheck)
+            {
+                ModelState.AddModelError("RaceName", "");
+            }
+
             if (ModelState.IsValid)
             {
                 db.Entry(race).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
+
+            //if model invalid, return trimmed name and remake the errors 
+            ModelState.Clear();
+            if (race.RaceName == null)
+            {
+                ModelState.AddModelError("RaceName", "Making the un-knowable species is not a good plan. This is how we get the Dweller. We don't make the un-knowable species!");
+            }
+            else if (race.RaceName.Length > 15)
+            {
+                ModelState.AddModelError("RaceName", "Well... this is awkward. So, I figured species names would never be more than 15 characters... guess I'm wrong. So, either contact me for a fix or figure out how to shorten it.");
+            }
+            else if (uniqueCheck)
+            {
+                ModelState.AddModelError("RaceName", "That exact species already exists. It'd be wasteful and confusing to allow it to be made again.");
+            }
+            ModelState.AddModelError("", "Something went wrong. If you don't see any red trying submiting again; you maybe just had a bunch of spaces in something");
             return View(race);
         }
 

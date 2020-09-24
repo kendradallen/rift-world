@@ -8,7 +8,6 @@
     @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
     {
         @Html.AntiForgeryToken()
-        <h4>Create a new account.</h4>
         <hr />
         @Html.ValidationSummary("", new { @class = "text-danger" })
         <div class="form-group row">
@@ -35,7 +34,7 @@
                 </div>
             </div>
         </div>
-        <div class="form-group">
+        <div class="form-group row">
             @Html.LabelFor(m => m.DiscordName, new { @class = "sr-only" })
             @Html.LabelFor(m => m.DiscordDiscriminator, new { @class = "sr-only" })
             <div class="input-group mb-2">
@@ -50,13 +49,13 @@
                 </div>
             </div>
         </div>
-        <p>
-            Once you submit, this form will be processed and need to be approved. NO accounts will be approved until you have sent me your RPG consent form on discord. So make sure I have that.
+        <p class="text-center">
+            Once submitted, you will need to wait for Katherine to approve your account. This is also a great time to double check that you have given her your RPG consent form. <br />NO accounts will be approved on the site unless Katherine has your consent form on file.
         </p>
 
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" class="btn btn-default" value="Register" />
+        <div class="form-group row justify-content-end">
+            <div class="col-md-offset-2 col-auto btn-signature">
+                <input type="submit" class="btn btn-default btn-lg" value="Register" />
             </div>
         </div>
     }

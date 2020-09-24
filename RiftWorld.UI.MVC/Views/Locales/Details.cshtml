@@ -6,6 +6,14 @@
 
     string majo = ViewBag.Majorities;
 }
+@section styles{
+    <style>
+        .style {
+            border: 5px double goldenrod;
+            background: rgba(245, 222, 179, .24);
+        }
+    </style>
+}
 
 <section id="basic" class="col-12" name="basic">
     <div class="row">
@@ -16,80 +24,85 @@
             @Html.DisplayFor(model => model.LocaleLevel.LocaleName)
         </div>
     </div>
-    <div>
-        @switch (Model.LevelOfLocaleId)
-        {
-            case 1:
-                <div id="majorities">
-                    <b>Majorities: </b>
-                    @if (!majo.IsEmpty())
-                    {
-                        <span>@majo</span>
-                    }
-                    else
-                    {
-                        <span>None</span>
-                    }
-                </div>
-                if (Model.AvgLifestyle != "Nada")
-                {
-                    <div id="avg-lifestyle">
-                        <b>@Html.DisplayNameFor(model => model.AvgLifestyle)</b>
-                        @Html.Raw(Model.AvgLifestyle)
+    <div class="row justify-content-center mt-3 mb-3">
+        <div class="col-md-7 style">
+            @switch (Model.LevelOfLocaleId)
+            {
+                case 1:
+                    <div id="majorities">
+                        <b>Majorities: </b>
+                        @if (!majo.IsEmpty())
+                        {
+                            <span>@majo</span>
+                        }
+                        else
+                        {
+                            <span>None</span>
+                        }
                     </div>
-                }
-                <p id="councilDelegate">
-                    <b>@Html.DisplayNameFor(model => model.CouncilDelegateId)</b>
-                    @if (Model.CouncilDelegateId != null && Model.NPC.IsPublished)
+                    if (Model.AvgLifestyle != "Nada")
                     {
-                        @Html.ActionLink(Model.NPC.Name, "Details", "NPCs", new { id = Model.CouncilDelegateId }, null)
+                        <div id="avg-lifestyle">
+                            <b>@Html.DisplayNameFor(model => model.AvgLifestyle)</b>
+                            @Html.Raw(Model.AvgLifestyle)
+                        </div>
                     }
-                    else
-                    {
-                        <span>None</span>
-                    }
-                </p>
-                <div id="Appointed">
-                    <b>@Html.DisplayNameFor(model => model.Appointed)</b>
-                    @Html.Raw(Model.Appointed)
-                </div>
-                break;
-            case 2:
-                if (Model.RegionId != null)
-                {
-                    <p><b>Region: </b>@Html.ActionLink(Model.Locale1.Name, "Details", new { id = Model.RegionId })</p>
-                }
-                <div id="majorities">
-                    <b>Majorities: </b>
-                    @if (!majo.IsEmpty())
-                    {
-                        <span>@majo</span>
-                    }
-                    else
-                    {
-                        <span>None</span>
-                    }
+                    <div id="councilDelegate">
 
-                </div>
-                if (Model.AvgLifestyle != "Nada")
-                {
-                    <div id="avg-lifestyle">
-                        <b>@Html.DisplayNameFor(model => model.AvgLifestyle)</b>
-                        @Html.Raw(Model.AvgLifestyle)
+                        <b>@Html.DisplayNameFor(model => model.CouncilDelegateId)</b>
+                        <p>
+                            @if (Model.CouncilDelegateId != null && Model.NPC.IsPublished)
+                            {
+                                @Html.ActionLink(Model.NPC.Name, "Details", "NPCs", new { id = Model.CouncilDelegateId }, null)
+                            }
+                            else
+                            {
+                                <span>None</span>
+                            }
+                        </p>
                     </div>
-                }
-                break;
-            case 3:
-                if (Model.RegionId != null)
-                {
-                    <p><b>Region: </b>@Html.ActionLink(Model.Locale1.Name, "Details", new { id = Model.RegionId })</p>
-                }
-                if (Model.ClosestCityId != null)
-                {
-                    <p><b>Closest City: </b>@Html.ActionLink(Model.Locale2.Name, "Details", new { id = Model.ClosestCityId }) </p>
-                }
-                break;
-        }
+                    <div id="Appointed">
+                        <b>@Html.DisplayNameFor(model => model.Appointed)</b>
+                        @Html.Raw(Model.Appointed)
+                    </div>
+                    break;
+                case 2:
+                    if (Model.RegionId != null)
+                    {
+                        <p><b>Region: </b>@Html.ActionLink(Model.Locale1.Name, "Details", new { id = Model.RegionId })</p>
+                    }
+                    <div id="majorities">
+                        <b>Majorities: </b>
+                        @if (!majo.IsEmpty())
+                        {
+                            <span>@majo</span>
+                        }
+                        else
+                        {
+                            <span>None</span>
+                        }
+
+                    </div>
+                    if (Model.AvgLifestyle != "Nada")
+                    {
+                        <div id="avg-lifestyle">
+                            <b>@Html.DisplayNameFor(model => model.AvgLifestyle)</b>
+                            @Html.Raw(Model.AvgLifestyle)
+                        </div>
+                    }
+                    break;
+                case 3:
+                    if (Model.RegionId != null)
+                    {
+                        <p><b>Region: </b>@Html.ActionLink(Model.Locale1.Name, "Details", new { id = Model.RegionId })</p>
+                    }
+                    if (Model.ClosestCityId != null)
+                    {
+                        <p><b>Closest City: </b>@Html.ActionLink(Model.Locale2.Name, "Details", new { id = Model.ClosestCityId }) </p>
+                    }
+                    break;
+            }
+        </div>
     </div>
 </section>
 @Html.Action("_Events", "Locales", new { id = Model.LocaleId })
@@ -122,7 +135,7 @@
         @Html.ActionLink("Back to List", "Index")
     </p>
 </footer>
-@if (User.IsInRole("Admin"))
+@if (Request.IsAuthenticated && User.IsInRole("Admin"))
 {
     <nav id="adminNav" class="navbar fixed-bottom navbar-light navbar-expand-md">
         <span class="navbar-brand">Katherine's Bar</span>
@@ -167,4 +180,44 @@
 }
 @section Scripts{
     <script src="~/Scripts/MyJS/deets.min.js"></script>
+    @if (ViewBag.OpenStory != null)
+    {
+        <script>
+            $(document).ready(function () {
+                $(".tab #story-" +@ViewBag.OpenStory).click();
+                $(".tab #story-" +@ViewBag.OpenStory).addClass("active");
+            });
+        </script>
+    }
+    else
+    {
+        <script>
+            $(document).ready(function () {
+                if (document.getElementById("story")) {
+                    $(".tab").children().first().click();
+                    $(".tab").children().first().addClass("active");
+                }
+            });
+        </script>
+    }
+    @if (!Request.IsAuthenticated)
+    {
+        <script>
+            if (window.sessionStorage) {
+                var iknow = sessionStorage.getItem('iknow');
+                if (iknow != "true") {
+                    $("#psst").show();
+                }
+                function stopShowing() {
+                    sessionStorage.setItem('iknow', "true");
+                    $("#psst").hide();
+                }
+            }
+            $(document).ready(function () {
+                setTimeout(function () {
+                    $("#psst-full").hide()
+                }, 3000)
+            });
+        </script>
+    }
 }

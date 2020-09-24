@@ -197,7 +197,7 @@
                 @Html.LabelFor(model => model.ApperanceText, htmlAttributes: new { @class = "control-label" })
                 <div class="col-12">
                     @Html.EditorFor(model => model.ApperanceText, new { htmlAttributes = new { @class = "form-control rich",
-                   style = "height:20em;" } })
+                   style = "height:30em;" } })
                     @Html.ValidationMessageFor(model => model.ApperanceText, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -205,7 +205,7 @@
             <div class="form-group">
                 @Html.LabelFor(model => model.AboutText, htmlAttributes: new { @class = "control-label" })
                 <div class="col-12">
-                    @Html.EditorFor(model => model.AboutText, new { htmlAttributes = new { @class = "form-control rich", style = "height:20em;" } })
+                    @Html.EditorFor(model => model.AboutText, new { htmlAttributes = new { @class = "form-control rich", style = "height:30em;" } })
                     @Html.ValidationMessageFor(model => model.AboutText, "", new { @class = "text-danger" })
                 </div>
             </div>

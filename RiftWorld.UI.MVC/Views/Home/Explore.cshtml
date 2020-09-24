@@ -19,18 +19,38 @@
 
             <br />
         </div>
-        <div class="col-10">
+        <div class="col-12">
             <h3 class="line">by Tags</h3>
-            <div class="tags">
+            <div class="row justify-content-center">
+                <div class="col-sm-6 col-12 mb-3">
+                    <div class="da-focus">
+                        <input type="text" id="tagSearch" placeholder="Search..." class="form-control">
+                    </div>
+                </div>
 
-                @foreach (var item in ViewBag.Tags)
-                {
-                    <a href="@Url.Action("TagIndex", "Infos", new { id=item.TagId})">@item.TagName</a>
-                }
+                <div class="tags col-10" id="tags">
+
+                    @foreach (var item in ViewBag.Tags)
+                    {
+                        <a href="@Url.Action("TagIndex", "Infos", new { id=item.TagId})">@item.TagName</a>
+                    }
+                </div>
             </div>
         </div>
     </div>
 
 
 </div>
+@section Scripts{
 
+    <script>
+        $(document).ready(function () {
+            $("#tagSearch").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+                $("#tags a").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+    </script>
+}

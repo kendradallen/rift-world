@@ -10,6 +10,7 @@ using RiftWorld.DATA.EF;
 
 namespace RiftWorld.UI.MVC.Controllers.BehindTheScenes
 {
+    //todo increase name limit to 35 characters
     [Authorize(Roles = "Admin")]
     public class TagsController : Controller
     {
@@ -50,13 +51,41 @@ namespace RiftWorld.UI.MVC.Controllers.BehindTheScenes
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "TagId,TagName,Description")] Tag tag)
         {
-            //todo - add a trim to all creates and edits for bts and names in general (this is a bonus goal)
+            //trim down stuff
+            if (tag.TagName != null)
+            {
+                tag.TagName = tag.TagName.Trim();
+            }
+            if (tag.Description != null)
+            {
+                tag.Description = tag.Description.Trim();
+            }
+            //check if unique
+            bool uniqueCheck = db.Tags.Any(x => x.TagName == tag.TagName);
+            if (uniqueCheck)
+            {
+                ModelState.AddModelError("TagName", "");
+            }
+
+            //actually run if valid
             if (ModelState.IsValid)
             {
                 db.Tags.Add(tag);
                 db.SaveChanges();
                 return RedirectToAction("CreateWhat", "Infos");
             }
+
+            //if invalid, return the trimmed strings allong with the errors they should have
+            ModelState.Clear();
+            if (tag.TagName == null)
+            {
+                ModelState.AddModelError("TagName", "Ya need a name");
+            }
+            else if (uniqueCheck)
+            {
+                ModelState.AddModelError("TagName", "That exact tag name already exists. It'd be too confusing to allow the same tag again.");
+            }
+            ModelState.AddModelError("", "Something went wrong. If you don't see any red trying submiting again; you maybe just had a bunch of spaces in something");
 
             return View(tag);
         }
@@ -83,12 +112,39 @@ namespace RiftWorld.UI.MVC.Controllers.BehindTheScenes
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "TagId,TagName,Description")] Tag tag)
         {
+            if (tag.TagName != null)
+            {
+                tag.TagName = tag.TagName.Trim();
+            }
+            if (tag.Description != null)
+            {
+                tag.Description = tag.Description.Trim();
+            }
+            bool uniqueCheck = db.Tags.Any(x => x.TagName == tag.TagName && x.TagId != tag.TagId);
+            if (uniqueCheck)
+            {
+                ModelState.AddModelError("TagName", "");
+            }
+
             if (ModelState.IsValid)
             {
                 db.Entry(tag).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
+
+            //if invalid, return the trimmed strings allong with the errors they should have
+            ModelState.Clear();
+            if (tag.TagName == null)
+            {
+                ModelState.AddModelError("TagName", "Okay, wait, where did the name go?");
+            }
+            else if (uniqueCheck)
+            {
+                ModelState.AddModelError("TagName", "That exact tag name already exists. It'd be too confusing to allow the same tag again.");
+            }
+            ModelState.AddModelError("", "Something went wrong. If you don't see any red trying submiting again; you maybe just had a bunch of spaces in something");
+
             return View(tag);
         }
 

@@ -1,38 +1,75 @@
-﻿@model IEnumerable<RiftWorld.UI.MVC.Models.ApplicationUser>
-
+﻿@*@model IEnumerable<RiftWorld.UI.MVC.Models.ApplicationUser>*@
+@model RiftWorld.UI.MVC.Models.UsersRolesViewModel
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Users";
 }
-<div class="col-12">
-    <h2>Index</h2>
-
-    <p>
-        @Html.ActionLink("Create New", "Create")
-    </p>
-    <table class="table">
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.UserName)
-            </th>
-            <th>
-
-            </th>
-        </tr>
-
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.UserName)
-                </td>
-                <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                    @Html.ActionLink("Consent", "Approve", new { id = item.Id }) |
-                    @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
-                </td>
-            </tr>
+@section styles{
+    <style>
+        .table tbody td, .table thead th {
+            border-top: 1px solid darkgoldenrod;
         }
+    </style>
+}
+    <div class="col-12">
+        <h2 class="line">@ViewBag.Title</h2>
+        <p>
+            @Html.ActionLink("Create New", "Create")
+        </p>
+        <table class="table table-bordered">
+            <thead>
 
-    </table>
-</div>
+                <tr>
+                    <th>Role</th>
+                    <th>
+                        UserName
+                    </th>
+                    <th>
+
+                    </th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var item in Model.Users)
+                {
+                <tr>
+                    <td>
+                        @if (Model.Roles.Where(r => r.Users.Any(u => u.UserId == item.Id) && r.Name == "Character").FirstOrDefault() != null)
+                        {<i class="fas fa-dice-d20" title="Active Character"></i>}
+                        @string.Join(",", Model.Roles.Where(r => r.Users.Any(u => u.UserId == item.Id) && r.Name != "Character").Select(r => r.Name))
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UserName)
+                    </td>
+                    <td>
+                        <div class="btn-group">
+                            <a href="@Url.Action("Details", new { id = item.Id })" class="btn btn-outline-dark"><i class="fas fa-user"></i> Dem Deets</a>
+
+                            @*@Html.ActionLink("View User Details", "Details", new { id = item.Id }, new { @class = "btn btn-outline-dark" })*@
+                            <button type="button" class="btn btn-outline-dark dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="sr-only">Toggle Dropdown</span>
+                            </button>
+                            <div class="dropdown-menu">
+                                <a href="@Url.Action("Edit", new { id= item.Id})" class="dropdown-item"><i class="fas fa-user-edit"></i> Edit</a>
+                                <a href="@Url.Action("Approve", new { id= item.Id})" class="dropdown-item"><i class="fas fa-file-alt"></i> Update Consent</a>
+                                <div class="dropdown-divider"></div>
+                                @if (Model.Roles.Where(r => r.Users.Any(u => u.UserId == item.Id) && r.Name == "Player").FirstOrDefault() != null)
+                                {
+                                    @Html.ActionLink("Make Moderator", "ToggleMod", new { id = item.Id }, new { @class = "dropdown-item" })
+                                }
+                                else if (Model.Roles.Where(r => r.Users.Any(u => u.UserId == item.Id) && r.Name == "Mod").FirstOrDefault() != null)
+                                {
+                                    @Html.ActionLink("Un-Make Moderator", "ToggleMod", new { id = item.Id }, new { @class = "dropdown-item" })
+                                }
+                                <div class="dropdown-divider"></div>
+                                <a href="@Url.Action("Delete", new { id= item.Id})" class="dropdown-item"><i class="fas fa-user-slash"></i> Retcon Existance</a>
+
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                }
+            </tbody>
+
+        </table>
+    </div>

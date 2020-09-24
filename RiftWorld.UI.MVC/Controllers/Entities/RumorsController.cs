@@ -40,7 +40,8 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
         // GET: Rumors
         public ActionResult Index()
         {
-            var rumors = db.Rumors.Include(r => r.Character).Include(r => r.Info);
+            //reason for beyond only including approved rumors is that, seeing unapproved rumors is not what this list is for. 
+            var rumors = db.Rumors.Include(r => r.Character).Include(r => r.Info).Where(r=>r.IsApproved);
             return View(rumors.ToList());
         }
 
@@ -79,87 +80,11 @@ namespace RiftWorld.UI.MVC.Controllers.Entities
         [Authorize(Roles = "Character")]
         public ActionResult CreateRumor([Bind(Include = "RumorOfId,RumorText, AuthorId, IsApproved")] RumorCreateVM rumor)
         {
-            //v2
             Rumor daRumor = new Rumor { RumorOfId = rumor.RumorOfId, IsApproved = rumor.IsApproved, RumorText = rumor.RumorText, AuthorId = (short)rumor.AuthorId };
             db.Rumors.Add(daRumor);
             db.SaveChanges();
             return Json(new { Message = "YES!", JsonRequestBehavior.AllowGet });
-            //v1
-            //if (ModelState.IsValid)
-            //{
-            //    Rumor daRumor = new Rumor { RumorOfId = rumor.RumorOfId, IsApproved = rumor.IsApproved, RumorText = rumor.RumorText, AuthorId = (short)rumor.AuthorId };
-            //    db.Rumors.Add(daRumor);
-            //    db.SaveChanges();
-            //    return RedirectToAction("Confirmed");
-            //}
-            //else
-            //{
-            //    return RedirectToAction("RumorFailed");
-            //}
         }
-
-        //// GET: Rumors/Create
-        //[OverrideAuthorization]
-        //public ActionResult Create()
-        //{
-        //    return View();
-        //}
-
-        //// POST: Rumors/Create
-        //// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        //// more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Create([Bind(Include = "RumorsId,RumorOfId,RumorText, IsApproved, AuthorId")] Rumor rumor)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        db.Rumors.Add(rumor);
-        //        db.SaveChanges();
-        //        return RedirectToAction("Confirmed", "Rumors");
-        //    }
-        //    return RedirectToAction("Failed");
-        //}
-        //public ActionResult Failed()
-        //{
-        //    return View();
-        //}
-        //todo make sure every action of a post validates antiforgery token
-
-        //// GET: Rumors/Edit/5
-        //public ActionResult Edit(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    Rumor rumor = db.Rumors.Find(id);
-        //    if (rumor == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    ViewBag.AuthorId = new SelectList(db.Characters, "CharacterId", "PlayerId", rumor.AuthorId);
-        //    ViewBag.RumorOfId = new SelectList(db.Infos, "InfoId", "Blurb", rumor.RumorOfId);
-        //    return View(rumor);
-        //}
-
-        //// POST: Rumors/Edit/5
-        //// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        //// more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Edit([Bind(Include = "RumorsId,RumorOfId,AuthorId,IsApproved,RumorText")] Rumor rumor)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        db.Entry(rumor).State = EntityState.Modified;
-        //        db.SaveChanges();
-        //        return RedirectToAction("Index");
-        //    }
-        //    ViewBag.AuthorId = new SelectList(db.Characters, "CharacterId", "PlayerId", rumor.AuthorId);
-        //    ViewBag.RumorOfId = new SelectList(db.Infos, "InfoId", "Blurb", rumor.RumorOfId);
-        //    return View(rumor);
-        //}
 
         // GET: Rumors/Delete/5
         [Authorize(Roles = "Admin")]

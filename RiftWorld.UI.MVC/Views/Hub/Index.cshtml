@@ -25,6 +25,10 @@
             font-size: 17px;
             width: 15%;
         }
+        .tablink {
+            padding: 11px 16px;
+            font-size: 20px;
+        }
 
             .tablink-a:hover, .tablink-b {
                 background-color: #777;
@@ -34,8 +38,9 @@
         .tabcontent-a, tabcontent-b {
             /*color: white;*/
             display: none;
-            padding: 100px 20px;
+            padding: 75px 0px;
             /*height: 100%;*/
+            animation: fadeEffect 1s;
         }
     </style>
 }
@@ -46,12 +51,19 @@
         {
             <div class="alert alert-danger" role="alert">You are currently requesting to retire this character.</div>
         }
-        <div class="row">
+        @*<div class="row">
             <button class="tablink-a col-sm-12 col-md" onclick="openPage('details', this, 'green')" id="defaultOpen">Details</button>
             <button class="tablink-a col-sm-12 col-md" onclick="openPage('journals', this, 'green')">Journals</button>
             <button class="tablink-a col-sm-12 col-md" onclick="openPage('underApproval', this, 'green')">Under Approval</button>
             <button class="tablink-a col-sm-12 col-md" onclick="openPage('tab-orgs', this, 'green')">Orgs</button>
             <button class="tablink-a col-sm-12 col-md" onclick="openPage('KnownSecrets', this, 'green')">Known Secrets</button>
+        </div>*@
+        <div class="row" id="daButtons">
+            <button class="tablink col-sm-12 col-md active" data-open="details">Details</button>
+            <button class="tablink col-sm-12 col-md" data-open="journals">Journals</button>
+            <button class="tablink col-sm-12 col-md" data-open="underApproval">Under Approval</button>
+            <button class="tablink col-sm-12 col-md" data-open="tab-orgs">Orgs</button>
+            <button class="tablink col-sm-12 col-md" data-open="KnownSecrets">Known Secrets</button>
         </div>
 
         @Html.Action("_Secrets", "Hub", new { id = Model.CharacterId })
@@ -62,23 +74,24 @@
 
 
         <div class="tabcontent-a" id="details">
-            <h4>Character</h4>
-
-            <div class="col">
-                @Html.ActionLink("Edit", "Edit", "Characters", new { id = Model.CharacterId }, new { @class = "btn btn-warning btn-block" })
-            </div>
-            <div class="col">
-                @if (!Model.IsRequestingRetire)
-                {
-                    @Html.ActionLink("Request to Retire Character", "RequestRetire", "Hub", null, new { @class = "btn btn-danger btn-block"})
-                }
-                else
-                {
-                    @Html.ActionLink("Cancel Retiring Character", "CancelRetireRequest", "Hub",null, new { @class = "btn btn-success btn-block" })
-                }
-            </div>
-            <div class="col">
-                @Html.ActionLink("Update Current Location", "ChangeLocation", "Hub", null, new { @class = "btn btn-info btn-block" })
+            <h3>Character</h3>
+            <div class="row">
+                <div class="col-12 col-md">
+                    @Html.ActionLink("Edit", "Edit", "Characters", new { id = Model.CharacterId }, new { @class = "btn btn-warning btn-block" })
+                </div>
+                <div class="col-12 col-md">
+                    @Html.ActionLink("Update Current Location", "ChangeLocation", "Hub", null, new { @class = "btn btn-info btn-block" })
+                </div>
+                <div class="col-12 col-md">
+                    @if (!Model.IsRequestingRetire)
+                    {
+                        @Html.ActionLink("Request to Retire Character", "RequestRetire", "Hub", null, new { @class = "btn btn-danger btn-block" })
+                    }
+                    else
+                    {
+                        @Html.ActionLink("Cancel Retiring Character", "CancelRetireRequest", "Hub", null, new { @class = "btn btn-success btn-block" })
+                    }
+                </div>
             </div>
             <hr />
             <section id="start" class="col-12" name="The Basics">
@@ -183,6 +196,26 @@
     </div>
 @section Scripts{
     <script>
+        $('#daButtons button').click(function () {
+            var value = $(this).data("open");
+            tabcontent = document.getElementsByClassName("tabcontent-a");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            document.getElementById(value).style.display = "block";
+            if (value == "underApproval") {
+                document.getElementById("bRumors").style.display = "none";
+                document.getElementById("bJournals").style.display = "none";
+                document.getElementById("bOrgs").style.display = "none";
+            }
+            $("#daButtons .active").removeClass('active');
+            $(this).addClass('active');
+        });
+        $(document).ready(function () {
+            $('#daButtons .active').click();
+        });
+    </script>
+    <script>
         function openPage(pageName, elmnt, color) {
             // Hide all elements with class="tabcontent" by default */
             var i, tabcontent, tablinks;
@@ -236,7 +269,7 @@
             elmnt.style.backgroundColor = color;
         }
 
-        //// Get the element with id="defaultOpen" and click on it
-        //document.getElementById("defaultOpen").click();
+            //// Get the element with id="defaultOpen" and click on it
+            //document.getElementById("defaultOpen").click();
     </script>
 }

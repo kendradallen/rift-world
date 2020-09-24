@@ -184,6 +184,7 @@
     <Compile Include="Controllers\Entities\RiftsController.cs" />
     <Compile Include="Controllers\Entities\SecretsController.cs" />
     <Compile Include="Controllers\Entities\StoriesController.cs" />
+    <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\Entities\NPCsController.cs" />
@@ -223,15 +224,15 @@
     <Content Include="Content\css\style.css" />
     <Content Include="Content\custom.css" />
     <Content Include="Content\fonts\fontawesome-webfont.svg" />
+    <Content Include="Content\img\404clearV2.png" />
     <Content Include="Content\img\CaeritheinMap.jpg" />
-    <Content Include="Content\img\character\default.jpg" />
     <Content Include="Content\img\f-logo.png" />
-    <Content Include="Content\img\item\default.jpg" />
+    <Content Include="Content\img\item\default.JPG" />
     <Content Include="Content\img\Ko-fi_Icon_RGB_stroke.png" />
     <Content Include="Content\img\Ko-fi_Icon_RGB_stroke_smol.png" />
     <Content Include="Content\img\logo2.png" />
-    <Content Include="Content\img\npc\default.jpg" />
     <Content Include="Content\img\logo.png" />
+    <Content Include="Content\img\npc\default.jpg" />
     <Content Include="Content\img\npc\org_default.jpg" />
     <Content Include="Content\img\org\default.jpg" />
     <Content Include="Content\SelectBoxes\multi.css" />
@@ -487,6 +488,13 @@
     <Content Include="Views\Orgs\Success.cshtml" />
     <Content Include="Views\Characters\Retire.cshtml" />
     <Content Include="Views\Home\Explore.cshtml" />
+    <Content Include="Views\Shared\TheForbiddenZone.cshtml" />
+    <Content Include="Views\Shared\Patience.cshtml" />
+    <Content Include="Views\Characters\AssignUserAsPlayer.cshtml" />
+    <Content Include="Views\Hub\Journal.cshtml" />
+    <Content Include="Views\Infos\_AssoTips.cshtml" />
+    <Content Include="Views\Journals\Details.cshtml" />
+    <Content Include="Views\Error\PageNotFound.cshtml" />
     <None Include="_Archive\Scripts\jquery-3.5.1.intellisense.js" />
     <Content Include="_Archive\Scripts\jquery-3.5.1.js" />
     <Content Include="_Archive\Scripts\jquery-3.5.1.min.js" />
@@ -824,12 +832,8 @@
     <Content Include="Views\Infos\_TagList.cshtml" />
     <Content Include="Views\Infos\TagIndex.cshtml" />
     <Content Include="Views\UsersAdmin\Approve.cshtml" />
-    <Content Include="Views\UsersAdmin\_Delete.cshtml" />
     <Content Include="Views\Characters\JournalHub.cshtml" />
     <Content Include="Views\Characters\_Journals.cshtml" />
-    <Content Include="Views\Characters\Journal.cshtml" />
-    <Content Include="Views\Journals\Create.cshtml" />
-    <Content Include="Views\Journals\NoCharacter.cshtml" />
     <Content Include="Views\Journals\Approve.cshtml" />
     <Content Include="Views\Characters\Approve.cshtml" />
     <Content Include="Views\Rumors\Approve.cshtml" />
@@ -917,6 +921,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\ConsentFiles\" />
+    <Folder Include="Content\img\character\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

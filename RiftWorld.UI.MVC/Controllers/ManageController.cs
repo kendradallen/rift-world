@@ -301,6 +301,11 @@ namespace RiftWorld.UI.MVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> ChangePassword(ChangePasswordViewModel model)
         {
+            if (User.IsInRole("Demo"))
+            {
+                ViewBag.Message = "No. Just no";
+                return View("Error");
+            }
             if (!ModelState.IsValid)
             {
                 return View(model);

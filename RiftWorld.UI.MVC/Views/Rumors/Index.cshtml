@@ -1,54 +1,50 @@
 ﻿@model IEnumerable<RiftWorld.DATA.EF.Rumor>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Rumors";
 }
 
 <div class="col-12">
 
-    <h2>Index</h2>
+    <h2>@ViewBag.Title</h2>
 
-    <p>
-        @Html.ActionLink("Create New", "Create")
-    </p>
     <table class="table">
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.IsApproved)
-            </th>
             <th>
                 @Html.DisplayNameFor(model => model.RumorText)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Character.PlayerId)
+                @Html.DisplayNameFor(model => model.AuthorId)
             </th>
+            @*<th>
+                @Html.DisplayNameFor(model => model.Character.UserDetail.DiscordFull)
+            </th>*@
             <th>
-                @Html.DisplayNameFor(model => model.Info.Blurb)
+                @Html.DisplayNameFor(model => model.RumorOfId)
             </th>
             <th></th>
         </tr>
 
         @foreach (var item in Model)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.IsApproved)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.RumorText)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Character.PlayerId)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Info.Blurb)
-                </td>
-                <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.RumorsId }) |
-                    @Html.ActionLink("Details", "Details", new { id = item.RumorsId }) |
-                    @Html.ActionLink("Delete", "Delete", new { id = item.RumorsId })
-                </td>
-            </tr>
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.RumorText)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Character.CharacterName)
+            </td>
+            @*<th>
+                @Html.DisplayNameFor(model => model.Character.UserDetail.DiscordName)
+            </th>*@
+            <td>
+                @Html.DisplayFor(modelItem => item.Info.Name)
+            </td>
+            <td>
+                <a href="@Url.Action("Details", "Infos", new { id=item.RumorOfId})#rumor-list">View</a> |
+                @Html.ActionLink("Delete", "Delete", new { id = item.RumorsId })
+            </td>
+        </tr>
         }
 
     </table>

@@ -44,6 +44,7 @@ else
     </ul>
     <br />
 }
+@* todo - *bonus* make a way for members of org to see the secret members*@
 @if (Request.IsAuthenticated && User.IsInRole("Admin") && Model.SecretMembers.Count != 0)
 {
     <h2 class="line">Secret Members</h2>

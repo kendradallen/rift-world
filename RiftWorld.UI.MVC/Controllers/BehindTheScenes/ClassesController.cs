@@ -21,21 +21,6 @@ namespace RiftWorld.UI.MVC.Controllers.BehindTheScenes
             return View(db.Classes.ToList());
         }
 
-        // GET: Classes/Details/5
-        //public ActionResult Details(byte? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    Class taclass = db.Classes.Find(id);
-        //    if (taclass == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    return View(taclass);
-        //}
-
         // GET: Classes/Create
         public ActionResult Create()
         {
@@ -49,7 +34,19 @@ namespace RiftWorld.UI.MVC.Controllers.BehindTheScenes
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "ClassId,ClassName,IsPlayerEnabled")] Class taclass)
         {
-            //todo - on this and every other BTS controller, prevent the creation of a duplicate name
+            //trim down stuff
+            if (taclass.ClassName != null)
+            {
+                taclass.ClassName = taclass.ClassName.Trim();
+            }
+            //check if unique
+            bool uniqueCheck = db.Classes.Any(x => x.ClassName == taclass.ClassName);
+            if (uniqueCheck)
+            {
+                ModelState.AddModelError("ClassName", "");
+            }
+
+            //actually run if valid
             if (ModelState.IsValid)
             {
                 db.Classes.Add(taclass);
@@ -57,6 +54,21 @@ namespace RiftWorld.UI.MVC.Controllers.BehindTheScenes
                 return RedirectToAction("CreateWhat", "Infos");
             }
 
+            //if invalid, return the trimmed strings allong with the errors they should have
+            ModelState.Clear();
+            if (taclass.ClassName == null)
+            {
+                ModelState.AddModelError("ClassName", "Katherine, seriously. If you're going to make a new class you need to actually name it.");
+            }
+            else if (taclass.ClassName.Length > 15)
+            {
+                ModelState.AddModelError("ClassName", "Too long. You have 15 characters; try again.");
+            }
+            else if (uniqueCheck)
+            {
+                ModelState.AddModelError("ClassName", "You don't need to have a class twice. If you want to make something player-enabled, just head to the BTS Lists, go to classes, and edit the class.");
+            }
+            ModelState.AddModelError("", "Something went wrong. If you don't see any red trying submiting again; you maybe just had a bunch of spaces in something");
             return View(taclass);
         }
 
@@ -82,12 +94,41 @@ namespace RiftWorld.UI.MVC.Controllers.BehindTheScenes
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "ClassId,ClassName,IsPlayerEnabled")] Class taclass)
         {
+            //trim down stuff
+            if (taclass.ClassName != null)
+            {
+                taclass.ClassName = taclass.ClassName.Trim();
+            }
+            //check if unique
+            bool uniqueCheck = db.Classes.Any(x => x.ClassName == taclass.ClassName && x.ClassId != taclass.ClassId);
+            if (uniqueCheck)
+            {
+                ModelState.AddModelError("ClassName", "");
+            }
+
+            //actually run if valid
             if (ModelState.IsValid)
             {
                 db.Entry(taclass).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
+
+            //if invalid, return the trimmed strings allong with the errors they should have
+            ModelState.Clear();
+            if (taclass.ClassName == null)
+            {
+                ModelState.AddModelError("ClassName", "Katherine, seriously. If you're going to make a new class you need to actually name it.");
+            }
+            else if (taclass.ClassName.Length > 15)
+            {
+                ModelState.AddModelError("ClassName", "Too long. You have 15 characters; try again.");
+            }
+            else if (uniqueCheck)
+            {
+                ModelState.AddModelError("ClassName", "You don't need to have a class twice. I am actually kind of impressed you got this error here. Were you looking for it? You sly dog you. ");
+            }
+            ModelState.AddModelError("", "Something went wrong. If you don't see any red trying submiting again; you maybe just had a bunch of spaces in something");
             return View(taclass);
         }
 

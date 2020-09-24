@@ -56,7 +56,56 @@ namespace RiftWorld.UI.MVC.Controllers
         [HttpGet]
         public async Task<ActionResult> Index()
         {
-            return View(await UserManager.Users.ToListAsync());
+            RiftWorldEntities db = new RiftWorldEntities();
+            var users = await UserManager.Users.Include(u => u.Roles).OrderBy(u=>u.UserName).ToListAsync();
+            var roles = await RoleManager.Roles.Include(r => r.Users).ToListAsync();
+            UsersRolesViewModel model = new UsersRolesViewModel { Users = users, Roles = roles};
+            return View(model);
+        }
+
+        //todo add make/unmake mod action
+        public async Task<ActionResult> ToggleMod(string id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var user = await UserManager.FindByIdAsync(id);
+            var userRoles = await UserManager.GetRolesAsync(user.Id);
+
+            if (userRoles.Contains("Player"))
+            {
+                var result = await UserManager.AddToRoleAsync(id, "Mod");
+                if (!result.Succeeded)
+                {
+                    ModelState.AddModelError("", result.Errors.First());
+                    return RedirectToAction("Edit", new { id = id });
+                }
+
+                result = await UserManager.RemoveFromRoleAsync(id, "Player");
+                if (!result.Succeeded)
+                {
+                    ModelState.AddModelError("", result.Errors.First());
+                    return RedirectToAction("Edit", new { id = id });
+                }
+            }
+            else if (userRoles.Contains("Mod"))
+            {
+                var result = await UserManager.AddToRoleAsync(id, "Player");
+                if (!result.Succeeded)
+                {
+                    ModelState.AddModelError("", result.Errors.First());
+                    return RedirectToAction("Edit", new { id = id });
+                }
+
+                result = await UserManager.RemoveFromRoleAsync(id, "Mod");
+                if (!result.Succeeded)
+                {
+                    ModelState.AddModelError("", result.Errors.First());
+                    return RedirectToAction("Edit", new { id = id });
+                }
+            }
+            return RedirectToAction("Index");
         }
 
         //
@@ -372,7 +421,8 @@ namespace RiftWorld.UI.MVC.Controllers
             var userDeets = db.UserDetails.Where(x => x.UserId == id).FirstOrDefault();
             if (userDeets == null)
             {
-                //error
+                ViewBag.Message = "Weird shit has happened. This person doesn't have any of the custom user details I made. This is a time to get Kendra.";
+                return View("Error");
             }
             if (userDeets.IsApproved == true)
             {
@@ -431,6 +481,20 @@ namespace RiftWorld.UI.MVC.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(string id)
         {
+            RiftWorldEntities db = new RiftWorldEntities();
+
+            #region Getting Demo user
+            var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(new ApplicationDbContext()));
+            var demoUser = roleManager.FindByName("Demo").Users.Select(x => x.UserId).FirstOrDefault();
+            if (demoUser == null)
+            {
+                ModelState.AddModelError("", "We have a problem; there is no demo user to assign to the characters once this person is deleted.");
+            }
+            #endregion
+            if (demoUser == id)
+            {
+                ModelState.AddModelError("", "No no no no no. That's the demo user everything is assigned to. Do not delete it.");
+            }
             if (ModelState.IsValid)
             {
                 if (id == null)
@@ -438,25 +502,12 @@ namespace RiftWorld.UI.MVC.Controllers
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
                 }
 
-                var user = UserManager.FindById(id);
+                var user = db.AspNetUsers.Find(id);
                 if (user == null)
                 {
                     return HttpNotFound();
                 }
 
-                #region Getting Demo user
-                var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(new ApplicationDbContext()));
-                var demoUser = roleManager.FindByName("Demo").Users.FirstOrDefault();
-                if (demoUser == null)
-                {
-                    ViewBag.Message = "So, we have a problem. There is no demo user.";
-                    return View("Error");
-                }
-                #endregion
-
-
-
-                RiftWorldEntities db = new RiftWorldEntities();
                 var userDeets = db.UserDetails.Where(x => x.UserId == id).FirstOrDefault();
                 var currentCharacter = userDeets.CurrentCharacterId;
                 var consent = userDeets.ConsentFileName;
@@ -478,7 +529,7 @@ namespace RiftWorld.UI.MVC.Controllers
                 var characters = db.Characters.Where(x => x.PlayerId == id).ToList();
                 foreach (Character item in characters)
                 {
-                    item.PlayerId = demoUser.UserId;
+                    item.PlayerId = demoUser;
                     item.IsPlayerDemo = true;
                     item.BackupPortrayerName = discordName;
                     db.Entry(item).State = EntityState.Modified;
@@ -486,8 +537,12 @@ namespace RiftWorld.UI.MVC.Controllers
                 }
 
                 db.UserDetails.Remove(userDeets);
-                UserManager.Delete(user);
-                db.SaveChanges();
+                var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext()));
+                var user2 = UserManager.FindById(id);
+
+                UserManager.Delete(user2);
+
+                db.SaveChangesAsync();
 
                 return RedirectToAction("Index");
             }

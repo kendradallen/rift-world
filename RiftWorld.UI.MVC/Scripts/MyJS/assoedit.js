@@ -106,3 +106,12 @@ function IsChecked(target, name, list) {
     var work = $('[data-list="' + list + '"][data-value="' + target + '"] [data-name="' + name + '"]').is(":checked");
     return work;
 }
+
+$(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+})
+
+$("#tips").click(function (e) {
+    e.preventDefault();
+    $('#tipsModal').modal('show');
+});

@@ -1,11 +1,16 @@
 ﻿
 @{
-    ViewBag.Title = "Style Guide";
+    ViewBag.Title = "Style Guide for Katherine";
 }
 <div class="col-12">
     <h2 class="line">@ViewBag.Title</h2>
+    <div class="btn-group quick">
+        <a class="btn btn-secondary" href="#pics">Images</a>
+        <a class="btn btn-secondary" href="#riche">Rich Text Editor</a>
+    </div>
+    <br />
     <a href="https://picresize.com/" target="_blank" style="font-size: 2em;">Picture Resizer</a>
-    <div class="row">
+    <div class="row" id="pics">
         <div class="col-12 pl-5 pr-5" id="portrait">
             <h3 class="line">NPC Portrait</h3>
             <p>The orignal testing for NPC portrait was performed on a portrait 300pxs by 300px. The styleing is optimized for that ratio of 1-1 (width to height). However a portrait of any size and ratio will not break. I however found that the npc looks best when the portrait is at about a 1-1 aspect ratio; 4-3 does not look terrible either. The npc will look worse if the ratio has height larger than width (again in my experience)</p>
@@ -44,6 +49,74 @@
             <p>In general, a 4-3 ratio or a 1-1 ratio is ideal; tall images look AWFUL. General sizing should be about 400px by 300px (massive rounding abound) with a very max of 450 by 450. The demo I went with was about 400 by 300. That make the characters look the best in my opinion</p>
             <p>You also have to worry about size on this one -unlike the others. I limit the players to 75kb in the picture (and I'm being fairly generous) and so when you are editing a character you are under the same restrictions. Once again, use the resource I provided to help.</p>
         </div>
+    </div>
+    <div class="text-left" id="riche">
+        <h2 class="line">Navigating the Rich Text Editor</h2>
+        <p>
+            The rich text editor has been set up to display the basics exactly as they would display to you while you type. The basics are headers and paragraphs. If you want others set up to display as they would, I'll have to program that in.
+        </p>
+        <p>In general, using the help button will help but this is the custom overview for you</p>
+        <ul>
+            <li>
+                One major thing to look out for is that right click is NOT going to bring up the spell check suggestions. Instead, it will bring up the link option. To check the spelling suggestions, use CRTL + Right Click
+            </li>
+            <li>
+                No image functionality exists in the rich text editor, so don't even try. Not that you could as there is no button for it in what I set up.
+            </li>
+            <li>
+                Fonts: yes they are there. None of our special nice fonts are (you have to clear formatting for them), but they don't break as far as I can tell.
+                But I have no guarentees on how nice they will look.
+                So buyers beware I guess?
+            </li>
+            <li>
+                Making a link is really simple and you can do it in one of 2 ways
+                <ol>
+                    <li>
+                        highlight the text that you want to be the link and right click it to add the link.
+                    </li>
+                    <li>
+                        Use the insert and click link
+                    </li>
+                </ol>both of these will get you to insert a link. The first option will automatically have the text displayed filled out while insert you have to do for yourself.
+                <br />You can direct copy the URL of any page on the site and use it as the URL<br />The other options you can leave alone but if you are curious.....
+                <ul>
+                    <li>Title is text that would be displayed upon hovering over the link</li>
+                    <li>The last is self explanitory but if you ever decide to link outside the site, I recommend changing to open in new tab.</li>
+                </ul>
+            </li>
+        </ul>
+        <h4>General Usage</h4>
+        <p>So in general, if you finish up with whatever section you wanted styled differently, use the clear format button rather than resetting say the text size or the text alignment. This will save on space in the end. </p>
+        <p>Because the default for the styling on the site is centered, the act of indenting something has no real effect unless you use a different alignment.</p>
+        <p>You can do quite a bit with styling. But due to limitations I can't give you the accurate preview. So, when you decide to do something fancy, try it out but then finish up creating/editing the info and look at how it appears on the details (this should be the page you go to once you finish either of those actions). If it is behaving weirdly or doesn't look like how you want you have 2 options: 1) play around with styling in the rich text till you get what you want 2) tell me it's not looking like you want. And I after conversing with you on how it should look and whether this is a general case, will endevor to fix the style to work with it. Normally this second solution will involve the next covered topic: templates.</p>
+        <h4>Templates</h4>
+        <p>Templates are a weird tool that I can best describe as both a way to have common structure you make in many infos AND a way for me to make a happy medium between my styling on the site and what the rich text editor does, without you having to learn some code. <br />For the record, however, I have to code in these templates. It's not something you can just make.</p>
+        <p>Most templates will have a paragraph at the very end. That paragraph - even if you put nothing in it - is used to make sure you get out of the custom styling I made. You only need it to start writing whatever it is you are doing next.</p>
+        <p>You'll find templates under the insert tab. Now obviously every template is different and I have no idea what I will be making in the way of these in the future; however, I can tell you about the starter pack I gave you:</p>
+        <ul>
+            <li style="list-style:none;">
+                <h5>
+                    Pretty Bullet List
+                </h5>
+                <p>This is designed in such a way that I have made what I think is maybe a good look for a bullet point list to be displayed. You may disagree and then I will change it. The way to use it is to simple insert the template. It will start a bullet list (the style of which you can change by using the toolbar) and add a paragraph beneath it. This paragraph is SUPER IMPORTANT, as I already mentioned.</p>
+            </li>
+            <li style="list-style:none;">
+                <h5>
+                    Pretty Ordered List
+                </h5>
+                <p>
+                    Works the exact same as the bullet list. Only you have more options on what it will look like.
+                </p>
+            </li>
+            <li style="list-style:none;">
+                <h5>
+                    Insert me before table of contents for pretty
+                </h5>
+                <p>
+                    This one is experimental and needs some explaining. The Table of Contents is something else you can insert. It will make a table of contents (think like wikipedia) based off of the headings 1-3 you have. And you can refresh the table of contents after you have added more headings. The template here is some invisible boxes that I use to make the table of contents pretty. So, you insert this template then put the table of contents in the space I left for it (and labeled).
+                </p>
+            </li>
+        </ul>
     </div>
 </div>
 

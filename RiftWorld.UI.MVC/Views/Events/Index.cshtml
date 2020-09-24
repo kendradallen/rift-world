@@ -16,25 +16,43 @@
             <tbody id="infoTable">
                 @foreach (var item in Model)
                 {
-                    <tr class="table-row" data-href="@Url.Action("Details", new { id = item.EventId })">
-                        <td scope="row" style="text-align:justify; border:none" class="@(item.IsPublished? "" : "table-danger")">
-                            <b>@Html.DisplayFor(modelItem => item.Name)</b><br />
-                            <i>@Html.DisplayFor(modelItem => item.Info.Blurb)</i>
-                        </td>
-                    </tr>
+                    @*version 1: the rows aren't actual links*@
+
+                    @*<tr class="table-row" data-href="@Url.Action("Details", new { id = item.EventId })">
+                <td scope="row" style="text-align:justify; border:none" class="@(item.IsPublished? "" : "table-danger")">
+                    <b>@Html.DisplayFor(modelItem => item.Name)</b><br />
+                    <i>@Html.DisplayFor(modelItem => item.Info.Blurb)</i>
+                </td>
+            </tr>*@
+                    @*version 2: the row is a link (with all the benefits of a link) + bootstrap classes for style*@
+
+                <tr class="table-row" style="transform:rotate(0)">
+                    <td scope="row" class="border-0 text-justify @(item.IsPublished? "" : "table-danger")">
+                        <b>@Html.DisplayFor(modelItem => item.Name)</b><br />
+                        <i>@Html.DisplayFor(modelItem => item.Info.Blurb)</i>
+                        <a href="@Url.Action("Details", new { id = item.EventId })" class="stretched-link"></a>
+                    </td>
+                    <!--for the ability to grab something by it's tag name-->
+                    <td style="display:none">
+                        @foreach (var tag in item.Info.InfoTags)
+                        {
+                            @(tag.Tag.TagName + ", ")
+                        }
+                    </td>
+                </tr>
                 }
             </tbody>
         </table>
     </div>
 </div>
 @section Scripts{
-    <script>
+    @*<script>
         $(document).ready(function ($) {
             $(".table-row").click(function () {
                 window.document.location = $(this).data("href");
             });
         });
-    </script>
+    </script>*@
     <script>
         $(document).ready(function () {
             $("#infoSearch").on("keyup", function () {

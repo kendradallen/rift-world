@@ -5,13 +5,13 @@
     ViewBag.InfoId = Model.InfoId;
 }
 <section id="start" class="col-12 row justify-content-center" name="Start">
-    <div id="pic" class=" pic col-sm-8 col-md-6 col-lg-3">
-        <img src="~/Content/img/org/@Model.SymbolFileName" />
-        @if (Model.SymbolFileName != "default.jpg")
-        {
+    @if (Model.SymbolFileName != "default.jpg")
+    {
+        <div id="pic" class=" pic col-sm-8 col-md-6 col-lg-3">
+            <img src="~/Content/img/org/@Model.SymbolFileName" />
             <div class="overlay">Art by @Model.Artist</div>
-        }
-    </div>
+        </div>
+    }
     <div id="name" class="col-12">
         @Html.DisplayFor(model => model.Name)
     </div>
@@ -32,7 +32,7 @@
 }
 <section id="members" class="col-md-6" name="Members">
     @Html.Action("_Members", "Orgs", new { id = Model.OrgId })
-    @if (Model.IsPlayerEnabled && User.IsInRole("Character"))
+    @if (Model.IsPlayerEnabled && Request.IsAuthenticated && User.IsInRole("Character"))
     {
         @Html.ActionLink("JOIN TODAY!", "JoinOrg", new { id = Model.OrgId }, new { @class = "btn btn-dark btn-block" })
     }
@@ -53,7 +53,7 @@
         @Html.ActionLink("Back to List", "Index")
     </p>
 </footer>
-@if (User.IsInRole("Admin"))
+@if (Request.IsAuthenticated && User.IsInRole("Admin"))
 {
     <nav id="adminNav" class="navbar fixed-bottom navbar-light navbar-expand-md">
         <span class="navbar-brand">Katherine's Bar</span>
@@ -98,4 +98,44 @@
 }
 @section Scripts{
     <script src="~/Scripts/MyJS/deets.min.js"></script>
+    @if (ViewBag.OpenStory != null)
+    {
+        <script>
+            $(document).ready(function () {
+                $(".tab #story-" +@ViewBag.OpenStory).click();
+                $(".tab #story-" +@ViewBag.OpenStory).addClass("active");
+            });
+        </script>
+    }
+    else
+    {
+        <script>
+            $(document).ready(function () {
+                if (document.getElementById("story")) {
+                    $(".tab").children().first().click();
+                    $(".tab").children().first().addClass("active");
+                }
+            });
+        </script>
+    }
+    @if (!Request.IsAuthenticated)
+    {
+        <script>
+            if (window.sessionStorage) {
+                var iknow = sessionStorage.getItem('iknow');
+                if (iknow != "true") {
+                    $("#psst").show();
+                }
+                function stopShowing() {
+                    sessionStorage.setItem('iknow', "true");
+                    $("#psst").hide();
+                }
+            }
+            $(document).ready(function () {
+                setTimeout(function () {
+                    $("#psst-full").hide()
+                }, 3000)
+            });
+        </script>
+    }
 }
